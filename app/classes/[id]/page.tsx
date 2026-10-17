@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import type { Metadata } from "next";
-import { CLASSES_MAP, DEFAULT_CLASS } from "@/lib/classes-data";
+import { CLASSES_LIST, CLASSES_MAP, DEFAULT_CLASS } from "@/lib/classes-data";
 import { ClassDetailView } from "@/components/classes/class-detail-view";
 
 interface PageProps {
@@ -9,12 +9,8 @@ interface PageProps {
 
 export function generateStaticParams() {
   return [
+    ...CLASSES_LIST.map((c) => ({ id: c.id })),
     { id: "css-flexbox-magic" },
-    { id: "html5-semantic-structure" },
-    { id: "css-grid-animations" },
-    { id: "javascript-dom-interactivity" },
-    { id: "react-19-component-engineering" },
-    { id: "fullstack-ui-engine" },
     { id: "advanced-js-logic" },
   ];
 }

@@ -1,37 +1,90 @@
-# Codevas (Code Canvas) - Project Plan
+# Project Plan: Codevas (Code Canvas)
+**Repository Name:** `codevas-learning-engine`
 
-## 1. Product Vision
-**Codevas** adalah *Interactive UI Learning Engine*. Platform ini menjembatani pelajar (remaja/pemula) yang sedang beralih dari *visual programming* (Scratch/Roblox) ke *text-based syntax* (HTML/CSS/JS/React). 
-Alih-alih memberikan kanvas kosong yang mengintimidasi, Codevas menyediakan *template* antarmuka web modern yang sengaja dibuat "rusak" atau belum selesai. Pengguna belajar dengan cara memanipulasi *template* tersebut secara *real-time*.
+## 1. Product Vision & Purpose
+**Apa itu Codevas?**
+Codevas adalah platform edukasi pemrograman interaktif berbasis web (Interactive UI Learning Engine) yang mensimulasikan lingkungan kerja *developer* profesional tanpa memerlukan instalasi apa pun (*zero-setup*). Pengguna memanipulasi *template* antarmuka web modern secara *real-time* melalui penulisan kode terarah.
 
-## 2. Design System: Candy Light Mode
-*   **Vibe:** Playful, clean, dan ramah pemula, namun tetap terasa seperti alat kerja *developer* sungguhan.
-*   **Warna:** Latar belakang terang (*off-white*) dengan blok warna solid pastel (Bubblegum Pink, Mint Green, Lemon Yellow, Sky Blue) tanpa gradasi.
-*   **Layout Utama (Split-Screen):** Kanvas visual di sebelah kiri, Monaco Editor di kanan atas, dan *Mission Control* (Instruksi & Auto-Validator) di kanan bawah.
+**Tujuan:**
+Menghilangkan rasa frustrasi "kanvas kosong" bagi pelajar dengan menyajikan UI yang sudah berdesain modern (Candy Light Mode), lalu memberikan validasi visual seketika saat pengguna mengetik kode.
 
-## 3. Tech Stack & AI Workflow
+## 2. Tech Stack & Infrastructure
 *   **Frontend:** Next.js, Tailwind CSS, Monaco Editor, Framer Motion.
-*   **Backend & DB (Future Scope):** Spring Boot, PostgreSQL, Docker (Self-hosted via Synology).
-*   **AI Developer Workflow (The Secret Weapon):**
-    1.  **Google Stitch:** Digunakan untuk *generate* desain UI mentah (*Candy Light Mode*) di *browser*.
-    2.  **Google Antigravity (MCP):** Digunakan di IDE untuk melakukan *slicing* desain dari Stitch menjadi komponen Next.js yang modular secara otomatis.
+*   **Backend:** Java Spring Boot (REST API, Validation Engine).
+*   **Database:** PostgreSQL.
+*   **Development AI Workflow:** Google Stitch (Fase Desain Visual/UI) + Google Antigravity (Fase Slicing & Logika).
+*   **Deployment:** Docker Containerized, Self-Hosted via Synology NAS (Reverse Proxy).
 
-## 4. Curriculum Architecture
-Pembelajaran dibagi menjadi 3 tahap (*Progressive Disclosure*):
-*   **Stage 1: The Architect (Layouting)**
-    *   Fokus pada tata letak spasial (Flexbox & CSS Grid).
-    *   Visual kanvas hanya berupa blok/kotak *wireframe* solid abu-abu.
-*   **Stage 2: The Artist (Component Styling)**
-    *   Fokus pada estetika satu komponen terpusat (Card, Button, Navbar).
-    *   Bermain dengan *border-radius*, *shadow*, warna, dan tipografi.
-*   **Stage 3: The Masterpiece (Full Web & Logic)**
-    *   Simulasi *developer* penuh. Muncul mode Terminal.
-    *   Integrasi React state dan manipulasi DOM interaktif pada halaman web skala penuh.
+## 3. Desain Visual (UI/UX)
+*   **Tema:** *Candy Light Mode*. Latar belakang bersih/putih dengan blok warna pastel solid (Mint Green, Bubblegum Pink, Sky Blue) tanpa gradasi.
+*   **Layout Utama:** *Split-screen* (55% Live Canvas menyerupai *browser* macOS, 45% Monaco Editor & Panel Mission Control).
+*   **Feedback:** Validasi instan (*auto-check*) tanpa tombol "Submit" manual untuk kategori Live Code HTML/CSS.
 
-## 5. Development Roadmap (Next Steps)
-- [x] Inisialisasi Next.js kosong.
-- [x] Setup integrasi Stitch MCP di Antigravity.
-- [x] Generate desain UI di Stitch (Landing Page, Login, Register, Workspace, Quiz).
-- [x] Eksekusi *slicing* modular: Landing Page (`app/page.tsx`), Login (`app/login/page.tsx`), dan Register (`app/register/page.tsx`).
-- [ ] Bangun UI untuk *Split-screen Workspace*.
-- [ ] Implementasi integrasi Monaco Editor dan *Live Iframe Auto-validation*.
+## 4. Database Architecture (ERD Core)
+Menggunakan `JSONB` agar struktur tabel fleksibel menampung konfigurasi soal yang berbeda-beda tiap kategori.
+
+*   **`users`**: `id`, `username`, `email`, `password_hash`, `xp_points`, `role` (USER, ADMIN).
+*   **`classes`**: `id`, `category` (ENUM: `LIVE_CODE`, `DRAG_DROP`, `QUIZ`), `title`, `description`, `is_published`.
+*   **`challenges`** (Level dalam Kelas): 
+    *   `id`, `class_id` (FK), `title`, `difficulty`.
+    *   `instruction` (TEXT).
+    *   `locked_template` (JSONB) -> *Kode boilerplate / opsi UI yang dikunci.*
+    *   `initial_state` (TEXT) -> *Kondisi awal di area kerja pengguna.*
+    *   `validation_rule` (JSONB) -> *Aturan kelulusan.*
+*   **`user_progress`**: `id`, `user_id` (FK), `challenge_id` (FK), `status` (LOCKED, IN_PROGRESS, COMPLETED), `code_snapshot`.
+
+## 5. Struktur Kurikulum Pembelajaran
+
+Kurikulum dibagi berdasarkan **Kategori** (metode pendekatan belajar). Di dalam setiap kategori, terdapat beberapa **Class** (materi spesifik).
+
+### Kategori: Live Code
+*(Fokus MVP saat ini. Pengguna memanipulasi kode dengan validasi antarmuka secara real-time. Visual kanvas berupa blok wireframe solid abu-abu untuk Layout).*
+
+**Class: CSS Flexbox**
+*   Level 1: The Activation (Menyalakan `display: flex`)
+*   Level 2: The Sniper (Menggunakan `justify-content: center`)
+*   Level 3: The Split (Menggunakan `justify-content: space-between`)
+*   Level 4: The Breathing Room (Menggunakan `justify-content: space-evenly`)
+*   Level 5: The Push (Menggunakan `justify-content: flex-end`)
+*   Level 6: The Gravity (Menggunakan `align-items: center`)
+*   Level 7: The Floor (Menggunakan `align-items: flex-end`)
+*   Level 8: The Tetris Tower (Mengubah orientasi dengan `flex-direction: column`)
+*   Level 9: The Gap (Memberi jarak dengan `gap`)
+*   Level 10: Boss Fight - Centering Div (Jurus pamungkas mempusatkan elemen)
+
+**Class: CSS Grid**
+*   Level 1: The Blueprint (Membuat papan `grid-template-columns`)
+*   Level 2: The Triplets (Membagi ruang menjadi 3 kolom rata)
+*   Level 3: The Asymmetry (Layout Sidebar dan Konten)
+*   Level 4: The Alleyway (Penerapan Grid Gap)
+*   Level 5: The Header Expansion (Memperlebar sel dengan `col-span`)
+*   Level 6: The Tower Expansion (Mempertinggi sel dengan `row-span`)
+*   Level 7: The VIP Pass (Mengubah urutan render elemen menggunakan `order`)
+*   Level 8: The Perfect Center (Menggunakan `place-items-center`)
+*   Level 9: The Inception (Menerapkan Flexbox di dalam sel Grid)
+*   Level 10: Boss Fight - The Bento Box (Merakit komponen menjadi UI Dashboard)
+
+**Class: Component Styling** *(Coming Soon)*
+**Class: Full Web Integration** *(Coming Soon)*
+**Class: React & Next.js Basics** *(Coming Soon)*
+
+---
+
+### Kategori: Visual Logic (Drag & Drop)
+*(Pendekatan drag-and-drop blok visual untuk membangun insting hierarki/logika tanpa risiko syntax error).*
+
+**Class: Javascript Logic Blocks** *(Coming Soon)*
+**Class: CSS Layouting Hierarchy** *(Coming Soon)*
+**Class: HTML DOM Tree Assembly** *(Coming Soon)*
+
+---
+
+### Kategori: Theory (Multiple Choice)
+*(Kuis UI interaktif untuk menguji pemahaman konsep dasar sebelum menyentuh kode).*
+
+**Class: CSS Selectors Quiz** *(Coming Soon)*
+**Class: HTML Semantic Quiz** *(Coming Soon)*
+**Class: JS Fundamentals Quiz** *(Coming Soon)*
+```eof
+
+Dengan struktur ini, tabel `classes` di *database* sudah pasti akan punya kolom `category`. AI juga tidak akan kebingungan membuat inisiatif fitur yang belum perlu dibuat karena batas-batas `(Coming Soon)` sudah disiapkan dengan tegas!
