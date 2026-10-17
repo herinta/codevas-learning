@@ -469,7 +469,7 @@ function ChallengePlaygroundContent({
         {/* User Status Pills */}
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-1.5 px-3 py-1 bg-[#fff3e0] border-2 border-on-surface rounded-full shadow-sm">
-            <Flame className="w-4 h-4 text-[#e65100] fill-[#e65100] animate-pulse" />
+            <Flame className="w-4 h-4 text-[#e65100] fill-[#e65100]" />
             <span className="text-xs font-headline font-black text-on-surface">
               {user ? `${(user as any).streak_days || 1} Hari` : "1 Hari"}
             </span>
@@ -595,10 +595,7 @@ function ChallengePlaygroundContent({
             <div className="flex items-center justify-between mb-3">
               <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-primary" />
-                <span>Arena Koding (Preview Langsung)</span>
-              </span>
-              <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300 animate-pulse">
-                ⚡ Real-time Live
+                <span>Arena Koding</span>
               </span>
             </div>
 
@@ -634,9 +631,9 @@ function ChallengePlaygroundContent({
                     }`}
                   >
                     <span
-                      className={`animate-bounce ${
+                      className={
                         itemsCount > 4 ? "text-lg" : "text-2xl"
-                      }`}
+                      }
                     >
                       {color.emoji}
                     </span>
@@ -704,7 +701,7 @@ function ChallengePlaygroundContent({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface">
-                CSS Editor (Live Input)
+                CSS Editor
               </span>
               <button
                 onClick={handleReset}
@@ -718,17 +715,12 @@ function ChallengePlaygroundContent({
 
             {/* Code Input Area */}
             <div className="rounded-2xl border-3 border-on-surface overflow-hidden bg-[#1e1e2e] shadow-brutal">
-              <div className="bg-[#181825] px-3.5 py-2 border-b border-[#313244] flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                  <span className="text-[11px] font-mono text-[#a6adc8] ml-2">
-                    style.css
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono font-bold text-emerald-400">
-                  Live Sync
+              <div className="bg-[#181825] px-3.5 py-2 border-b border-[#313244] flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <span className="text-[11px] font-mono text-[#a6adc8] ml-2">
+                  style.css
                 </span>
               </div>
               <textarea
@@ -742,61 +734,46 @@ function ChallengePlaygroundContent({
             </div>
           </div>
 
-          {/* Bottom Action Area: Real-Time Feedback & Automatic Level Advancement */}
-          <div className="pt-4 mt-4 border-t border-outline-variant space-y-2">
-            {liveEval.passed ? (
-              <div className="space-y-2.5 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <div className="p-3.5 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-center gap-2.5 text-xs font-headline font-black text-emerald-950 shadow-sm">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                  <span>Sempurna! Target berhasil dicapai secara live! 🎉</span>
-                </div>
+          {/* Bottom Action Area: Appears when target is achieved */}
+          {liveEval.passed && (
+            <div className="pt-4 mt-4 border-t border-outline-variant space-y-2.5 animate-in fade-in duration-300">
+              <div className="p-3.5 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-center gap-2.5 text-xs font-headline font-black text-emerald-950 shadow-sm">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                <span>Sempurna! Target berhasil dicapai! 🎉</span>
+              </div>
 
-                {isClassCompleted || challenge?.order_index === 10 ? (
-                  <Link href="/dashboard" className="block w-full">
-                    <button className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all">
-                      <span>🏆 Selamat! Kamu Menamatkan Kelas (Ke Dashboard)</span>
-                    </button>
-                  </Link>
-                ) : (
-                  <button
-                    onClick={() => {
-                      if (nextChallengeId) {
-                        router.push(
-                          `/classes/${classId}/learn/${nextChallengeId}`
-                        );
-                      } else {
-                        // Fallback ke tantangan urutan berikutnya
-                        const nextOrder = (challenge?.order_index || 1) + 1;
-                        router.push(`/classes/${classId}`);
-                      }
-                    }}
-                    className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all animate-pulse"
-                  >
-                    <span>Lanjut ke Level Berikutnya</span>
-                    <Rocket className="w-5 h-5" />
+              {isClassCompleted || challenge?.order_index === 10 ? (
+                <Link href="/dashboard" className="block w-full">
+                  <button className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all">
+                    <span>🏆 Selamat! Kamu Menamatkan Kelas (Ke Dashboard)</span>
                   </button>
-                )}
-
-                <Link
-                  href={`/classes/${classId}`}
-                  className="block w-full text-center py-1 text-xs font-bold text-on-surface-variant hover:underline"
-                >
-                  Kembali ke Silabus Kelas
                 </Link>
-              </div>
-            ) : (
-              <div className="p-4 bg-surface-container-high rounded-2xl border-2 border-dashed border-on-surface flex items-center justify-between text-xs font-bold text-on-surface-variant">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
-                  <span>Live Preview: Ketik CSS untuk menyelaraskan permen</span>
-                </div>
-                <span className="font-mono text-[11px] text-primary">
-                  {liveEval.goals.filter((g) => g.passed).length}/
-                  {liveEval.goals.length} Cocok
-                </span>
-              </div>
-            )}
-          </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    if (nextChallengeId) {
+                      router.push(
+                        `/classes/${classId}/learn/${nextChallengeId}`
+                      );
+                    } else {
+                      router.push(`/classes/${classId}`);
+                    }
+                  }}
+                  className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all"
+                >
+                  <span>Lanjut ke Level Berikutnya</span>
+                  <Rocket className="w-5 h-5" />
+                </button>
+              )}
+
+              <Link
+                href={`/classes/${classId}`}
+                className="block w-full text-center py-1 text-xs font-bold text-on-surface-variant hover:underline"
+              >
+                Kembali ke Silabus Kelas
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
