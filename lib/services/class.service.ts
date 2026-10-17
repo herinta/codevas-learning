@@ -256,4 +256,166 @@ export class ClassService {
       };
     });
   }
+
+  /**
+   * Admin: Get all classes with stats (filter by category, e.g., 'LIVE_CODE')
+   */
+  static async getAdminClasses(category?: string): Promise<Array<ClassEntity & {
+    totalChallenges: number;
+    totalEnrollments: number;
+    totalCompletions: number;
+  }>> {
+    let whereClause = "";
+    const values: any[] = [];
+    if (category) {
+      whereClause = "WHERE c.category = $1";
+      values.push(category);
+    }
+
+    const rows = await query<any>(
+      `SELECT
+         c.*,
+         (SELECT count(*)::text FROM challenges ch WHERE ch.class_id = c.id) as total_challenges,
+         (SELECT count(*)::text FROM user_enrollments ue WHERE ue.class_id = c.id AND ue.status != 'DROPPED') as total_enrollments,
+         (SELECT count(*)::text FROM user_progress up JOIN challenges ch ON up.challenge_id = ch.id WHERE ch.class_id = c.id AND up.status = 'COMPLETED') as total_completions
+       FROM classes c
+       ${whereClause}
+       ORDER BY c.order_index ASC, c.created_at ASC`,
+      values
+    );
+
+    return rows.map((r) => ({
+      ...r,
+      totalChallenges: parseInt(r.total_challenges || "0", 10),
+      totalEnrollments: parseInt(r.total_enrollments || "0", 10),
+      totalCompletions: parseInt(r.total_completions || "0", 10),
+    }));
+  }
+
+  /**
+   * Admin: Create a new class
+   */
+  static async createClass(data: {
+    id: string;
+    category: "LIVE_CODE" | "DRAG_DROP" | "QUIZ";
+    title: string;
+    tagline?: string;
+    description?: string;
+    difficulty_level?: string;
+    xp_reward?: number;
+    estimated_time?: string;
+    is_published?: boolean;
+    order_index?: number;
+  }): Promise<ClassEntity> {
+    const cleanId = data.id.trim().toLowerCase().replace(/[^a-z0-9-_]/g, "-");
+    const rows = await query<ClassEntity>(
+      `INSERT INTO classes (
+         id, category, title, tagline, description, difficulty_level,
+         xp_reward, estimated_time, is_published, order_index
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       RETURNING *`,
+      [
+        cleanId,
+        data.category || "LIVE_CODE",
+        data.title.trim(),
+        data.tagline?.trim() || null,
+        data.description?.trim() || null,
+        data.difficulty_level || "Pemula",
+        data.xp_reward ?? 150,
+        data.estimated_time || "2 Jam",
+        data.is_published ?? true,
+        data.order_index ?? 1,
+      ]
+    );
+
+    return rows[0];
+  }
+
+  /**
+   * Admin: Update class details
+   */
+  static async updateClass(
+    id: string,
+    data: {
+      category?: "LIVE_CODE" | "DRAG_DROP" | "QUIZ";
+      title?: string;
+      tagline?: string;
+      description?: string;
+      difficulty_level?: string;
+      xp_reward?: number;
+      estimated_time?: string;
+      is_published?: boolean;
+      order_index?: number;
+    }
+  ): Promise<ClassEntity | null> {
+    const fields: string[] = [];
+    const values: any[] = [];
+    let idx = 1;
+
+    if (data.category !== undefined) {
+      fields.push(`category = $${idx++}`);
+      values.push(data.category);
+    }
+    if (data.title !== undefined) {
+      fields.push(`title = $${idx++}`);
+      values.push(data.title.trim());
+    }
+    if (data.tagline !== undefined) {
+      fields.push(`tagline = $${idx++}`);
+      values.push(data.tagline.trim());
+    }
+    if (data.description !== undefined) {
+      fields.push(`description = $${idx++}`);
+      values.push(data.description.trim());
+    }
+    if (data.difficulty_level !== undefined) {
+      fields.push(`difficulty_level = $${idx++}`);
+      values.push(data.difficulty_level);
+    }
+    if (data.xp_reward !== undefined) {
+      fields.push(`xp_reward = $${idx++}`);
+      values.push(data.xp_reward);
+    }
+    if (data.estimated_time !== undefined) {
+      fields.push(`estimated_time = $${idx++}`);
+      values.push(data.estimated_time);
+    }
+    if (data.is_published !== undefined) {
+      fields.push(`is_published = $${idx++}`);
+      values.push(data.is_published);
+    }
+    if (data.order_index !== undefined) {
+      fields.push(`order_index = $${idx++}`);
+      values.push(data.order_index);
+    }
+
+    if (fields.length === 0) {
+      const existing = await query<ClassEntity>("SELECT * FROM classes WHERE id = $1 LIMIT 1", [id]);
+      return existing[0] || null;
+    }
+
+    fields.push("updated_at = CURRENT_TIMESTAMP");
+    values.push(id);
+
+    const rows = await query<ClassEntity>(
+      `UPDATE classes
+       SET ${fields.join(", ")}
+       WHERE id = $${idx}
+       RETURNING *`,
+      values
+    );
+
+    return rows[0] || null;
+  }
+
+  /**
+   * Admin: Delete class (cascades to challenges)
+   */
+  static async deleteClass(id: string): Promise<boolean> {
+    const rows = await query<{ id: string }>(
+      `DELETE FROM classes WHERE id = $1 RETURNING id`,
+      [id]
+    );
+    return rows.length > 0;
+  }
 }

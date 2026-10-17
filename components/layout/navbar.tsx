@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Terminal, Menu, X, Sparkles, LogOut, LayoutGrid, Zap } from "lucide-react";
+import { Terminal, Menu, X, Sparkles, LogOut, LayoutGrid, Zap, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth/auth-context";
 
@@ -90,6 +90,17 @@ export const Navbar: React.FC = () => {
                 </span>
               </Link>
 
+              {user.role === "ADMIN" && (
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-400 text-on-surface border-2 border-on-surface rounded-full shadow-brutal-sm hover:scale-105 transition-transform"
+                  title="Panel Admin"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span className="font-headline font-black text-xs">Admin</span>
+                </Link>
+              )}
+
               <button
                 onClick={() => logout()}
                 className="p-2 rounded-full border border-on-surface bg-surface-container hover:bg-red-50 hover:text-red-600 text-on-surface-variant transition-colors"
@@ -155,6 +166,16 @@ export const Navbar: React.FC = () => {
             <LayoutGrid className="w-4 h-4" />
             <span>Dashboard Belajar</span>
           </Link>
+          {user?.role === "ADMIN" && (
+            <Link
+              href="/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-xl text-sm font-bold text-on-surface bg-amber-400 border border-on-surface flex items-center gap-2"
+            >
+              <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
+              <span>Panel Admin (Monitoring &amp; Kelas)</span>
+            </Link>
+          )}
           <Link
             href={user ? "/classes" : "#classes"}
             onClick={() => setMobileMenuOpen(false)}

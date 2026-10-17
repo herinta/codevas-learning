@@ -23,6 +23,7 @@ export interface UserEntity {
   xp_points: number;
   streak_days: number;
   last_active_date: string | Date;
+  last_seen_at?: Date | string;
   role: UserRole;
   created_at: Date | string;
   updated_at: Date | string;

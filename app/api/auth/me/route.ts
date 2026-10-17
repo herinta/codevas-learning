@@ -20,6 +20,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
+    // Perbarui waktu aktif terakhir user
+    UserService.touchLastSeen(user.id);
+
     return NextResponse.json(
       {
         user: {
