@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database Service
+  codevas-db:
+    image: postgres:16-alpine
+    container_name: codevas-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: codevas_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    volumes:
+      - codevas_pgdata:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d codevas_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - codevas-net
+
+  # 2. Next.js App Service (Frontend & App Router API)
+  codevas-web:
+    image: ghcr.io/herinta/codevas-learning:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: codevas-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:root@codevas-db:5432/codevas_db
+      DB_HOST: codevas-db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_NAME: codevas_db
+      NEXTAUTH_URL: https://codevas.synology.me
+      PORT: 3000
+      HOSTNAME: "0.0.0.0"
+    depends_on:
+      codevas-db:
+        condition: service_healthy
+    networks:
+      - codevas-net
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # 3. Watchtower: Otomatis mendeteksi push baru di GitHub & auto-update container
+  codevas-watchtower:
+    image: containrrr/watchtower:latest
+    container_name: codevas-watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=60 # Cek update setiap 60 detik
+      - WATCHTOWER_LABEL_ENABLE=true # Hanya update container yang memiliki label enable (codevas-web)
+    networks:
+      - codevas-net
+
+volumes:
+  codevas_pgdata:
+    name: codevas_pgdata
+
+networks:
+  codevas-net:
+    name: codevas-net
+    driver: bridge

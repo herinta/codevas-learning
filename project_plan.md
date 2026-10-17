@@ -89,3 +89,18 @@ Kurikulum dibagi berdasarkan **Kategori** (metode pendekatan belajar). Di dalam 
 ```eof
 
 Dengan struktur ini, tabel `classes` di *database* sudah pasti akan punya kolom `category`. AI juga tidak akan kebingungan membuat inisiatif fitur yang belum perlu dibuat karena batas-batas `(Coming Soon)` sudah disiapkan dengan tegas!
+
+---
+
+## 6. Next Tasks (Upcoming Milestones)
+1. **📱 Full Mobile Responsiveness**:
+   - Optimalisasi semua halaman agar responsive di layar mobile (`sm`, `md` breakpoints).
+   - Mobile navigation drawer / hamburger menu untuk Navbar.
+   - Penyesuaian layout split-screen `/classes/[id]` pada mobile (tab switching antara kanvas & code/instruksi).
+   - Layout kartu Dashboard dan Silabus Katalog yang adaptive.
+
+2. **🔐 Authentication dengan Auth.js (NextAuth v5) & Google Login**:
+   - Integrasi `@auth/core` / `next-auth` App Router handler (`/api/auth/[...nextauth]`).
+   - Setup Google OAuth Provider (Google Client ID & Secret).
+   - Sinkronisasi sesi login Google ke entitas database `users`.
+   - Middleware proteksi rute (`/dashboard`, `/classes/[id]`).
