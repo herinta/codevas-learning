@@ -25,6 +25,7 @@ Menggunakan `JSONB` agar struktur tabel fleksibel menampung konfigurasi soal yan
 
 *   **`users`**: `id`, `username`, `email`, `password_hash`, `xp_points`, `role` (USER, ADMIN).
 *   **`classes`**: `id`, `category` (ENUM: `LIVE_CODE`, `DRAG_DROP`, `QUIZ`), `title`, `description`, `is_published`.
+*   **`user_enrollments`**: `id` (UUID), `user_id` (FK -> users), `class_id` (FK -> classes), `status` (ACTIVE, COMPLETED, DROPPED), `enrolled_at`.
 *   **`challenges`** (Level dalam Kelas): 
     *   `id`, `class_id` (FK), `title`, `difficulty`.
     *   `instruction` (TEXT).

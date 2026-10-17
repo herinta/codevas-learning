@@ -28,12 +28,18 @@ export const Navbar: React.FC = () => {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-          <a
-            href="#curriculum"
+          <Link
+            href="/dashboard"
             className="px-4 py-1.5 rounded-full text-sm font-label font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
           >
-            Kurikulum
-          </a>
+            Dashboard
+          </Link>
+          <Link
+            href="/classes"
+            className="px-4 py-1.5 rounded-full text-sm font-label font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
+          >
+            Silabus
+          </Link>
           <a
             href="#demo"
             className="px-4 py-1.5 rounded-full text-sm font-label font-bold text-primary bg-primary-fixed border border-primary/20 transition-colors flex items-center gap-1.5"
@@ -93,13 +99,20 @@ export const Navbar: React.FC = () => {
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
         <div className="sm:hidden mt-2 max-w-sm mx-auto bg-surface-container-lowest border-2 border-on-surface rounded-2xl p-4 shadow-[0_6px_0_#2e1a28] flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-150">
-          <a
-            href="#curriculum"
+          <Link
+            href="/dashboard"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2 rounded-xl text-sm font-bold text-primary bg-primary-fixed"
+          >
+            Dashboard Belajar
+          </Link>
+          <Link
+            href="/classes"
             onClick={() => setMobileMenuOpen(false)}
             className="px-3 py-2 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container"
           >
-            Kurikulum
-          </a>
+            Silabus Semua Kelas
+          </Link>
           <a
             href="#demo"
             onClick={() => setMobileMenuOpen(false)}

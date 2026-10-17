@@ -56,7 +56,22 @@ CREATE TABLE IF NOT EXISTS challenges (
 CREATE INDEX IF NOT EXISTS idx_challenges_class_id ON challenges(class_id);
 CREATE INDEX IF NOT EXISTS idx_challenges_order ON challenges(class_id, order_index);
 
--- 5. Table: user_progress
+-- 5. Table: user_enrollments
+CREATE TABLE IF NOT EXISTS user_enrollments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    class_id VARCHAR(50) NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'COMPLETED', 'DROPPED')),
+    enrolled_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_user_class UNIQUE (user_id, class_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_enrollments_user ON user_enrollments(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_enrollments_class ON user_enrollments(class_id);
+
+-- 6. Table: user_progress
 CREATE TABLE IF NOT EXISTS user_progress (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -232,7 +247,14 @@ export async function seedInitialData() {
       `, [c.id, c.class_id, c.title, c.difficulty, c.order_index, c.instruction, JSON.stringify(c.locked_template), c.initial_state, JSON.stringify(c.validation_rule)]);
     }
 
-    // 4. Initial Progress for Alex
+    // 4. Initial Enrollments (Alex enrolled in CSS Flexbox)
+    await client.query(`
+      INSERT INTO user_enrollments (user_id, class_id, status)
+      VALUES ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'css-flexbox', 'ACTIVE')
+      ON CONFLICT (user_id, class_id) DO NOTHING;
+    `);
+
+    // 5. Initial Progress for Alex
     await client.query(`
       INSERT INTO user_progress (user_id, challenge_id, status, code_snapshot)
       VALUES 
@@ -267,6 +289,7 @@ export async function setupDatabase() {
     const usersCount = (await client.query('SELECT count(*) FROM users')).rows[0].count;
     const classesCount = (await client.query('SELECT count(*) FROM classes')).rows[0].count;
     const challengesCount = (await client.query('SELECT count(*) FROM challenges')).rows[0].count;
+    const enrollmentsCount = (await client.query('SELECT count(*) FROM user_enrollments')).rows[0].count;
     const progressCount = (await client.query('SELECT count(*) FROM user_progress')).rows[0].count;
 
     return {
@@ -276,6 +299,7 @@ export async function setupDatabase() {
         users: Number(usersCount),
         classes: Number(classesCount),
         challenges: Number(challengesCount),
+        user_enrollments: Number(enrollmentsCount),
         user_progress: Number(progressCount),
       },
     };

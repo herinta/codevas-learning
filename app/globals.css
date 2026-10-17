@@ -60,11 +60,18 @@
 
 /* Neo-Brutalist & Candy Shadow Utilities */
 .candy-btn-shadow {
-  box-shadow: 0 4px 0 #2e1a28;
+  box-shadow: 3px 3px 0 #2e1a28;
 }
 .candy-btn-shadow:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #2e1a28;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #2e1a28;
+}
+
+.candy-card-shadow {
+  box-shadow: 4px 4px 0px #2e1a28;
+}
+.candy-card-shadow-lg {
+  box-shadow: 6px 6px 0px #2e1a28;
 }
 
 .neo-shadow {

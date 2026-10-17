@@ -82,7 +82,22 @@ CREATE TABLE IF NOT EXISTS challenges (
 CREATE INDEX IF NOT EXISTS idx_challenges_class_id ON challenges(class_id);
 CREATE INDEX IF NOT EXISTS idx_challenges_order ON challenges(class_id, order_index);
 
--- 5. Table: user_progress
+-- 5. Table: user_enrollments
+CREATE TABLE IF NOT EXISTS user_enrollments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    class_id VARCHAR(50) NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'COMPLETED', 'DROPPED')),
+    enrolled_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_user_class UNIQUE (user_id, class_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_enrollments_user ON user_enrollments(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_enrollments_class ON user_enrollments(class_id);
+
+-- 6. Table: user_progress
 CREATE TABLE IF NOT EXISTS user_progress (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -104,9 +119,9 @@ async function main() {
   try {
     console.log('📦 Executing ERD Schema DDL...');
     await client.query(DDL_SCHEMA);
-    console.log('✅ Tables created/verified according to ERD: users, classes, challenges, user_progress');
+    console.log('✅ Tables created/verified according to ERD: users, classes, user_enrollments, challenges, user_progress');
 
-    console.log('🌱 Seeding curriculum data...');
+    console.log('🌱 Seeding curriculum data & user enrollments...');
     // Demo accounts
     await client.query(`
       INSERT INTO users (id, username, email, password_hash, xp_points, role) VALUES
@@ -129,19 +144,28 @@ async function main() {
         is_published = EXCLUDED.is_published;
     `);
 
+    // Demo Enrollment: Alex enrolled in CSS Flexbox
+    await client.query(`
+      INSERT INTO user_enrollments (user_id, class_id, status)
+      VALUES ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'css-flexbox', 'ACTIVE')
+      ON CONFLICT (user_id, class_id) DO NOTHING;
+    `);
+
     // Verify summary
     const resUsers = await client.query('SELECT count(*) FROM users');
     const resClasses = await client.query('SELECT count(*) FROM classes');
     const resChallenges = await client.query('SELECT count(*) FROM challenges');
+    const resEnrollments = await client.query('SELECT count(*) FROM user_enrollments');
     const resProgress = await client.query('SELECT count(*) FROM user_progress');
 
     console.log('\n📊 Database Summary in DBeaver / PostgreSQL:');
-    console.log(`- Database Name   : codevas_db`);
-    console.log(`- users table     : ${resUsers.rows[0].count} rows`);
-    console.log(`- classes table   : ${resClasses.rows[0].count} rows`);
-    console.log(`- challenges table: ${resChallenges.rows[0].count} rows`);
-    console.log(`- user_progress   : ${resProgress.rows[0].count} rows`);
-    console.log('\n✨ Database is 100% ready and matches the ERD!');
+    console.log(`- Database Name       : codevas_db`);
+    console.log(`- users table         : ${resUsers.rows[0].count} rows`);
+    console.log(`- classes table       : ${resClasses.rows[0].count} rows`);
+    console.log(`- challenges table    : ${resChallenges.rows[0].count} rows`);
+    console.log(`- user_enrollments    : ${resEnrollments.rows[0].count} rows`);
+    console.log(`- user_progress       : ${resProgress.rows[0].count} rows`);
+    console.log('\n✨ Database with user_enrollments is 100% ready and matches the updated ERD!');
   } finally {
     client.release();
     await pool.end();

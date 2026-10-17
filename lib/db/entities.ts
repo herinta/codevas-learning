@@ -7,6 +7,7 @@ export type UserRole = 'USER' | 'ADMIN';
 export type ClassCategory = 'LIVE_CODE' | 'DRAG_DROP' | 'QUIZ';
 export type ChallengeDifficulty = 'EASY' | 'MEDIUM' | 'HARD' | 'BOSS_FIGHT';
 export type ProgressStatus = 'LOCKED' | 'IN_PROGRESS' | 'COMPLETED';
+export type EnrollmentStatus = 'ACTIVE' | 'COMPLETED' | 'DROPPED';
 
 /**
  * Entity: users
@@ -70,9 +71,24 @@ export interface UserProgressEntity {
 }
 
 /**
+ * Entity: user_enrollments
+ * Table mapping for user class enrollments
+ */
+export interface UserEnrollmentEntity {
+  id: string; // UUID
+  user_id: string; // Foreign key -> users.id
+  class_id: string; // Foreign key -> classes.id
+  status: EnrollmentStatus;
+  enrolled_at: Date | string;
+  created_at: Date | string;
+  updated_at: Date | string;
+}
+
+/**
  * Extended Class model with challenge relations
  */
 export interface ClassWithChallenges extends ClassEntity {
   challenges: ChallengeEntity[];
   completedCount?: number;
+  isEnrolled?: boolean;
 }
