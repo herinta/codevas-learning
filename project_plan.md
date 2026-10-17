@@ -10,7 +10,7 @@ Menghilangkan rasa frustrasi "kanvas kosong" bagi pelajar dengan menyajikan UI y
 
 ## 2. Tech Stack & Infrastructure
 *   **Frontend:** Next.js, Tailwind CSS, Monaco Editor, Framer Motion.
-*   **Backend:** Java Spring Boot (REST API, Validation Engine).
+*   **Backend:** Nextjs (REST API, Validation Engine).
 *   **Database:** PostgreSQL.
 *   **Development AI Workflow:** Google Stitch (Fase Desain Visual/UI) + Google Antigravity (Fase Slicing & Logika).
 *   **Deployment:** Docker Containerized, Self-Hosted via Synology NAS (Reverse Proxy).
