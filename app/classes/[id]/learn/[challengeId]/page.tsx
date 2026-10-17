@@ -373,12 +373,172 @@ function ChallengePlaygroundContent({
     }
   }, [liveEval.passed, hasSavedPass, user, challengeId, cssCode, refreshUser]);
 
-  const handleInsertHelper = (snippet: string) => {
-    setCssCode((prev) => {
-      if (prev.includes(".arena {")) {
-        return prev.replace(".arena {", `.arena {\n  ${snippet};`);
+  // Mini Confetti canvas ref localized strictly within the right panel
+  const confettiCanvasRef = React.useRef<HTMLCanvasElement | null>(null);
+
+  const fireMiniConfetti = React.useCallback(() => {
+    const canvas = confettiCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Set canvas dimensions to right panel container size
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+    const colors = ["#ec4899", "#f59e0b", "#10b981", "#6366f1", "#06b6d4", "#fbbf24", "#e11d48"];
+    const particlesCount = 42;
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      color: string;
+      rotation: number;
+      rotationSpeed: number;
+      alpha: number;
+      shape: "rect" | "circle";
+    }> = [];
+
+    // Burst from bottom center of the right action panel
+    const startX = canvas.width / 2;
+    const startY = canvas.height - 80;
+
+    for (let i = 0; i < particlesCount; i++) {
+      const speed = 4 + Math.random() * 7;
+      particles.push({
+        x: startX + (Math.random() - 0.5) * 80,
+        y: startY,
+        vx: (Math.random() - 0.5) * 8,
+        vy: -speed - 2,
+        size: 5 + Math.random() * 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 12,
+        alpha: 1,
+        shape: Math.random() > 0.4 ? "rect" : "circle",
+      });
+    }
+
+    let animationFrameId: number;
+    const startTime = performance.now();
+
+    const render = (time: number) => {
+      const elapsed = time - startTime;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      let alive = false;
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.22; // gravity
+        p.vx *= 0.98; // air drag
+        p.rotation += p.rotationSpeed;
+        if (elapsed > 900) {
+          p.alpha = Math.max(0, 1 - (elapsed - 900) / 900);
+        }
+
+        if (p.alpha > 0 && p.y < canvas.height + 20) {
+          alive = true;
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+
+          if (p.shape === "rect") {
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+          } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
       }
-      return `${prev}\n${snippet};`;
+
+      if (alive && elapsed < 2000) {
+        animationFrameId = requestAnimationFrame(render);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(render);
+  }, []);
+
+  // Trigger mini confetti only when transitioning from false -> true
+  const prevPassedRef = React.useRef(false);
+  useEffect(() => {
+    if (liveEval.passed && !prevPassedRef.current) {
+      fireMiniConfetti();
+    }
+    prevPassedRef.current = liveEval.passed;
+  }, [liveEval.passed, fireMiniConfetti]);
+
+  // Check if a snippet is already present in user's CSS
+  const isHelperActive = (snippet: string, code: string): boolean => {
+    const clean = snippet.trim().replace(/;$/, "");
+    if (clean.includes(":")) {
+      const [prop, val] = clean.split(":").map((s) => s.trim());
+      const escapedVal = val.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+      const regex = new RegExp(`\\b${prop}\\s*:\\s*${escapedVal}\\b`, "i");
+      return regex.test(code);
+    }
+    if (clean.startsWith(".")) {
+      const escaped = clean.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+      return new RegExp(`${escaped}\\b`, "i").test(code);
+    }
+    return code.toLowerCase().includes(clean.toLowerCase());
+  };
+
+  // Toggle helper: Click once to insert, click again to remove cleanly (no stacking/spam)
+  const handleToggleHelper = (snippet: string) => {
+    const clean = snippet.trim().replace(/;$/, "");
+
+    setCssCode((prev) => {
+      // 1. If snippet is a CSS declaration (e.g. "display: flex" or "justify-content: center")
+      if (clean.includes(":")) {
+        const [prop, val] = clean.split(":").map((s) => s.trim());
+        const escapedVal = val.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+        const exactRegex = new RegExp(`[\\t ]*${prop}\\s*:\\s*${escapedVal}\\s*;?\\n?`, "gi");
+
+        // If EXACT declaration already exists -> TOGGLE OFF (REMOVE)
+        if (exactRegex.test(prev)) {
+          return prev.replace(exactRegex, "").replace(/\n{3,}/g, "\n\n");
+        }
+
+        // If the same property already exists with another value -> REPLACE IT (no stacking/spam)
+        const samePropRegex = new RegExp(`${prop}\\s*:\\s*[^;\\n]+;?`, "i");
+        if (samePropRegex.test(prev)) {
+          return prev.replace(samePropRegex, `${prop}: ${val};`);
+        }
+
+        // Otherwise -> INSERT into .arena { ... } or append
+        if (prev.includes(".arena {")) {
+          return prev.replace(".arena {", `.arena {\n  ${clean};`);
+        }
+        return `${prev}\n${clean};`;
+      }
+
+      // 2. If snippet is a selector (e.g. ".permen-2" or ".permen-3")
+      if (clean.startsWith(".")) {
+        const escaped = clean.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+        const blockRegex = new RegExp(`\\n*${escaped}\\s*\\{[^}]*\\}`, "gi");
+        if (blockRegex.test(prev)) {
+          return prev.replace(blockRegex, "").replace(/\n{3,}/g, "\n\n");
+        }
+        const defaultProp = clean.includes("2") ? "align-self: flex-end;" : "order: -1;";
+        return `${prev}\n\n${clean} {\n  ${defaultProp}\n}`;
+      }
+
+      // 3. Fallback toggle
+      if (prev.includes(clean)) {
+        return prev.replace(clean, "").replace(/\n{3,}/g, "\n\n");
+      }
+      return `${prev}\n${clean};`;
     });
   };
 
@@ -664,29 +824,49 @@ function ChallengePlaygroundContent({
 
           </div>
 
-          {/* Quick Syntax Pills Helper (Dinamis dari API) */}
+          {/* Quick Syntax Pills Helper (Dinamis dari API & Toggleable) */}
           {challenge?.syntax_helpers && challenge.syntax_helpers.length > 0 && (
             <div className="mt-4 pt-4 border-t border-outline-variant">
-              <span className="block text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">
-                Ketik Cepat (Klik untuk menyisipkan):
-              </span>
+              <div className="flex items-center justify-between mb-2">
+                <span className="block text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+                  Ketik Cepat (Klik pasang / klik lagi untuk hapus):
+                </span>
+              </div>
               <div className="flex flex-wrap gap-1.5">
-                {challenge.syntax_helpers.map((snippet) => (
-                  <button
-                    key={snippet}
-                    onClick={() => handleInsertHelper(snippet)}
-                    className="px-2.5 py-1 bg-surface-container-lowest border border-on-surface text-[11px] font-mono font-bold rounded-lg shadow-sm hover:bg-primary-fixed hover:text-primary transition-colors cursor-pointer active:scale-95"
-                  >
-                    +{snippet}
-                  </button>
-                ))}
+                {challenge.syntax_helpers.map((snippet) => {
+                  const active = isHelperActive(snippet, cssCode);
+                  return (
+                    <button
+                      key={snippet}
+                      onClick={() => handleToggleHelper(snippet)}
+                      className={`px-2.5 py-1 text-[11px] font-mono rounded-lg transition-all cursor-pointer active:scale-95 flex items-center gap-1 ${
+                        active
+                          ? "bg-primary text-white border-2 border-primary shadow-xs font-black ring-2 ring-primary/30"
+                          : "bg-surface-container-lowest border border-on-surface text-on-surface font-bold hover:bg-primary-fixed hover:text-primary shadow-xs"
+                      }`}
+                      title={
+                        active
+                          ? `Klik untuk membatalkan / menghapus "${snippet}"`
+                          : `Klik untuk menyisipkan "${snippet}"`
+                      }
+                    >
+                      <span className="text-[10px] font-black">{active ? "✕" : "+"}</span>
+                      <span>{snippet}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
         </div>
 
         {/* PANEL 3: CODE EDITOR & REAL-TIME ACTION (4 Cols) */}
-        <div className="lg:col-span-4 p-5 sm:p-6 bg-surface-container-lowest flex flex-col justify-between">
+        <div className="lg:col-span-4 p-5 sm:p-6 bg-surface-container-lowest flex flex-col justify-between relative overflow-hidden">
+          {/* Localized Mini Confetti Canvas (Sebelah kanan saja, tidak full layar) */}
+          <canvas
+            ref={confettiCanvasRef}
+            className="pointer-events-none absolute inset-0 z-30 w-full h-full"
+          />
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface">
