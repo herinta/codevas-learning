@@ -61,6 +61,17 @@ services:
     networks:
       - codevas-net
 
+  # 4. Cloudflare Tunnel: Akses publik aman dari mana saja TANPA perlu akses router atau port forwarding
+  codevas-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: codevas-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --url http://codevas-web:3000
+    depends_on:
+      - codevas-web
+    networks:
+      - codevas-net
+
 volumes:
   codevas_pgdata:
     name: codevas_pgdata
