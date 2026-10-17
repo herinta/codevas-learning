@@ -36,7 +36,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: root
       DB_NAME: codevas_db
-      NEXTAUTH_URL: https://codevas.synology.me
+      NEXTAUTH_URL: https://codevas.my.id
       PORT: 3000
       HOSTNAME: "0.0.0.0"
     depends_on:
@@ -61,12 +61,12 @@ services:
     networks:
       - codevas-net
 
-  # 4. Cloudflare Tunnel: Akses publik aman dari mana saja TANPA perlu akses router atau port forwarding
+  # 4. Cloudflare Tunnel Resmi codevas.my.id (Zero-Port, Outbound Secure Tunnel)
   codevas-tunnel:
     image: cloudflare/cloudflared:latest
     container_name: codevas-tunnel
     restart: unless-stopped
-    command: tunnel --no-autoupdate --url http://codevas-web:3000
+    command: tunnel --no-autoupdate run --token eyJhIjoiMWJjNGU3NzhjMTBkNTc0MDhjMDMwYzI2MWM3MzVmNzEiLCJzIjoiS3NWUkFUV25qbjVOOVU2d1J0ZzBXS2o1dXh3WWc2N0NFT0hGWkJIaWlFWT0iLCJ0IjoiYzhlNWJmM2EtOTk4YS00MmYwLWI4OWUtOTVhZDAzNjA3MzJlIn0= --url http://codevas-web:3000
     depends_on:
       - codevas-web
     networks:
