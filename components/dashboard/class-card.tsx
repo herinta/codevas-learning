@@ -142,7 +142,7 @@ export const ClassTrackCard: React.FC<ClassTrackCardProps> = ({
               className={`h-full rounded-full transition-all duration-300 ${
                 isPublished ? config.progressBg : "bg-outline/50"
               }`}
-              style={{ width: `${isPublished ? Math.max(progressPercent, 4) : 0}%` }}
+              style={{ width: `${isPublished && isStarted ? progressPercent : 0}%` }}
             />
           </div>
         </div>

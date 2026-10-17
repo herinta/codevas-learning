@@ -213,6 +213,7 @@ export class ClassService {
       enrolled_at: string;
       total_levels: string;
       completed_levels: string;
+      active_challenge_id: string | null;
     }>(
       `SELECT 
          c.id, c.title, c.tagline, c.category, c.difficulty_level, c.xp_reward,
@@ -221,7 +222,12 @@ export class ClassService {
          (SELECT count(*)::text 
           FROM user_progress up 
           JOIN challenges ch ON up.challenge_id = ch.id 
-          WHERE up.user_id = ue.user_id AND ch.class_id = c.id AND up.status = 'COMPLETED') as completed_levels
+          WHERE up.user_id = ue.user_id AND ch.class_id = c.id AND up.status = 'COMPLETED') as completed_levels,
+         (SELECT ch.id 
+          FROM challenges ch
+          LEFT JOIN user_progress up ON up.challenge_id = ch.id AND up.user_id = ue.user_id
+          WHERE ch.class_id = c.id AND (up.status IS NULL OR up.status != 'COMPLETED')
+          ORDER BY ch.order_index ASC LIMIT 1) as active_challenge_id
        FROM user_enrollments ue
        JOIN classes c ON ue.class_id = c.id
        WHERE ue.user_id = $1 AND ue.status = 'ACTIVE'
@@ -245,7 +251,7 @@ export class ClassService {
         totalLevels,
         completedLevels,
         progressPercent,
-        nextChallengeId: `${r.id}-1-activation`, // Default link
+        nextChallengeId: r.active_challenge_id || `${r.id}-1-activation`,
         enrolled_at: r.enrolled_at,
       };
     });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, use, Suspense } from "react";
+import React, { useState, useEffect, use, Suspense, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -17,6 +17,7 @@ import {
   Rocket,
   Loader2,
   Zap,
+  Check,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
 
@@ -24,10 +25,27 @@ interface ChallengeData {
   id: string;
   class_id: string;
   title: string;
+  difficulty?: string;
+  order_index?: number;
   instruction: string;
   hint: string | null;
   xp_reward: number;
   initial_state: string;
+  codeSnapshot?: string;
+  locked_template?: {
+    element?: string;
+    itemsCount?: number;
+    itemLabels?: string[];
+  };
+  target_visual?: {
+    display?: string;
+    flexDirection?: string;
+    justifyContent?: string;
+    alignItems?: string;
+    flexWrap?: string;
+    gap?: string;
+    description?: string;
+  };
 }
 
 function ChallengePlaygroundContent({
@@ -52,13 +70,16 @@ function ChallengePlaygroundContent({
     earnedXp?: number;
     newTotalXp?: number;
     nextChallengeId?: string | null;
+    isClassCompleted?: boolean;
   } | null>(null);
 
   // Load challenge info
   useEffect(() => {
     async function loadData() {
+      setLoading(true);
+      setResult(null);
       try {
-        const res = await fetch(`/api/classes/${classId}`);
+        const res = await fetch(`/api/classes/${classId}`, { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data?.challenges) {
@@ -83,31 +104,6 @@ function ChallengePlaygroundContent({
     }
     loadData();
   }, [classId, challengeId]);
-
-  // Extract CSS inside .arena { ... } for live preview
-  const parseUserStyles = (): React.CSSProperties => {
-    try {
-      const match = cssCode.match(/\.arena\s*\{([^}]*)\}/i) || [null, cssCode];
-      const declarations = match[1] || "";
-      const styleObj: Record<string, string> = {};
-
-      declarations.split(";").forEach((rule) => {
-        const [prop, val] = rule.split(":");
-        if (prop && val) {
-          const camelProp = prop
-            .trim()
-            .replace(/-([a-z])/g, (_, g) => g.toUpperCase());
-          styleObj[camelProp] = val.trim();
-        }
-      });
-
-      return styleObj as React.CSSProperties;
-    } catch {
-      return {};
-    }
-  };
-
-  const userStyles = parseUserStyles();
 
   // Handle evaluation
   const handleEvaluate = async () => {
@@ -134,6 +130,7 @@ function ChallengePlaygroundContent({
         earnedXp: data.earnedXp,
         newTotalXp: data.newTotalXp,
         nextChallengeId: data.nextChallengeId,
+        isClassCompleted: data.isClassCompleted,
       });
 
       if (data.passed) {
@@ -165,6 +162,38 @@ function ChallengePlaygroundContent({
     }
   };
 
+  // Item configurations
+  const itemsCount = challenge?.locked_template?.itemsCount || 3;
+  const itemLabels = challenge?.locked_template?.itemLabels || [
+    "🍬 Permen 1",
+    "🍭 Permen 2",
+    "🍫 Permen 3",
+  ];
+
+  const palette = [
+    { bg: "bg-pink-100", border: "border-pink-900", text: "text-pink-950", emoji: "🍬" },
+    { bg: "bg-purple-100", border: "border-purple-900", text: "text-purple-950", emoji: "🍭" },
+    { bg: "bg-amber-100", border: "border-amber-900", text: "text-amber-950", emoji: "🍫" },
+    { bg: "bg-sky-100", border: "border-sky-900", text: "text-sky-950", emoji: "⭐" },
+    { bg: "bg-emerald-100", border: "border-emerald-900", text: "text-emerald-950", emoji: "💎" },
+    { bg: "bg-rose-100", border: "border-rose-900", text: "text-rose-950", emoji: "🍩" },
+  ];
+
+  // Scoped CSS generator for the live arena
+  const scopedCss = useMemo(() => {
+    if (!cssCode) return "";
+    return cssCode
+      .replace(/\.arena\b/g, "#live-arena")
+      .replace(/\.permen-([0-9]+)\b/g, "#live-arena .permen-$1")
+      .replace(/\.card-([0-9]+)\b/g, "#live-arena .card-$1");
+  }, [cssCode]);
+
+  // Target visual goal styles
+  const targetVisual = challenge?.target_visual || {};
+  const isLevel8 = challenge?.id === "flexbox-8-align-self";
+  const isLevel9 = challenge?.id === "flexbox-9-order";
+  const isLevel10 = challenge?.id === "flexbox-10-boss-fight";
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
@@ -178,6 +207,14 @@ function ChallengePlaygroundContent({
 
   return (
     <div className="min-h-screen bg-background text-on-surface flex flex-col">
+      {/* Scoped Dynamic Styles for Live Arena */}
+      <style>{`
+        #live-arena {
+          box-sizing: border-box;
+        }
+        ${scopedCss}
+      `}</style>
+
       {/* Top Bar Navigation */}
       <header className="w-full bg-surface-container-lowest border-b-2 border-on-surface px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
@@ -189,11 +226,18 @@ function ChallengePlaygroundContent({
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <span className="text-[11px] font-bold text-secondary tracking-widest uppercase">
-              MODUL INTERAKTIF
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-secondary tracking-widest uppercase">
+                LEVEL {challenge?.order_index || 1} / 10
+              </span>
+              {challenge?.difficulty && (
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-on-surface bg-primary text-white">
+                  {challenge.difficulty}
+                </span>
+              )}
+            </div>
             <h1 className="font-display font-black text-sm sm:text-base text-on-surface truncate max-w-xs sm:max-w-md">
-              {challenge?.title || "Level 1"}
+              {challenge?.title || "Level"}
             </h1>
           </div>
         </div>
@@ -247,23 +291,59 @@ function ChallengePlaygroundContent({
             </div>
 
             {/* Target Canvas Mini Preview */}
-            <div className="w-full h-36 bg-white rounded-xl border-2 border-dashed border-emerald-600 p-2 flex items-center justify-center gap-3 overflow-hidden shadow-inner">
-              <div className="w-16 h-16 rounded-xl bg-pink-100 border-2 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm">
-                <span className="text-xl">🍬</span>
-                <span className="text-[9px] font-bold font-mono">Item 1</span>
-              </div>
-              <div className="w-16 h-16 rounded-xl bg-purple-100 border-2 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm">
-                <span className="text-xl">🍭</span>
-                <span className="text-[9px] font-bold font-mono">Item 2</span>
-              </div>
-              <div className="w-16 h-16 rounded-xl bg-amber-100 border-2 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm">
-                <span className="text-xl">🍫</span>
-                <span className="text-[9px] font-bold font-mono">Item 3</span>
-              </div>
+            <div
+              className="w-full h-40 bg-white rounded-xl border-2 border-dashed border-emerald-600 p-2.5 overflow-hidden shadow-inner transition-all"
+              style={{
+                display: targetVisual.display || "flex",
+                flexDirection: (targetVisual.flexDirection as any) || "row",
+                justifyContent: targetVisual.justifyContent || "center",
+                alignItems: targetVisual.alignItems || "center",
+                flexWrap: (targetVisual.flexWrap as any) || "nowrap",
+                gap: targetVisual.gap || "8px",
+              }}
+            >
+              {Array.from({ length: itemsCount }).map((_, i) => {
+                const color = palette[i % palette.length];
+                const label = itemLabels[i] || `Item ${i + 1}`;
+
+                // Level-specific goal overrides for the visual target
+                const itemTargetStyle: React.CSSProperties = {};
+                if (isLevel8 && i === 1) {
+                  itemTargetStyle.alignSelf = "flex-end";
+                }
+                if (isLevel9 && i === 2) {
+                  itemTargetStyle.order = -1;
+                }
+
+                return (
+                  <div
+                    key={i}
+                    style={itemTargetStyle}
+                    className={`rounded-lg border-2 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm transition-all ${
+                      color.bg
+                    } ${
+                      isLevel10
+                        ? "w-[45%] h-14 p-1"
+                        : itemsCount > 4
+                        ? "w-11 h-11 p-0.5"
+                        : "w-14 h-14 p-1"
+                    }`}
+                  >
+                    <span className={itemsCount > 4 ? "text-sm" : "text-base"}>
+                      {color.emoji}
+                    </span>
+                    <span className="text-[8px] font-bold font-mono text-center truncate max-w-full">
+                      {label.replace(/^[^\w]+/, "")}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
 
             <p className="text-[11px] text-on-surface-variant font-medium leading-tight">
-              💡 <em>Catatan:</em> Solusi kamu fleksibel! Yang terpenting elemen tersusun horizontal dan berada di tengah arena.
+              💡 <em>Tujuan:</em>{" "}
+              {targetVisual.description ||
+                "Sesuaikan properti CSS flexbox agar tata letak arena cocok dengan target di atas."}
             </p>
           </div>
 
@@ -278,7 +358,8 @@ function ChallengePlaygroundContent({
             </button>
             {showHint && (
               <div className="mt-2 p-3 bg-secondary-fixed/30 border border-secondary rounded-xl text-xs text-on-surface font-medium leading-relaxed">
-                {challenge?.hint || "Gunakan display: flex; justify-content: center; align-items: center;"}
+                {challenge?.hint ||
+                  "Gunakan display: flex; justify-content: center; align-items: center;"}
               </div>
             )}
           </div>
@@ -299,27 +380,41 @@ function ChallengePlaygroundContent({
 
             {/* LIVE ARENA CONTAINER */}
             <div
-              className="w-full h-80 bg-surface-container-lowest border-4 border-on-surface rounded-2xl p-4 shadow-brutal overflow-auto transition-all relative"
-              style={userStyles}
+              id="live-arena"
+              className="arena w-full h-80 bg-surface-container-lowest border-4 border-on-surface rounded-2xl p-4 shadow-brutal overflow-auto transition-all relative"
             >
-              <div className="w-20 h-20 rounded-2xl bg-pink-200 border-3 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm transition-all duration-300">
-                <span className="text-2xl animate-bounce">🍬</span>
-                <span className="text-[10px] font-bold font-mono text-on-surface">
-                  Permen 1
-                </span>
-              </div>
-              <div className="w-20 h-20 rounded-2xl bg-purple-200 border-3 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm transition-all duration-300">
-                <span className="text-2xl">🍭</span>
-                <span className="text-[10px] font-bold font-mono text-on-surface">
-                  Permen 2
-                </span>
-              </div>
-              <div className="w-20 h-20 rounded-2xl bg-amber-200 border-3 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm transition-all duration-300">
-                <span className="text-2xl">🍫</span>
-                <span className="text-[10px] font-bold font-mono text-on-surface">
-                  Permen 3
-                </span>
-              </div>
+              {Array.from({ length: itemsCount }).map((_, i) => {
+                const color = palette[i % palette.length];
+                const label = itemLabels[i] || `Permen ${i + 1}`;
+
+                return (
+                  <div
+                    key={i}
+                    className={`permen-${i + 1} card-${
+                      i + 1
+                    } rounded-2xl border-3 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm transition-all duration-300 ${
+                      color.bg
+                    } ${
+                      isLevel10
+                        ? "w-[46%] min-h-[5rem] p-2"
+                        : itemsCount > 4
+                        ? "w-14 h-14 p-1"
+                        : "w-20 h-20 p-2"
+                    }`}
+                  >
+                    <span
+                      className={`animate-bounce ${
+                        itemsCount > 4 ? "text-lg" : "text-2xl"
+                      }`}
+                    >
+                      {color.emoji}
+                    </span>
+                    <span className="text-[10px] font-bold font-mono text-on-surface text-center truncate max-w-full">
+                      {label}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -332,7 +427,11 @@ function ChallengePlaygroundContent({
               {[
                 "display: flex",
                 "justify-content: center",
+                "justify-content: space-between",
+                "justify-content: space-around",
                 "align-items: center",
+                "flex-direction: column",
+                "flex-wrap: wrap",
                 "gap: 16px",
               ].map((snippet) => (
                 <button
@@ -418,12 +517,34 @@ function ChallengePlaygroundContent({
           {/* Bottom Submit Action Button */}
           <div className="pt-4 mt-4 border-t border-outline-variant space-y-2">
             {result?.passed ? (
-              <Link href={`/classes/${classId}`} className="block w-full">
-                <button className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all">
-                  <span>Kembali ke Silabus Kelas</span>
-                  <Rocket className="w-5 h-5" />
-                </button>
-              </Link>
+              <div className="space-y-2">
+                {result.nextChallengeId ? (
+                  <button
+                    onClick={() => {
+                      setResult(null);
+                      router.push(
+                        `/classes/${classId}/learn/${result.nextChallengeId}`
+                      );
+                    }}
+                    className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all"
+                  >
+                    <span>Lanjut ke Level Berikutnya</span>
+                    <Rocket className="w-5 h-5" />
+                  </button>
+                ) : (
+                  <Link href="/dashboard" className="block w-full">
+                    <button className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all">
+                      <span>🏆 Selamat! Kelas Selesai (Ke Dashboard)</span>
+                    </button>
+                  </Link>
+                )}
+                <Link
+                  href={`/classes/${classId}`}
+                  className="block w-full text-center py-1.5 text-xs font-bold text-on-surface-variant hover:underline"
+                >
+                  Kembali ke Silabus Kelas
+                </Link>
+              </div>
             ) : (
               <button
                 onClick={handleEvaluate}

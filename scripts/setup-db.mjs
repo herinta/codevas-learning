@@ -86,26 +86,6 @@ CREATE TABLE IF NOT EXISTS classes (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Alter classes if columns missing
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='tagline') THEN
-        ALTER TABLE classes ADD COLUMN tagline TEXT;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='difficulty_level') THEN
-        ALTER TABLE classes ADD COLUMN difficulty_level VARCHAR(30) NOT NULL DEFAULT 'Pemula';
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='xp_reward') THEN
-        ALTER TABLE classes ADD COLUMN xp_reward INT NOT NULL DEFAULT 150;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='estimated_time') THEN
-        ALTER TABLE classes ADD COLUMN estimated_time VARCHAR(50) NOT NULL DEFAULT '2 Jam';
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='order_index') THEN
-        ALTER TABLE classes ADD COLUMN order_index INT NOT NULL DEFAULT 1;
-    END IF;
-END $$;
-
 CREATE INDEX IF NOT EXISTS idx_classes_category ON classes(category);
 CREATE INDEX IF NOT EXISTS idx_classes_published ON classes(is_published);
 
@@ -127,22 +107,6 @@ CREATE TABLE IF NOT EXISTS challenges (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uq_class_order UNIQUE (class_id, order_index)
 );
-
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='xp_reward') THEN
-        ALTER TABLE challenges ADD COLUMN xp_reward INT NOT NULL DEFAULT 20;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='hint') THEN
-        ALTER TABLE challenges ADD COLUMN hint TEXT;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='target_visual') THEN
-        ALTER TABLE challenges ADD COLUMN target_visual JSONB NOT NULL DEFAULT '{}'::jsonb;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='validation_rules') THEN
-        ALTER TABLE challenges ADD COLUMN validation_rules JSONB NOT NULL DEFAULT '{}'::jsonb;
-    END IF;
-END $$;
 
 CREATE INDEX IF NOT EXISTS idx_challenges_class_id ON challenges(class_id);
 CREATE INDEX IF NOT EXISTS idx_challenges_order ON challenges(class_id, order_index);
@@ -175,13 +139,6 @@ CREATE TABLE IF NOT EXISTS user_progress (
     CONSTRAINT uq_user_challenge UNIQUE (user_id, challenge_id)
 );
 
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='user_progress' AND column_name='completed_at') THEN
-        ALTER TABLE user_progress ADD COLUMN completed_at TIMESTAMP WITH TIME ZONE;
-    END IF;
-END $$;
-
 CREATE INDEX IF NOT EXISTS idx_user_progress_user ON user_progress(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_progress_challenge ON user_progress(challenge_id);
 CREATE INDEX IF NOT EXISTS idx_user_progress_status ON user_progress(status);
@@ -202,7 +159,7 @@ async function main() {
       ('css-flexbox', 'LIVE_CODE', 'CSS Flexbox Mastery', 
        'Kuasai tata letak fleksibel modern, alignment instan, dan distribusi ruang.',
        'Dari aktivasi display: flex hingga trik mempusatkan elemen secara horizontal dan vertikal. Cocok untuk pemula yang ingin menguasai layouting CSS.',
-       'Pemula', 250, '1.5 Jam', TRUE, 1),
+       'Pemula', 550, '2.5 Jam', TRUE, 1),
       
       ('css-grid', 'LIVE_CODE', 'CSS Grid Architecture', 
        'Bangun tata letak 2 dimensi modern, sistem bento box, dan responsive grid.',
@@ -236,7 +193,7 @@ async function main() {
         order_index = EXCLUDED.order_index;
     `);
 
-    // 2. Challenges Seed (Levels inside CSS Flexbox)
+    // 2. Challenges Seed (Full 10 Levels inside CSS Flexbox!)
     await client.query(`
       INSERT INTO challenges (
         id, class_id, title, difficulty, order_index, xp_reward, instruction, hint,
@@ -245,12 +202,12 @@ async function main() {
       (
         'flexbox-1-activation',
         'css-flexbox',
-        'Level 1: Rapatkan 3 Permen ke Tengah Layar',
+        'Level 1: Rapatkan 3 Permen ke Titik Tengah',
         'EASY',
         1,
         50,
         'Tiga kotak permen saat ini berantakan dan menumpuk secara vertikal di pojok kiri atas. Tugasmu adalah membuat ketiga permen tersebut berbaris rapi secara horizontal dan berada tepat di tengah-tengah kotak arena!',
-        'Gunakan display: flex untuk menyusun horizontal, lalu gunakan justify-content: center dan align-items: center untuk memposisikannya di tengah.',
+        'Gunakan display: flex; lalu tambahkan justify-content: center; dan align-items: center; untuk memposisikannya di tengah.',
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["🍬 Permen 1", "🍭 Permen 2", "🍫 Permen 3"]}'::jsonb,
         '{"display": "flex", "flexDirection": "row", "justifyContent": "center", "alignItems": "center", "gap": "16px", "description": "Tiga permen berbaris horizontal di titik tengah arena dengan jarak serasi."}'::jsonb,
         '.arena {\n  /* Tulis kode CSS Flexbox kamu di sini */\n}',
@@ -259,30 +216,128 @@ async function main() {
       (
         'flexbox-2-space-between',
         'css-flexbox',
-        'Level 2: Sebarkan Kotak ke Ujung Arena',
+        'Level 2: Sebarkan Elemen ke Kedua Ujung Tepi',
         'EASY',
         2,
-        60,
-        'Buat ketiga kartu tersebar merata dari ujung kiri sampai ujung kanan arena dengan jarak antar elemen yang sama.',
-        'Atur display: flex lalu pilih nilai justify-content yang mendorong elemen ke batas tepi arena.',
-        '{"element": "arena", "itemsCount": 3, "itemLabels": ["Card A", "Card B", "Card C"]}'::jsonb,
-        '{"display": "flex", "justifyContent": "space-between", "alignItems": "center"}'::jsonb,
+        50,
+        'Buat ketiga kartu tersebar merata dari batas paling kiri sampai batas paling kanan arena dengan jarak antar elemen yang sama.',
+        'Gunakan display: flex; justify-content: space-between; align-items: center;.',
+        '{"element": "arena", "itemsCount": 3, "itemLabels": ["Permen A", "Permen B", "Permen C"]}'::jsonb,
+        '{"display": "flex", "justifyContent": "space-between", "alignItems": "center", "description": "Permen A di pojok kiri, C di pojok kanan, dan B tepat di tengah."}'::jsonb,
         '.arena {\n  display: flex;\n  /* Lengkapi agar terpisah ke kedua ujung */\n}',
         '{"goals": [{"property": "justify-content", "accepted": ["space-between"]}]}'::jsonb
       ),
       (
-        'flexbox-3-column-reverse',
+        'flexbox-3-space-around',
         'css-flexbox',
-        'Level 3: Balikkan Urutan Menjadi Kolom Terbalik',
-        'MEDIUM',
+        'Level 3: Distribusi Jarak Merata (Space Around)',
+        'EASY',
         3,
-        70,
-        'Ubah alur permen agar tersusun ke bawah secara vertikal, namun dengan urutan terbalik (Permen 3 di atas, Permen 1 di bawah).',
-        'Gunakan flex-direction: column-reverse.',
+        50,
+        'Berikan ruang sela yang seimbang di sekeliling tiap permen agar tidak menempel ke dinding pinggir arena.',
+        'Gunakan justify-content: space-around; atau space-evenly; dengan align-items: center;.',
+        '{"element": "arena", "itemsCount": 3, "itemLabels": ["Permen 1", "Permen 2", "Permen 3"]}'::jsonb,
+        '{"display": "flex", "justifyContent": "space-around", "alignItems": "center", "description": "Seluruh permen memiliki bantalan ruang sela merata di kiri dan kanannya."}'::jsonb,
+        '.arena {\n  display: flex;\n  /* Berikan ruang sela merata */\n}',
+        '{"goals": [{"property": "justify-content", "accepted": ["space-around", "space-evenly"]}]}'::jsonb
+      ),
+      (
+        'flexbox-4-flex-end',
+        'css-flexbox',
+        'Level 4: Dorong Semua Permen ke Pojok Kanan Bawah',
+        'EASY',
+        4,
+        50,
+        'Pindahkan ketiga permen ke sudut paling bawah dan paling kanan dari arena.',
+        'Gunakan justify-content: flex-end; dan align-items: flex-end; (atau nilai end).',
+        '{"element": "arena", "itemsCount": 3, "itemLabels": ["Permen 1", "Permen 2", "Permen 3"]}'::jsonb,
+        '{"display": "flex", "justifyContent": "flex-end", "alignItems": "flex-end", "gap": "16px", "description": "Semua permen berkumpul di sudut pojok kanan bawah arena."}'::jsonb,
+        '.arena {\n  display: flex;\n  /* Pindahkan ke pojok kanan bawah */\n}',
+        '{"goals": [{"property": "justify-content", "accepted": ["flex-end", "end"]}, {"property": "align-items", "accepted": ["flex-end", "end"]}]}'::jsonb
+      ),
+      (
+        'flexbox-5-direction-column',
+        'css-flexbox',
+        'Level 5: Ubah Alur Menjadi Kolom Vertikal',
+        'MEDIUM',
+        5,
+        60,
+        'Ubah alur permen agar berjejer lurus dari atas ke bawah secara vertikal di tengah-tengah arena.',
+        'Gunakan flex-direction: column; dan align-items: center; serta justify-content: center;.',
+        '{"element": "arena", "itemsCount": 3, "itemLabels": ["Top", "Mid", "Bot"]}'::jsonb,
+        '{"display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "gap": "12px", "description": "Permen berjejer ke bawah seperti tumpukan vertikal di tengah arena."}'::jsonb,
+        '.arena {\n  display: flex;\n  /* Ubah alur menjadi kolom vertikal terpusat */\n}',
+        '{"goals": [{"property": "flex-direction", "accepted": ["column"]}, {"property": "align-items", "accepted": ["center"]}]}'::jsonb
+      ),
+      (
+        'flexbox-6-column-reverse',
+        'css-flexbox',
+        'Level 6: Balikkan Urutan Kolom Terbalik',
+        'MEDIUM',
+        6,
+        60,
+        'Susun permen ke bawah secara vertikal, namun dengan urutan terbalik (Permen 3 di puncak atas, Permen 1 di paling bawah).',
+        'Gunakan flex-direction: column-reverse;.',
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["1", "2", "3"]}'::jsonb,
-        '{"display": "flex", "flexDirection": "column-reverse", "justifyContent": "center"}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Ubah arah flex di sini */\n}',
+        '{"display": "flex", "flexDirection": "column-reverse", "justifyContent": "center", "alignItems": "center", "gap": "12px", "description": "Urutan terbalik vertikal: 3 di atas, 1 di bawah."}'::jsonb,
+        '.arena {\n  display: flex;\n  /* Balikkan urutan kolom di sini */\n}',
         '{"goals": [{"property": "flex-direction", "accepted": ["column-reverse"]}]}'::jsonb
+      ),
+      (
+        'flexbox-7-flex-wrap',
+        'css-flexbox',
+        'Level 7: Atasi Elemen Meluap dengan Multi-Baris (Wrap)',
+        'MEDIUM',
+        7,
+        60,
+        'Ada 6 permen yang meluap ke luar arena! Izinkan permen membungkus ke baris baru saat ruang horizontal penuh dengan jarak 16px.',
+        'Gunakan flex-wrap: wrap; dan gap: 16px;.',
+        '{"element": "arena", "itemsCount": 6, "itemLabels": ["P1", "P2", "P3", "P4", "P5", "P6"]}'::jsonb,
+        '{"display": "flex", "flexWrap": "wrap", "gap": "16px", "justifyContent": "center", "description": "Permen membungkus ke baris kedua dengan rapi tanpa keluar arena."}'::jsonb,
+        '.arena {\n  display: flex;\n  /* Izinkan membungkus ke baris baru */\n}',
+        '{"goals": [{"property": "flex-wrap", "accepted": ["wrap"]}, {"property": "gap", "accepted": ["16px", "1rem", "12px"]}]}'::jsonb
+      ),
+      (
+        'flexbox-8-align-self',
+        'css-flexbox',
+        'Level 8: Turunkan Permen Bintang Sendirian (Align Self)',
+        'HARD',
+        8,
+        70,
+        'Permen 1 dan 3 tetap berada di atas, tapi permen kedua (bintang) harus turun sendirian ke dasar arena!',
+        'Gunakan selector .permen-2 { align-self: flex-end; } atau align-self: end;.',
+        '{"element": "arena", "itemsCount": 3, "itemLabels": ["P1", "⭐ Permen 2", "P3"]}'::jsonb,
+        '{"display": "flex", "alignItems": "flex-start", "justifyContent": "space-around", "description": "Permen 1 dan 3 di atas, sedangkan Permen 2 turun ke dasar arena."}'::jsonb,
+        '.arena {\n  display: flex;\n  justify-content: space-around;\n  align-items: flex-start;\n}\n\n.permen-2 {\n  /* Turunkan permen ini sendirian ke bawah */\n}',
+        '{"goals": [{"property": "align-self", "accepted": ["flex-end", "end"]}]}'::jsonb
+      ),
+      (
+        'flexbox-9-order',
+        'css-flexbox',
+        'Level 9: Tukar Posisi Permen Juara Tanpa Ubah HTML (Order)',
+        'HARD',
+        9,
+        70,
+        'Pindahkan permen nomor 3 ke posisi paling depan (paling kiri) menggunakan properti order!',
+        'Gunakan order: -1; pada .permen-3.',
+        '{"element": "arena", "itemsCount": 3, "itemLabels": ["P1", "P2", "🏆 Permen 3"]}'::jsonb,
+        '{"display": "flex", "justifyContent": "center", "gap": "16px", "description": "Permen 3 tampil pertama di depan Permen 1 dan 2."}'::jsonb,
+        '.arena {\n  display: flex;\n  justify-content: center;\n  gap: 16px;\n}\n\n.permen-3 {\n  /* Pindahkan permen juara ke baris terdepan */\n}',
+        '{"goals": [{"property": "order", "accepted": ["-1", "0"]}]}'::jsonb
+      ),
+      (
+        'flexbox-10-boss-fight',
+        'css-flexbox',
+        'Level 10: BOSS FIGHT — Responsive Bento Dashboard Layout',
+        'BOSS_FIGHT',
+        10,
+        80,
+        'Pertarungan Terakhir: Gabungkan display: flex, wrap multi-baris, distribusi space-between, dan perataan tengah untuk merapikan 4 panel bento kartu!',
+        'Kombinasikan display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;.',
+        '{"element": "arena", "itemsCount": 4, "itemLabels": ["📊 Analytics", "⚡ Speed", "🛡️ Security", "⭐ Reputasi"]}'::jsonb,
+        '{"display": "flex", "flexWrap": "wrap", "justifyContent": "space-between", "alignItems": "center", "gap": "16px", "description": "4 kartu bento tersusun 2x2 proporsional dan presisi."}'::jsonb,
+        '.arena {\n  /* BOSS FIGHT: Terapkan tata letak bento dashboard modern */\n}',
+        '{"goals": [{"property": "display", "accepted": ["flex"]}, {"property": "flex-wrap", "accepted": ["wrap"]}, {"property": "justify-content", "accepted": ["space-between", "center"]}, {"property": "gap", "accepted": ["16px", "1rem", "12px", "20px"]}]}'::jsonb
       ),
       (
         'grid-1-two-columns',
@@ -334,7 +389,7 @@ async function main() {
     console.log(`- challenges table    : ${resChallenges.rows[0].count} rows`);
     console.log(`- user_enrollments    : ${resEnrollments.rows[0].count} rows`);
     console.log(`- user_progress       : ${resProgress.rows[0].count} rows`);
-    console.log('\n✨ Database is 100% updated and populated with dynamic challenges & level 1!');
+    console.log('\n✨ Database is 100% updated with full 10 levels for CSS Flexbox Mastery!');
   } finally {
     client.release();
     await pool.end();
