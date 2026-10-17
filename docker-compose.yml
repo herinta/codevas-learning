@@ -24,9 +24,6 @@ services:
   # 2. Next.js App Service (Frontend & App Router API)
   codevas-web:
     image: ghcr.io/herinta/codevas-learning:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
     container_name: codevas-web
     restart: unless-stopped
     ports:
