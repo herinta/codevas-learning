@@ -645,27 +645,7 @@ function ChallengePlaygroundContent({
               })}
             </div>
 
-            {/* Real-Time Live Goals Status Tracker */}
-            <div className="mt-4 p-3 bg-surface-container-lowest rounded-2xl border-2 border-on-surface space-y-1.5 shadow-sm">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant block">
-                Status Target Real-Time:
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {liveEval.goals.map((g, idx) => (
-                  <span
-                    key={idx}
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono font-bold border transition-all ${
-                      g.passed
-                        ? "bg-emerald-100 border-emerald-600 text-emerald-950 scale-105"
-                        : "bg-surface-container-low border-outline-variant text-on-surface-variant opacity-75"
-                    }`}
-                  >
-                    <span>{g.passed ? "✓" : "○"}</span>
-                    <span>{g.label}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
+
           </div>
 
           {/* Quick Syntax Pills Helper */}
