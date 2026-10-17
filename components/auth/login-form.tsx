@@ -2,14 +2,21 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, Sparkles, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { SocialAuth } from "./social-auth";
 import { useAuth } from "./auth-context";
 
-export const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  isDemoMode?: boolean;
+}
+
+export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { setUser } = useAuth();
+
+  const showDemoBox = isDemoMode || pathname.startsWith("/demo");
 
   const [showPassword, setShowPassword] = useState(false);
   const [identifier, setIdentifier] = useState("");
@@ -96,27 +103,65 @@ export const LoginForm: React.FC = () => {
         </div>
       )}
 
-      {/* Quick Demo Credentials Helper */}
-      <div className="mb-4 p-3 bg-secondary-fixed/50 border-2 border-on-surface rounded-2xl flex items-center justify-between gap-2 text-xs">
-        <div>
-          <span className="font-bold text-secondary flex items-center gap-1 font-headline">
-            <Sparkles className="w-3.5 h-3.5 text-secondary" /> Akun Demo Test:
-          </span>
-          <span className="text-on-surface font-mono text-[11px]">
-            demo / demo123
-          </span>
+      {/* Quick Demo Credentials Helper - KHUSUS UNTUK LINK PORTO /demo */}
+      {showDemoBox && (
+        <div className="mb-6 p-4 sm:p-5 bg-gradient-to-br from-amber-50 to-orange-50 border-3 border-on-surface rounded-2xl neo-shadow-sm space-y-3 animate-in fade-in zoom-in-95 duration-200">
+          <div className="flex items-center justify-between">
+            <span className="font-headline font-black text-xs sm:text-sm text-amber-950 flex items-center gap-1.5 uppercase tracking-wide">
+              <Sparkles className="w-4 h-4 text-amber-600 fill-amber-500" />
+              <span>Akses Demo Akun (Portofolio)</span>
+            </span>
+            <span className="text-[10px] font-mono font-bold bg-amber-200 text-amber-950 px-2 py-0.5 rounded-full border border-amber-400">
+              PORTO SHOWCASE
+            </span>
+          </div>
+          <p className="text-[11px] text-amber-900/80 font-medium leading-tight">
+            Klik kartu di bawah untuk langsung mengisi akun uji coba sebagai Siswa atau Administrator:
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+            {/* Akun Demo Siswa */}
+            <button
+              type="button"
+              onClick={() => {
+                setIdentifier("demo");
+                setPassword("demo123");
+              }}
+              className="p-2.5 rounded-xl border-2 border-on-surface bg-white hover:bg-secondary-fixed/30 text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-xs"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-headline font-black text-xs text-secondary flex items-center gap-1">
+                  <span>🎓 Akun Siswa</span>
+                </span>
+                <span className="text-[10px] font-mono font-bold text-secondary">Isi ✨</span>
+              </div>
+              <div className="text-[11px] font-mono text-on-surface-variant mt-0.5">
+                demo / demo123
+              </div>
+            </button>
+
+            {/* Akun Demo Admin */}
+            <button
+              type="button"
+              onClick={() => {
+                setIdentifier("admin");
+                setPassword("admin123");
+              }}
+              className="p-2.5 rounded-xl border-2 border-on-surface bg-white hover:bg-amber-100 text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-xs"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-headline font-black text-xs text-amber-900 flex items-center gap-1">
+                  <span>🛡️ Akun Admin</span>
+                </span>
+                <span className="text-[10px] font-mono font-bold text-amber-800">Isi ✨</span>
+              </div>
+              <div className="text-[11px] font-mono text-on-surface-variant mt-0.5">
+                admin / admin123
+              </div>
+            </button>
+          </div>
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            setIdentifier("demo");
-            setPassword("demo123");
-          }}
-          className="px-3 py-1 bg-secondary text-white font-bold rounded-full border border-on-surface text-xs hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer"
-        >
-          Isi Otomatis ✨
-        </button>
-      </div>
+      )}
 
       {/* Credentials Form */}
       <form className="space-y-4" onSubmit={handleSubmit}>
