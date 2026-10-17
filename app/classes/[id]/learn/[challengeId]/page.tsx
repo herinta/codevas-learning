@@ -192,8 +192,20 @@ function evaluateLiveGoals(
   return { passed: false, goals: [] };
 }
 
+// Known valid CSS values for anti-flicker live parsing
+const VALID_PROPERTIES: Record<string, RegExp> = {
+  display: /^(flex|inline-flex|grid|block|none)$/i,
+  justifyContent: /^(center|space-between|space-around|space-evenly|flex-start|flex-end|start|end|left|right)$/i,
+  alignItems: /^(center|flex-start|flex-end|stretch|baseline|start|end)$/i,
+  flexDirection: /^(row|row-reverse|column|column-reverse)$/i,
+  flexWrap: /^(wrap|nowrap|wrap-reverse)$/i,
+  gap: /^(\d+(\.\d+)?(px|rem|em|%)?(\s+\d+(\.\d+)?(px|rem|em|%)?)?)$/i,
+  alignSelf: /^(auto|flex-start|flex-end|center|baseline|stretch|start|end)$/i,
+  order: /^-?\d+$/i,
+};
+
 /**
- * Robust CSS style parser that maps styles directly to React inline styles for instant reactivity
+ * Robust, anti-flicker CSS style parser that maps styles directly to React inline styles for silky smooth 60fps reactivity
  */
 function parseUserStyles(css: string): {
   arenaStyle: React.CSSProperties;
@@ -207,6 +219,20 @@ function parseUserStyles(css: string): {
     let hasRules = false;
     let match: RegExpExecArray | null;
 
+    const sanitizeDeclaration = (prop: string, val: string): { key: string; value: string } | null => {
+      const cleanProp = prop.trim();
+      const cleanVal = val.trim();
+      if (!cleanProp || !cleanVal) return null;
+
+      const camelProp = cleanProp.replace(/-([a-z])/g, (_, g) => g.toUpperCase());
+      const validator = VALID_PROPERTIES[camelProp];
+      if (validator && !validator.test(cleanVal)) {
+        // While user is mid-keystroke (e.g. typing 'cent'), ignore partial invalid value to prevent flickering
+        return null;
+      }
+      return { key: camelProp, value: cleanVal };
+    };
+
     while ((match = ruleRegex.exec(css)) !== null) {
       hasRules = true;
       const selector = match[1].trim();
@@ -216,10 +242,10 @@ function parseUserStyles(css: string): {
       declarations.split(";").forEach((rule) => {
         const [prop, val] = rule.split(":");
         if (prop && val) {
-          const camelProp = prop
-            .trim()
-            .replace(/-([a-z])/g, (_, g) => g.toUpperCase());
-          declObj[camelProp] = val.trim();
+          const sanitized = sanitizeDeclaration(prop, val);
+          if (sanitized) {
+            declObj[sanitized.key] = sanitized.value;
+          }
         }
       });
 
@@ -239,10 +265,10 @@ function parseUserStyles(css: string): {
       css.split(";").forEach((rule) => {
         const [prop, val] = rule.split(":");
         if (prop && val) {
-          const camelProp = prop
-            .trim()
-            .replace(/-([a-z])/g, (_, g) => g.toUpperCase());
-          arenaStyle[camelProp] = val.trim();
+          const sanitized = sanitizeDeclaration(prop, val);
+          if (sanitized) {
+            arenaStyle[sanitized.key] = sanitized.value;
+          }
         }
       });
     }
@@ -400,10 +426,15 @@ function ChallengePlaygroundContent({
 
   return (
     <div className="min-h-screen bg-background text-on-surface flex flex-col">
-      {/* Scoped Dynamic Styles for Live Arena */}
+      {/* Scoped Dynamic Styles for Live Arena with Spring Glide Animations */}
       <style>{`
         #live-arena {
           box-sizing: border-box;
+          transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        #live-arena > div {
+          transition: all 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) !important;
+          will-change: transform, margin, flex, order, align-self;
         }
         ${scopedCss}
       `}</style>
