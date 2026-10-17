@@ -51,6 +51,8 @@ CREATE TABLE IF NOT EXISTS challenges (
     order_index INT NOT NULL CHECK (order_index > 0),
     xp_reward INT NOT NULL DEFAULT 20,
     instruction TEXT NOT NULL,
+    theory TEXT,
+    syntax_helpers JSONB NOT NULL DEFAULT '[]'::jsonb,
     hint TEXT,
     locked_template JSONB NOT NULL DEFAULT '{}'::jsonb,
     target_visual JSONB NOT NULL DEFAULT '{}'::jsonb,

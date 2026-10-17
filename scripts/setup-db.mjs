@@ -99,6 +99,8 @@ CREATE TABLE IF NOT EXISTS challenges (
     xp_reward INT NOT NULL DEFAULT 20,
     instruction TEXT NOT NULL,
     hint TEXT,
+    theory TEXT,
+    syntax_helpers JSONB NOT NULL DEFAULT '[]'::jsonb,
     locked_template JSONB NOT NULL DEFAULT '{}'::jsonb,
     target_visual JSONB NOT NULL DEFAULT '{}'::jsonb,
     initial_state TEXT NOT NULL,
@@ -107,6 +109,16 @@ CREATE TABLE IF NOT EXISTS challenges (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uq_class_order UNIQUE (class_id, order_index)
 );
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='theory') THEN
+        ALTER TABLE challenges ADD COLUMN theory TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='syntax_helpers') THEN
+        ALTER TABLE challenges ADD COLUMN syntax_helpers JSONB NOT NULL DEFAULT '[]'::jsonb;
+    END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_challenges_class_id ON challenges(class_id);
 CREATE INDEX IF NOT EXISTS idx_challenges_order ON challenges(class_id, order_index);
@@ -197,7 +209,7 @@ async function main() {
     await client.query("DELETE FROM challenges WHERE class_id IN ('css-flexbox', 'css-grid');");
     await client.query(`
       INSERT INTO challenges (
-        id, class_id, title, difficulty, order_index, xp_reward, instruction, hint,
+        id, class_id, title, difficulty, order_index, xp_reward, instruction, hint, theory, syntax_helpers,
         locked_template, target_visual, initial_state, validation_rules
       ) VALUES
       (
@@ -209,6 +221,8 @@ async function main() {
         50,
         'Tiga kotak permen saat ini berantakan dan menumpuk secara vertikal di pojok kiri atas. Tugasmu adalah membuat ketiga permen tersebut berbaris rapi secara horizontal dan berada tepat di tengah-tengah kotak arena!',
         'Gunakan display: flex; lalu tambahkan justify-content: center; dan align-items: center; untuk memposisikannya di tengah.',
+        'CSS Flexbox (Flexible Box Layout) dirancang untuk menyusun elemen secara fleksibel dalam 1 dimensi. Mengaktifkan display: flex; pada kontainer mengubah anak-anaknya menjadi flex items. Gunakan justify-content: center untuk perataan sumbu utama (horizontal), dan align-items: center untuk perataan sumbu silang (vertikal).',
+        '["display: flex", "justify-content: center", "align-items: center"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["🍬 Permen 1", "🍭 Permen 2", "🍫 Permen 3"]}'::jsonb,
         '{"display": "flex", "flexDirection": "row", "justifyContent": "center", "alignItems": "center", "gap": "16px", "description": "Tiga permen berbaris horizontal di titik tengah arena dengan jarak serasi."}'::jsonb,
         '.arena {\n  /* Tulis kode CSS Flexbox kamu di sini */\n}',
@@ -223,6 +237,8 @@ async function main() {
         50,
         'Buat ketiga kartu tersebar merata dari batas paling kiri sampai batas paling kanan arena dengan jarak antar elemen yang sama.',
         'Gunakan display: flex; justify-content: space-between; align-items: center;.',
+        'justify-content: space-between; mendistribusikan elemen pertama di ujung awal (paling kiri) dan elemen terakhir di ujung akhir (paling kanan), dengan ruang sela tersisa dibagi rata secara presisi di antara elemen-elemen tersebut.',
+        '["display: flex", "justify-content: space-between", "align-items: center"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Permen A", "Permen B", "Permen C"]}'::jsonb,
         '{"display": "flex", "justifyContent": "space-between", "alignItems": "center", "description": "Permen A di pojok kiri, C di pojok kanan, dan B tepat di tengah."}'::jsonb,
         '.arena {\n  display: flex;\n  /* Lengkapi agar terpisah ke kedua ujung */\n}',
@@ -237,6 +253,8 @@ async function main() {
         50,
         'Berikan ruang sela yang seimbang di sekeliling tiap permen agar tidak menempel ke dinding pinggir arena.',
         'Gunakan justify-content: space-around; atau space-evenly; dengan align-items: center;.',
+        'justify-content: space-around; memberikan ruang sela sama rata di sekeliling tiap elemen, sehingga elemen paling pinggir memiliki separuh ruang dibanding ruang di antara dua elemen. Anda juga bisa menggunakan space-evenly untuk jarak yang benar-benar identik di semua sisi.',
+        '["justify-content: space-around", "justify-content: space-evenly", "align-items: center"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Permen 1", "Permen 2", "Permen 3"]}'::jsonb,
         '{"display": "flex", "justifyContent": "space-around", "alignItems": "center", "description": "Seluruh permen memiliki bantalan ruang sela merata di kiri dan kanannya."}'::jsonb,
         '.arena {\n  display: flex;\n  /* Berikan ruang sela merata */\n}',
@@ -251,6 +269,8 @@ async function main() {
         50,
         'Pindahkan ketiga permen ke sudut paling bawah dan paling kanan dari arena.',
         'Gunakan justify-content: flex-end; dan align-items: flex-end; (atau nilai end).',
+        'Kombinasi justify-content: flex-end; dan align-items: flex-end; memindahkan seluruh flex item ke sudut akhir (kanan-bawah) kontainer. Dalam CSS modern, nilai end juga diterima sebagai padanan standar.',
+        '["justify-content: flex-end", "align-items: flex-end"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Permen 1", "Permen 2", "Permen 3"]}'::jsonb,
         '{"display": "flex", "justifyContent": "flex-end", "alignItems": "flex-end", "gap": "16px", "description": "Semua permen berkumpul di sudut pojok kanan bawah arena."}'::jsonb,
         '.arena {\n  display: flex;\n  /* Pindahkan ke pojok kanan bawah */\n}',
@@ -265,6 +285,8 @@ async function main() {
         60,
         'Ubah alur permen agar berjejer lurus dari atas ke bawah secara vertikal di tengah-tengah arena.',
         'Gunakan flex-direction: column; dan align-items: center; serta justify-content: center;.',
+        'flex-direction menentukan arah sumbu utama (main axis). Nilai default-nya adalah row (horizontal). Mengubahnya menjadi column akan membalikkan sumbu sehingga elemen tersusun vertikal dari atas ke bawah. Saat column aktif, align-items mengontrol posisi horizontal!',
+        '["flex-direction: column", "align-items: center", "justify-content: center"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Top", "Mid", "Bot"]}'::jsonb,
         '{"display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "gap": "12px", "description": "Permen berjejer ke bawah seperti tumpukan vertikal di tengah arena."}'::jsonb,
         '.arena {\n  display: flex;\n  /* Ubah alur menjadi kolom vertikal terpusat */\n}',
@@ -279,6 +301,8 @@ async function main() {
         60,
         'Susun permen ke bawah secara vertikal, namun dengan urutan terbalik (Permen 3 di puncak atas, Permen 1 di paling bawah).',
         'Gunakan flex-direction: column-reverse;.',
+        'flex-direction: column-reverse; menyusun elemen secara vertikal dari bawah ke atas, membalikkan urutan visual elemen tanpa perlu mengubah struktur HTML asli.',
+        '["flex-direction: column-reverse", "justify-content: center"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["1", "2", "3"]}'::jsonb,
         '{"display": "flex", "flexDirection": "column-reverse", "justifyContent": "center", "alignItems": "center", "gap": "12px", "description": "Urutan terbalik vertikal: 3 di atas, 1 di bawah."}'::jsonb,
         '.arena {\n  display: flex;\n  /* Balikkan urutan kolom di sini */\n}',
@@ -293,6 +317,8 @@ async function main() {
         60,
         'Ada 6 permen yang meluap ke luar arena! Izinkan permen membungkus ke baris baru saat ruang horizontal penuh dengan jarak 16px.',
         'Gunakan flex-wrap: wrap; dan gap: 16px;.',
+        'Secara default, flex items akan dipaksa dalam satu baris (nowrap) dan bisa meluap (overflow). Properti flex-wrap: wrap; mengizinkan elemen berpindah ke baris baru saat lebar kontainer tidak lagi mencukupi. Gunakan gap untuk jarak antar baris dan kolom yang konsisten.',
+        '["flex-wrap: wrap", "gap: 16px", "justify-content: center"]'::jsonb,
         '{"element": "arena", "itemsCount": 6, "itemLabels": ["P1", "P2", "P3", "P4", "P5", "P6"]}'::jsonb,
         '{"display": "flex", "flexWrap": "wrap", "gap": "16px", "justifyContent": "center", "description": "Permen membungkus ke baris kedua dengan rapi tanpa keluar arena."}'::jsonb,
         '.arena {\n  display: flex;\n  /* Izinkan membungkus ke baris baru */\n}',
@@ -307,6 +333,8 @@ async function main() {
         70,
         'Permen 1 dan 3 tetap berada di atas, tapi permen kedua (bintang) harus turun sendirian ke dasar arena!',
         'Gunakan selector .permen-2 { align-self: flex-end; } atau align-self: end;.',
+        'align-self memungkinkan satu flex item tertentu menimpa (override) aturan align-items dari kontainer induknya. Properti ini diterapkan langsung pada elemen anak (misalnya .permen-2), bukan pada .arena.',
+        '[".permen-2", "align-self: flex-end", "align-self: center"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["P1", "⭐ Permen 2", "P3"]}'::jsonb,
         '{"display": "flex", "alignItems": "flex-start", "justifyContent": "space-around", "description": "Permen 1 dan 3 di atas, sedangkan Permen 2 turun ke dasar arena."}'::jsonb,
         '.arena {\n  display: flex;\n  justify-content: space-around;\n  align-items: flex-start;\n}\n\n.permen-2 {\n  /* Turunkan permen ini sendirian ke bawah */\n}',
@@ -321,6 +349,8 @@ async function main() {
         70,
         'Pindahkan permen nomor 3 ke posisi paling depan (paling kiri) menggunakan properti order!',
         'Gunakan order: -1; pada .permen-3.',
+        'Properti order mengontrol urutan visual flex item. Semua item memiliki order default 0. Memberikan nilai negatif (seperti order: -1) membuat item tersebut tampil lebih dulu dari item lainnya tanpa mengubah urutan di berkas HTML.',
+        '[".permen-3", "order: -1", "order: 1"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["P1", "P2", "🏆 Permen 3"]}'::jsonb,
         '{"display": "flex", "justifyContent": "center", "gap": "16px", "description": "Permen 3 tampil pertama di depan Permen 1 dan 2."}'::jsonb,
         '.arena {\n  display: flex;\n  justify-content: center;\n  gap: 16px;\n}\n\n.permen-3 {\n  /* Pindahkan permen juara ke baris terdepan */\n}',
@@ -335,6 +365,8 @@ async function main() {
         80,
         'Pertarungan Terakhir: Gabungkan display: flex, wrap multi-baris, distribusi space-between, dan perataan tengah untuk merapikan 4 panel bento kartu!',
         'Kombinasikan display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;.',
+        'Tantangan Terakhir: Desain Bento Box responsif menggabungkan display: flex, flex-wrap: wrap, justify-content: space-between, dan gap. Pendekatan ini adalah pondasi membangun kartu dashboard modern di industri frontend.',
+        '["display: flex", "flex-wrap: wrap", "justify-content: space-between", "gap: 16px"]'::jsonb,
         '{"element": "arena", "itemsCount": 4, "itemLabels": ["📊 Analytics", "⚡ Speed", "🛡️ Security", "⭐ Reputasi"]}'::jsonb,
         '{"display": "flex", "flexWrap": "wrap", "justifyContent": "space-between", "alignItems": "center", "gap": "16px", "description": "4 kartu bento tersusun 2x2 proporsional dan presisi."}'::jsonb,
         '.arena {\n  /* BOSS FIGHT: Terapkan tata letak bento dashboard modern */\n}',
@@ -349,6 +381,8 @@ async function main() {
         60,
         'Susun keempat panel menjadi format 2 kolom dan 2 baris yang simetris.',
         'Gunakan display: grid dan grid-template-columns: repeat(2, 1fr) atau 1fr 1fr.',
+        'CSS Grid Layout adalah sistem tata letak 2 dimensi (baris dan kolom). grid-template-columns: repeat(2, 1fr) membagi kontainer menjadi 2 kolom dengan lebar pecahan proporsional yang sama (1 fraction unit).',
+        '["display: grid", "grid-template-columns: repeat(2, 1fr)", "gap: 16px"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 4, "itemLabels": ["Panel 1", "Panel 2", "Panel 3", "Panel 4"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "16px"}'::jsonb,
         '.grid-arena {\n  /* Tulis CSS Grid di sini */\n}',
@@ -360,6 +394,8 @@ async function main() {
         xp_reward = EXCLUDED.xp_reward,
         instruction = EXCLUDED.instruction,
         hint = EXCLUDED.hint,
+        theory = EXCLUDED.theory,
+        syntax_helpers = EXCLUDED.syntax_helpers,
         locked_template = EXCLUDED.locked_template,
         target_visual = EXCLUDED.target_visual,
         initial_state = EXCLUDED.initial_state,

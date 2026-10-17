@@ -81,6 +81,8 @@ export interface ChallengeEntity {
   xp_reward: number;
   instruction: string;
   hint: string | null;
+  theory?: string | null;
+  syntax_helpers?: string[];
   locked_template: Record<string, unknown> | string; // JSONB
   target_visual: TargetVisualSpec | string; // JSONB
   initial_state: string;

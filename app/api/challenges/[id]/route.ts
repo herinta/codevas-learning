@@ -1,17 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ChallengeService } from '@/lib/services/challenge.service';
+import { verifySessionToken, AUTH_COOKIE_NAME } from '@/lib/auth/session';
 
 /**
  * GET /api/challenges/[id]
- * Returns challenge details with locked template and validation rule
+ * Returns dynamic challenge details including question instructions, theory/materials, hints, and visual targets
  */
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const challenge = await ChallengeService.getChallengeById(id);
+
+    const cookie = request.cookies.get(AUTH_COOKIE_NAME);
+    let userId: string | undefined = undefined;
+
+    if (cookie?.value) {
+      const payload = verifySessionToken(cookie.value);
+      if (payload) {
+        userId = payload.userId;
+      }
+    }
+
+    const challenge = await ChallengeService.getChallengeById(id, userId);
 
     if (!challenge) {
       return NextResponse.json(

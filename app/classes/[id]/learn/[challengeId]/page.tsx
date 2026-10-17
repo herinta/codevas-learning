@@ -15,6 +15,7 @@ import {
   Rocket,
   Loader2,
   Zap,
+  BookOpen,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
 
@@ -25,6 +26,8 @@ interface ChallengeData {
   difficulty?: string;
   order_index?: number;
   instruction: string;
+  theory?: string | null;
+  syntax_helpers?: string[];
   hint: string | null;
   xp_reward: number;
   initial_state: string;
@@ -298,7 +301,7 @@ function ChallengePlaygroundContent({
   const [nextChallengeId, setNextChallengeId] = useState<string | null>(null);
   const [isClassCompleted, setIsClassCompleted] = useState(false);
 
-  // Load challenge info
+  // Load challenge info dynamically from API
   useEffect(() => {
     async function loadData() {
       setLoading(true);
@@ -307,21 +310,17 @@ function ChallengePlaygroundContent({
       setIsClassCompleted(false);
 
       try {
-        const res = await fetch(`/api/classes/${classId}`, { cache: "no-store" });
+        const res = await fetch(`/api/challenges/${challengeId}`, { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
-          if (json.success && json.data?.challenges) {
-            const found = json.data.challenges.find(
-              (c: any) => c.id === challengeId
+          if (json.success && json.data) {
+            const found = json.data;
+            setChallenge(found);
+            setCssCode(
+              found.codeSnapshot ||
+                found.initial_state ||
+                `.arena {\n  /* Tulis CSS Flexbox di sini */\n}`
             );
-            if (found) {
-              setChallenge(found);
-              setCssCode(
-                found.codeSnapshot ||
-                  found.initial_state ||
-                  `.arena {\n  /* Tulis CSS Flexbox di sini */\n}`
-              );
-            }
           }
         }
       } catch (err) {
@@ -331,7 +330,7 @@ function ChallengePlaygroundContent({
       }
     }
     loadData();
-  }, [classId, challengeId]);
+  }, [challengeId]);
 
   // Real-time Live Evaluation as user types (instant reactivity)
   const liveEval = useMemo(() => {
@@ -488,7 +487,7 @@ function ChallengePlaygroundContent({
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
         {/* PANEL 1: INSTRUCTIONS & VISUAL TARGET GOAL (4 Cols) */}
         <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-r-2 border-on-surface p-5 sm:p-6 bg-surface-container-lowest overflow-y-auto space-y-6">
-          {/* Mission Box */}
+          {/* Mission Box (Soal Dinamis dari API) */}
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-primary-fixed border border-primary text-primary font-headline font-black text-xs">
               <Zap className="w-3.5 h-3.5 fill-primary" />
@@ -497,10 +496,27 @@ function ChallengePlaygroundContent({
             <h2 className="font-display font-black text-xl text-on-surface">
               {challenge?.title}
             </h2>
-            <p className="text-xs sm:text-sm text-on-surface-variant font-medium leading-relaxed">
+            <div className="text-xs sm:text-sm text-on-surface font-medium leading-relaxed bg-surface-container-low p-3.5 rounded-xl border border-outline-variant">
               {challenge?.instruction}
-            </p>
+            </div>
           </div>
+
+          {/* Materi & Konsep Teori (Dinamis dari API) */}
+          {challenge?.theory && (
+            <div className="p-4 bg-primary-fixed/20 border-2 border-primary/40 rounded-2xl space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-lg bg-primary/20 border border-primary/40 flex items-center justify-center">
+                  <BookOpen className="w-3.5 h-3.5 text-primary" />
+                </div>
+                <span className="text-xs font-headline font-black uppercase tracking-wider text-primary">
+                  Materi &amp; Teori Pembelajaran
+                </span>
+              </div>
+              <p className="text-xs text-on-surface font-medium leading-relaxed whitespace-pre-line pl-1">
+                {challenge.theory}
+              </p>
+            </div>
+          )}
 
           {/* VISUAL TARGET BOX */}
           <div className="p-4 bg-surface-container-low border-2 border-on-surface rounded-2xl space-y-2.5">
@@ -648,32 +664,25 @@ function ChallengePlaygroundContent({
 
           </div>
 
-          {/* Quick Syntax Pills Helper */}
-          <div className="mt-4 pt-4 border-t border-outline-variant">
-            <span className="block text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">
-              Ketik Cepat (Klik untuk menyisipkan):
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {[
-                "display: flex",
-                "justify-content: center",
-                "justify-content: space-between",
-                "justify-content: space-around",
-                "align-items: center",
-                "flex-direction: column",
-                "flex-wrap: wrap",
-                "gap: 16px",
-              ].map((snippet) => (
-                <button
-                  key={snippet}
-                  onClick={() => handleInsertHelper(snippet)}
-                  className="px-2.5 py-1 bg-surface-container-lowest border border-on-surface text-[11px] font-mono font-bold rounded-lg shadow-sm hover:bg-primary-fixed hover:text-primary transition-colors cursor-pointer"
-                >
-                  +{snippet}
-                </button>
-              ))}
+          {/* Quick Syntax Pills Helper (Dinamis dari API) */}
+          {challenge?.syntax_helpers && challenge.syntax_helpers.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-outline-variant">
+              <span className="block text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">
+                Ketik Cepat (Klik untuk menyisipkan):
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {challenge.syntax_helpers.map((snippet) => (
+                  <button
+                    key={snippet}
+                    onClick={() => handleInsertHelper(snippet)}
+                    className="px-2.5 py-1 bg-surface-container-lowest border border-on-surface text-[11px] font-mono font-bold rounded-lg shadow-sm hover:bg-primary-fixed hover:text-primary transition-colors cursor-pointer active:scale-95"
+                  >
+                    +{snippet}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* PANEL 3: CODE EDITOR & REAL-TIME ACTION (4 Cols) */}
