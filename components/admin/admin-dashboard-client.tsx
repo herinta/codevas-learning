@@ -30,6 +30,9 @@ import {
   Award,
   Sparkles,
   Lock,
+  Globe,
+  Compass,
+  MousePointerClick,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
 import { Navbar } from "@/components/layout/navbar";
@@ -45,6 +48,10 @@ interface AdminStats {
   totalChallenges: number;
   totalEnrollments: number;
   totalCompletions: number;
+  totalLandingVisits?: number;
+  uniqueLandingVisitors?: number;
+  landingVisitorsToday?: number;
+  landingVisitorsOnline?: number;
 }
 
 interface UserItem {
@@ -893,6 +900,100 @@ export function AdminDashboardClient() {
                   {stats ? stats.totalCompletions : "-"}
                 </div>
                 <p className="text-[10px] text-primary/80 font-medium mt-1">Level berhasil diselesaikan</p>
+              </div>
+            </div>
+
+            {/* LANDING PAGE VISITOR ANALYTICS SECTION (TANPA LOGIN) */}
+            <div className="p-6 rounded-3xl border-3 border-on-surface bg-surface-container-lowest shadow-brutal space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-outline-variant pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-teal-100 border-2 border-on-surface flex items-center justify-center text-teal-800 shadow-brutal-sm">
+                    <Globe className="w-4 h-4 stroke-[2.5]" />
+                  </div>
+                  <div>
+                    <h2 className="font-display font-black text-base sm:text-lg text-on-surface flex items-center gap-2">
+                      <span>Pengunjung Website Landing (Tanpa Login)</span>
+                      <span className="text-[10px] font-mono font-bold bg-teal-100 text-teal-900 border border-teal-300 px-2 py-0.5 rounded-full">
+                        Publik / Guest
+                      </span>
+                    </h2>
+                    <p className="text-xs text-on-surface-variant font-medium">
+                      Pelacakan anonim kunjungan publik di landing page sebelum pengguna masuk atau registrasi.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-xs font-bold text-teal-800 bg-teal-50 px-3 py-1.5 rounded-xl border border-teal-300">
+                  <span className="w-2.5 h-2.5 rounded-full bg-teal-500 animate-pulse" />
+                  <span>Real-time Tracker Aktif</span>
+                </div>
+              </div>
+
+              {/* 4 Visitor Metric Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* 1. Pengunjung Landing Online */}
+                <div className="p-4 rounded-2xl border-2 border-on-surface bg-teal-50/60 shadow-sm flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] font-headline font-black uppercase text-teal-950">
+                      Pengunjung Sedang Aktif
+                    </span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-teal-500 ring-4 ring-teal-200" />
+                  </div>
+                  <div className="font-display font-black text-2xl sm:text-3xl text-teal-900">
+                    {stats?.landingVisitorsOnline ?? 0}
+                  </div>
+                  <p className="text-[10px] text-teal-700 font-medium mt-1">
+                    Sedang membuka landing page (15m)
+                  </p>
+                </div>
+
+                {/* 2. Pengunjung Hari Ini */}
+                <div className="p-4 rounded-2xl border-2 border-on-surface bg-indigo-50/60 shadow-sm flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] font-headline font-black uppercase text-indigo-950">
+                      Pengunjung Hari Ini
+                    </span>
+                    <Compass className="w-4 h-4 text-indigo-600" />
+                  </div>
+                  <div className="font-display font-black text-2xl sm:text-3xl text-indigo-900">
+                    {stats?.landingVisitorsToday ?? 0}
+                  </div>
+                  <p className="text-[10px] text-indigo-700 font-medium mt-1">
+                    Pengunjung unik hari ini
+                  </p>
+                </div>
+
+                {/* 3. Total Pengunjung Unik */}
+                <div className="p-4 rounded-2xl border-2 border-on-surface bg-amber-50/60 shadow-sm flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] font-headline font-black uppercase text-amber-950">
+                      Total Pengunjung Unik
+                    </span>
+                    <Globe className="w-4 h-4 text-amber-600" />
+                  </div>
+                  <div className="font-display font-black text-2xl sm:text-3xl text-amber-900">
+                    {stats?.uniqueLandingVisitors ?? 0}
+                  </div>
+                  <p className="text-[10px] text-amber-700 font-medium mt-1">
+                    Perangkat / browser unik
+                  </p>
+                </div>
+
+                {/* 4. Total Kunjungan Halaman (Pageviews) */}
+                <div className="p-4 rounded-2xl border-2 border-on-surface bg-rose-50/60 shadow-sm flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] font-headline font-black uppercase text-rose-950">
+                      Total Kunjungan Halaman
+                    </span>
+                    <MousePointerClick className="w-4 h-4 text-rose-600" />
+                  </div>
+                  <div className="font-display font-black text-2xl sm:text-3xl text-rose-900">
+                    {stats?.totalLandingVisits ?? 0}
+                  </div>
+                  <p className="text-[10px] text-rose-700 font-medium mt-1">
+                    Total hit &amp; reload landing
+                  </p>
+                </div>
               </div>
             </div>
 

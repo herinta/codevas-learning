@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAdminRequest } from "@/lib/auth/admin-guard";
 import { UserService } from "@/lib/services/user.service";
+import { AnalyticsService } from "@/lib/services/analytics.service";
 
 /**
  * GET /api/admin/stats
- * Real-time monitoring stats: users online, active today, total users, classes, completions
+ * Real-time monitoring stats: users online, active today, total users, classes, completions, and landing visitors
  */
 export async function GET(req: NextRequest) {
   try {
@@ -13,11 +14,17 @@ export async function GET(req: NextRequest) {
       return auth.errorResponse!;
     }
 
-    const stats = await UserService.getAdminUserStats();
+    const [stats, visitorStats] = await Promise.all([
+      UserService.getAdminUserStats(),
+      AnalyticsService.getVisitorStats(),
+    ]);
 
     return NextResponse.json({
       success: true,
-      data: stats,
+      data: {
+        ...stats,
+        ...visitorStats,
+      },
     });
   } catch (error: any) {
     if (error && typeof error === "object" && "digest" in error) {

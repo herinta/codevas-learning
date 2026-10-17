@@ -158,6 +158,21 @@ CREATE TABLE IF NOT EXISTS user_progress (
 CREATE INDEX IF NOT EXISTS idx_user_progress_user ON user_progress(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_progress_challenge ON user_progress(challenge_id);
 CREATE INDEX IF NOT EXISTS idx_user_progress_status ON user_progress(status);
+
+-- 7. Table: site_visits (Tracking Pengunjung Landing Page Tanpa Login)
+CREATE TABLE IF NOT EXISTS site_visits (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    visitor_id VARCHAR(100) NOT NULL,
+    path VARCHAR(255) NOT NULL DEFAULT '/',
+    user_agent TEXT,
+    ip_hash VARCHAR(64),
+    visited_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_site_visits_visited_at ON site_visits(visited_at);
+CREATE INDEX IF NOT EXISTS idx_site_visits_visitor_id ON site_visits(visitor_id);
+CREATE INDEX IF NOT EXISTS idx_site_visits_path ON site_visits(path);
+
 `;
 
 async function main() {

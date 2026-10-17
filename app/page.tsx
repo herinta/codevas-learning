@@ -22,6 +22,17 @@ export default function HomePage() {
     }
   }, [user, loading, router]);
 
+  // Track anonymous landing page visitor (tanpa login)
+  useEffect(() => {
+    if (!loading && !user) {
+      fetch("/api/analytics/visit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: "/" }),
+      }).catch(() => {});
+    }
+  }, [loading, user]);
+
   if (!loading && user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-on-surface">
