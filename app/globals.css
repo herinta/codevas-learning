@@ -1,26 +1,146 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-primary: #e040a0;
+  --color-primary-container: #f080c0;
+  --color-primary-fixed: #ffd6ee;
+  --color-primary-fixed-dim: #f0a0cc;
+  --color-on-primary: #ffffff;
+  --color-on-primary-fixed: #3d0028;
+  --color-on-primary-fixed-variant: #a02070;
+
+  --color-secondary: #7c52aa;
+  --color-secondary-container: #eedcff;
+  --color-secondary-fixed: #eedcff;
+  --color-secondary-fixed-dim: #c8a8e8;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #2e2040;
+  --color-on-secondary-fixed: #1a1030;
+  --color-on-secondary-fixed-variant: #4a3068;
+
+  --color-tertiary: #0096cc;
+  --color-tertiary-container: #40c0ee;
+  --color-tertiary-fixed: #c8eaff;
+  --color-tertiary-fixed-dim: #80d0f0;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #00334d;
+  --color-on-tertiary-fixed: #001a33;
+  --color-on-tertiary-fixed-variant: #005580;
+
+  --color-background: #fef7ff;
+  --color-surface: #fef7ff;
+  --color-surface-dim: #e0d6e0;
+  --color-surface-bright: #fef7ff;
+  --color-surface-variant: #f2e8f2;
+  --color-surface-container: #f8eef8;
+  --color-surface-container-low: #fbf2fb;
+  --color-surface-container-high: #f2e8f2;
+  --color-surface-container-highest: #ece2ec;
+  --color-surface-container-lowest: #ffffff;
+
+  --color-outline: #907898;
+  --color-outline-variant: #dcc8e0;
+
+  --color-on-surface: #2e1a28;
+  --color-on-surface-variant: #604868;
+
+  --color-inverse-surface: #2e1a28;
+  --color-inverse-on-surface: #fef7ff;
+  --color-inverse-primary: #f0a0cc;
+
+  --color-error: #e53e3e;
+  --color-error-container: #ffe8e8;
+
+  --font-headline: var(--font-dm-sans), sans-serif;
+  --font-display: var(--font-dm-sans), sans-serif;
+  --font-body: var(--font-dm-sans), sans-serif;
+  --font-label: var(--font-dm-sans), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Neo-Brutalist & Candy Shadow Utilities */
+.candy-btn-shadow {
+  box-shadow: 0 4px 0 #2e1a28;
+}
+.candy-btn-shadow:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #2e1a28;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.neo-shadow {
+  box-shadow: 0 10px 0 #2e1a28;
+}
+.neo-shadow-sm {
+  box-shadow: 0 4px 0 #2e1a28;
+}
+.neo-shadow-button {
+  box-shadow: 0 4px 0 #2e1a28;
+  transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.neo-shadow-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #2e1a28;
+}
+.neo-shadow-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #2e1a28;
+}
+
+.shadow-brutal {
+  box-shadow: 0 8px 0 #2e1a28;
+}
+.shadow-brutal-sm {
+  box-shadow: 0 3px 0 #2e1a28;
+}
+
+/* Candy Glow Drop Shadows */
+.candy-shadow-pink {
+  box-shadow: 0 8px 24px -4px rgba(224, 64, 160, 0.28);
+}
+.candy-shadow-purple {
+  box-shadow: 0 8px 24px -4px rgba(124, 82, 170, 0.25);
+}
+.candy-shadow-blue {
+  box-shadow: 0 8px 24px -4px rgba(0, 150, 204, 0.25);
+}
+
+/* Blueprint Grid Canvas */
+.blueprint-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, rgba(124, 82, 170, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(124, 82, 170, 0.08) 1px, transparent 1px);
+}
+
+/* Floating Animations */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(3deg);
   }
 }
 
+@keyframes floatReverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(12px) rotate(-4deg);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: floatReverse 7s ease-in-out infinite;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
 }

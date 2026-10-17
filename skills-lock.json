@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "skills": {
+    "nextjs": {
+      "source": "full-stack-skills/react-skills",
+      "sourceType": "github",
+      "skillPath": "skills/nextjs/SKILL.md",
+      "computedHash": "c0258984ca7170c41ccd5709a315f6312952460ac2107e79c44d37b9ec385181"
+    },
+    "react": {
+      "source": "full-stack-skills/react-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react/SKILL.md",
+      "computedHash": "a29e6c59b562c6bb7a85fd3fc14d4a2c50b284656580298641ded6009b0f9b52"
+    },
+    "react-hooks": {
+      "source": "full-stack-skills/react-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-hooks/SKILL.md",
+      "computedHash": "7fd45d21813b2a9c274b302f37fdb2482c28b2910709b8b88a6eb3acb7d814ff"
+    },
+    "react-native": {
+      "source": "full-stack-skills/react-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-native/SKILL.md",
+      "computedHash": "dfbe27560e6efe87f324bec3c3cf2b48462af276dd39b35575619b29815cb247"
+    },
+    "react-native-project-creater": {
+      "source": "full-stack-skills/react-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-native-project-creater/SKILL.md",
+      "computedHash": "3ae299252fb94c6498dd0af3c44a706c221956ef74d524c493b4258d0453887b"
+    },
+    "redux": {
+      "source": "full-stack-skills/react-skills",
+      "sourceType": "github",
+      "skillPath": "skills/redux/SKILL.md",
+      "computedHash": "467f43070f732d40f8fabb596f814d3e20f61b1922bd1e9bd017daee0f332ecc"
+    }
+  }
+}
