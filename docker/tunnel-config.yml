@@ -1,0 +1,9 @@
+tunnel: c8e5bf3a-998a-42f0-b89e-95ad0360732e
+credentials-file: /etc/cloudflared/tunnel-creds.json
+
+ingress:
+  - hostname: codevas.my.id
+    service: http://codevas-web:3000
+  - hostname: www.codevas.my.id
+    service: http://codevas-web:3000
+  - service: http_status:404

@@ -13,7 +13,10 @@ import {
   Compass,
   Trophy,
   LayoutGrid,
+  LogOut,
+  User as UserIcon,
 } from "lucide-react";
+import { useAuth } from "@/components/auth/auth-context";
 
 export interface DashboardNavProps {
   readonly searchQuery: string;
@@ -25,10 +28,16 @@ export interface DashboardNavProps {
 export const DashboardNav: React.FC<DashboardNavProps> = ({
   searchQuery,
   onSearchChange,
-  userXp = 1240,
+  userXp: propUserXp,
   streakDays = 12,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const { user, logout } = useAuth();
+
+  // Gunakan XP real dari user jika sedang login, atau prop fallback
+  const displayXp = user ? user.xp_points : (propUserXp ?? 50);
+  const initials = user ? user.username.slice(0, 2).toUpperCase() : "G";
 
   return (
     <header className="w-full bg-surface-container-lowest border-b-2 border-on-surface shadow-[0_4px_16px_rgba(224,64,160,0.12)] sticky top-0 z-50">
@@ -97,7 +106,7 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary-fixed border-2 border-on-surface rounded-full candy-btn-shadow">
             <Star className="w-4 h-4 text-secondary fill-secondary" />
             <span className="text-xs font-display font-black text-secondary">
-              {userXp.toLocaleString()} XP
+              {displayXp.toLocaleString()} XP
             </span>
           </div>
 
@@ -118,12 +127,75 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
             <span>Coding</span>
           </Link>
 
-          {/* User Profile Avatar */}
-          <div className="relative pl-0.5">
-            <div className="w-9 h-9 rounded-full border-2 border-on-surface overflow-hidden bg-primary-fixed ring-2 ring-primary flex items-center justify-center text-sm font-black text-primary">
-              AL
-            </div>
-            <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-on-surface rounded-full"></span>
+          {/* User Profile Avatar with Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+              className="w-9 h-9 rounded-full border-2 border-on-surface overflow-hidden bg-primary-fixed ring-2 ring-primary flex items-center justify-center text-xs font-black text-primary focus:outline-none cursor-pointer"
+              title={user ? `@${user.username}` : "Akun Pengguna"}
+            >
+              {initials}
+            </button>
+            <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-on-surface rounded-full pointer-events-none"></span>
+
+            {/* Profile Dropdown Menu */}
+            {profileDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-56 bg-surface-container-lowest border-2 border-on-surface rounded-2xl p-2.5 shadow-brutal z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                {user ? (
+                  <>
+                    <div className="px-3 py-2 border-b border-outline-variant mb-1">
+                      <p className="font-headline font-bold text-xs text-on-surface truncate">
+                        @{user.username}
+                      </p>
+                      <p className="font-body text-[11px] text-on-surface-variant truncate">
+                        {user.email}
+                      </p>
+                      <span className="inline-block mt-1 font-mono text-[10px] font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-full">
+                        {user.xp_points} XP Points
+                      </span>
+                    </div>
+
+                    <Link
+                      href="/profile"
+                      onClick={() => setProfileDropdownOpen(false)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-on-surface hover:bg-surface-container transition-colors"
+                    >
+                      <UserIcon className="w-4 h-4 text-primary" />
+                      <span>Edit Profil &amp; Foto</span>
+                    </Link>
+
+                    <button
+                      onClick={() => {
+                        setProfileDropdownOpen(false);
+                        logout();
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Keluar (Logout)</span>
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-1 p-1">
+                    <Link
+                      href="/login"
+                      onClick={() => setProfileDropdownOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-on-surface hover:bg-surface-container transition-colors"
+                    >
+                      <UserIcon className="w-4 h-4" />
+                      <span>Masuk ke Akun</span>
+                    </Link>
+                    <Link
+                      href="/register"
+                      onClick={() => setProfileDropdownOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-primary bg-primary-fixed hover:opacity-90 transition-opacity"
+                    >
+                      <span>Daftar Akun Baru</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}

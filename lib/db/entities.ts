@@ -1,6 +1,6 @@
 /**
  * Codevas Database Entities & Types
- * Defined strictly according to project_plan.md ERD
+ * Synchronized with PostgreSQL 16 schema
  */
 
 export type UserRole = 'USER' | 'ADMIN';
@@ -11,14 +11,18 @@ export type EnrollmentStatus = 'ACTIVE' | 'COMPLETED' | 'DROPPED';
 
 /**
  * Entity: users
- * Table mapping for user authentication, profiles, and XP points
+ * Table mapping for user authentication, profiles, streaks, and XP points
  */
 export interface UserEntity {
   id: string; // UUID
   username: string;
   email: string;
   password_hash: string;
+  full_name: string | null;
+  avatar_url: string | null;
   xp_points: number;
+  streak_days: number;
+  last_active_date: string | Date;
   role: UserRole;
   created_at: Date | string;
   updated_at: Date | string;
@@ -26,16 +30,42 @@ export interface UserEntity {
 
 /**
  * Entity: classes
- * Table mapping for course curriculum (CSS Flexbox, CSS Grid, etc.)
+ * Table mapping for curriculum (CSS Flexbox, CSS Grid, etc.)
  */
 export interface ClassEntity {
   id: string; // e.g. 'css-flexbox', 'css-grid'
   category: ClassCategory;
   title: string;
+  tagline: string | null;
   description: string | null;
+  difficulty_level: string;
+  xp_reward: number;
+  estimated_time: string;
   is_published: boolean;
+  order_index: number;
   created_at: Date | string;
   updated_at: Date | string;
+}
+
+/**
+ * Target Visual specification for dynamic Level 1 visualization
+ */
+export interface TargetVisualSpec {
+  display?: string;
+  flexDirection?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  gap?: string;
+  gridTemplateColumns?: string;
+  description?: string;
+  items?: Array<{ id: number; label: string }>;
+}
+
+export interface ValidationRuleSpec {
+  goals?: Array<{
+    property: string;
+    accepted: string[];
+  }>;
 }
 
 /**
@@ -48,10 +78,13 @@ export interface ChallengeEntity {
   title: string;
   difficulty: ChallengeDifficulty;
   order_index: number;
+  xp_reward: number;
   instruction: string;
+  hint: string | null;
   locked_template: Record<string, unknown> | string; // JSONB
+  target_visual: TargetVisualSpec | string; // JSONB
   initial_state: string;
-  validation_rule: Record<string, unknown> | string; // JSONB
+  validation_rules: ValidationRuleSpec | string; // JSONB
   created_at: Date | string;
   updated_at: Date | string;
 }
@@ -66,6 +99,7 @@ export interface UserProgressEntity {
   challenge_id: string; // Foreign key -> challenges.id
   status: ProgressStatus;
   code_snapshot: string | null;
+  completed_at: Date | string | null;
   created_at: Date | string;
   updated_at: Date | string;
 }
@@ -85,10 +119,37 @@ export interface UserEnrollmentEntity {
 }
 
 /**
- * Extended Class model with challenge relations
+ * Challenge with user progress attached
+ */
+export interface ChallengeWithUserProgress extends ChallengeEntity {
+  userStatus: ProgressStatus;
+  codeSnapshot?: string | null;
+}
+
+/**
+ * Extended Class model with challenge relations and real progress
  */
 export interface ClassWithChallenges extends ClassEntity {
-  challenges: ChallengeEntity[];
-  completedCount?: number;
-  isEnrolled?: boolean;
+  challenges: ChallengeWithUserProgress[];
+  totalLevels: number;
+  completedLevels: number;
+  progressPercent: number;
+  isEnrolled: boolean;
+}
+
+/**
+ * Enrolled Class Card item for Dashboard
+ */
+export interface EnrolledClassSummary {
+  id: string;
+  title: string;
+  tagline: string | null;
+  category: ClassCategory;
+  difficulty_level: string;
+  xp_reward: number;
+  totalLevels: number;
+  completedLevels: number;
+  progressPercent: number;
+  nextChallengeId: string | null;
+  enrolled_at: Date | string;
 }

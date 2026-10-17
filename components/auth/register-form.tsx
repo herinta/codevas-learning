@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   User,
   AtSign,
@@ -9,21 +10,30 @@ import {
   Lock,
   Eye,
   EyeOff,
-  CheckCircle2,
   ShieldCheck,
   Zap,
   ArrowRight,
+  AlertCircle,
+  Loader2,
+  CheckCircle2,
 } from "lucide-react";
 import { SocialAuth } from "./social-auth";
+import { useAuth } from "./auth-context";
 
 export const RegisterForm: React.FC = () => {
+  const router = useRouter();
+  const { setUser } = useAuth();
+
   const [fullname, setFullname] = useState("");
-  const [username, setUsername] = useState("@budicodes");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("CandySecret#2026");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(true);
-  const [submitted, setSubmitted] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   // Password strength calculation (0 to 4)
   const calculateStrength = (pass: string) => {
@@ -37,13 +47,50 @@ export const RegisterForm: React.FC = () => {
 
   const strength = calculateStrength(password);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      alert(`Selamat datang di Codevas, ${fullname || username}! Akunmu berhasil dibuat 🎉`);
-      setSubmitted(false);
-    }, 400);
+    setErrorMsg(null);
+    setSuccessMsg(null);
+
+    if (!agreeTerms) {
+      setErrorMsg("Harap setujui Ketentuan Layanan & Kebijakan Privasi Codevas.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullname,
+          username,
+          email,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMsg(data.error || "Gagal membuat akun. Silakan periksa kembali data Anda.");
+        setLoading(false);
+        return;
+      }
+
+      // Success
+      setUser(data.user);
+      setSuccessMsg(`Selamat datang, @${data.user.username}! Mengalihkan ke Dashboard... 🎉`);
+
+      setTimeout(() => {
+        router.push("/dashboard");
+        router.refresh();
+      }, 900);
+    } catch {
+      setErrorMsg("Terjadi gangguan koneksi ke server. Pastikan internet aktif dan coba lagi.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,13 +99,13 @@ export const RegisterForm: React.FC = () => {
       <div className="text-center space-y-2.5 mb-7">
         <div className="inline-flex items-center gap-1.5 bg-tertiary-fixed text-on-tertiary-container px-3.5 py-1 rounded-full border-2 border-on-surface text-xs font-headline font-extrabold shadow-brutal-sm">
           <Zap className="w-3.5 h-3.5 text-tertiary fill-tertiary" />
-          <span>Mulai Koding 2 Menit!</span>
+          <span>Bonus +50 XP Saat Mendaftar!</span>
         </div>
         <h1 className="font-display font-black text-3xl sm:text-4xl text-on-surface tracking-tight">
           Buat Akun Baru
         </h1>
         <p className="font-body text-sm sm:text-base text-on-surface-variant font-medium max-w-md mx-auto">
-          Gabung komunitas developer kreatif &amp; bangun portfolio impianmu!
+          Gabung komunitas developer kreatif &amp; taklukkan tantangan coding berhadiah XP!
         </p>
       </div>
 
@@ -73,6 +120,22 @@ export const RegisterForm: React.FC = () => {
         </span>
       </div>
 
+      {/* Error Alert Banner */}
+      {errorMsg && (
+        <div className="mb-5 p-3.5 bg-red-100 border-2 border-red-500 rounded-2xl flex items-start gap-2.5 text-red-900 text-xs sm:text-sm font-semibold animate-shake">
+          <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+          <span>{errorMsg}</span>
+        </div>
+      )}
+
+      {/* Success Banner */}
+      {successMsg && (
+        <div className="mb-5 p-3.5 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-start gap-2.5 text-emerald-950 text-xs sm:text-sm font-bold animate-pulse">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+          <span>{successMsg}</span>
+        </div>
+      )}
+
       {/* Registration Form */}
       <form className="space-y-4" onSubmit={handleSubmit}>
         {/* Fullname */}
@@ -81,15 +144,14 @@ export const RegisterForm: React.FC = () => {
             className="block font-label font-bold text-xs uppercase tracking-wider text-on-surface mb-1.5"
             htmlFor="fullname"
           >
-            Nama Lengkap
+            Nama Lengkap (Opsional)
           </label>
           <div className="flex items-center bg-surface-container-low rounded-xl border-2 border-on-surface px-3.5 py-2.5 transition-all focus-within:ring-2 focus-within:ring-primary">
             <User className="w-5 h-5 text-on-surface-variant mr-2.5 shrink-0" />
             <input
               id="fullname"
               type="text"
-              required
-              placeholder="Budi Santoso"
+              placeholder="Contoh: Budi Santoso"
               value={fullname}
               onChange={(e) => setFullname(e.target.value)}
               className="w-full bg-transparent border-0 p-0 text-on-surface font-body font-medium placeholder:text-outline text-sm focus:outline-none"
@@ -97,19 +159,21 @@ export const RegisterForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Username / Handle with availability badge */}
+        {/* Username / Handle */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
             <label
               className="block font-label font-bold text-xs uppercase tracking-wider text-on-surface"
               htmlFor="username"
             >
-              Username / Handle
+              Username / Handle <span className="text-primary">*</span>
             </label>
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-600 px-2 py-0.5 rounded-full">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
-              <span>Tersedia</span>
-            </span>
+            {username.length >= 3 && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-600 px-2 py-0.5 rounded-full">
+                <CheckCircle2 className="w-3 h-3 text-emerald-700" />
+                <span>Format Valid</span>
+              </span>
+            )}
           </div>
           <div className="flex items-center bg-surface-container-low rounded-xl border-2 border-on-surface px-3.5 py-2.5 transition-all focus-within:ring-2 focus-within:ring-primary">
             <AtSign className="w-5 h-5 text-on-surface-variant mr-2.5 shrink-0" />
@@ -117,7 +181,7 @@ export const RegisterForm: React.FC = () => {
               id="username"
               type="text"
               required
-              placeholder="@budicodes"
+              placeholder="budicodes"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full bg-transparent border-0 p-0 text-on-surface font-headline font-bold placeholder:text-outline text-sm focus:outline-none"
@@ -131,7 +195,7 @@ export const RegisterForm: React.FC = () => {
             className="block font-label font-bold text-xs uppercase tracking-wider text-on-surface mb-1.5"
             htmlFor="email"
           >
-            Email Pengguna
+            Email Pengguna <span className="text-primary">*</span>
           </label>
           <div className="flex items-center bg-surface-container-low rounded-xl border-2 border-on-surface px-3.5 py-2.5 transition-all focus-within:ring-2 focus-within:ring-primary">
             <Mail className="w-5 h-5 text-on-surface-variant mr-2.5 shrink-0" />
@@ -154,11 +218,11 @@ export const RegisterForm: React.FC = () => {
               className="block font-label font-bold text-xs uppercase tracking-wider text-on-surface"
               htmlFor="password"
             >
-              Kata Sandi
+              Kata Sandi <span className="text-primary">*</span>
             </label>
             <span className="text-xs font-bold text-secondary flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-secondary" />
-              <span>{strength >= 3 ? "Kuat & Aman" : "Standar"}</span>
+              <span>{strength >= 3 ? "Kuat & Aman" : strength >= 2 ? "Sedang" : "Minimal 6 Karakter"}</span>
             </span>
           </div>
           <div className="flex items-center bg-surface-container-low rounded-xl border-2 border-on-surface px-3.5 py-2.5 transition-all focus-within:ring-2 focus-within:ring-primary">
@@ -167,7 +231,7 @@ export const RegisterForm: React.FC = () => {
               id="password"
               type={showPassword ? "text" : "password"}
               required
-              placeholder="Minimal 8 karakter unik"
+              placeholder="Minimal 6 karakter unik"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-transparent border-0 p-0 text-on-surface font-mono font-medium placeholder:text-outline text-sm focus:outline-none"
@@ -186,7 +250,7 @@ export const RegisterForm: React.FC = () => {
             </button>
           </div>
 
-          {/* Password Strength 4 Candy Bars */}
+          {/* Password Strength Candy Bars */}
           <div className="grid grid-cols-4 gap-1.5 mt-2">
             <div
               className={`h-2 rounded-full border border-on-surface transition-colors ${
@@ -245,13 +309,22 @@ export const RegisterForm: React.FC = () => {
         <div className="pt-3">
           <button
             type="submit"
-            disabled={submitted}
-            className="w-full py-4 px-6 bg-primary hover:bg-[#ec4899] text-white font-headline font-black text-lg rounded-2xl border-4 border-on-surface neo-button shadow-brutal flex items-center justify-center gap-2 group transition-all active:translate-y-1 disabled:opacity-50"
+            disabled={loading}
+            className="w-full py-4 px-6 bg-primary hover:bg-[#ec4899] text-white font-headline font-black text-lg rounded-2xl border-4 border-on-surface neo-button shadow-brutal flex items-center justify-center gap-2 group transition-all active:translate-y-1 disabled:opacity-60 cursor-pointer"
           >
-            <span>{submitted ? "Mendaftarkan..." : "Buat Akun Sekarang"}</span>
-            <span className="text-xl group-hover:rotate-12 transition-transform">
-              🎉
-            </span>
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>Mendaftarkan Akun...</span>
+              </>
+            ) : (
+              <>
+                <span>Buat Akun Sekarang</span>
+                <span className="text-xl group-hover:rotate-12 transition-transform">
+                  🎉
+                </span>
+              </>
+            )}
           </button>
         </div>
       </form>

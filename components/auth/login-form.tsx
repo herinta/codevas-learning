@@ -2,24 +2,56 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Mail, Lock, Eye, EyeOff, Sparkles, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Mail, Lock, Eye, EyeOff, Sparkles, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { SocialAuth } from "./social-auth";
+import { useAuth } from "./auth-context";
 
 export const LoginForm: React.FC = () => {
+  const router = useRouter();
+  const { setUser } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    // Client-side demo feedback
-    setTimeout(() => {
-      alert(`Selamat datang kembali di Codevas, ${identifier || "Teman Koding"}!`);
-      setSubmitted(false);
-    }, 400);
+    setErrorMsg(null);
+    setSuccessMsg(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMsg(data.error || "Gagal masuk. Periksa kembali email/username dan kata sandi.");
+        setLoading(false);
+        return;
+      }
+
+      setUser(data.user);
+      setSuccessMsg(`Selamat datang kembali, @${data.user.username}! Mengalihkan... 🚀`);
+
+      setTimeout(() => {
+        router.push("/dashboard");
+        router.refresh();
+      }, 700);
+    } catch {
+      setErrorMsg("Terjadi kesalahan jaringan. Cek koneksi Anda lalu coba lagi.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -44,9 +76,25 @@ export const LoginForm: React.FC = () => {
       <div className="relative flex items-center justify-center my-6">
         <div className="border-t-2 border-on-surface w-full"></div>
         <span className="bg-surface-container-lowest px-3 text-[11px] font-label font-black tracking-wider text-on-surface-variant uppercase relative">
-          ATAU DENGAN EMAIL
+          ATAU DENGAN EMAIL / USERNAME
         </span>
       </div>
+
+      {/* Error Banner */}
+      {errorMsg && (
+        <div className="mb-5 p-3.5 bg-red-100 border-2 border-red-500 rounded-2xl flex items-start gap-2.5 text-red-900 text-xs sm:text-sm font-semibold animate-shake">
+          <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+          <span>{errorMsg}</span>
+        </div>
+      )}
+
+      {/* Success Banner */}
+      {successMsg && (
+        <div className="mb-5 p-3.5 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-start gap-2.5 text-emerald-950 text-xs sm:text-sm font-bold animate-pulse">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+          <span>{successMsg}</span>
+        </div>
+      )}
 
       {/* Credentials Form */}
       <form className="space-y-4" onSubmit={handleSubmit}>
@@ -137,13 +185,22 @@ export const LoginForm: React.FC = () => {
         {/* Main CTA Button */}
         <button
           type="submit"
-          disabled={submitted}
-          className="w-full py-3.5 px-6 bg-inverse-surface text-inverse-on-surface font-label font-black text-base rounded-full border-2 border-on-surface neo-shadow-button transition-transform duration-150 flex items-center justify-center gap-2 group hover:bg-[#1a0f17] active:scale-95 disabled:opacity-50"
+          disabled={loading}
+          className="w-full py-3.5 px-6 bg-inverse-surface text-inverse-on-surface font-label font-black text-base rounded-full border-2 border-on-surface neo-shadow-button transition-transform duration-150 flex items-center justify-center gap-2 group hover:bg-[#1a0f17] active:scale-95 disabled:opacity-60 cursor-pointer"
         >
-          <span>{submitted ? "Memproses..." : "Masuk ke Codevas"}</span>
-          <span className="text-lg group-hover:scale-125 transition-transform">
-            🚀
-          </span>
+          {loading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Memverifikasi...</span>
+            </>
+          ) : (
+            <>
+              <span>Masuk ke Codevas</span>
+              <span className="text-lg group-hover:scale-125 transition-transform">
+                🚀
+              </span>
+            </>
+          )}
         </button>
       </form>
 

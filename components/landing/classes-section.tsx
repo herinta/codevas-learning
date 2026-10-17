@@ -1,36 +1,67 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Star,
   Sparkles,
   CheckCircle2,
   ArrowRight,
-  Code2,
   Layers,
   Terminal,
   Clock,
-  Lock,
-  Puzzle,
   Flame,
   LayoutGrid,
   Boxes,
   HelpCircle,
+  Loader2,
 } from "lucide-react";
-import { CLASSES_LIST, ClassCategory } from "@/lib/classes-data";
+
+interface ApiClassItem {
+  id: string;
+  category: "LIVE_CODE" | "DRAG_DROP" | "QUIZ";
+  title: string;
+  tagline: string | null;
+  description: string | null;
+  difficulty_level: string;
+  xp_reward: number;
+  estimated_time: string;
+  is_published: boolean;
+  totalLevels: number;
+  completedLevels: number;
+  progressPercent: number;
+  isEnrolled: boolean;
+}
 
 export const ClassesSection: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<
-    "ALL" | ClassCategory
-  >("ALL");
+  const [classes, setClasses] = useState<ApiClassItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<"ALL" | "LIVE_CODE" | "DRAG_DROP" | "QUIZ">("ALL");
+
+  useEffect(() => {
+    async function loadClasses() {
+      try {
+        const res = await fetch("/api/classes", { cache: "no-store" });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            setClasses(json.data);
+          }
+        }
+      } catch (err) {
+        console.error("Gagal mengambil data kelas:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadClasses();
+  }, []);
 
   const filteredClasses =
     selectedCategory === "ALL"
-      ? CLASSES_LIST
-      : CLASSES_LIST.filter((item) => item.category === selectedCategory);
+      ? classes
+      : classes.filter((item) => item.category === selectedCategory);
 
-  const getCategoryIcon = (cat: ClassCategory) => {
+  const getCategoryIcon = (cat: string) => {
     switch (cat) {
       case "LIVE_CODE":
         return <Terminal className="w-4 h-4 text-primary" />;
@@ -38,10 +69,12 @@ export const ClassesSection: React.FC = () => {
         return <Boxes className="w-4 h-4 text-amber-600" />;
       case "QUIZ":
         return <HelpCircle className="w-4 h-4 text-secondary" />;
+      default:
+        return <Terminal className="w-4 h-4" />;
     }
   };
 
-  const getCategoryThumbnailIcon = (title: string, cat: ClassCategory) => {
+  const getCategoryThumbnailIcon = (title: string, cat: string) => {
     if (title.includes("Flexbox")) return <LayoutGrid className="w-8 h-8 text-primary" />;
     if (title.includes("Grid")) return <Layers className="w-8 h-8 text-emerald-600" />;
     if (title.includes("Styling")) return <Sparkles className="w-8 h-8 text-secondary" />;
@@ -49,272 +82,203 @@ export const ClassesSection: React.FC = () => {
     return <HelpCircle className="w-8 h-8 text-secondary" />;
   };
 
+  const getAccentBg = (id: string) => {
+    switch (id) {
+      case "css-flexbox":
+        return "bg-[#fce7f3]";
+      case "css-grid":
+        return "bg-[#dcfce7]";
+      case "component-styling":
+        return "bg-[#ede9fe]";
+      case "js-logic-blocks":
+        return "bg-[#fef3c7]";
+      default:
+        return "bg-[#e0e7ff]";
+    }
+  };
+
   return (
-    <section className="py-24 px-4 bg-surface max-w-6xl mx-auto" id="curriculum">
+    <section className="py-24 px-4 bg-surface max-w-6xl mx-auto" id="classes">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
           {/* Badge Langganan */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-fixed border-2 border-on-surface text-secondary font-display font-black text-xs uppercase tracking-wider shadow-[0_3px_0_#2e1a28] mb-4">
             <Sparkles className="w-4 h-4 text-secondary fill-secondary-container" />
-            <span>Sistem Langganan All-Access • 3 Kategori Pembelajaran</span>
+            <span>Kurikulum Dinamis • 3 Kategori Pembelajaran</span>
           </div>
 
           <h2 className="font-display font-black text-3xl sm:text-4xl md:text-5xl text-on-surface tracking-tight">
-            Belajar Design &amp; Web Development
+            Pilihan Kelas Web Development
           </h2>
           <p className="mt-3 text-base sm:text-lg text-on-surface-variant font-medium max-w-2xl leading-relaxed">
-            Kurikulum terstruktur ke dalam 3 metode pendekatan belajar:{" "}
-            <strong>Live Code</strong>, <strong>Visual Logic (Drag &amp; Drop)</strong>, dan{" "}
-            <strong>Theory (Multiple Choice)</strong>. Semua modul sudah termasuk dalam satu
-            paket langganan aktif!
+            Kurikulum gamifikasi terstruktur: <strong>Live Code</strong>, <strong>Visual Logic</strong>, dan <strong>Quiz Theory</strong>. Siapa pun bisa melihat detail kurikulum secara gratis!
           </p>
         </div>
 
-        {/* Highlight Akses Subs Card */}
+        {/* Akses Card */}
         <div className="bg-surface-container-lowest border-2 border-on-surface px-5 py-3 rounded-2xl shadow-[0_4px_0_#2e1a28] flex items-center gap-3 shrink-0">
           <div className="w-10 h-10 rounded-full bg-emerald-100 border-2 border-on-surface flex items-center justify-center text-emerald-700 font-black">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
             <p className="text-xs font-bold text-on-surface uppercase tracking-wider">
-              Akses Langganan
+              Status Akses
             </p>
             <p className="font-display font-black text-sm text-emerald-700">
-              Semua Kategori Termasuk ✨
+              100% Gratis &amp; Terbuka
             </p>
           </div>
         </div>
       </div>
 
-      {/* 3 Main Categories Filter Tabs */}
-      <div className="flex items-center gap-2.5 overflow-x-auto pb-4 mb-8 scrollbar-none">
+      {/* Category Filter Pills */}
+      <div className="flex flex-wrap items-center gap-3 mb-10 pb-2">
         {[
-          { key: "ALL", label: "Semua Kategori", count: CLASSES_LIST.length },
-          { key: "LIVE_CODE", label: "Live Code (Fokus MVP)", count: 3 },
-          { key: "DRAG_DROP", label: "Visual Logic (Drag & Drop)", count: 3 },
-          { key: "QUIZ", label: "Theory (Multiple Choice)", count: 3 },
+          { key: "ALL", label: "Semua Kategori" },
+          { key: "LIVE_CODE", label: "Live Code" },
+          { key: "DRAG_DROP", label: "Drag & Drop" },
+          { key: "QUIZ", label: "Quiz Theory" },
         ].map((tab) => {
           const isActive = selectedCategory === tab.key;
           return (
             <button
               key={tab.key}
               onClick={() => setSelectedCategory(tab.key as any)}
-              className={`px-5 py-2.5 rounded-full font-headline font-bold text-sm border-2 border-on-surface transition-all whitespace-nowrap active:translate-y-0.5 flex items-center gap-2 ${
+              className={`px-5 py-2 rounded-full font-headline font-black text-xs sm:text-sm border-2 border-on-surface transition-all cursor-pointer ${
                 isActive
-                  ? "bg-primary text-white shadow-[0_4px_0_#2e1a28] scale-[1.02]"
+                  ? "bg-primary text-white shadow-[0_4px_0_#2e1a28] -translate-y-0.5"
                   : "bg-surface-container-lowest text-on-surface hover:bg-surface-container shadow-[0_2px_0_#2e1a28]"
               }`}
             >
-              <span>{tab.label}</span>
-              <span
-                className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                  isActive
-                    ? "bg-white text-primary"
-                    : "bg-surface-container-highest text-on-surface-variant"
-                }`}
-              >
-                {tab.count}
-              </span>
+              {tab.label}
             </button>
           );
         })}
       </div>
 
-      {/* Grid of Class Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-        {filteredClasses.map((item) => {
-          const isComingSoon = item.status === "coming-soon";
-
-          return (
-            <div
-              key={item.id}
-              className={`group bg-surface-container-lowest rounded-2xl border-4 border-on-surface transition-all duration-200 flex flex-col justify-between overflow-hidden ${
-                isComingSoon
-                  ? "shadow-[0_6px_0_#2e1a28] opacity-95"
-                  : "shadow-[0_8px_0_#2e1a28] hover:-translate-y-2 hover:shadow-[0_12px_0_#2e1a28]"
-              }`}
-            >
-              <div>
-                {/* Card Thumbnail Visual Mockup */}
-                <div
-                  className={`h-44 ${item.accentBg} border-b-4 border-on-surface p-5 flex flex-col justify-between relative overflow-hidden`}
-                >
-                  {/* Background Soft Glow */}
-                  <div className="absolute -right-4 -bottom-4 w-28 h-28 rounded-full bg-white/40 blur-md pointer-events-none"></div>
-
-                  {/* Top Row on Thumbnail */}
-                  <div className="flex items-center justify-between z-10">
-                    <span
-                      className={`px-3 py-1 rounded-full border-2 border-on-surface font-headline font-black text-[11px] shadow-[0_2px_0_#2e1a28] flex items-center gap-1.5 ${item.stageColor}`}
-                    >
-                      {getCategoryIcon(item.category)}
-                      <span>{item.categoryLabel}</span>
-                    </span>
-
-                    {isComingSoon ? (
-                      <span className="px-2.5 py-1 bg-surface-container-lowest text-on-surface-variant font-mono font-bold text-[11px] rounded-full border border-on-surface flex items-center gap-1 shadow-sm">
-                        <Clock className="w-3.5 h-3.5 text-secondary" />
-                        <span>Coming Soon</span>
-                      </span>
-                    ) : (
-                      <span className="px-2.5 py-1 bg-surface-container-lowest text-on-surface font-mono font-bold text-[11px] rounded-full border border-on-surface flex items-center gap-1 shadow-sm">
-                        <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                        <span>+{item.xpReward} XP</span>
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Center Visual Icon & Tag Chips */}
-                  <div className="flex items-center gap-3 z-10">
-                    <div className="w-14 h-14 rounded-2xl bg-surface-container-lowest border-2 border-on-surface flex items-center justify-center shadow-[0_4px_0_#2e1a28] group-hover:scale-110 transition-transform">
-                      {getCategoryThumbnailIcon(item.title, item.category)}
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {item.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="px-2 py-0.5 rounded-md bg-surface-container-lowest/90 text-on-surface font-mono text-[10px] font-bold border border-outline-variant"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Card Body */}
-                <div className="p-5 space-y-3">
-                  {/* Title */}
-                  {isComingSoon ? (
-                    <h3 className="font-display font-black text-lg text-on-surface leading-snug line-clamp-2">
-                      {item.title}
-                    </h3>
-                  ) : (
-                    <Link href={`/classes/${item.id}`}>
-                      <h3 className="font-display font-black text-lg text-on-surface leading-snug group-hover:text-primary transition-colors line-clamp-2 cursor-pointer">
-                        {item.title}
-                      </h3>
-                    </Link>
-                  )}
-
-                  <p className="text-xs text-on-surface-variant font-medium line-clamp-2 leading-relaxed">
-                    {item.tagline}
-                  </p>
-
-                  {/* Subscription Badge (No Price!) */}
-                  <div className="flex items-center justify-between pt-1">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-900 border border-emerald-500 rounded-full text-xs font-headline font-black shadow-sm">
-                      <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                      <span>Termasuk dalam Langganan</span>
-                    </div>
-
-                    <span className="text-xs font-bold text-on-surface-variant font-mono">
-                      {isComingSoon ? "Segera Rilis" : `${item.modulesCount} Level`}
-                    </span>
-                  </div>
-
-                  {/* Rating & Difficulty Level (BuildWithAngga Style) */}
-                  <div className="pt-3 border-t-2 border-surface-container-high flex items-center justify-between text-xs">
-                    {/* Stars & Reviews */}
-                    <div className="flex items-center gap-1.5">
-                      <div className="flex items-center text-amber-400">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className="w-4 h-4 fill-amber-400 text-amber-400"
-                          />
-                        ))}
-                      </div>
-                      <span className="font-bold text-on-surface">
-                        {item.rating}
-                      </span>
-                      <span className="text-on-surface-variant font-medium">
-                        ({item.reviewsCount})
-                      </span>
-                    </div>
-
-                    {/* Difficulty Level Bar */}
-                    <div
-                      className="flex items-center gap-1.5 text-on-surface font-bold text-xs"
-                      title={`Tingkat: ${item.level}`}
-                    >
-                      <div className="flex items-end gap-0.5 h-4">
-                        <span
-                          className={`w-1 rounded-sm ${
-                            item.levelBars >= 1
-                              ? "bg-primary h-2"
-                              : "bg-outline-variant h-2"
-                          }`}
-                        ></span>
-                        <span
-                          className={`w-1 rounded-sm ${
-                            item.levelBars >= 2
-                              ? "bg-primary h-3"
-                              : "bg-outline-variant h-3"
-                          }`}
-                        ></span>
-                        <span
-                          className={`w-1 rounded-sm ${
-                            item.levelBars >= 3
-                              ? "bg-primary h-4"
-                              : "bg-outline-variant h-4"
-                          }`}
-                        ></span>
-                      </div>
-                      <span className="text-[11px] font-label text-on-surface-variant">
-                        {item.level}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Footer */}
-              <div className="px-5 pb-5 pt-1">
-                {isComingSoon ? (
-                  <button
-                    disabled
-                    className="w-full py-2.5 px-4 rounded-xl bg-surface-container text-on-surface-variant font-label font-bold text-xs border-2 border-outline-variant flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
-                  >
-                    <Lock className="w-3.5 h-3.5" />
-                    <span>Segera Hadir (Tahap Berikutnya)</span>
-                  </button>
-                ) : (
-                  <Link
-                    href={`/classes/${item.id}`}
-                    className="w-full py-2.5 px-4 rounded-xl bg-surface-container-high hover:bg-primary hover:text-white text-on-surface font-label font-bold text-xs border-2 border-on-surface shadow-[0_2px_0_#2e1a28] flex items-center justify-center gap-2 group-hover:bg-primary group-hover:text-white transition-all text-center"
-                  >
-                    <span>Mulai Belajar Sekarang</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Subscription Banner CTA under Classes */}
-      <div className="mt-14 bg-gradient-to-r from-primary-fixed via-secondary-fixed to-tertiary-fixed rounded-2xl border-4 border-on-surface p-6 sm:p-8 shadow-[0_8px_0_#2e1a28] flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="space-y-1 text-center md:text-left">
-          <h4 className="font-display font-black text-xl sm:text-2xl text-on-surface">
-            Buka Seluruh 3 Kategori Kelas Tanpa Batas!
-          </h4>
-          <p className="font-body text-sm text-on-surface-variant font-medium">
-            Satu langganan aktif mencakup modul <strong>Live Code</strong>,{" "}
-            <strong>Visual Logic Drag &amp; Drop</strong>, serta kuis{" "}
-            <strong>Theory</strong> dengan live playground tanpa biaya per modul.
+      {/* Loading Skeleton */}
+      {loading && (
+        <div className="py-16 flex flex-col items-center justify-center gap-3">
+          <Loader2 className="w-8 h-8 text-primary animate-spin" />
+          <p className="font-headline font-bold text-sm text-on-surface-variant">
+            Memuat kurikulum kelas terbaru dari server...
           </p>
         </div>
-        <Link
-          href="/register"
-          className="px-6 py-3 rounded-full bg-primary text-white font-headline font-black text-sm border-2 border-on-surface shadow-[0_4px_0_#2e1a28] hover:scale-105 active:translate-y-0.5 transition-all whitespace-nowrap shrink-0 flex items-center gap-2"
-        >
-          <span>Daftar &amp; Langganan Sekarang</span>
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-      </div>
+      )}
+
+      {/* Grid of Class Cards */}
+      {!loading && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+          {filteredClasses.map((item) => {
+            const isComingSoon = !item.is_published;
+            const accentBg = getAccentBg(item.id);
+
+            return (
+              <div
+                key={item.id}
+                className={`group bg-surface-container-lowest rounded-2xl border-4 border-on-surface transition-all duration-200 flex flex-col justify-between overflow-hidden ${
+                  isComingSoon
+                    ? "shadow-[0_6px_0_#2e1a28] opacity-75 grayscale-[40%]"
+                    : "shadow-[0_8px_0_#2e1a28] hover:-translate-y-2 hover:shadow-[0_12px_0_#2e1a28]"
+                }`}
+              >
+                <div>
+                  {/* Card Thumbnail */}
+                  <div
+                    className={`h-40 ${accentBg} border-b-4 border-on-surface p-5 flex flex-col justify-between relative overflow-hidden`}
+                  >
+                    <div className="flex items-center justify-between z-10">
+                      <span className="px-3 py-1 rounded-full border-2 border-on-surface bg-white font-headline font-black text-[11px] shadow-[0_2px_0_#2e1a28] flex items-center gap-1.5">
+                        {getCategoryIcon(item.category)}
+                        <span>{item.category.replace("_", " ")}</span>
+                      </span>
+
+                      {isComingSoon ? (
+                        <span className="px-2.5 py-1 bg-surface-container-high text-on-surface-variant font-mono font-bold text-[11px] rounded-full border border-on-surface flex items-center gap-1 shadow-sm">
+                          <Clock className="w-3.5 h-3.5 text-secondary" />
+                          <span>Coming Soon</span>
+                        </span>
+                      ) : (
+                        <span className="px-2.5 py-1 bg-surface-container-lowest text-on-surface font-mono font-bold text-[11px] rounded-full border border-on-surface flex items-center gap-1 shadow-sm">
+                          <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                          <span>+{item.xp_reward} XP</span>
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Center Icon */}
+                    <div className="flex items-center gap-3 z-10">
+                      <div className="w-12 h-12 rounded-2xl bg-surface-container-lowest border-2 border-on-surface flex items-center justify-center shadow-[0_4px_0_#2e1a28] group-hover:scale-110 transition-transform">
+                        {getCategoryThumbnailIcon(item.title, item.category)}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs font-bold text-on-surface font-mono">
+                          Tingkat: {item.difficulty_level}
+                        </span>
+                        <span className="text-[11px] text-on-surface-variant font-medium">
+                          Estimasi: {item.estimated_time}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className="p-5 space-y-3">
+                    {/* Title */}
+                    {isComingSoon ? (
+                      <h3 className="font-display font-black text-lg text-on-surface leading-snug line-clamp-2">
+                        {item.title}
+                      </h3>
+                    ) : (
+                      <Link href={`/classes/${item.id}`}>
+                        <h3 className="font-display font-black text-lg text-on-surface leading-snug group-hover:text-primary transition-colors line-clamp-2 cursor-pointer">
+                          {item.title}
+                        </h3>
+                      </Link>
+                    )}
+
+                    <p className="text-xs text-on-surface-variant font-medium line-clamp-2 leading-relaxed">
+                      {item.tagline || item.description}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-xs font-bold text-on-surface-variant font-mono">
+                        {isComingSoon ? "Dalam Pembuatan" : `${item.totalLevels} Level Tantangan`}
+                      </span>
+
+                      {item.isEnrolled && (
+                        <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-400">
+                          {item.progressPercent}% Selesai
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Footer CTA */}
+                <div className="p-5 pt-0">
+                  {isComingSoon ? (
+                    <button
+                      disabled
+                      className="w-full py-3 px-4 rounded-xl border-2 border-on-surface font-headline font-black text-xs text-on-surface-variant bg-surface-container-high cursor-not-allowed text-center"
+                    >
+                      Segera Hadir
+                    </button>
+                  ) : (
+                    <Link href={`/classes/${item.id}`} className="block w-full">
+                      <button className="w-full py-3 px-4 rounded-xl border-2 border-on-surface font-headline font-black text-xs text-white bg-primary hover:bg-[#ec4899] shadow-[0_3px_0_#2e1a28] flex items-center justify-center gap-2 group/btn transition-transform active:translate-y-0.5 cursor-pointer">
+                        <span>{item.isEnrolled ? "Lanjutkan Belajar" : "Lihat Silabus & Mulai"}</span>
+                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                      </button>
+                    </Link>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 };

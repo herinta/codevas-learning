@@ -1,27 +1,38 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ClassService } from '@/lib/services/class.service';
-import { ClassCategory } from '@/lib/db/entities';
+import { NextRequest, NextResponse } from "next/server";
+import { ClassService } from "@/lib/services/class.service";
+import { verifySessionToken, AUTH_COOKIE_NAME } from "@/lib/auth/session";
 
 /**
  * GET /api/classes
- * Query param: ?category=LIVE_CODE | DRAG_DROP | QUIZ
+ * Returns all classes dynamically from PostgreSQL with enrollment & progress info
  */
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const categoryParam = searchParams.get('category');
-    const category = categoryParam ? (categoryParam.toUpperCase() as ClassCategory) : undefined;
+    const cookie = request.cookies.get(AUTH_COOKIE_NAME);
+    let userId: string | undefined = undefined;
 
-    const classes = await ClassService.getAllClasses(category);
+    if (cookie?.value) {
+      const payload = verifySessionToken(cookie.value);
+      if (payload) {
+        userId = payload.userId;
+      }
+    }
+
+    const classes = await ClassService.getAllClasses(userId);
+
     return NextResponse.json({
       success: true,
       data: classes,
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "digest" in error) {
+      throw error;
+    }
+    console.error("[API GET /api/classes Error]:", error);
     return NextResponse.json(
       {
         success: false,
-        message: 'Failed to fetch classes',
+        message: "Gagal mengambil daftar kelas",
         error: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }

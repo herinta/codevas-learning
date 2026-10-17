@@ -56,8 +56,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_POLL_INTERVAL=60 # Cek update setiap 60 detik
-      - WATCHTOWER_LABEL_ENABLE=true # Hanya update container yang memiliki label enable (codevas-web)
+      - WATCHTOWER_POLL_INTERVAL=60
+      - WATCHTOWER_LABEL_ENABLE=true
     networks:
       - codevas-net
 
@@ -66,7 +66,10 @@ services:
     image: cloudflare/cloudflared:latest
     container_name: codevas-tunnel
     restart: unless-stopped
-    command: tunnel --no-autoupdate run --token eyJhIjoiMWJjNGU3NzhjMTBkNTc0MDhjMDMwYzI2MWM3MzVmNzEiLCJzIjoiS3NWUkFUV25qbjVOOVU2d1J0ZzBXS2o1dXh3WWc2N0NFT0hGWkJIaWlFWT0iLCJ0IjoiYzhlNWJmM2EtOTk4YS00MmYwLWI4OWUtOTVhZDAzNjA3MzJlIn0= --url http://codevas-web:3000
+    command: tunnel --no-autoupdate --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./docker/tunnel-config.yml:/etc/cloudflared/config.yml:ro
+      - ./docker/tunnel-creds.json:/etc/cloudflared/tunnel-creds.json:ro
     depends_on:
       - codevas-web
     networks:
