@@ -194,6 +194,7 @@ async function main() {
     `);
 
     // 2. Challenges Seed (Full 10 Levels inside CSS Flexbox!)
+    await client.query("DELETE FROM challenges WHERE class_id IN ('css-flexbox', 'css-grid');");
     await client.query(`
       INSERT INTO challenges (
         id, class_id, title, difficulty, order_index, xp_reward, instruction, hint,
@@ -365,15 +366,39 @@ async function main() {
         validation_rules = EXCLUDED.validation_rules;
     `);
 
-    // 3. Demo Admin User update with full_name & avatar
+    // 3. Demo Admin and User accounts with valid scrypt password hashes
+    // demo@codevas.dev  -> demo123
+    // admin@codevas.dev -> admin123
     await client.query(`
       INSERT INTO users (id, username, email, password_hash, full_name, avatar_url, xp_points, streak_days, role) VALUES
-      ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'admin', 'admin@codevas.dev', '$2a$12$demoAdminHashSecret', 'Admin Codevas', 'https://api.dicebear.com/7.x/bottts/svg?seed=AdminCodevas', 1250, 5, 'ADMIN'),
-      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'alex_coder', 'alex@codevas.dev', '$2a$12$demoUserHashSecret', 'Alex Developer', 'https://api.dicebear.com/7.x/bottts/svg?seed=alex_coder', 340, 3, 'USER')
+      ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'admin', 'admin@codevas.dev', 'ce1e3db0de863737e9547e6bf2ac6b3f:fa55da04dbd25678f9a048fcd10ede681fa79cfe0b9bd9f17f07a21ca79da925ff0e2bba4c4ff284cadbde68fa22d7078201edf0875c4d2e352110ac9cad767a', 'Super Admin Codevas', 'https://api.dicebear.com/7.x/bottts/svg?seed=AdminCodevas', 1250, 7, 'ADMIN'),
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'demo', 'demo@codevas.dev', 'e21bf3d3089df63c05719504159d8f24:6148be768b1f4cf4da80cbe90b4c0715229f910eb6ee70cfff4d8f6740d0aa363a2f09fd8c6844460f11641c589c62147ccdce9346917a9e247dde65d092c62f', 'Alex Demo Developer', 'https://api.dicebear.com/7.x/bottts/svg?seed=alex_coder', 340, 3, 'USER')
       ON CONFLICT (id) DO UPDATE SET
+        username = EXCLUDED.username,
+        email = EXCLUDED.email,
+        password_hash = EXCLUDED.password_hash,
         full_name = EXCLUDED.full_name,
         avatar_url = EXCLUDED.avatar_url,
-        streak_days = EXCLUDED.streak_days;
+        xp_points = EXCLUDED.xp_points,
+        streak_days = EXCLUDED.streak_days,
+        role = EXCLUDED.role;
+    `);
+
+    // 4. Enroll Demo User to CSS Flexbox Mastery
+    await client.query(`
+      INSERT INTO user_enrollments (id, user_id, class_id, status) VALUES
+      ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'css-flexbox', 'ACTIVE')
+      ON CONFLICT (user_id, class_id) DO UPDATE SET status = 'ACTIVE';
+    `);
+
+    // 5. User Progress (Level 1 completed, Level 2 in progress)
+    await client.query(`
+      INSERT INTO user_progress (user_id, challenge_id, status, code_snapshot) VALUES
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'flexbox-1-activation', 'COMPLETED', '.arena {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}'),
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'flexbox-2-space-between', 'IN_PROGRESS', '.arena {\n  display: flex;\n  /* Lengkapi agar terpisah ke kedua ujung */\n}')
+      ON CONFLICT (user_id, challenge_id) DO UPDATE SET
+        status = EXCLUDED.status,
+        code_snapshot = EXCLUDED.code_snapshot;
     `);
 
     // Verify summary

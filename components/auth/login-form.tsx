@@ -96,6 +96,28 @@ export const LoginForm: React.FC = () => {
         </div>
       )}
 
+      {/* Quick Demo Credentials Helper */}
+      <div className="mb-4 p-3 bg-secondary-fixed/50 border-2 border-on-surface rounded-2xl flex items-center justify-between gap-2 text-xs">
+        <div>
+          <span className="font-bold text-secondary flex items-center gap-1 font-headline">
+            <Sparkles className="w-3.5 h-3.5 text-secondary" /> Akun Demo Test:
+          </span>
+          <span className="text-on-surface font-mono text-[11px]">
+            demo / demo123
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setIdentifier("demo");
+            setPassword("demo123");
+          }}
+          className="px-3 py-1 bg-secondary text-white font-bold rounded-full border border-on-surface text-xs hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer"
+        >
+          Isi Otomatis ✨
+        </button>
+      </div>
+
       {/* Credentials Form */}
       <form className="space-y-4" onSubmit={handleSubmit}>
         {/* Email / Username Input */}
