@@ -8,16 +8,13 @@ import {
   Flame,
   Star,
   Sparkles,
-  Play,
   RotateCcw,
   CheckCircle2,
-  AlertCircle,
   Lightbulb,
   Eye,
   Rocket,
   Loader2,
   Zap,
-  Check,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
 
@@ -48,6 +45,214 @@ interface ChallengeData {
   };
 }
 
+/**
+ * Live flexible CSS goal evaluator for real-time validation without needing a submit button!
+ */
+function evaluateLiveGoals(
+  challengeId: string,
+  cssCode: string
+): {
+  passed: boolean;
+  goals: { label: string; passed: boolean }[];
+} {
+  const normalized = cssCode.toLowerCase().replace(/\s+/g, " ");
+
+  if (challengeId === "flexbox-1-activation") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 =
+      /justify-content\s*:\s*(center|space-around|space-evenly)/.test(normalized) ||
+      /margin\s*:\s*(auto|0\s+auto)/.test(normalized);
+    const g3 =
+      /align-items\s*:\s*center/.test(normalized) ||
+      /place-items\s*:\s*center/.test(normalized);
+    return {
+      passed: g1 && g2 && g3,
+      goals: [
+        { label: "display: flex", passed: g1 },
+        { label: "justify-content: center", passed: g2 },
+        { label: "align-items: center", passed: g3 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-2-space-between") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /justify-content\s*:\s*space-between/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: flex", passed: g1 },
+        { label: "justify-content: space-between", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-3-space-around") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /justify-content\s*:\s*(space-around|space-evenly)/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: flex", passed: g1 },
+        { label: "justify-content: space-around", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-4-flex-end") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /justify-content\s*:\s*(flex-end|end)/.test(normalized);
+    const g3 = /align-items\s*:\s*(flex-end|end)/.test(normalized);
+    return {
+      passed: g1 && g2 && g3,
+      goals: [
+        { label: "display: flex", passed: g1 },
+        { label: "justify-content: flex-end", passed: g2 },
+        { label: "align-items: flex-end", passed: g3 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-5-direction-column") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /flex-direction\s*:\s*column/.test(normalized);
+    const g3 =
+      /align-items\s*:\s*center/.test(normalized) ||
+      /justify-content\s*:\s*center/.test(normalized);
+    return {
+      passed: g1 && g2 && g3,
+      goals: [
+        { label: "display: flex", passed: g1 },
+        { label: "flex-direction: column", passed: g2 },
+        { label: "align-items: center", passed: g3 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-6-column-reverse") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /flex-direction\s*:\s*column-reverse/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: flex", passed: g1 },
+        { label: "flex-direction: column-reverse", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-7-flex-wrap") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /flex-wrap\s*:\s*wrap/.test(normalized);
+    const g3 = /gap\s*:\s*(16px|1rem|12px|20px|1.5rem)/.test(normalized);
+    return {
+      passed: g1 && g2 && g3,
+      goals: [
+        { label: "display: flex", passed: g1 },
+        { label: "flex-wrap: wrap", passed: g2 },
+        { label: "gap: 16px", passed: g3 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-8-align-self") {
+    const g1 = /align-self\s*:\s*(flex-end|end)/.test(normalized);
+    return {
+      passed: g1,
+      goals: [{ label: ".permen-2 { align-self: flex-end; }", passed: g1 }],
+    };
+  }
+
+  if (challengeId === "flexbox-9-order") {
+    const g1 = /order\s*:\s*(-1|0|-2)/.test(normalized);
+    return {
+      passed: g1,
+      goals: [{ label: ".permen-3 { order: -1; }", passed: g1 }],
+    };
+  }
+
+  if (challengeId === "flexbox-10-boss-fight") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /flex-wrap\s*:\s*wrap/.test(normalized);
+    const g3 = /justify-content\s*:\s*(space-between|center|space-around)/.test(
+      normalized
+    );
+    const g4 = /gap\s*:\s*(16px|1rem|12px|20px|1.5rem)/.test(normalized);
+    return {
+      passed: g1 && g2 && g3 && g4,
+      goals: [
+        { label: "display: flex", passed: g1 },
+        { label: "flex-wrap: wrap", passed: g2 },
+        { label: "justify-content: space-between", passed: g3 },
+        { label: "gap: 16px", passed: g4 },
+      ],
+    };
+  }
+
+  return { passed: false, goals: [] };
+}
+
+/**
+ * Robust CSS style parser that maps styles directly to React inline styles for instant reactivity
+ */
+function parseUserStyles(css: string): {
+  arenaStyle: React.CSSProperties;
+  itemStyles: Record<string, React.CSSProperties>;
+} {
+  const arenaStyle: Record<string, string> = {};
+  const itemStyles: Record<string, Record<string, string>> = {};
+
+  try {
+    const ruleRegex = /([^{]+)\{([^}]+)\}/g;
+    let hasRules = false;
+    let match: RegExpExecArray | null;
+
+    while ((match = ruleRegex.exec(css)) !== null) {
+      hasRules = true;
+      const selector = match[1].trim();
+      const declarations = match[2].trim();
+      const declObj: Record<string, string> = {};
+
+      declarations.split(";").forEach((rule) => {
+        const [prop, val] = rule.split(":");
+        if (prop && val) {
+          const camelProp = prop
+            .trim()
+            .replace(/-([a-z])/g, (_, g) => g.toUpperCase());
+          declObj[camelProp] = val.trim();
+        }
+      });
+
+      if (selector.includes(".arena") || selector === "arena") {
+        Object.assign(arenaStyle, declObj);
+      } else {
+        const itemMatch = selector.match(/\.(permen|card)-?([0-9]+)/);
+        if (itemMatch) {
+          const key = `item-${itemMatch[2]}`;
+          itemStyles[key] = { ...(itemStyles[key] || {}), ...declObj };
+        }
+      }
+    }
+
+    // If user writes without .arena { ... }, parse directly into arena
+    if (!hasRules && css.trim()) {
+      css.split(";").forEach((rule) => {
+        const [prop, val] = rule.split(":");
+        if (prop && val) {
+          const camelProp = prop
+            .trim()
+            .replace(/-([a-z])/g, (_, g) => g.toUpperCase());
+          arenaStyle[camelProp] = val.trim();
+        }
+      });
+    }
+  } catch (err) {
+    console.error("CSS Parse Error:", err);
+  }
+
+  return { arenaStyle, itemStyles };
+}
+
 function ChallengePlaygroundContent({
   params,
 }: {
@@ -60,24 +265,21 @@ function ChallengePlaygroundContent({
   const [challenge, setChallenge] = useState<ChallengeData | null>(null);
   const [cssCode, setCssCode] = useState<string>("");
   const [loading, setLoading] = useState(true);
-  const [evaluating, setEvaluating] = useState(false);
   const [showHint, setShowHint] = useState(false);
 
-  // Result state
-  const [result, setResult] = useState<{
-    passed: boolean;
-    feedback: string[];
-    earnedXp?: number;
-    newTotalXp?: number;
-    nextChallengeId?: string | null;
-    isClassCompleted?: boolean;
-  } | null>(null);
+  // Auto-sync state when passed
+  const [hasSavedPass, setHasSavedPass] = useState(false);
+  const [nextChallengeId, setNextChallengeId] = useState<string | null>(null);
+  const [isClassCompleted, setIsClassCompleted] = useState(false);
 
   // Load challenge info
   useEffect(() => {
     async function loadData() {
       setLoading(true);
-      setResult(null);
+      setHasSavedPass(false);
+      setNextChallengeId(null);
+      setIsClassCompleted(false);
+
       try {
         const res = await fetch(`/api/classes/${classId}`, { cache: "no-store" });
         if (res.ok) {
@@ -105,46 +307,46 @@ function ChallengePlaygroundContent({
     loadData();
   }, [classId, challengeId]);
 
-  // Handle evaluation
-  const handleEvaluate = async () => {
-    if (!user) {
-      alert("Silakan login terlebih dahulu untuk menyimpan progress koding.");
-      router.push(`/login?redirect=/classes/${classId}/learn/${challengeId}`);
-      return;
-    }
+  // Real-time Live Evaluation as user types (instant reactivity)
+  const liveEval = useMemo(() => {
+    return evaluateLiveGoals(challengeId, cssCode);
+  }, [challengeId, cssCode]);
 
-    setEvaluating(true);
-    setResult(null);
+  // Real-time Style Parsing for the Live Arena
+  const { arenaStyle, itemStyles } = useMemo(() => {
+    return parseUserStyles(cssCode);
+  }, [cssCode]);
 
-    try {
-      const res = await fetch(`/api/challenges/${challengeId}/evaluate`, {
+  // Scoped CSS tag for extra browser cascade support
+  const scopedCss = useMemo(() => {
+    if (!cssCode) return "";
+    return cssCode
+      .replace(/\.arena\b/g, "#live-arena")
+      .replace(/\.permen-([0-9]+)\b/g, "#live-arena .permen-$1")
+      .replace(/\.card-([0-9]+)\b/g, "#live-arena .card-$1");
+  }, [cssCode]);
+
+  // Automatically save progress in the background the moment all goals are fulfilled
+  useEffect(() => {
+    if (liveEval.passed && !hasSavedPass && user) {
+      setHasSavedPass(true);
+
+      fetch(`/api/challenges/${challengeId}/evaluate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: cssCode }),
-      });
-
-      const data = await res.json();
-      setResult({
-        passed: data.passed,
-        feedback: data.feedback || [data.message],
-        earnedXp: data.earnedXp,
-        newTotalXp: data.newTotalXp,
-        nextChallengeId: data.nextChallengeId,
-        isClassCompleted: data.isClassCompleted,
-      });
-
-      if (data.passed) {
-        refreshUser();
-      }
-    } catch {
-      setResult({
-        passed: false,
-        feedback: ["Gagal menghubungkan ke server validasi."],
-      });
-    } finally {
-      setEvaluating(false);
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.passed) {
+            setNextChallengeId(data.nextChallengeId);
+            setIsClassCompleted(Boolean(data.isClassCompleted));
+            refreshUser();
+          }
+        })
+        .catch((err) => console.error("Error auto-saving progress:", err));
     }
-  };
+  }, [liveEval.passed, hasSavedPass, user, challengeId, cssCode, refreshUser]);
 
   const handleInsertHelper = (snippet: string) => {
     setCssCode((prev) => {
@@ -158,7 +360,7 @@ function ChallengePlaygroundContent({
   const handleReset = () => {
     if (challenge) {
       setCssCode(challenge.initial_state);
-      setResult(null);
+      setHasSavedPass(false);
     }
   };
 
@@ -178,15 +380,6 @@ function ChallengePlaygroundContent({
     { bg: "bg-emerald-100", border: "border-emerald-900", text: "text-emerald-950", emoji: "💎" },
     { bg: "bg-rose-100", border: "border-rose-900", text: "text-rose-950", emoji: "🍩" },
   ];
-
-  // Scoped CSS generator for the live arena
-  const scopedCss = useMemo(() => {
-    if (!cssCode) return "";
-    return cssCode
-      .replace(/\.arena\b/g, "#live-arena")
-      .replace(/\.permen-([0-9]+)\b/g, "#live-arena .permen-$1")
-      .replace(/\.card-([0-9]+)\b/g, "#live-arena .card-$1");
-  }, [cssCode]);
 
   // Target visual goal styles
   const targetVisual = challenge?.target_visual || {};
@@ -343,7 +536,7 @@ function ChallengePlaygroundContent({
             <p className="text-[11px] text-on-surface-variant font-medium leading-tight">
               💡 <em>Tujuan:</em>{" "}
               {targetVisual.description ||
-                "Sesuaikan properti CSS flexbox agar tata letak arena cocok dengan target di atas."}
+                "Ketik kode CSS di editor agar posisi elemen di arena sesuai target."}
             </p>
           </div>
 
@@ -373,26 +566,33 @@ function ChallengePlaygroundContent({
                 <Sparkles className="w-4 h-4 text-primary" />
                 <span>Arena Koding (Preview Langsung)</span>
               </span>
-              <span className="text-[10px] font-mono font-bold text-on-surface-variant">
-                Live Rendering
+              <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300 animate-pulse">
+                ⚡ Real-time Live
               </span>
             </div>
 
-            {/* LIVE ARENA CONTAINER */}
+            {/* LIVE ARENA CONTAINER - Directly reacts to user's CSS inline styles */}
             <div
               id="live-arena"
-              className="arena w-full h-80 bg-surface-container-lowest border-4 border-on-surface rounded-2xl p-4 shadow-brutal overflow-auto transition-all relative"
+              className={`arena w-full h-80 bg-surface-container-lowest border-4 rounded-2xl p-4 shadow-brutal overflow-auto transition-all relative ${
+                liveEval.passed
+                  ? "border-emerald-500 ring-4 ring-emerald-300/60"
+                  : "border-on-surface"
+              }`}
+              style={arenaStyle}
             >
               {Array.from({ length: itemsCount }).map((_, i) => {
                 const color = palette[i % palette.length];
                 const label = itemLabels[i] || `Permen ${i + 1}`;
+                const itemSpecificStyle = itemStyles[`item-${i + 1}`] || {};
 
                 return (
                   <div
                     key={i}
+                    style={itemSpecificStyle}
                     className={`permen-${i + 1} card-${
                       i + 1
-                    } rounded-2xl border-3 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm transition-all duration-300 ${
+                    } rounded-2xl border-3 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm transition-all duration-200 ${
                       color.bg
                     } ${
                       isLevel10
@@ -415,6 +615,28 @@ function ChallengePlaygroundContent({
                   </div>
                 );
               })}
+            </div>
+
+            {/* Real-Time Live Goals Status Tracker */}
+            <div className="mt-4 p-3 bg-surface-container-lowest rounded-2xl border-2 border-on-surface space-y-1.5 shadow-sm">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant block">
+                Status Target Real-Time:
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {liveEval.goals.map((g, idx) => (
+                  <span
+                    key={idx}
+                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono font-bold border transition-all ${
+                      g.passed
+                        ? "bg-emerald-100 border-emerald-600 text-emerald-950 scale-105"
+                        : "bg-surface-container-low border-outline-variant text-on-surface-variant opacity-75"
+                    }`}
+                  >
+                    <span>{g.passed ? "✓" : "○"}</span>
+                    <span>{g.label}</span>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -446,12 +668,12 @@ function ChallengePlaygroundContent({
           </div>
         </div>
 
-        {/* PANEL 3: CODE EDITOR & SUBMISSION (4 Cols) */}
+        {/* PANEL 3: CODE EDITOR & REAL-TIME ACTION (4 Cols) */}
         <div className="lg:col-span-4 p-5 sm:p-6 bg-surface-container-lowest flex flex-col justify-between">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface">
-                CSS Editor
+                CSS Editor (Live Input)
               </span>
               <button
                 onClick={handleReset}
@@ -465,104 +687,83 @@ function ChallengePlaygroundContent({
 
             {/* Code Input Area */}
             <div className="rounded-2xl border-3 border-on-surface overflow-hidden bg-[#1e1e2e] shadow-brutal">
-              <div className="bg-[#181825] px-3.5 py-2 border-b border-[#313244] flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                <span className="text-[11px] font-mono text-[#a6adc8] ml-2">
-                  style.css
+              <div className="bg-[#181825] px-3.5 py-2 border-b border-[#313244] flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <span className="text-[11px] font-mono text-[#a6adc8] ml-2">
+                    style.css
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-emerald-400">
+                  Live Sync
                 </span>
               </div>
               <textarea
                 value={cssCode}
                 onChange={(e) => setCssCode(e.target.value)}
-                rows={10}
+                rows={11}
                 spellCheck={false}
                 className="w-full p-4 bg-transparent text-[#cdd6f4] font-mono text-xs sm:text-sm focus:outline-none resize-none leading-relaxed"
-                placeholder=".arena { ... }"
+                placeholder=".arena { display: flex; ... }"
               />
             </div>
-
-            {/* Evaluation Result Feedback Banner */}
-            {result && (
-              <div
-                className={`p-4 rounded-2xl border-2 text-xs font-bold space-y-1.5 animate-in fade-in slide-in-from-bottom-2 ${
-                  result.passed
-                    ? "bg-emerald-100 border-emerald-600 text-emerald-950"
-                    : "bg-red-100 border-red-500 text-red-950"
-                }`}
-              >
-                <div className="flex items-center gap-2 font-headline font-black text-sm">
-                  {result.passed ? (
-                    <>
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                      <span>Level Berhasil Ditaklukkan! 🎉</span>
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="w-5 h-5 text-red-600" />
-                      <span>Belum Tepat, Coba Lagi!</span>
-                    </>
-                  )}
-                </div>
-                {result.feedback.map((f, i) => (
-                  <p key={i} className="pl-7">
-                    {f}
-                  </p>
-                ))}
-              </div>
-            )}
           </div>
 
-          {/* Bottom Submit Action Button */}
+          {/* Bottom Action Area: Real-Time Feedback & Automatic Level Advancement */}
           <div className="pt-4 mt-4 border-t border-outline-variant space-y-2">
-            {result?.passed ? (
-              <div className="space-y-2">
-                {result.nextChallengeId ? (
+            {liveEval.passed ? (
+              <div className="space-y-2.5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div className="p-3.5 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-center gap-2.5 text-xs font-headline font-black text-emerald-950 shadow-sm">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <span>Sempurna! Target berhasil dicapai secara live! 🎉</span>
+                </div>
+
+                {isClassCompleted || challenge?.order_index === 10 ? (
+                  <Link href="/dashboard" className="block w-full">
+                    <button className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all">
+                      <span>🏆 Selamat! Kamu Menamatkan Kelas (Ke Dashboard)</span>
+                    </button>
+                  </Link>
+                ) : (
                   <button
                     onClick={() => {
-                      setResult(null);
-                      router.push(
-                        `/classes/${classId}/learn/${result.nextChallengeId}`
-                      );
+                      if (nextChallengeId) {
+                        router.push(
+                          `/classes/${classId}/learn/${nextChallengeId}`
+                        );
+                      } else {
+                        // Fallback ke tantangan urutan berikutnya
+                        const nextOrder = (challenge?.order_index || 1) + 1;
+                        router.push(`/classes/${classId}`);
+                      }
                     }}
-                    className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all"
+                    className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all animate-pulse"
                   >
                     <span>Lanjut ke Level Berikutnya</span>
                     <Rocket className="w-5 h-5" />
                   </button>
-                ) : (
-                  <Link href="/dashboard" className="block w-full">
-                    <button className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all">
-                      <span>🏆 Selamat! Kelas Selesai (Ke Dashboard)</span>
-                    </button>
-                  </Link>
                 )}
+
                 <Link
                   href={`/classes/${classId}`}
-                  className="block w-full text-center py-1.5 text-xs font-bold text-on-surface-variant hover:underline"
+                  className="block w-full text-center py-1 text-xs font-bold text-on-surface-variant hover:underline"
                 >
                   Kembali ke Silabus Kelas
                 </Link>
               </div>
             ) : (
-              <button
-                onClick={handleEvaluate}
-                disabled={evaluating}
-                className="w-full py-4 rounded-2xl bg-primary hover:bg-[#ec4899] text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all disabled:opacity-60"
-              >
-                {evaluating ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Mengevaluasi Jawaban...</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="w-5 h-5 fill-white" />
-                    <span>Periksa Jawaban (Cek Solusi)</span>
-                  </>
-                )}
-              </button>
+              <div className="p-4 bg-surface-container-high rounded-2xl border-2 border-dashed border-on-surface flex items-center justify-between text-xs font-bold text-on-surface-variant">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
+                  <span>Live Preview: Ketik CSS untuk menyelaraskan permen</span>
+                </div>
+                <span className="font-mono text-[11px] text-primary">
+                  {liveEval.goals.filter((g) => g.passed).length}/
+                  {liveEval.goals.length} Cocok
+                </span>
+              </div>
             )}
           </div>
         </div>
