@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(100),
     avatar_url TEXT,
     xp_points INT NOT NULL DEFAULT 50 CHECK (xp_points >= 0),
+    level INT NOT NULL DEFAULT 1 CHECK (level >= 1),
     streak_days INT NOT NULL DEFAULT 1 CHECK (streak_days >= 0),
     last_active_date DATE NOT NULL DEFAULT CURRENT_DATE,
     role VARCHAR(20) NOT NULL DEFAULT 'USER' CHECK (role IN ('USER', 'ADMIN')),
@@ -112,6 +113,21 @@ CREATE TABLE IF NOT EXISTS site_visits (
 CREATE INDEX IF NOT EXISTS idx_site_visits_visited_at ON site_visits(visited_at);
 CREATE INDEX IF NOT EXISTS idx_site_visits_visitor_id ON site_visits(visitor_id);
 CREATE INDEX IF NOT EXISTS idx_site_visits_path ON site_visits(path);
+
+-- 7. Table: user_daily_activity (Tracking target belajar harian & streak)
+CREATE TABLE IF NOT EXISTS user_daily_activity (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    activity_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    study_seconds INT NOT NULL DEFAULT 0,
+    daily_target_completed BOOLEAN NOT NULL DEFAULT FALSE,
+    xp_earned_today INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_user_activity_date UNIQUE (user_id, activity_date)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_daily_activity_lookup ON user_daily_activity(user_id, activity_date);
 
 -- ========================================================
 -- SEED DATA: Classes & Full 10 Levels for CSS Flexbox
