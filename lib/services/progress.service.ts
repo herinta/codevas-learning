@@ -1,6 +1,7 @@
 import { query } from "@/lib/db/pool";
 import { UserProgressEntity, ProgressStatus, ChallengeEntity } from "@/lib/db/entities";
 import { UserService } from "./user.service";
+import { calculateGamificationStats, GamificationStats } from "@/lib/gamification";
 
 export interface CompleteChallengeResult {
   success: boolean;
@@ -9,6 +10,13 @@ export interface CompleteChallengeResult {
   newStreakDays: number;
   nextChallengeId: string | null;
   isClassCompleted: boolean;
+  level: number;
+  leveledUp: boolean;
+  rankTitle: string;
+  rankBadge: string;
+  levelProgressPercent: number;
+  nextLevelXp: number;
+  currentLevelXp: number;
 }
 
 export class ProgressService {
@@ -103,14 +111,29 @@ export class ProgressService {
 
     // 4. Tambah XP dan Update Streak jika ini penyelesaian pertama
     let earnedXp = 0;
+    let addXpResult: {
+      xp_points: number;
+      level: number;
+      earnedXp: number;
+      leveledUp: boolean;
+      stats: GamificationStats;
+    } | null = null;
+
     if (!wasAlreadyCompleted) {
       earnedXp = currentChallenge.xp_reward;
-      await UserService.addXp(userId, earnedXp);
+      addXpResult = await UserService.addXp(
+        userId,
+        earnedXp,
+        "CHALLENGE_COMPLETE",
+        challengeId,
+        `Menyelesaikan level tantangan: ${currentChallenge.title}`
+      );
     }
 
     const { streak_days: newStreakDays } = await UserService.recordActivity(userId);
     const updatedUser = await UserService.findById(userId);
     const newTotalXp = updatedUser?.xp_points ?? 0;
+    const stats = addXpResult?.stats || calculateGamificationStats(newTotalXp);
 
     // 5. Buka Level Berikutnya dalam Kelas ini
     const nextChRows = await query<ChallengeEntity>(
@@ -151,6 +174,13 @@ export class ProgressService {
       newStreakDays,
       nextChallengeId,
       isClassCompleted,
+      level: stats.level,
+      leveledUp: addXpResult?.leveledUp ?? false,
+      rankTitle: stats.rank_title,
+      rankBadge: stats.rank_badge,
+      levelProgressPercent: stats.level_progress_percent,
+      nextLevelXp: stats.next_level_xp,
+      currentLevelXp: stats.current_level_xp,
     };
   }
 }

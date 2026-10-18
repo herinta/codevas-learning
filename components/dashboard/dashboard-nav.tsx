@@ -102,6 +102,16 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
             </span>
           </div>
 
+          {/* Level Pill */}
+          <div
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-300 border-2 border-on-surface rounded-full candy-btn-shadow"
+            title={`Level ${user?.level || 1} — ${user?.rank_title || 'Siswa Pemula'}`}
+          >
+            <span className="text-xs font-mono font-black text-on-surface">
+              Lv.{user?.level || 1}
+            </span>
+          </div>
+
           {/* XP Pill */}
           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary-fixed border-2 border-on-surface rounded-full candy-btn-shadow">
             <Star className="w-4 h-4 text-secondary fill-secondary" />
@@ -150,9 +160,17 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
                       <p className="font-body text-[11px] text-on-surface-variant truncate">
                         {user.email}
                       </p>
-                      <span className="inline-block mt-1 font-mono text-[10px] font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-full">
-                        {user.xp_points} XP Points
-                      </span>
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <span className="font-mono text-[10px] font-black text-on-surface bg-amber-300 px-2 py-0.5 rounded-full border border-on-surface">
+                          Lv.{user.level || 1}
+                        </span>
+                        <span className="font-mono text-[10px] font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-full">
+                          {user.xp_points} XP
+                        </span>
+                      </div>
+                      <div className="text-[10px] font-bold text-on-surface-variant mt-1">
+                        {user.rank_title || "Siswa Pemula"}
+                      </div>
                     </div>
 
                     <Link

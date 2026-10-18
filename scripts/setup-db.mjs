@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(100),
     avatar_url TEXT,
     xp_points INT NOT NULL DEFAULT 50 CHECK (xp_points >= 0),
+    level INT NOT NULL DEFAULT 1 CHECK (level >= 1),
     streak_days INT NOT NULL DEFAULT 1 CHECK (streak_days >= 0),
     last_active_date DATE NOT NULL DEFAULT CURRENT_DATE,
     role VARCHAR(20) NOT NULL DEFAULT 'USER' CHECK (role IN ('USER', 'ADMIN')),
@@ -59,6 +60,9 @@ BEGIN
     END IF;
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='avatar_url') THEN
         ALTER TABLE users ADD COLUMN avatar_url TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='level') THEN
+        ALTER TABLE users ADD COLUMN level INT NOT NULL DEFAULT 1;
     END IF;
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='streak_days') THEN
         ALTER TABLE users ADD COLUMN streak_days INT NOT NULL DEFAULT 1;
@@ -172,6 +176,20 @@ CREATE TABLE IF NOT EXISTS site_visits (
 CREATE INDEX IF NOT EXISTS idx_site_visits_visited_at ON site_visits(visited_at);
 CREATE INDEX IF NOT EXISTS idx_site_visits_visitor_id ON site_visits(visitor_id);
 CREATE INDEX IF NOT EXISTS idx_site_visits_path ON site_visits(path);
+
+-- 8. Table: xp_transactions (Ledger & Audit Trail EXP Pengguna)
+CREATE TABLE IF NOT EXISTS xp_transactions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    amount INT NOT NULL,
+    source VARCHAR(50) NOT NULL,
+    reference_id VARCHAR(100),
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_xp_transactions_user ON xp_transactions(user_id);
+CREATE INDEX IF NOT EXISTS idx_xp_transactions_created_at ON xp_transactions(created_at);
 
 `;
 
@@ -632,9 +650,9 @@ async function main() {
     // demo@codevas.dev  -> demo123
     // admin@codevas.dev -> admin123
     await client.query(`
-      INSERT INTO users (id, username, email, password_hash, full_name, avatar_url, xp_points, streak_days, role) VALUES
-      ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'admin', 'admin@codevas.dev', 'ce1e3db0de863737e9547e6bf2ac6b3f:fa55da04dbd25678f9a048fcd10ede681fa79cfe0b9bd9f17f07a21ca79da925ff0e2bba4c4ff284cadbde68fa22d7078201edf0875c4d2e352110ac9cad767a', 'Super Admin Codevas', 'https://api.dicebear.com/7.x/bottts/svg?seed=AdminCodevas', 1250, 7, 'ADMIN'),
-      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'demo', 'demo@codevas.dev', 'e21bf3d3089df63c05719504159d8f24:6148be768b1f4cf4da80cbe90b4c0715229f910eb6ee70cfff4d8f6740d0aa363a2f09fd8c6844460f11641c589c62147ccdce9346917a9e247dde65d092c62f', 'Alex Demo Developer', 'https://api.dicebear.com/7.x/bottts/svg?seed=alex_coder', 340, 3, 'USER')
+      INSERT INTO users (id, username, email, password_hash, full_name, avatar_url, xp_points, level, streak_days, role) VALUES
+      ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'admin', 'admin@codevas.dev', 'ce1e3db0de863737e9547e6bf2ac6b3f:fa55da04dbd25678f9a048fcd10ede681fa79cfe0b9bd9f17f07a21ca79da925ff0e2bba4c4ff284cadbde68fa22d7078201edf0875c4d2e352110ac9cad767a', 'Super Admin Codevas', 'https://api.dicebear.com/7.x/bottts/svg?seed=AdminCodevas', 1250, 5, 7, 'ADMIN'),
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'demo', 'demo@codevas.dev', 'e21bf3d3089df63c05719504159d8f24:6148be768b1f4cf4da80cbe90b4c0715229f910eb6ee70cfff4d8f6740d0aa363a2f09fd8c6844460f11641c589c62147ccdce9346917a9e247dde65d092c62f', 'Alex Demo Developer', 'https://api.dicebear.com/7.x/bottts/svg?seed=alex_coder', 340, 3, 3, 'USER')
       ON CONFLICT (id) DO UPDATE SET
         username = EXCLUDED.username,
         email = EXCLUDED.email,
@@ -642,8 +660,18 @@ async function main() {
         full_name = EXCLUDED.full_name,
         avatar_url = EXCLUDED.avatar_url,
         xp_points = EXCLUDED.xp_points,
+        level = EXCLUDED.level,
         streak_days = EXCLUDED.streak_days,
         role = EXCLUDED.role;
+    `);
+
+    // Initial XP Transactions for demo and admin
+    await client.query(`
+      INSERT INTO xp_transactions (user_id, amount, source, reference_id, description) VALUES
+      ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 1250, 'ADMIN_GRANT', 'system_init', 'Bonus setup awal akun Super Admin'),
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 50, 'REGISTER_BONUS', 'welcome', 'Bonus selamat datang registrasi akun'),
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 290, 'CHALLENGE_COMPLETE', 'flexbox-1-activation', 'Menyelesaikan tantangan kurikulum Codevas')
+      ON CONFLICT DO NOTHING;
     `);
 
     // 4. Enroll Demo User to HTML Architecture and CSS Flexbox

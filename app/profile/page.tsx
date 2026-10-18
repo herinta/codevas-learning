@@ -41,8 +41,15 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [xpHistory, setXpHistory] = useState<Array<{
+    id: string;
+    amount: number;
+    source: string;
+    description: string;
+    created_at: string;
+  }>>([]);
 
-  // Sync initial values from auth user
+  // Sync initial values from auth user & fetch detailed profile + XP history
   useEffect(() => {
     if (!authLoading && !user) {
       router.push("/login?redirect=/profile");
@@ -52,6 +59,18 @@ export default function ProfilePage() {
         (user as any).avatar_url ||
           `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(user.username)}`
       );
+
+      // Fetch latest gamification profile & history
+      fetch("/api/user/profile")
+        .then((res) => res.json())
+        .then((json) => {
+          if (json.success && json.data) {
+            if (Array.isArray(json.data.xp_history)) {
+              setXpHistory(json.data.xp_history);
+            }
+          }
+        })
+        .catch(() => {});
     }
   }, [user, authLoading, router]);
 
@@ -134,14 +153,22 @@ export default function ProfilePage() {
             </div>
 
             {/* Gamification Pills */}
-            <div className="flex items-center gap-2.5">
-              <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#fff3e0] border-2 border-on-surface rounded-full shadow-sm">
-                <Flame className="w-4 h-4 text-[#e65100] fill-[#e65100]" />
-                <span className="text-xs font-headline font-black text-on-surface">
-                  {user ? `${(user as any).streak_days || 1} Hari Streak` : "1 Hari"}
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-300 border-2 border-on-surface rounded-full shadow-sm">
+                <span className="text-xs font-mono font-black text-on-surface">
+                  Lv.{user?.level || 1}
+                </span>
+                <span className="text-xs font-headline font-bold text-on-surface">
+                  {user?.rank_title || "Siswa Pemula"}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-secondary-fixed border-2 border-on-surface rounded-full shadow-sm">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#fff3e0] border-2 border-on-surface rounded-full shadow-sm">
+                <Flame className="w-4 h-4 text-[#e65100] fill-[#e65100]" />
+                <span className="text-xs font-headline font-black text-on-surface">
+                  {user ? `${(user as any).streak_days || 1} Hari` : "1 Hari"}
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary-fixed border-2 border-on-surface rounded-full shadow-sm">
                 <Star className="w-4 h-4 text-secondary fill-secondary" />
                 <span className="text-xs font-headline font-black text-secondary">
                   {user?.xp_points || 50} XP
@@ -295,6 +322,103 @@ export default function ProfilePage() {
               </button>
             </div>
           </form>
+
+          {/* Card Reputasi & EXP Gamifikasi */}
+          <div className="mt-8 pt-8 border-t-4 border-on-surface space-y-6">
+            <div className="flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-amber-300 text-on-surface border-2 border-on-surface flex items-center justify-center font-mono font-black text-xs">
+                Lv
+              </span>
+              <div>
+                <h2 className="font-display font-black text-xl text-on-surface">
+                  Reputasi &amp; Tingkat EXP
+                </h2>
+                <p className="font-body text-xs text-on-surface-variant font-medium">
+                  Selesaikan quest coding dan tantangan untuk meningkatkan level dan membuka reputasi developer.
+                </p>
+              </div>
+            </div>
+
+            {/* Level Progress Banner */}
+            <div className="p-5 bg-surface-container-low rounded-2xl border-2 border-on-surface space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">{user?.rank_badge || "🌱"}</span>
+                  <div>
+                    <span className="font-headline font-black text-base text-on-surface block">
+                      {user?.rank_title || "Siswa Pemula"}
+                    </span>
+                    <span className="font-mono text-xs text-on-surface-variant font-bold">
+                      Level {user?.level || 1} • {user?.xp_points || 50} Total XP
+                    </span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span className="text-xs font-mono font-bold text-secondary">
+                    {user?.xp_remaining && user.xp_remaining > 0
+                      ? `${user.xp_remaining} XP lagi menuju Level ${(user?.level || 1) + 1}`
+                      : "Peringkat Tertinggi"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Bar */}
+              <div className="w-full bg-surface-container-high rounded-full h-4 border-2 border-on-surface overflow-hidden p-0.5">
+                <div
+                  className="bg-gradient-to-r from-amber-400 via-primary to-secondary h-full rounded-full transition-all duration-500"
+                  style={{ width: `${Math.max(5, user?.level_progress_percent ?? 50)}%` }}
+                />
+              </div>
+
+              <div className="flex justify-between items-center text-[11px] font-bold text-on-surface-variant">
+                <span>{user?.current_level_xp ?? 50} XP di level ini</span>
+                <span>Progres: {user?.level_progress_percent ?? 50}%</span>
+              </div>
+            </div>
+
+            {/* XP Transactions History List */}
+            <div className="space-y-3">
+              <h3 className="font-display font-black text-base text-on-surface flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <span>Riwayat Perolehan EXP</span>
+              </h3>
+
+              {xpHistory.length === 0 ? (
+                <div className="p-4 bg-surface-container-low rounded-xl border border-outline-variant text-center text-xs text-on-surface-variant font-medium">
+                  Belum ada catatan transaksi EXP. Selesaikan quest tantangan pertamamu untuk mulai mengumpulkan EXP!
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {xpHistory.map((item) => (
+                    <div
+                      key={item.id}
+                      className="p-3 bg-surface-container-low rounded-xl border border-on-surface flex items-center justify-between gap-3 text-xs"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <span className="px-2 py-0.5 bg-secondary-fixed text-secondary font-mono font-black rounded-lg border border-on-surface text-[11px]">
+                          +{item.amount} XP
+                        </span>
+                        <div>
+                          <p className="font-headline font-bold text-on-surface leading-snug">
+                            {item.description || item.source}
+                          </p>
+                          <span className="text-[10px] text-on-surface-variant font-mono">
+                            {new Date(item.created_at).toLocaleString("id-ID", {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded border border-outline-variant">
+                        {item.source}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </main>
 

@@ -76,10 +76,12 @@ export const Navbar: React.FC = () => {
             <div className="flex items-center gap-2">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-1.5 px-3 py-1 bg-secondary-fixed border-2 border-on-surface rounded-full shadow-brutal-sm hover:scale-105 transition-transform"
-                title="XP Pengguna"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-secondary-fixed border-2 border-on-surface rounded-full shadow-brutal-sm hover:scale-105 transition-transform"
+                title={`Level ${user.level || 1} — ${user.rank_title || 'Siswa Pemula'}`}
               >
-                <Zap className="w-3.5 h-3.5 text-secondary fill-secondary" />
+                <span className="bg-amber-300 text-on-surface text-[10px] font-mono font-black px-1.5 py-0.5 rounded-full border border-on-surface">
+                  Lv.{user.level || 1}
+                </span>
                 <span className="font-display font-black text-xs text-secondary">
                   {user.xp_points} XP
                 </span>
@@ -201,7 +203,7 @@ export const Navbar: React.FC = () => {
           <div className="pt-2 border-t border-outline-variant flex flex-col gap-2">
             {user ? (
               <div className="flex items-center justify-between px-2 py-1.5">
-                <span className="text-xs font-bold text-on-surface">@{user.username} ({user.xp_points} XP)</span>
+                <span className="text-xs font-bold text-on-surface">@{user.username} (Lv.{user.level || 1} • {user.xp_points} XP)</span>
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);

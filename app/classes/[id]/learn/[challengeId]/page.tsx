@@ -447,6 +447,13 @@ function ChallengePlaygroundContent({
   const [isSaving, setIsSaving] = useState(false);
   const [sessionExpired, setSessionExpired] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [earnedXpInfo, setEarnedXpInfo] = useState<{
+    earnedXp: number;
+    leveledUp: boolean;
+    level: number;
+    rankTitle: string;
+    newTotalXp?: number;
+  } | null>(null);
 
   // Load challenge info dynamically from API
   const loadData = React.useCallback(async () => {
@@ -456,6 +463,7 @@ function ChallengePlaygroundContent({
     setIsClassCompleted(false);
     setSaveError(null);
     setLoadError(null);
+    setEarnedXpInfo(null);
 
     try {
       const res = await fetch(`/api/challenges/${challengeId}`, { cache: "no-store" });
@@ -547,6 +555,13 @@ function ChallengePlaygroundContent({
         setHasSavedPass(true);
         setNextChallengeId(data.nextChallengeId);
         setIsClassCompleted(Boolean(data.isClassCompleted));
+        setEarnedXpInfo({
+          earnedXp: data.earnedXp ?? challenge?.xp_reward ?? 20,
+          leveledUp: Boolean(data.leveledUp),
+          level: data.level ?? user?.level ?? 1,
+          rankTitle: data.rankTitle ?? user?.rank_title ?? "Siswa Pemula",
+          newTotalXp: data.newTotalXp,
+        });
         refreshUser();
       }
     } catch (err) {
@@ -1021,6 +1036,15 @@ function ChallengePlaygroundContent({
 
         {/* User Status Pills */}
         <div className="flex items-center gap-2 sm:gap-3">
+          <div
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-300 border-2 border-on-surface rounded-full shadow-sm"
+            title={`Level ${user?.level || 1} • ${user?.rank_title || 'Siswa Pemula'}`}
+          >
+            <span className="text-xs font-mono font-black text-on-surface">
+              Lv.{user?.level || 1}
+            </span>
+          </div>
+
           <div className="flex items-center gap-1.5 px-3 py-1 bg-[#fff3e0] border-2 border-on-surface rounded-full shadow-sm">
             <Flame className="w-4 h-4 text-[#e65100] fill-[#e65100]" />
             <span className="text-xs font-headline font-black text-on-surface">
@@ -1292,9 +1316,23 @@ function ChallengePlaygroundContent({
           {/* Bottom Action Area: Appears when target is achieved */}
           {liveEval.passed && (
             <div className="pt-4 mt-4 border-t border-outline-variant space-y-2.5 animate-in fade-in duration-300">
-              <div className="p-3.5 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-center gap-2.5 text-xs font-headline font-black text-emerald-950 shadow-sm">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                <span>Sempurna! Target berhasil dicapai.</span>
+              <div className="p-3.5 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-center justify-between text-xs font-headline font-black text-emerald-950 shadow-sm">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <div>
+                    <span>Sempurna! Target berhasil dicapai.</span>
+                    {earnedXpInfo?.leveledUp && (
+                      <span className="block text-[11px] font-bold text-amber-800 mt-0.5">
+                        🎉 Selamat! Naik ke Level {earnedXpInfo.level} ({earnedXpInfo.rankTitle})
+                      </span>
+                    )}
+                  </div>
+                </div>
+                {earnedXpInfo?.earnedXp && earnedXpInfo.earnedXp > 0 && (
+                  <span className="px-2.5 py-1 bg-emerald-600 text-white rounded-lg font-mono font-black text-xs shrink-0 shadow-xs">
+                    +{earnedXpInfo.earnedXp} XP
+                  </span>
+                )}
               </div>
 
               {/* Offline / Save Error Alert with Retry button */}

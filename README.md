@@ -12,14 +12,15 @@ Berikut adalah rangkuman komprehensif perkembangan arsitektur, fitur, dan engine
 ### 1. 🗄️ Database PostgreSQL & Skema Relasional (ERD)
 Sistem database telah dimigrasikan dan tersinkronisasi penuh dengan **PostgreSQL 16** lokal (`codevas_db`) dan Docker container:
 
-* **`users`**: Data autentikasi akun, profil, XP points, streak harian, role (`USER` dan `ADMIN`), tanggal aktif, serta `last_seen_at` untuk pemantauan realtime online.
+* **`users`**: Data autentikasi akun, profil, level pengguna, XP points, streak harian, role (`USER` dan `ADMIN`), tanggal aktif, serta `last_seen_at` untuk pemantauan realtime online.
+* **`xp_transactions`**: Ledger dan audit trail riwayat perolehan EXP pengguna (`user_id`, `amount`, `source`, `reference_id`, `description`, `created_at`).
 * **`classes`**: Katalog mata pelajaran per kategori (`LIVE_CODE`, `DRAG_DROP`, `QUIZ`), tingkat kesulitan, estimasi waktu, status publikasi, dan total reward XP.
 * **`challenges`**: Modul quest/level dalam kelas. Dilengkapi kolom **`theory`** (materi konsep kunci), **`instruction`** (soal misi), **`syntax_helpers`** (tag pintasan ketik cepat), **`target_visual`** (target solusi visual), **`locked_template`**, dan **`initial_state`**.
 * **`user_enrollments`**: Relasi pendaftaran kelas oleh pengguna (`status`: `ACTIVE`, `COMPLETED`, `DROPPED`) dengan proteksi `UNIQUE(user_id, class_id)`.
 * **`user_progress`**: Tracking progres penyelesaian quest per pengguna (`LOCKED`, `IN_PROGRESS`, `COMPLETED`), snapshot kode CSS terakhir, dan waktu penyelesaian.
 * **`site_visits`**: Pelacakan analitik pengunjung publik landing page tanpa login secara anonim (`visitor_id`, `path`, `ip_hash`, `user_agent`, `visited_at`) dengan fitur auto-throttle 5 menit.
 
-> **Automated Migration & Seed**: Script `node scripts/setup-db.mjs` (atau `npm run db:setup`) mengeksekusi DDL schema, migration idempotent, indexes, serta seed 10 Level Lengkap CSS Flexbox Mastery.
+> **Automated Migration & Seed**: Script `node scripts/setup-db.mjs` (atau `npm run db:setup`) mengeksekusi DDL schema, migration idempotent, indexes, tabel ledger `xp_transactions`, serta seed materi kurikulum.
 
 ---
 

@@ -21,12 +21,27 @@ export interface UserEntity {
   full_name: string | null;
   avatar_url: string | null;
   xp_points: number;
+  level: number;
   streak_days: number;
   last_active_date: string | Date;
   last_seen_at?: Date | string;
   role: UserRole;
   created_at: Date | string;
   updated_at: Date | string;
+}
+
+/**
+ * Entity: xp_transactions
+ * Ledger record for user XP gains and audit trail
+ */
+export interface XpTransactionEntity {
+  id: string; // UUID
+  user_id: string;
+  amount: number;
+  source: 'REGISTER_BONUS' | 'CHALLENGE_COMPLETE' | 'DAILY_STREAK' | 'ADMIN_GRANT' | string;
+  reference_id?: string | null;
+  description?: string | null;
+  created_at: Date | string;
 }
 
 /**

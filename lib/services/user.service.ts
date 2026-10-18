@@ -1,6 +1,7 @@
 import { query } from "@/lib/db/pool";
-import { UserEntity } from "@/lib/db/entities";
+import { UserEntity, XpTransactionEntity } from "@/lib/db/entities";
 import { hashPassword } from "@/lib/auth/password";
+import { calculateGamificationStats, GamificationStats } from "@/lib/gamification";
 
 export interface CreateUserInput {
   username: string;
@@ -63,7 +64,7 @@ export class UserService {
   }
 
   /**
-   * Register a new user with hashed password, initial 50 XP bonus, and streak = 1
+   * Register a new user with hashed password, initial 50 XP bonus, level calculation, and streak = 1
    */
   static async createUser(input: CreateUserInput): Promise<UserEntity> {
     const cleanUsername = input.username.trim().replace(/^@+/, "");
@@ -74,14 +75,26 @@ export class UserService {
       input.avatar_url ||
       `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(cleanUsername)}`;
 
+    const initialXp = 50;
+    const initialStats = calculateGamificationStats(initialXp);
+
     const rows = await query<UserEntity>(
-      `INSERT INTO users (username, email, password_hash, full_name, avatar_url, xp_points, streak_days, last_active_date, role)
-       VALUES ($1, $2, $3, $4, $5, 50, 1, CURRENT_DATE, 'USER')
+      `INSERT INTO users (username, email, password_hash, full_name, avatar_url, xp_points, level, streak_days, last_active_date, role)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 1, CURRENT_DATE, 'USER')
        RETURNING *`,
-      [cleanUsername, cleanEmail, hashedPassword, fullName, avatarUrl]
+      [cleanUsername, cleanEmail, hashedPassword, fullName, avatarUrl, initialXp, initialStats.level]
     );
 
-    return rows[0];
+    const newUser = rows[0];
+    if (newUser) {
+      await query(
+        `INSERT INTO xp_transactions (user_id, amount, source, reference_id, description)
+         VALUES ($1, $2, 'REGISTER_BONUS', 'welcome', 'Bonus selamat datang registrasi akun baru')`,
+        [newUser.id, initialXp]
+      );
+    }
+
+    return newUser;
   }
 
   /**
@@ -164,17 +177,65 @@ export class UserService {
   }
 
   /**
-   * Update user XP points
+   * Update user XP points, compute new level, and record ledger transaction
    */
-  static async addXp(userId: string, pointsToAdd: number): Promise<number> {
-    const rows = await query<{ xp_points: number }>(
+  static async addXp(
+    userId: string,
+    pointsToAdd: number,
+    source: string = "CHALLENGE_COMPLETE",
+    referenceId?: string,
+    description?: string
+  ): Promise<{
+    xp_points: number;
+    level: number;
+    earnedXp: number;
+    leveledUp: boolean;
+    stats: GamificationStats;
+  }> {
+    const user = await this.findById(userId);
+    const prevXp = user?.xp_points ?? 0;
+    const oldLevel = user?.level ?? 1;
+    const newXp = Math.max(0, prevXp + pointsToAdd);
+    const stats = calculateGamificationStats(newXp);
+    const leveledUp = stats.level > oldLevel;
+
+    const rows = await query<{ xp_points: number; level: number }>(
       `UPDATE users 
-       SET xp_points = xp_points + $1, updated_at = CURRENT_TIMESTAMP 
-       WHERE id = $2 
-       RETURNING xp_points`,
-      [pointsToAdd, userId]
+       SET xp_points = $1, level = $2, updated_at = CURRENT_TIMESTAMP 
+       WHERE id = $3 
+       RETURNING xp_points, level`,
+      [newXp, stats.level, userId]
     );
-    return rows[0]?.xp_points ?? 0;
+
+    // Record transaction audit trail
+    if (pointsToAdd !== 0) {
+      await query(
+        `INSERT INTO xp_transactions (user_id, amount, source, reference_id, description)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [userId, pointsToAdd, source, referenceId || null, description || `Perolehan EXP dari ${source}`]
+      );
+    }
+
+    return {
+      xp_points: rows[0]?.xp_points ?? newXp,
+      level: rows[0]?.level ?? stats.level,
+      earnedXp: pointsToAdd,
+      leveledUp,
+      stats,
+    };
+  }
+
+  /**
+   * Get XP Transaction History for a user
+   */
+  static async getXpHistory(userId: string, limit: number = 10): Promise<XpTransactionEntity[]> {
+    return query<XpTransactionEntity>(
+      `SELECT * FROM xp_transactions 
+       WHERE user_id = $1 
+       ORDER BY created_at DESC 
+       LIMIT $2`,
+      [userId, limit]
+    );
   }
 
   /**
@@ -297,7 +358,7 @@ export class UserService {
     values.push(offset);
 
     const users = await query<UserEntity>(
-      `SELECT id, username, email, full_name, avatar_url, xp_points, streak_days, last_active_date, last_seen_at, role, created_at, updated_at
+      `SELECT id, username, email, full_name, avatar_url, xp_points, level, streak_days, last_active_date, last_seen_at, role, created_at, updated_at
        FROM users
        ${whereClause}
        ORDER BY last_seen_at DESC NULLS LAST, created_at DESC
@@ -356,8 +417,12 @@ export class UserService {
       values.push(data.full_name.trim());
     }
     if (data.xp_points !== undefined) {
+      const newXp = Math.max(0, data.xp_points);
+      const stats = calculateGamificationStats(newXp);
       fields.push(`xp_points = $${idx++}`);
-      values.push(Math.max(0, data.xp_points));
+      values.push(newXp);
+      fields.push(`level = $${idx++}`);
+      values.push(stats.level);
     }
     if (data.streak_days !== undefined) {
       fields.push(`streak_days = $${idx++}`);

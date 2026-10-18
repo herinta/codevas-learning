@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { calculateGamificationStats } from "@/lib/gamification";
 
 export interface AuthUser {
   id: string;
@@ -10,6 +11,13 @@ export interface AuthUser {
   full_name?: string | null;
   avatar_url?: string | null;
   xp_points: number;
+  level: number;
+  rank_title: string;
+  rank_badge: string;
+  current_level_xp: number;
+  next_level_xp: number;
+  level_progress_percent: number;
+  xp_remaining: number;
   streak_days?: number;
   role: string;
 }
@@ -40,7 +48,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await fetch("/api/auth/me", { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
-        setUser(data.user || null);
+        if (data.user) {
+          const stats = calculateGamificationStats(data.user.xp_points);
+          setUser({
+            ...data.user,
+            level: data.user.level ?? stats.level,
+            rank_title: data.user.rank_title ?? stats.rank_title,
+            rank_badge: data.user.rank_badge ?? stats.rank_badge,
+            current_level_xp: data.user.current_level_xp ?? stats.current_level_xp,
+            next_level_xp: data.user.next_level_xp ?? stats.next_level_xp,
+            level_progress_percent: data.user.level_progress_percent ?? stats.level_progress_percent,
+            xp_remaining: data.user.xp_remaining ?? stats.xp_remaining,
+          });
+        } else {
+          setUser(null);
+        }
       } else {
         setUser(null);
       }

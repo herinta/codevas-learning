@@ -423,6 +423,13 @@ export async function POST(
       newStreakDays: result.newStreakDays,
       nextChallengeId: result.nextChallengeId,
       isClassCompleted: result.isClassCompleted,
+      level: result.level,
+      leveledUp: result.leveledUp,
+      rankTitle: result.rankTitle,
+      rankBadge: result.rankBadge,
+      levelProgressPercent: result.levelProgressPercent,
+      nextLevelXp: result.nextLevelXp,
+      currentLevelXp: result.currentLevelXp,
       message: result.isClassCompleted
         ? "🏆 Selamat! Kamu telah menyelesaikan seluruh level dalam kelas ini!"
         : "Selamat! Level berhasil ditaklukkan, level berikutnya telah terbuka!",

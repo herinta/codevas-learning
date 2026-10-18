@@ -23,7 +23,8 @@ Menghilangkan rasa frustrasi "kanvas kosong" bagi pelajar dengan menyajikan UI y
 ## 4. Database Architecture (ERD Core)
 Menggunakan `JSONB` agar struktur tabel fleksibel menampung konfigurasi soal yang berbeda-beda tiap kategori.
 
-*   **`users`**: `id`, `username`, `email`, `password_hash`, `xp_points`, `role` (USER, ADMIN).
+*   **`users`**: `id` (UUID), `username`, `email`, `password_hash`, `full_name`, `avatar_url`, `xp_points`, `level`, `streak_days`, `role` (USER, ADMIN), `last_seen_at`, `created_at`, `updated_at`.
+*   **`xp_transactions`** (Ledger & Audit Trail EXP): `id` (UUID), `user_id` (FK -> users), `amount`, `source` (REGISTER_BONUS, CHALLENGE_COMPLETE, STREAK_BONUS, ADMIN_GRANT), `reference_id`, `description`, `created_at`.
 *   **`classes`**: `id`, `category` (ENUM: `LIVE_CODE`, `DRAG_DROP`, `QUIZ`), `title`, `description`, `is_published`.
 *   **`user_enrollments`**: `id` (UUID), `user_id` (FK -> users), `class_id` (FK -> classes), `status` (ACTIVE, COMPLETED, DROPPED), `enrolled_at`.
 *   **`challenges`** (Level dalam Kelas): 
