@@ -7,10 +7,12 @@ import {
   UserProgressEntity,
   EnrolledClassSummary,
 } from "@/lib/db/entities";
+import { CLASSES_LIST, CLASSES_MAP } from "@/lib/classes-data";
 
 export class ClassService {
   /**
-   * Get all classes, dynamically enriched with user enrollment and progress percentage if logged in
+   * Get all classes, dynamically enriched with user enrollment and progress percentage if logged in.
+   * Gracefully falls back to CLASSES_LIST if DB is unavailable or empty.
    */
   static async getAllClasses(userId?: string): Promise<Array<ClassEntity & {
     totalLevels: number;
@@ -18,55 +20,94 @@ export class ClassService {
     progressPercent: number;
     isEnrolled: boolean;
   }>> {
-    // 1. Ambil semua kelas diurutkan berdasarkan order_index
-    const classes = await query<ClassEntity>(
-      "SELECT * FROM classes ORDER BY order_index ASC, created_at ASC"
-    );
+    const buildFallback = () =>
+      CLASSES_LIST.map((c, idx) => ({
+        id: c.id,
+        category: c.category,
+        title: c.title,
+        tagline: c.tagline ?? null,
+        description: c.about ?? null,
+        difficulty_level: c.level,
+        xp_reward: c.xpReward,
+        estimated_time: c.estimatedHours,
+        is_published: c.status === "available",
+        order_index: idx + 1,
+        created_at: new Date(),
+        updated_at: new Date(),
+        totalLevels: c.modulesCount || (c.modules ? c.modules.length : 0),
+        completedLevels: 0,
+        progressPercent: 0,
+        isEnrolled: false,
+      }));
 
-    // 2. Ambil total tantangan per kelas
-    const counts = await query<{ class_id: string; total: string }>(
-      "SELECT class_id, count(*)::text as total FROM challenges GROUP BY class_id"
-    );
-    const countMap = new Map<string, number>();
-    counts.forEach((c) => countMap.set(c.class_id, parseInt(c.total, 10)));
-
-    // 3. Jika user login, ambil data enrollments & progress
-    const enrolledSet = new Set<string>();
-    const completedMap = new Map<string, number>();
-
-    if (userId) {
-      const enrollments = await query<{ class_id: string }>(
-        "SELECT class_id FROM user_enrollments WHERE user_id = $1 AND status != 'DROPPED'",
-        [userId]
+    try {
+      // 1. Ambil semua kelas diurutkan berdasarkan order_index
+      const classes = await query<ClassEntity>(
+        "SELECT * FROM classes ORDER BY order_index ASC, created_at ASC"
       );
-      enrollments.forEach((e) => enrolledSet.add(e.class_id));
 
-      const completed = await query<{ class_id: string; completed_count: string }>(
-        `SELECT c.class_id, count(*)::text as completed_count
-         FROM user_progress up
-         JOIN challenges c ON up.challenge_id = c.id
-         WHERE up.user_id = $1 AND up.status = 'COMPLETED'
-         GROUP BY c.class_id`,
-        [userId]
-      );
-      completed.forEach((c) => completedMap.set(c.class_id, parseInt(c.completed_count, 10)));
+      if (!classes || classes.length === 0) {
+        return buildFallback();
+      }
+
+      // 2. Ambil total tantangan per kelas
+      let countMap = new Map<string, number>();
+      try {
+        const counts = await query<{ class_id: string; total: string }>(
+          "SELECT class_id, count(*)::text as total FROM challenges GROUP BY class_id"
+        );
+        counts.forEach((c) => countMap.set(c.class_id, parseInt(c.total, 10)));
+      } catch {
+        // Abaikan jika tabel challenges belum ada
+      }
+
+      // 3. Jika user login, ambil data enrollments & progress
+      const enrolledSet = new Set<string>();
+      const completedMap = new Map<string, number>();
+
+      if (userId) {
+        try {
+          const enrollments = await query<{ class_id: string }>(
+            "SELECT class_id FROM user_enrollments WHERE user_id = $1 AND status != 'DROPPED'",
+            [userId]
+          );
+          enrollments.forEach((e) => enrolledSet.add(e.class_id));
+
+          const completed = await query<{ class_id: string; completed_count: string }>(
+            `SELECT c.class_id, count(*)::text as completed_count
+             FROM user_progress up
+             JOIN challenges c ON up.challenge_id = c.id
+             WHERE up.user_id = $1 AND up.status = 'COMPLETED'
+             GROUP BY c.class_id`,
+            [userId]
+          );
+          completed.forEach((c) => completedMap.set(c.class_id, parseInt(c.completed_count, 10)));
+        } catch {
+          // Abaikan jika tabel enrollments belum ada
+        }
+      }
+
+      return classes.map((item) => {
+        const staticItem = CLASSES_MAP[item.id];
+        const staticLevels = staticItem?.modulesCount || (staticItem?.modules ? staticItem.modules.length : 0);
+        const totalLevels = countMap.get(item.id) || staticLevels || 0;
+        const completedLevels = completedMap.get(item.id) || 0;
+        const progressPercent =
+          totalLevels > 0 ? Math.round((completedLevels / totalLevels) * 100) : 0;
+        const isEnrolled = enrolledSet.has(item.id);
+
+        return {
+          ...item,
+          totalLevels,
+          completedLevels,
+          progressPercent,
+          isEnrolled,
+        };
+      });
+    } catch (err) {
+      console.warn("[ClassService.getAllClasses] DB query error, falling back to static classes:", err);
+      return buildFallback();
     }
-
-    return classes.map((item) => {
-      const totalLevels = countMap.get(item.id) || 0;
-      const completedLevels = completedMap.get(item.id) || 0;
-      const progressPercent =
-        totalLevels > 0 ? Math.round((completedLevels / totalLevels) * 100) : 0;
-      const isEnrolled = enrolledSet.has(item.id);
-
-      return {
-        ...item,
-        totalLevels,
-        completedLevels,
-        progressPercent,
-        isEnrolled,
-      };
-    });
   }
 
   /**
@@ -76,86 +117,141 @@ export class ClassService {
     id: string,
     userId?: string
   ): Promise<ClassWithChallenges | null> {
-    const classRows = await query<ClassEntity>(
-      "SELECT * FROM classes WHERE id = $1 LIMIT 1",
-      [id]
-    );
-    if (!classRows.length) return null;
+    const buildStaticFallback = (): ClassWithChallenges | null => {
+      const staticClass = CLASSES_MAP[id];
+      if (!staticClass) return null;
 
-    const courseClass = classRows[0];
-
-    // Ambil semua tantangan / level dalam kelas ini
-    const challenges = await query<ChallengeEntity>(
-      "SELECT * FROM challenges WHERE class_id = $1 ORDER BY order_index ASC",
-      [id]
-    );
-
-    let isEnrolled = false;
-    const progressMap = new Map<string, { status: string; codeSnapshot: string | null }>();
-
-    if (userId) {
-      const enrollmentRows = await query<{ id: string }>(
-        "SELECT id FROM user_enrollments WHERE user_id = $1 AND class_id = $2 AND status != 'DROPPED' LIMIT 1",
-        [userId, id]
+      const fallbackChallenges: ChallengeWithUserProgress[] = (staticClass.modules || []).map(
+        (m, idx) => ({
+          id: m.id,
+          class_id: staticClass.id,
+          title: m.title,
+          difficulty: "EASY" as const,
+          order_index: m.number,
+          xp_reward: m.xp,
+          instruction: m.description,
+          hint: null,
+          theory: null,
+          syntax_helpers: [],
+          locked_template: {},
+          target_visual: {},
+          initial_state: "",
+          validation_rules: {},
+          created_at: new Date(),
+          updated_at: new Date(),
+          userStatus: idx === 0 ? "IN_PROGRESS" : "LOCKED",
+          codeSnapshot: null,
+        })
       );
-      isEnrolled = enrollmentRows.length > 0;
 
-      if (challenges.length > 0) {
-        const challengeIds = challenges.map((c) => c.id);
-        const progressRows = await query<UserProgressEntity>(
-          `SELECT * FROM user_progress 
-           WHERE user_id = $1 AND challenge_id = ANY($2::text[])`,
-          [userId, challengeIds]
-        );
-        progressRows.forEach((p) => {
-          progressMap.set(p.challenge_id, {
-            status: p.status,
-            codeSnapshot: p.code_snapshot,
-          });
-        });
+      return {
+        id: staticClass.id,
+        category: staticClass.category,
+        title: staticClass.title,
+        tagline: staticClass.tagline,
+        description: staticClass.about,
+        difficulty_level: staticClass.level,
+        xp_reward: staticClass.xpReward,
+        estimated_time: staticClass.estimatedHours,
+        is_published: staticClass.status === "available",
+        order_index: 1,
+        created_at: new Date(),
+        updated_at: new Date(),
+        challenges: fallbackChallenges,
+        totalLevels: staticClass.modulesCount || fallbackChallenges.length,
+        completedLevels: 0,
+        progressPercent: 0,
+        isEnrolled: false,
+      };
+    };
+
+    try {
+      const classRows = await query<ClassEntity>(
+        "SELECT * FROM classes WHERE id = $1 LIMIT 1",
+        [id]
+      );
+      if (!classRows.length) {
+        return buildStaticFallback();
       }
-    }
 
-    let completedLevels = 0;
+      const courseClass = classRows[0];
 
-    const challengesWithProgress: ChallengeWithUserProgress[] = challenges.map((ch, idx) => {
-      let userStatus: "LOCKED" | "IN_PROGRESS" | "COMPLETED" = "LOCKED";
-      let codeSnapshot: string | null = null;
+      // Ambil semua tantangan / level dalam kelas ini
+      const challenges = await query<ChallengeEntity>(
+        "SELECT * FROM challenges WHERE class_id = $1 ORDER BY order_index ASC",
+        [id]
+      );
 
-      if (isEnrolled) {
-        const prog = progressMap.get(ch.id);
-        if (prog) {
-          userStatus = prog.status as "LOCKED" | "IN_PROGRESS" | "COMPLETED";
-          codeSnapshot = prog.codeSnapshot;
-        } else if (idx === 0) {
-          // Level 1 selalu otomatis terbuka untuk user terdaftar jika belum ada progress
-          userStatus = "IN_PROGRESS";
+      let isEnrolled = false;
+      const progressMap = new Map<string, { status: string; codeSnapshot: string | null }>();
+
+      if (userId) {
+        const enrollmentRows = await query<{ id: string }>(
+          "SELECT id FROM user_enrollments WHERE user_id = $1 AND class_id = $2 AND status != 'DROPPED' LIMIT 1",
+          [userId, id]
+        );
+        isEnrolled = enrollmentRows.length > 0;
+
+        if (challenges.length > 0) {
+          const challengeIds = challenges.map((c) => c.id);
+          const progressRows = await query<UserProgressEntity>(
+            `SELECT * FROM user_progress 
+             WHERE user_id = $1 AND challenge_id = ANY($2::text[])`,
+            [userId, challengeIds]
+          );
+          progressRows.forEach((p) => {
+            progressMap.set(p.challenge_id, {
+              status: p.status,
+              codeSnapshot: p.code_snapshot,
+            });
+          });
         }
       }
 
-      if (userStatus === "COMPLETED") {
-        completedLevels++;
-      }
+      let completedLevels = 0;
+
+      const challengesWithProgress: ChallengeWithUserProgress[] = challenges.map((ch, idx) => {
+        let userStatus: "LOCKED" | "IN_PROGRESS" | "COMPLETED" = "LOCKED";
+        let codeSnapshot: string | null = null;
+
+        if (isEnrolled) {
+          const prog = progressMap.get(ch.id);
+          if (prog) {
+            userStatus = prog.status as "LOCKED" | "IN_PROGRESS" | "COMPLETED";
+            codeSnapshot = prog.codeSnapshot;
+          } else if (idx === 0) {
+            // Level 1 selalu otomatis terbuka untuk user terdaftar jika belum ada progress
+            userStatus = "IN_PROGRESS";
+          }
+        }
+
+        if (userStatus === "COMPLETED") {
+          completedLevels++;
+        }
+
+        return {
+          ...ch,
+          userStatus,
+          codeSnapshot,
+        };
+      });
+
+      const totalLevels = challenges.length;
+      const progressPercent =
+        totalLevels > 0 ? Math.round((completedLevels / totalLevels) * 100) : 0;
 
       return {
-        ...ch,
-        userStatus,
-        codeSnapshot,
+        ...courseClass,
+        challenges: challengesWithProgress,
+        totalLevels,
+        completedLevels,
+        progressPercent,
+        isEnrolled,
       };
-    });
-
-    const totalLevels = challenges.length;
-    const progressPercent =
-      totalLevels > 0 ? Math.round((completedLevels / totalLevels) * 100) : 0;
-
-    return {
-      ...courseClass,
-      challenges: challengesWithProgress,
-      totalLevels,
-      completedLevels,
-      progressPercent,
-      isEnrolled,
-    };
+    } catch (err) {
+      console.warn(`[ClassService.getClassById] Error fetching class ${id}, using static fallback:`, err);
+      return buildStaticFallback();
+    }
   }
 
   /**

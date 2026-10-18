@@ -15,8 +15,9 @@ import {
   HelpCircle,
   Loader2,
 } from "lucide-react";
+import { CLASSES_LIST } from "@/lib/classes-data";
 
-interface ApiClassItem {
+export interface ApiClassItem {
   id: string;
   category: "LIVE_CODE" | "DRAG_DROP" | "QUIZ";
   title: string;
@@ -32,9 +33,31 @@ interface ApiClassItem {
   isEnrolled: boolean;
 }
 
-export const ClassesSection: React.FC = () => {
-  const [classes, setClasses] = useState<ApiClassItem[]>([]);
-  const [loading, setLoading] = useState(true);
+const DEFAULT_LANDING_CLASSES: ApiClassItem[] = CLASSES_LIST.map((c) => ({
+  id: c.id,
+  category: c.category,
+  title: c.title,
+  tagline: c.tagline ?? null,
+  description: c.about ?? null,
+  difficulty_level: c.level,
+  xp_reward: c.xpReward,
+  estimated_time: c.estimatedHours,
+  is_published: c.status === "available",
+  totalLevels: c.modulesCount || (c.modules ? c.modules.length : 0),
+  completedLevels: 0,
+  progressPercent: 0,
+  isEnrolled: false,
+}));
+
+interface ClassesSectionProps {
+  initialClasses?: ApiClassItem[];
+}
+
+export const ClassesSection: React.FC<ClassesSectionProps> = ({ initialClasses }) => {
+  const [classes, setClasses] = useState<ApiClassItem[]>(
+    initialClasses && initialClasses.length > 0 ? initialClasses : DEFAULT_LANDING_CLASSES
+  );
+  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<"ALL" | "LIVE_CODE" | "DRAG_DROP" | "QUIZ">("ALL");
 
   useEffect(() => {
@@ -43,7 +66,7 @@ export const ClassesSection: React.FC = () => {
         const res = await fetch("/api/classes");
         if (res.ok) {
           const json = await res.json();
-          if (json.success && Array.isArray(json.data)) {
+          if (json.success && Array.isArray(json.data) && json.data.length > 0) {
             setClasses(json.data);
           }
         }
@@ -75,8 +98,11 @@ export const ClassesSection: React.FC = () => {
   };
 
   const getCategoryThumbnailIcon = (title: string, cat: string) => {
+    if (title.includes("HTML")) return <Terminal className="w-8 h-8 text-sky-600" />;
+    if (title.includes("Basics")) return <Sparkles className="w-8 h-8 text-amber-600" />;
     if (title.includes("Flexbox")) return <LayoutGrid className="w-8 h-8 text-primary" />;
     if (title.includes("Grid")) return <Layers className="w-8 h-8 text-emerald-600" />;
+    if (title.includes("Tailwind")) return <LayoutGrid className="w-8 h-8 text-cyan-600" />;
     if (title.includes("Styling")) return <Sparkles className="w-8 h-8 text-secondary" />;
     if (cat === "DRAG_DROP") return <Boxes className="w-8 h-8 text-amber-600" />;
     return <HelpCircle className="w-8 h-8 text-secondary" />;
@@ -84,13 +110,20 @@ export const ClassesSection: React.FC = () => {
 
   const getAccentBg = (id: string) => {
     switch (id) {
+      case "html-architecture":
+        return "bg-[#e0f2fe]";
+      case "css-basics":
+        return "bg-[#fef3c7]";
       case "css-flexbox":
         return "bg-[#fce7f3]";
       case "css-grid":
         return "bg-[#dcfce7]";
       case "component-styling":
         return "bg-[#ede9fe]";
+      case "tailwind-css":
+        return "bg-[#cffafe]";
       case "js-logic-blocks":
+      case "javascript-logic-blocks":
         return "bg-[#fef3c7]";
       default:
         return "bg-[#e0e7ff]";
@@ -167,8 +200,17 @@ export const ClassesSection: React.FC = () => {
         </div>
       )}
 
+      {/* Empty State */}
+      {!loading && filteredClasses.length === 0 && (
+        <div className="py-16 text-center bg-surface-container-lowest border-2 border-dashed border-on-surface/30 rounded-3xl p-8">
+          <p className="font-headline font-bold text-base text-on-surface-variant">
+            Belum ada kelas pada kategori ini. Silakan pilih tab kategori lain di atas.
+          </p>
+        </div>
+      )}
+
       {/* Grid of Class Cards */}
-      {!loading && (
+      {!loading && filteredClasses.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           {filteredClasses.map((item) => {
             const isComingSoon = !item.is_published;

@@ -47,9 +47,7 @@ export default function HomePage() {
     <main className="min-h-screen flex flex-col bg-background text-on-surface">
       <Navbar />
       <HeroSection />
-      <div id="classes">
-        <ClassesSection />
-      </div>
+      <ClassesSection />
       <InteractiveDemo />
       <FeaturesSection />
       <StatsBanner />

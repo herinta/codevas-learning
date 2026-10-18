@@ -123,6 +123,29 @@ CREATE TABLE IF NOT EXISTS classes (
 CREATE INDEX IF NOT EXISTS idx_classes_category ON classes(category);
 CREATE INDEX IF NOT EXISTS idx_classes_published ON classes(is_published);
 
+-- Alter classes if columns missing (idempotent migration)
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='order_index') THEN
+        ALTER TABLE classes ADD COLUMN order_index INT NOT NULL DEFAULT 1;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='tagline') THEN
+        ALTER TABLE classes ADD COLUMN tagline TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='difficulty_level') THEN
+        ALTER TABLE classes ADD COLUMN difficulty_level VARCHAR(30) NOT NULL DEFAULT 'Pemula';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='xp_reward') THEN
+        ALTER TABLE classes ADD COLUMN xp_reward INT NOT NULL DEFAULT 150;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='estimated_time') THEN
+        ALTER TABLE classes ADD COLUMN estimated_time VARCHAR(50) NOT NULL DEFAULT '2 Jam';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='is_published') THEN
+        ALTER TABLE classes ADD COLUMN is_published BOOLEAN NOT NULL DEFAULT TRUE;
+    END IF;
+END $$;
+
 -- 4. Table: challenges
 CREATE TABLE IF NOT EXISTS challenges (
     id VARCHAR(60) PRIMARY KEY,

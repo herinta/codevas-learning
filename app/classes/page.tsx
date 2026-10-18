@@ -67,6 +67,9 @@ export default async function AllClassesCatalogPage() {
     }
   } catch (err) {
     console.error("Gagal memuat kelas SSR katalog:", err);
+  }
+
+  if (!initialClasses || initialClasses.length === 0) {
     initialClasses = CLASSES_LIST.map((c) => ({
       id: c.id,
       category: c.category,
@@ -77,7 +80,7 @@ export default async function AllClassesCatalogPage() {
       xp_reward: c.xpReward,
       estimated_time: c.estimatedHours,
       is_published: c.status === "available",
-      totalLevels: c.modulesCount || 0,
+      totalLevels: c.modulesCount || (c.modules ? c.modules.length : 0),
       completedLevels: 0,
       progressPercent: 0,
       isEnrolled: false,

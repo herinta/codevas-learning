@@ -92,11 +92,77 @@ async function ensureSchema() {
     await pool.query(`
       CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
       CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+      -- 1. Ensure users table columns
       DO $$ BEGIN
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='level') THEN
-          ALTER TABLE users ADD COLUMN level INT NOT NULL DEFAULT 1 CHECK (level >= 1);
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'users') THEN
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='level') THEN
+            ALTER TABLE users ADD COLUMN level INT NOT NULL DEFAULT 1 CHECK (level >= 1);
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='full_name') THEN
+            ALTER TABLE users ADD COLUMN full_name VARCHAR(100);
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='avatar_url') THEN
+            ALTER TABLE users ADD COLUMN avatar_url TEXT;
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='streak_days') THEN
+            ALTER TABLE users ADD COLUMN streak_days INT NOT NULL DEFAULT 1;
+          END IF;
         END IF;
       END $$;
+
+      -- 2. Ensure classes table and missing columns
+      CREATE TABLE IF NOT EXISTS classes (
+        id VARCHAR(50) PRIMARY KEY,
+        category VARCHAR(30) NOT NULL CHECK (category IN ('LIVE_CODE', 'DRAG_DROP', 'QUIZ')),
+        title VARCHAR(100) NOT NULL,
+        tagline TEXT,
+        description TEXT,
+        difficulty_level VARCHAR(30) NOT NULL DEFAULT 'Pemula',
+        xp_reward INT NOT NULL DEFAULT 150,
+        estimated_time VARCHAR(50) NOT NULL DEFAULT '2 Jam',
+        is_published BOOLEAN NOT NULL DEFAULT TRUE,
+        order_index INT NOT NULL DEFAULT 1,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+
+      DO $$ BEGIN
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'classes') THEN
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='order_index') THEN
+            ALTER TABLE classes ADD COLUMN order_index INT NOT NULL DEFAULT 1;
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='tagline') THEN
+            ALTER TABLE classes ADD COLUMN tagline TEXT;
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='difficulty_level') THEN
+            ALTER TABLE classes ADD COLUMN difficulty_level VARCHAR(30) NOT NULL DEFAULT 'Pemula';
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='xp_reward') THEN
+            ALTER TABLE classes ADD COLUMN xp_reward INT NOT NULL DEFAULT 150;
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='estimated_time') THEN
+            ALTER TABLE classes ADD COLUMN estimated_time VARCHAR(50) NOT NULL DEFAULT '2 Jam';
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='classes' AND column_name='is_published') THEN
+            ALTER TABLE classes ADD COLUMN is_published BOOLEAN NOT NULL DEFAULT TRUE;
+          END IF;
+        END IF;
+      END $$;
+
+      -- 3. Ensure challenges table theory and syntax_helpers columns
+      DO $$ BEGIN
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'challenges') THEN
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='theory') THEN
+            ALTER TABLE challenges ADD COLUMN theory TEXT;
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='syntax_helpers') THEN
+            ALTER TABLE challenges ADD COLUMN syntax_helpers JSONB NOT NULL DEFAULT '[]'::jsonb;
+          END IF;
+        END IF;
+      END $$;
+
+      -- 4. User Daily Activity Table
       CREATE TABLE IF NOT EXISTS user_daily_activity (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
