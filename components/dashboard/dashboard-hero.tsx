@@ -1,5 +1,5 @@
 import React from "react";
-import { Gamepad2, Zap, Layers, Sparkles } from "lucide-react";
+import { Zap, Layers, Sparkles } from "lucide-react";
 
 export interface DashboardHeroProps {
   readonly totalClasses?: number;
@@ -18,12 +18,6 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
         <div className="absolute right-1/4 -top-8 w-28 h-28 rounded-full bg-tertiary/25 blur-xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl">
-          {/* Gamified Mode Badge */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-surface rounded-full border-2 border-on-surface text-xs font-black text-primary mb-3.5 candy-card-shadow">
-            <Gamepad2 className="w-4 h-4 text-primary" />
-            <span>Mode Belajar Gamifikasi Aktif</span>
-          </div>
-
           {/* Headline */}
           <h1 className="font-display font-black text-2xl sm:text-4xl lg:text-5xl tracking-tight text-on-surface leading-tight">
             Pilih Petualangan Kode & Quiz Tantanganmu! 🎮
