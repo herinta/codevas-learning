@@ -258,19 +258,21 @@ Mirip konsep `application-dev.properties` & `application-prod.properties` di Spr
 - [`.env.production`](file:///d:/Project/codevas/.env.production): Mode production resmi (di Docker / Synology NAS), mengarah ke database container internal (`codevas-db:5432/codevas_db`).
 - [`.env.local`](file:///d:/Project/codevas/.env.local): Overrides lokal untuk developer. Cukup ubah `DB_MODE="local"` atau `DB_MODE="server"` untuk beralih target database.
 
-### 8.2 Perintah Sinkronisasi Database
-- Migrasi Database Lokal:
-  ```bash
-  npm run db:setup:local
-  ```
-- Migrasi Database Server (Synology NAS LAN):
-  ```bash
-  npm run db:setup:server
-  ```
-- Migrasi Otomatis (sesuai `DB_MODE` aktif):
+### 8.2 Prosedur Sinkronisasi & Migrasi Skema Database
+- **Di Laptop (Dev Lokal)**:
   ```bash
   npm run db:setup
   ```
+  *(Menyinkronkan seluruh tabel dan silabus ke PostgreSQL lokal di `localhost:5432`)*.
+
+- **Di Server (Synology NAS Production - Zero-Port Isolation)**:
+  Untuk keamanan maksimal dari hacker dan malware jaringan, port PostgreSQL `5432` sengaja **TIDAK** dibuka ke luar jaringan host. Sinkronisasi database server dilakukan secara terisolasi dan aman:
+  1. Masuk ke **Synology Container Manager** -> pilih container **`codevas-web`** -> **Terminal**.
+  2. Jalankan perintah:
+     ```bash
+     node scripts/setup-db.mjs
+     ```
+  *(Script bersifat idempotent: hanya memperbarui kolom dan materi baru tanpa menyentuh akun user yang sudah terdaftar)*.
 
 ---
 
