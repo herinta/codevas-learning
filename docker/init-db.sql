@@ -254,9 +254,9 @@ INSERT INTO classes (id, category, title, tagline, description, difficulty_level
         xp_reward = EXCLUDED.xp_reward,
         estimated_time = EXCLUDED.estimated_time,
         is_published = EXCLUDED.is_published,
-        order_index = EXCLUDED.order_index;;
+        order_index = EXCLUDED.order_index;
 
-DELETE FROM challenges WHERE class_id IN ('html-architecture', 'css-flexbox', 'css-grid');;
+DELETE FROM challenges WHERE class_id IN ('html-architecture', 'css-flexbox', 'css-grid');
 
 INSERT INTO challenges (
         id, class_id, title, difficulty, order_index, xp_reward, instruction, hint, theory, syntax_helpers,
@@ -641,7 +641,7 @@ INSERT INTO challenges (
         locked_template = EXCLUDED.locked_template,
         target_visual = EXCLUDED.target_visual,
         initial_state = EXCLUDED.initial_state,
-        validation_rules = EXCLUDED.validation_rules;;
+        validation_rules = EXCLUDED.validation_rules;
 
 INSERT INTO users (id, username, email, password_hash, full_name, avatar_url, xp_points, level, streak_days, role) VALUES
       ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'admin', 'admin@codevas.dev', 'ce1e3db0de863737e9547e6bf2ac6b3f:fa55da04dbd25678f9a048fcd10ede681fa79cfe0b9bd9f17f07a21ca79da925ff0e2bba4c4ff284cadbde68fa22d7078201edf0875c4d2e352110ac9cad767a', 'Super Admin Codevas', 'https://api.dicebear.com/7.x/bottts/svg?seed=AdminCodevas', 1250, 5, 7, 'ADMIN'),
@@ -659,7 +659,7 @@ INSERT INTO users (id, username, email, password_hash, full_name, avatar_url, xp
         xp_points = EXCLUDED.xp_points,
         level = EXCLUDED.level,
         streak_days = EXCLUDED.streak_days,
-        role = EXCLUDED.role;;
+        role = EXCLUDED.role;
 
 INSERT INTO xp_transactions (user_id, amount, source, reference_id, description) VALUES
       ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 1250, 'ADMIN_GRANT', 'system_init', 'Bonus setup awal akun Super Admin'),
@@ -669,12 +669,12 @@ INSERT INTO xp_transactions (user_id, amount, source, reference_id, description)
       ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', 520, 'CHALLENGE_COMPLETE', 'css-flexbox', 'Menyelesaikan modul Flexbox'),
       ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', 280, 'CHALLENGE_COMPLETE', 'css-flexbox', 'Menyelesaikan tantangan CSS'),
       ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a88', 190, 'CHALLENGE_COMPLETE', 'html-architecture', 'Menyelesaikan tantangan HTML')
-      ON CONFLICT DO NOTHING;;
+      ON CONFLICT DO NOTHING;
 
 INSERT INTO user_enrollments (id, user_id, class_id, status) VALUES
       ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'css-flexbox', 'ACTIVE'),
       ('d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'html-architecture', 'ACTIVE')
-      ON CONFLICT (user_id, class_id) DO UPDATE SET status = 'ACTIVE';;
+      ON CONFLICT (user_id, class_id) DO UPDATE SET status = 'ACTIVE';
 
 INSERT INTO user_progress (user_id, challenge_id, status, code_snapshot) VALUES
       ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'flexbox-1-activation', 'COMPLETED', '.arena {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}'),
@@ -682,7 +682,7 @@ INSERT INTO user_progress (user_id, challenge_id, status, code_snapshot) VALUES
       ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'html-1-raw-content', 'IN_PROGRESS', '<!-- Tulis tag heading 1 di sini -->')
       ON CONFLICT (user_id, challenge_id) DO UPDATE SET
         status = EXCLUDED.status,
-        code_snapshot = EXCLUDED.code_snapshot;;
+        code_snapshot = EXCLUDED.code_snapshot;
 
 SELECT count(*) FROM users;
 
