@@ -1275,11 +1275,6 @@ function ChallengePlaygroundContent({
                   <span className="block text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
                     Ketik Cepat (Klik pasang / klik lagi untuk hapus):
                   </span>
-                  {isTutorialLevel && !liveEval.passed && (
-                    <span className="text-[10px] font-mono font-black text-primary bg-primary/15 px-2 py-0.5 rounded-full border border-primary/30">
-                      ONBOARDING MODE
-                    </span>
-                  )}
                 </div>
 
                 <div className="flex flex-wrap gap-1.5">
@@ -1326,11 +1321,6 @@ function ChallengePlaygroundContent({
                           {active ? "✕" : isTutorialChoice ? "✨" : "+"}
                         </span>
                         <span>{snippet}</span>
-                        {isTutorialChoice && (
-                          <span className="ml-1 text-[8px] font-sans font-black bg-primary text-white px-1 py-0.2 rounded uppercase tracking-wider">
-                            TUTORIAL
-                          </span>
-                        )}
                       </button>
                     );
                   })}
