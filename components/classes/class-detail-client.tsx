@@ -375,7 +375,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
       </section>
 
       {/* MAIN TWO-COLUMN GAME ARENA */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex-grow w-full">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-28 md:pb-10 flex-grow w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* ======================================================== */}
           {/* LEFT COLUMN: THE WINDING TIMELINE / DUOLINGO LEARNING PATH */}

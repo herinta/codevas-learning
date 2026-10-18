@@ -183,7 +183,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-background text-on-surface flex flex-col">
       <Navbar />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-28 pb-16 flex-1 w-full">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-28 pb-28 md:pb-16 flex-1 w-full">
         {/* Header Breadcrumb */}
         <div className="flex items-center gap-2 mb-6 text-sm">
           <Link

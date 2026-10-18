@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import { AuthProvider } from "@/components/auth/auth-context";
 import { PwaProvider } from "@/components/pwa/pwa-provider";
+import { MobileBottomNav } from "@/components/navigation/mobile-bottom-nav";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -87,7 +88,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
         <AuthProvider>
-          <PwaProvider>{children}</PwaProvider>
+          <PwaProvider>
+            {children}
+            <MobileBottomNav />
+          </PwaProvider>
         </AuthProvider>
       </body>
     </html>

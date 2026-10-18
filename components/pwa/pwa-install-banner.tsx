@@ -107,8 +107,8 @@ export const PwaInstallBanner: React.FC = () => {
 
   return (
     <>
-      {/* FLOATING MOBILE PWA INSTALL BANNER - KHUSUS MOBILE */}
-      <div className="fixed bottom-4 inset-x-4 z-50 animate-in slide-in-from-bottom-5 duration-300 md:hidden">
+      {/* FLOATING MOBILE PWA INSTALL BANNER - KHUSUS MOBILE (Ditempatkan di atas bottom nav) */}
+      <div className="fixed bottom-20 inset-x-4 z-50 animate-in slide-in-from-bottom-5 duration-300 md:hidden">
         <div className="bg-surface-container-lowest border-3 border-on-surface rounded-2xl p-4 shadow-[0_8px_0_#2e1a28] relative">
           {/* Close button */}
           <button

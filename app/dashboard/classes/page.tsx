@@ -157,7 +157,7 @@ export default function DashboardClassesPage() {
       </nav>
 
       {/* Main Content Area */}
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 flex-1">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 flex-1 pb-24 md:pb-6">
         {/* Banner Section */}
         <div className="bg-surface-container-lowest border-2 border-on-surface rounded-2xl sm:rounded-3xl p-6 sm:p-8 candy-card-shadow mb-8 relative overflow-hidden">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">

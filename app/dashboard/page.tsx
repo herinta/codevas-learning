@@ -229,7 +229,7 @@ export default function DashboardPage() {
       />
 
       {/* Main Content Area */}
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex-1">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex-1 pb-24 md:pb-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* LEFT: 8 Columns - Class Track Cards */}
           <div className="lg:col-span-8 flex flex-col gap-6">
