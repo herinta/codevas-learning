@@ -14,6 +14,149 @@ function evaluateCss(challengeId: string, cssCode: string): {
   const normalized = cssCode.toLowerCase().replace(/\s+/g, " ");
   const feedback: string[] = [];
 
+  // ================= HTML ARCHITECTURE (12 Levels) =================
+  if (challengeId === "html-1-raw-content") {
+    const hasH1 = /<h1[^>]*>[\s\S]*Profil Saya[\s\S]*<\/h1>/i.test(cssCode);
+    if (!hasH1) feedback.push("Gunakan tag <h1> dengan teks 'Profil Saya'.");
+    return {
+      passed: hasH1,
+      score: hasH1 ? 100 : 0,
+      feedback: hasH1 ? ["Kerangka judul <h1> berhasil dibuat dengan tepat!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-2-paragraph") {
+    const hasH1 = /<h1[^>]*>[\s\S]*<\/h1>/i.test(cssCode);
+    const hasP = /<p[^>]*>[\s\S]+<\/p>/i.test(cssCode);
+    if (!hasP) feedback.push("Tambahkan tag <p> dengan deskripsi singkat dirimu.");
+    const passed = hasH1 && hasP;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Paragraf <p> berhasil ditambahkan di bawah judul!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-3-first-box") {
+    const hasDiv = /<div[^>]*>[\s\S]*<h1[\s\S]*<p[\s\S]*<\/div>/i.test(cssCode);
+    if (!hasDiv) feedback.push("Bungkus elemen <h1> dan <p> ke dalam satu container <div>.");
+    return {
+      passed: hasDiv,
+      score: hasDiv ? 100 : 50,
+      feedback: hasDiv ? ["Kardus <div> pertamamu berhasil membungkus teks dengan rapi!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-4-siblings") {
+    const divs = cssCode.match(/<div[^>]*>[\s\S]*?<\/div>/gi);
+    const hasTwoDivs = Boolean(divs && divs.length >= 2);
+    if (!hasTwoDivs) feedback.push("Buat minimal 2 buah <div> yang sejajar (atas dan bawah).");
+    return {
+      passed: hasTwoDivs,
+      score: hasTwoDivs ? 100 : 50,
+      feedback: hasTwoDivs ? ["Dua kardus sejajar (sibling) berhasil disusun!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-5-matryoshka") {
+    const hasParentAndChildren = /<div[^>]*>[\s\S]*<div[^>]*>[\s\S]*?<\/div>[\s\S]*<div[^>]*>[\s\S]*?<\/div>[\s\S]*<\/div>/i.test(cssCode);
+    if (!hasParentAndChildren) feedback.push("Buat satu <div> utama (Parent) yang membungkus dua <div> (Child) di dalamnya.");
+    return {
+      passed: hasParentAndChildren,
+      score: hasParentAndChildren ? 100 : 50,
+      feedback: hasParentAndChildren ? ["Sempurna! Konsep nesting (kardus di dalam kardus) berhasil dipahami!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-6-image-element") {
+    const hasImg = /<img\b[^>]*>/i.test(cssCode);
+    const hasSrc = /<img\b[^>]*\bsrc\s*=\s*["'][^"']+["'][^>]*>/i.test(cssCode);
+    if (!hasImg) feedback.push("Gunakan tag <img> (self-closing).");
+    if (!hasSrc) feedback.push("Sertakan atribut src dengan tautan gambar.");
+    const passed = hasImg && hasSrc;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Elemen gambar <img> berhasil dipasang!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-7-action-button") {
+    const hasBtn = /<button[^>]*>[\s\S]*Follow[\s\S]*<\/button>/i.test(cssCode);
+    if (!hasBtn) feedback.push("Tambahkan tag <button> dengan teks 'Follow'.");
+    return {
+      passed: hasBtn,
+      score: hasBtn ? 100 : 0,
+      feedback: hasBtn ? ["Tombol interaktif <button> berhasil dibuat!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-8-link") {
+    const hasLink = /<a\b[^>]*\bhref\s*=\s*["'][^"']+["'][^>]*>[\s\S]+<\/a>/i.test(cssCode);
+    if (!hasLink) feedback.push("Gunakan tag <a> dengan atribut href yang valid.");
+    return {
+      passed: hasLink,
+      score: hasLink ? 100 : 0,
+      feedback: hasLink ? ["Tautan navigasi <a> berhasil dipasang!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-9-list-hierarchy") {
+    const hasUl = /<ul[^>]*>[\s\S]*<\/ul>/i.test(cssCode);
+    const hasLi = /<ul[^>]*>[\s\S]*<li[^>]*>[\s\S]*?<\/li>[\s\S]*<\/ul>/i.test(cssCode);
+    if (!hasUl) feedback.push("Gunakan tag <ul> sebagai wadah daftar.");
+    if (!hasLi) feedback.push("Masukkan elemen item <li> di dalam <ul>.");
+    const passed = hasUl && hasLi;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Hierarki daftar <ul> dan <li> berhasil dirakit!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-10-semantic-touch") {
+    const hasSection = /<section[^>]*>[\s\S]+<\/section>/i.test(cssCode);
+    if (!hasSection) feedback.push("Gunakan tag semantik <section> untuk membungkus konten.");
+    return {
+      passed: hasSection,
+      score: hasSection ? 100 : 0,
+      feedback: hasSection ? ["Kerangka semantik <section> berhasil diterapkan!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-11-form-wrapper") {
+    const hasForm = /<form[^>]*>[\s\S]*<\/form>/i.test(cssCode);
+    const hasInput = /<form[^>]*>[\s\S]*<input\b[^>]*>[\s\S]*<\/form>/i.test(cssCode);
+    const hasButton = /<form[^>]*>[\s\S]*<button\b[^>]*>[\s\S]*<\/button>[\s\S]*<\/form>/i.test(cssCode);
+    if (!hasForm) feedback.push("Bungkus elemen dengan tag <form>.");
+    if (!hasInput) feedback.push("Sertakan tag <input> di dalam form.");
+    if (!hasButton) feedback.push("Sertakan tag <button> di dalam form.");
+    const passed = hasForm && hasInput && hasButton;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Formulir pengiriman data berhasil dirakit dengan benar!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-12-boss-card") {
+    const hasImg = /<img\b[^>]*>/i.test(cssCode);
+    const hasInnerDiv = /<div[^>]*>[\s\S]*<div[^>]*>[\s\S]*<\/div>[\s\S]*<\/div>/i.test(cssCode);
+    const hasHead = /<h[1-3][^>]*>[\s\S]*?<\/h[1-3]>/i.test(cssCode);
+    const hasP = /<p[^>]*>[\s\S]*?<\/p>/i.test(cssCode);
+    const hasBtn = /<button[^>]*>[\s\S]*?<\/button>/i.test(cssCode);
+    if (!hasImg) feedback.push("Tambahkan tag <img /> untuk foto avatar.");
+    if (!hasInnerDiv) feedback.push("Bungkus teks nama, bio, dan tombol ke dalam <div> child.");
+    if (!hasHead || !hasP || !hasBtn) feedback.push("Pastikan ada elemen judul/nama, paragraf bio, dan tombol follow.");
+    const passed = hasImg && hasInnerDiv && hasHead && hasP && hasBtn;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Selamat! Kamu berhasil menaklukkan BOSS FIGHT dan merakit hierarki Profile Card dengan sempurna!"] : feedback,
+    };
+  }
+
+  // ================= CSS FLEXBOX (10 Levels) =================
   // LEVEL 1: Rapatkan 3 Permen ke Titik Tengah
   if (challengeId === "flexbox-1-activation") {
     const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Terminal, Menu, X, Sparkles, LogOut, LayoutGrid, Zap, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth/auth-context";
@@ -9,12 +10,18 @@ import { useAuth } from "@/components/auth/auth-context";
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const pathname = usePathname();
+
+  const isDemo = pathname ? pathname.startsWith("/demo") : false;
+  const brandHref = isDemo ? "/demo" : "/";
+  const loginHref = isDemo ? "/demo/login" : "/login";
+  const registerHref = isDemo ? "/demo/register" : "/register";
 
   return (
     <header className="fixed top-4 inset-x-0 z-50 px-4 md:px-8">
       <div className="max-w-6xl mx-auto bg-surface-container-lowest border-2 border-on-surface rounded-full py-2.5 px-4 md:px-6 shadow-[0_6px_0_#2e1a28] flex items-center justify-between transition-all duration-200">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link href={brandHref} className="flex items-center gap-2.5 group">
           <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white border-2 border-on-surface shadow-[0_2px_0_#2e1a28] group-hover:rotate-12 transition-transform duration-200">
             <Terminal className="w-5 h-5 stroke-[2.5]" />
           </div>
@@ -112,12 +119,12 @@ export const Navbar: React.FC = () => {
             </div>
           ) : (
             <>
-              <Link href="/login">
+              <Link href={loginHref}>
                 <Button variant="ghost" size="sm">
                   Masuk
                 </Button>
               </Link>
-              <Link href="/register">
+              <Link href={registerHref}>
                 <Button variant="primary" size="sm">
                   Daftar Gratis
                 </Button>
@@ -135,7 +142,7 @@ export const Navbar: React.FC = () => {
               </div>
             </Link>
           ) : (
-            <Link href="/login">
+            <Link href={loginHref}>
               <Button variant="ghost" size="sm" className="px-2.5">
                 Masuk
               </Button>
@@ -207,7 +214,7 @@ export const Navbar: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
+              <Link href={registerHref} onClick={() => setMobileMenuOpen(false)}>
                 <Button variant="primary" size="md" className="w-full">
                   Mulai Belajar Sekarang
                 </Button>

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Mail, Lock, Eye, EyeOff, Sparkles, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Sparkles, AlertCircle, Loader2, CheckCircle2, ArrowRight } from "lucide-react";
 import { SocialAuth } from "./social-auth";
 import { useAuth } from "./auth-context";
 
@@ -49,12 +49,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
       }
 
       setUser(data.user);
-      setSuccessMsg(`Selamat datang kembali, @${data.user.username}! Mengalihkan... 🚀`);
-
-      setTimeout(() => {
-        router.push("/dashboard");
-        router.refresh();
-      }, 700);
+      
+      // Direct redirect ke Dashboard atau tujuan redirect tanpa alert/jeda
+      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+      const redirectUrl = params?.get("redirect") || "/dashboard";
+      router.push(redirectUrl);
+      router.refresh();
     } catch {
       setErrorMsg("Terjadi kesalahan jaringan. Cek koneksi Anda lalu coba lagi.");
       setLoading(false);
@@ -65,14 +65,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
     <div className="w-full max-w-lg bg-surface-container-lowest border-[3px] border-on-surface rounded-2xl p-6 sm:p-8 md:p-10 neo-shadow transition-all relative">
       {/* Header Section */}
       <div className="text-center space-y-3 mb-6">
-        <div className="inline-flex items-center gap-1.5 bg-primary-fixed border-2 border-on-surface text-on-primary-fixed px-3.5 py-1 rounded-full text-xs sm:text-sm font-label font-bold neo-shadow-sm">
-          <span>👋 Halo Teman Koding!</span>
-        </div>
         <h1 className="font-display font-black text-3xl sm:text-4xl text-on-surface tracking-tight">
           Masuk ke Akun
         </h1>
         <p className="font-body text-on-surface-variant text-sm sm:text-base leading-relaxed max-w-sm mx-auto">
-          Lanjutkan petualangan koding frontend dan kumpulkan XP harianmu!
+          Lanjutkan pembelajaran koding frontend dan kumpulkan XP harianmu.
         </p>
       </div>
 
@@ -89,34 +86,25 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
 
       {/* Error Banner */}
       {errorMsg && (
-        <div className="mb-5 p-3.5 bg-red-100 border-2 border-red-500 rounded-2xl flex items-start gap-2.5 text-red-900 text-xs sm:text-sm font-semibold animate-shake">
+        <div className="mb-5 p-3.5 bg-red-100 border-2 border-red-500 rounded-2xl flex items-start gap-2.5 text-red-900 text-xs sm:text-sm font-semibold">
           <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
           <span>{errorMsg}</span>
         </div>
       )}
 
-      {/* Success Banner */}
-      {successMsg && (
-        <div className="mb-5 p-3.5 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-start gap-2.5 text-emerald-950 text-xs sm:text-sm font-bold animate-pulse">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-          <span>{successMsg}</span>
-        </div>
-      )}
-
       {/* Quick Demo Credentials Helper - KHUSUS UNTUK LINK PORTO /demo */}
       {showDemoBox && (
-        <div className="mb-6 p-4 sm:p-5 bg-gradient-to-br from-amber-50 to-orange-50 border-3 border-on-surface rounded-2xl neo-shadow-sm space-y-3 animate-in fade-in zoom-in-95 duration-200">
+        <div className="mb-6 p-4 sm:p-5 bg-gradient-to-br from-amber-50 to-orange-50 border-3 border-on-surface rounded-2xl neo-shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="font-headline font-black text-xs sm:text-sm text-amber-950 flex items-center gap-1.5 uppercase tracking-wide">
-              <Sparkles className="w-4 h-4 text-amber-600 fill-amber-500" />
-              <span>Akses Demo Akun (Portofolio)</span>
+              <span>Akses Demo Cepat</span>
             </span>
             <span className="text-[10px] font-mono font-bold bg-amber-200 text-amber-950 px-2 py-0.5 rounded-full border border-amber-400">
-              PORTO SHOWCASE
+              DEMO
             </span>
           </div>
           <p className="text-[11px] text-amber-900/80 font-medium leading-tight">
-            Klik kartu di bawah untuk langsung mengisi akun uji coba sebagai Siswa atau Administrator:
+            Pilih akun uji coba untuk pengisian otomatis:
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
@@ -130,10 +118,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
               className="p-2.5 rounded-xl border-2 border-on-surface bg-white hover:bg-secondary-fixed/30 text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-xs"
             >
               <div className="flex items-center justify-between">
-                <span className="font-headline font-black text-xs text-secondary flex items-center gap-1">
-                  <span>🎓 Akun Siswa</span>
+                <span className="font-headline font-black text-xs text-secondary">
+                  Akun Siswa
                 </span>
-                <span className="text-[10px] font-mono font-bold text-secondary">Isi ✨</span>
+                <span className="text-[10px] font-mono font-bold text-secondary">Gunakan</span>
               </div>
               <div className="text-[11px] font-mono text-on-surface-variant mt-0.5">
                 demo / demo123
@@ -150,10 +138,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
               className="p-2.5 rounded-xl border-2 border-on-surface bg-white hover:bg-amber-100 text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-xs"
             >
               <div className="flex items-center justify-between">
-                <span className="font-headline font-black text-xs text-amber-900 flex items-center gap-1">
-                  <span>🛡️ Akun Admin</span>
+                <span className="font-headline font-black text-xs text-amber-900">
+                  Akun Admin
                 </span>
-                <span className="text-[10px] font-mono font-bold text-amber-800">Isi ✨</span>
+                <span className="text-[10px] font-mono font-bold text-amber-800">Gunakan</span>
               </div>
               <div className="text-[11px] font-mono text-on-surface-variant mt-0.5">
                 admin / admin123
@@ -263,9 +251,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
           ) : (
             <>
               <span>Masuk ke Codevas</span>
-              <span className="text-lg group-hover:scale-125 transition-transform">
-                🚀
-              </span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </>
           )}
         </button>
@@ -276,7 +262,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
         <p className="font-body text-sm font-medium text-on-surface-variant">
           Belum punya akun?{" "}
           <Link
-            href="/register"
+            href={showDemoBox ? "/demo/register" : "/register"}
             className="font-headline font-black text-primary hover:text-[#c02080] underline decoration-2 underline-offset-4 ml-1 inline-flex items-center gap-1 group"
           >
             <span>Daftar gratis sekarang</span>

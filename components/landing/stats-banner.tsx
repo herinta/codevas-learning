@@ -1,8 +1,14 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Trophy, Star, ArrowRight } from "lucide-react";
 
 export const StatsBanner: React.FC = () => {
+  const pathname = usePathname();
+  const registerHref = pathname?.startsWith("/demo") ? "/demo/register" : "/register";
+
   return (
     <section className="py-12 px-4" id="community">
       <div className="max-w-6xl mx-auto bg-secondary-fixed rounded-3xl border-4 border-on-surface p-8 md:p-12 shadow-[0_10px_0_#2e1a28] flex flex-col md:flex-row items-center justify-between gap-8">
@@ -20,7 +26,7 @@ export const StatsBanner: React.FC = () => {
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-3">
             <Link
-              href="/register"
+              href={registerHref}
               className="px-6 py-3 rounded-full bg-primary text-white font-label font-black text-sm border-2 border-on-surface shadow-[0_4px_0_#2e1a28] hover:scale-105 transition-all inline-flex items-center gap-2"
             >
               <span>Gabung Sekarang</span>

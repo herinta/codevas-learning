@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Flame,
   ArrowRight,
@@ -10,6 +13,9 @@ import {
 } from "lucide-react";
 
 export const HeroSection: React.FC = () => {
+  const pathname = usePathname();
+  const registerHref = pathname?.startsWith("/demo") ? "/demo/register" : "/register";
+
   return (
     <section className="relative pt-36 pb-20 md:pt-44 md:pb-28 overflow-hidden bg-surface-container-lowest">
       {/* Subtle Concentric Rings Background */}
@@ -76,7 +82,7 @@ export const HeroSection: React.FC = () => {
         {/* CTA Row */}
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="/register"
+            href={registerHref}
             className="w-full sm:w-auto px-8 py-4 rounded-full bg-primary text-white font-label font-black text-lg border-2 border-on-surface shadow-[0_6px_0_#2e1a28] hover:scale-105 active:translate-y-1 active:shadow-[0_2px_0_#2e1a28] transition-all flex items-center justify-center gap-3 group"
           >
             <span>Mulai Belajar Gratis</span>

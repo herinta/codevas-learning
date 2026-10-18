@@ -49,10 +49,13 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({ classData }) =
   // Handle Enrollment logic
   const handleEnroll = () => {
     if (!isLoggedIn) {
-      // User requested: jika klik enroll saat belum login arahkan ke /login
       router.push(`/login?redirect=/classes/${classData.id}`);
     } else {
-      alert(`Selamat! Kamu telah terdaftar di kelas "${classData.title}". Membuka Workspace...`);
+      const firstModule = classData.modules?.[0];
+      const targetUrl = firstModule
+        ? `/classes/${classData.id}/learn/${firstModule.id}`
+        : `/classes/${classData.id}`;
+      router.push(targetUrl);
     }
   };
 

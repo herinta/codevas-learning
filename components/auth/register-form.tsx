@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   User,
   AtSign,
@@ -16,12 +16,20 @@ import {
   AlertCircle,
   Loader2,
   CheckCircle2,
+  Dices,
+  Sparkles,
 } from "lucide-react";
 import { SocialAuth } from "./social-auth";
 import { useAuth } from "./auth-context";
 
-export const RegisterForm: React.FC = () => {
+interface RegisterFormProps {
+  isDemoMode?: boolean;
+}
+
+export const RegisterForm: React.FC<RegisterFormProps> = ({ isDemoMode = false }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const isDemo = isDemoMode || pathname?.startsWith("/demo");
   const { setUser } = useAuth();
 
   const [fullname, setFullname] = useState("");
@@ -34,6 +42,61 @@ export const RegisterForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  const generateRandomData = () => {
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    const names = ["Andi", "Budi", "Citra", "Dian", "Eko", "Fajar", "Gita", "Hadi", "Indah", "Joko"];
+    const randomName = names[Math.floor(Math.random() * names.length)];
+    return {
+      fullname: `${randomName} Tester ${rand}`,
+      username: `tester_${rand}`,
+      email: `tester${rand}@codevas.dev`,
+      password: "Password123!",
+    };
+  };
+
+  const handleFillRandom = () => {
+    const data = generateRandomData();
+    setFullname(data.fullname);
+    setUsername(data.username);
+    setEmail(data.email);
+    setPassword(data.password);
+    setAgreeTerms(true);
+    setErrorMsg(null);
+  };
+
+  const handleAutoRegister = async () => {
+    const data = generateRandomData();
+    setFullname(data.fullname);
+    setUsername(data.username);
+    setEmail(data.email);
+    setPassword(data.password);
+    setAgreeTerms(true);
+    setErrorMsg(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const resJson = await res.json();
+      if (!res.ok) {
+        setErrorMsg(resJson.error || "Gagal membuat akun otomatis. Coba lagi.");
+        setLoading(false);
+        return;
+      }
+
+      setUser(resJson.user);
+      router.push("/dashboard");
+      router.refresh();
+    } catch {
+      setErrorMsg("Terjadi gangguan koneksi ke server. Pastikan internet aktif dan coba lagi.");
+      setLoading(false);
+    }
+  };
 
   // Password strength calculation (0 to 4)
   const calculateStrength = (pass: string) => {
@@ -79,14 +142,10 @@ export const RegisterForm: React.FC = () => {
         return;
       }
 
-      // Success
+      // Success - Direct redirect to Dashboard
       setUser(data.user);
-      setSuccessMsg(`Selamat datang, @${data.user.username}! Mengalihkan ke Dashboard... 🎉`);
-
-      setTimeout(() => {
-        router.push("/dashboard");
-        router.refresh();
-      }, 900);
+      router.push("/dashboard");
+      router.refresh();
     } catch {
       setErrorMsg("Terjadi gangguan koneksi ke server. Pastikan internet aktif dan coba lagi.");
       setLoading(false);
@@ -108,6 +167,49 @@ export const RegisterForm: React.FC = () => {
           Gabung komunitas developer kreatif &amp; taklukkan tantangan coding berhadiah XP!
         </p>
       </div>
+
+      {/* Demo Tester Quick Access Card */}
+      {isDemo && (
+        <div className="mb-6 p-4 rounded-2xl border-2 border-on-surface bg-secondary-fixed/30 shadow-[0_4px_0_#2e1a28]">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-1.5 font-headline font-black text-xs text-on-surface">
+              <Sparkles className="w-4 h-4 text-secondary fill-secondary" />
+              <span>Tester Portofolio Demo</span>
+            </div>
+            <span className="text-[10px] font-mono font-bold bg-secondary text-white px-2 py-0.5 rounded-full">
+              Otomatis
+            </span>
+          </div>
+          <p className="text-xs text-on-surface-variant font-medium mb-3">
+            Tidak perlu repot mengetik data. Pilih opsi di bawah untuk langsung mencoba akun baru:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={handleFillRandom}
+              className="p-2.5 rounded-xl border-2 border-on-surface bg-white hover:bg-slate-50 text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-xs flex items-center gap-2"
+            >
+              <Dices className="w-4 h-4 text-secondary shrink-0" />
+              <div>
+                <div className="font-headline font-black text-xs text-on-surface">Isi Data Acak</div>
+                <div className="text-[10px] text-on-surface-variant">Generate nama &amp; email acak</div>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={handleAutoRegister}
+              disabled={loading}
+              className="p-2.5 rounded-xl border-2 border-on-surface bg-secondary text-white hover:bg-secondary/90 text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-xs flex items-center gap-2 disabled:opacity-60"
+            >
+              <Zap className="w-4 h-4 text-amber-300 fill-amber-300 shrink-0" />
+              <div>
+                <div className="font-headline font-black text-xs text-white">Daftar Cepat 1-Klik</div>
+                <div className="text-[10px] text-white/80">Otomatis buat &amp; masuk</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* SSO Quick Actions */}
       <SocialAuth mode="register" />
@@ -320,9 +422,7 @@ export const RegisterForm: React.FC = () => {
             ) : (
               <>
                 <span>Buat Akun Sekarang</span>
-                <span className="text-xl group-hover:rotate-12 transition-transform">
-                  🎉
-                </span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </>
             )}
           </button>
@@ -334,7 +434,7 @@ export const RegisterForm: React.FC = () => {
         <p className="font-body text-sm font-semibold text-on-surface">
           Sudah punya akun?{" "}
           <Link
-            href="/login"
+            href={isDemo ? "/demo/login" : "/login"}
             className="font-headline font-black text-secondary hover:text-primary underline decoration-2 underline-offset-4 ml-1 inline-flex items-center gap-1 group"
           >
             <span>Masuk di sini</span>

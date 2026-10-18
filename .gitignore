@@ -43,3 +43,5 @@ next-env.d.ts
 # cloudflare credentials
 docker/tunnel-creds.json
 
+silabus_live_code_curriculum*.md
+qa_test_plan_detailed.md

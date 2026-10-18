@@ -1,8 +1,14 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Terminal, Heart } from "lucide-react";
 
 export const Footer: React.FC = () => {
+  const pathname = usePathname();
+  const registerHref = pathname?.startsWith("/demo") ? "/demo/register" : "/register";
+
   return (
     <footer className="bg-surface-container-lowest border-t-4 border-on-surface pt-16 pb-12 px-4 mt-16">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10">
@@ -83,7 +89,7 @@ export const Footer: React.FC = () => {
               </a>
             </li>
             <li>
-              <Link href="/register" className="hover:text-primary transition-colors">
+              <Link href={registerHref} className="hover:text-primary transition-colors">
                 Kuis Live Syntax
               </Link>
             </li>
@@ -101,10 +107,10 @@ export const Footer: React.FC = () => {
             </p>
             <div className="pt-2 flex flex-col gap-2">
               <Link
-                href="/register"
+                href={registerHref}
                 className="inline-flex items-center justify-center px-4 py-2 bg-primary text-white font-label font-bold text-xs rounded-full border-2 border-on-surface candy-btn-shadow hover:scale-105 transition-all text-center"
               >
-                Buat Akun Gratis 🚀
+                Buat Akun Gratis
               </Link>
             </div>
           </div>

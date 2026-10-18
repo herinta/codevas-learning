@@ -187,30 +187,45 @@ async function main() {
     // 1. Classes Seed
     await client.query(`
       INSERT INTO classes (id, category, title, tagline, description, difficulty_level, xp_reward, estimated_time, is_published, order_index) VALUES
-      ('css-flexbox', 'LIVE_CODE', 'CSS Flexbox Mastery', 
-       'Kuasai tata letak fleksibel modern, alignment instan, dan distribusi ruang.',
+      ('html-architecture', 'LIVE_CODE', 'HTML Architecture (The Skeletons & Hierarchy)',
+       'Memahami logika "Kardus" (Container), hierarki parent-child, nesting, dan kapan harus membungkus elemen.',
+       'Mulai dari teks mentah hingga struktur Profile Card. Pelajari fondasi kerangka web, tag semantik, dan nesting elemen.',
+       'Pemula', 420, '3 Jam', TRUE, 1),
+
+      ('css-basics', 'LIVE_CODE', 'CSS Basics (The Fundamentals)',
+       'Menguasai Box Model, warna, tipografi, padding, margin, dan efek visual dasar.',
+       'Kuasai pewarnaan background, teks, font-size, perataan, padding, margin, border, border-radius, dan bayangan box-shadow.',
+       'Pemula', 450, '2.5 Jam', TRUE, 2),
+
+      ('css-flexbox', 'LIVE_CODE', 'CSS Flexbox (The 1D Layout)', 
+       'Kuasai tata letak fleksibel modern, alignment instan, dan distribusi ruang 1D.',
        'Dari aktivasi display: flex hingga trik mempusatkan elemen secara horizontal dan vertikal. Cocok untuk pemula yang ingin menguasai layouting CSS.',
-       'Pemula', 550, '2.5 Jam', TRUE, 1),
+       'Pemula', 550, '2.5 Jam', TRUE, 3),
       
-      ('css-grid', 'LIVE_CODE', 'CSS Grid Architecture', 
+      ('css-grid', 'LIVE_CODE', 'CSS Grid (The 2D Layout)', 
        'Bangun tata letak 2 dimensi modern, sistem bento box, dan responsive grid.',
        'Pelajari pembagian grid template columns, span, area, dan tata letak majalah digital yang rapi dan responsif di semua ukuran layar.',
-       'Menengah', 300, '2.5 Jam', TRUE, 2),
+       'Menengah', 500, '2.5 Jam', TRUE, 4),
 
-      ('component-styling', 'LIVE_CODE', 'Component Styling & Effects', 
-       'Desain komponen tombol, kartu, dan form interaktif berestetika neo-brutalist.',
-       'Eksplorasi perpaduan shadow tegas, border tebal, warna-warna vibrant candy, dan micro-interactions modern.',
-       'Pemula', 180, '1.5 Jam', FALSE, 3),
+      ('component-styling', 'LIVE_CODE', 'Component Styling (The Artist)', 
+       'Desain komponen tombol, kartu, dan form interaktif berestetika neo-brutalist dan modern.',
+       'Eksplorasi perpaduan shadow tegas, hover effects, focus rings, avatar cover, glassmorphism blur, dan E-Commerce card.',
+       'Pemula', 520, '2.5 Jam', TRUE, 5),
+
+      ('tailwind-css', 'LIVE_CODE', 'Tailwind CSS (The Modern Way)',
+       'Mengkonversi pemahaman CSS murni menjadi penulisan Utility Classes standar industri.',
+       'Pelajari class utilitas warna, sizer, spacing scale, flex & grid utilities, responsive breakpoint, dark mode, dan glassmorphism card.',
+       'Menengah', 540, '3 Jam', TRUE, 6),
 
       ('js-logic-blocks', 'DRAG_DROP', 'JavaScript Logic Blocks', 
        'Latih logika pemrograman frontend dengan blok visual puzzle interaktif.',
        'Pahami kondisi if/else, perulangan for/while, dan manipulasi array secara visual tanpa takut syntax error.',
-       'Pemula', 200, '2 Jam', FALSE, 4),
+       'Pemula', 200, '2 Jam', FALSE, 7),
 
       ('css-selectors-quiz', 'QUIZ', 'CSS Selectors & Specificity', 
        'Tebak dan taklukkan bobot spesifisitas CSS dan pseudo-class langka.',
        'Uji pemahamanmu tentang selektor :nth-child, :has, specificity hierarchy, dan cascade inheritance.',
-       'Menengah', 150, '1 Jam', FALSE, 5)
+       'Menengah', 150, '1 Jam', FALSE, 8)
 
       ON CONFLICT (id) DO UPDATE SET
         category = EXCLUDED.category,
@@ -224,13 +239,205 @@ async function main() {
         order_index = EXCLUDED.order_index;
     `);
 
-    // 2. Challenges Seed (Full 10 Levels inside CSS Flexbox!)
-    await client.query("DELETE FROM challenges WHERE class_id IN ('css-flexbox', 'css-grid');");
+    // 2. Challenges Seed (HTML Architecture 12 Levels & Flexbox & Grid)
+    await client.query("DELETE FROM challenges WHERE class_id IN ('html-architecture', 'css-flexbox', 'css-grid');");
     await client.query(`
       INSERT INTO challenges (
         id, class_id, title, difficulty, order_index, xp_reward, instruction, hint, theory, syntax_helpers,
         locked_template, target_visual, initial_state, validation_rules
       ) VALUES
+      (
+        'html-1-raw-content',
+        'html-architecture',
+        'Level 1: The Raw Content',
+        'EASY',
+        1,
+        30,
+        'Web dimulai dari teks mentah. Buat sebuah judul utama menggunakan tag <h1> dengan teks "Profil Saya".',
+        'Ketik <h1>Profil Saya</h1> di dalam area kode.',
+        'HTML adalah kerangka dasar halaman web. Tag <h1> merepresentasikan judul tingkat tertinggi (Heading 1).',
+        '["<h1>Profil Saya</h1>", "<p>Profil Saya</p>", "<h3>Profil Saya</h3>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<h1>Profil Saya</h1>", "description": "Judul besar Profil Saya di bagian atas."}'::jsonb,
+        '<!-- Tulis tag heading 1 di sini -->',
+        '{"goals": [{"tag": "h1", "text": "Profil Saya"}]}'::jsonb
+      ),
+      (
+        'html-2-paragraph',
+        'html-architecture',
+        'Level 2: The Paragraph',
+        'EASY',
+        2,
+        30,
+        'Beri penjelasan. Tambahkan tag <p> di bawah judul tadi untuk menuliskan deskripsi singkat dirimu.',
+        'Tambahkan <p>Halo, ini deskripsi singkat diriku.</p> tepat di bawah tag <h1>.',
+        'Tag <p> (Paragraph) digunakan untuk membungkus paragraf teks biasa.',
+        '["<p>Halo, ini deskripsi singkat diriku.</p>", "<span>Deskripsi</span>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<h1>Profil Saya</h1><p>Halo, ini deskripsi singkat diriku.</p>"}'::jsonb,
+        '<h1>Profil Saya</h1>\\n<!-- Tambahkan paragraf di bawah ini -->',
+        '{"goals": [{"tag": "p"}]}'::jsonb
+      ),
+      (
+        'html-3-first-box',
+        'html-architecture',
+        'Level 3: The First Box (Container)',
+        'EASY',
+        3,
+        35,
+        'Teksmu berserakan. Mari rapikan. Bungkus tag <h1> dan <p> tadi ke dalam sebuah kardus kosong bernama <div>. Perhatikan garis bantu di layar untuk melihat ukuran kardusmu.',
+        'Gunakan <div> pembuka di atas <h1> dan </div> penutup di bawah <p>.',
+        'Tag <div> (Division) adalah kontainer kosong generik yang digunakan untuk mengelompokkan elemen terkait.',
+        '["<div> ... </div>", "<section> ... </section>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<div><h1>Profil Saya</h1><p>Halo, ini deskripsi singkat diriku.</p></div>"}'::jsonb,
+        '<h1>Profil Saya</h1>\\n<p>Halo, ini deskripsi singkat diriku.</p>',
+        '{"goals": [{"tag": "div", "children": ["h1", "p"]}]}'::jsonb
+      ),
+      (
+        'html-4-siblings',
+        'html-architecture',
+        'Level 4: The Siblings (Kakak Beradik)',
+        'EASY',
+        4,
+        35,
+        'Buat dua kelompok informasi yang sejajar. Buat dua buah <div> yang diletakkan atas dan bawah (bukan di dalam satu sama lain). Isi masing-masing dengan teks bebas.',
+        'Buat <div>Bagian Atas</div> lalu di bawahnya buat <div>Bagian Bawah</div>.',
+        'Elemen Sibling adalah elemen-elemen yang berada pada tingkatan hierarki yang sama di bawah parent yang sama.',
+        '["<div>Atas</div>\\n<div>Bawah</div>", "<div><div>Nesting</div></div>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<div>Bagian Atas</div><div>Bagian Bawah</div>"}'::jsonb,
+        '<!-- Buat dua div sejajar di sini -->',
+        '{"goals": [{"count": 2, "tag": "div"}]}'::jsonb
+      ),
+      (
+        'html-5-matryoshka',
+        'html-architecture',
+        'Level 5: The Matryoshka (Nesting)',
+        'EASY',
+        5,
+        40,
+        'Ini adalah rahasia layout rapi: Kardus di dalam kardus! Buat satu <div> utama (Parent), lalu di dalamnya buat dua <div> (Child) untuk memisahkan area "Foto" dan "Teks".',
+        'Bungkus dua <div> di dalam satu <div> pembungkus utama.',
+        'Nesting adalah teknik menempatkan elemen HTML di dalam elemen lain untuk membangun hierarki pohon DOM.',
+        '["<div>\\n  <div>Foto</div>\\n  <div>Teks</div>\\n</div>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<div><div>Foto</div><div>Teks</div></div>"}'::jsonb,
+        '<!-- Buat parent div dan dua child div di sini -->',
+        '{"goals": [{"nesting": "parent-with-two-children"}]}'::jsonb
+      ),
+      (
+        'html-6-image-element',
+        'html-architecture',
+        'Level 6: The Image Element',
+        'EASY',
+        6,
+        35,
+        'Tampilkan gambar menggunakan tag <img>. Ingat, tag ini spesial karena tidak butuh penutup (self-closing). Jangan lupa tambahkan atribut src.',
+        'Gunakan <img src=\"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\" alt=\"Avatar\" />',
+        'Tag <img> bersifat self-closing / void element dan memuat atribut wajib src dan atribut alt untuk aksesibilitas.',
+        '["<img src=\\"...\\" alt=\\"Avatar\\" />", "<image>...</image>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<img src=\\"avatar.jpg\\" />"}'::jsonb,
+        '<!-- Tampilkan gambar dengan tag img -->',
+        '{"goals": [{"tag": "img", "hasAttr": "src"}]}'::jsonb
+      ),
+      (
+        'html-7-action-button',
+        'html-architecture',
+        'Level 7: The Action (Button)',
+        'EASY',
+        7,
+        35,
+        'Tambahkan tombol interaktif. Gunakan tag <button> dan beri teks "Follow" di dalamnya.',
+        'Ketik <button>Follow</button>.',
+        'Tag <button> merepresentasikan elemen tombol aksi yang dapat diklik oleh pengguna.',
+        '["<button>Follow</button>", "<input type=\\"button\\" value=\\"Follow\\" />"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<button>Follow</button>"}'::jsonb,
+        '<!-- Buat tombol aksi di sini -->',
+        '{"goals": [{"tag": "button", "text": "Follow"}]}'::jsonb
+      ),
+      (
+        'html-8-link',
+        'html-architecture',
+        'Level 8: The Link',
+        'EASY',
+        8,
+        35,
+        'Buat teks yang bisa diklik. Gunakan tag <a> (Anchor) dengan atribut href untuk mengarahkan pengguna ke halaman lain.',
+        'Gunakan <a href=\"https://codevas.dev\">Kunjungi Website</a>.',
+        'Tag <a> (Anchor) menghubungkan dokumen web dengan URL tujuan melalui atribut href.',
+        '["<a href=\\"https://codevas.dev\\">Website</a>", "<link href=\\"...\\">"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<a href=\\"#\\">Kunjungi Profil</a>"}'::jsonb,
+        '<!-- Buat link anchor di sini -->',
+        '{"goals": [{"tag": "a", "hasAttr": "href"}]}'::jsonb
+      ),
+      (
+        'html-9-list-hierarchy',
+        'html-architecture',
+        'Level 9: The List Hierarchy',
+        'EASY',
+        9,
+        40,
+        'Membuat daftar bukan sekadar teks berjejer. Buat daftar hobi menggunakan hierarki yang benar: satu pembungkus <ul>, dan beberapa item <li> di dalamnya.',
+        'Bungkus tag <li> di dalam <ul>.',
+        'Tag <ul> (Unordered List) membutuhkan elemen <li> (List Item) sebagai anak langsungnya.',
+        '["<ul>\\n  <li>Coding</li>\\n  <li>Design</li>\\n</ul>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<ul><li>Coding</li><li>Gaming</li></ul>"}'::jsonb,
+        '<!-- Buat list bertingkat ul dan li di sini -->',
+        '{"goals": [{"tag": "ul", "childTag": "li"}]}'::jsonb
+      ),
+      (
+        'html-10-semantic-touch',
+        'html-architecture',
+        'Level 10: The Semantic Touch',
+        'MEDIUM',
+        10,
+        45,
+        'Kadang kita butuh kardus yang lebih punya makna ketimbang <div> biasa. Gunakan tag <section> untuk membungkus sebuah blok konten besar.',
+        'Gunakan <section> ... </section> sebagai pembungkus utama.',
+        'Tag semantik seperti <section>, <article>, <header>, dan <footer> memberi makna pada struktur dokumen untuk SEO dan aksesibilitas.',
+        '["<section> ... </section>", "<article> ... </article>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<section><h2>Tentang Saya</h2><p>Konten...</p></section>"}'::jsonb,
+        '<!-- Ganti atau bungkus dengan tag section -->',
+        '{"goals": [{"tag": "section"}]}'::jsonb
+      ),
+      (
+        'html-11-form-wrapper',
+        'html-architecture',
+        'Level 11: The Form Wrapper',
+        'MEDIUM',
+        11,
+        45,
+        'Kumpulkan input dari pengguna. Buat tag <form>, lalu masukkan <input> dan <button> ke dalamnya. Ini adalah hierarki standar untuk pengiriman data.',
+        'Bungkus <input placeholder=\"Email...\" /> dan <button>Kirim</button> di dalam tag <form>.',
+        'Tag <form> adalah wadah untuk kontrol formulir interaktif (input, select, textarea, button).',
+        '["<form>\\n  <input placeholder=\\"Nama\\" />\\n  <button>Kirim</button>\\n</form>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<form><input /><button>Kirim</button></form>"}'::jsonb,
+        '<!-- Buat formulir di sini -->',
+        '{"goals": [{"tag": "form", "contains": ["input", "button"]}]}'::jsonb
+      ),
+      (
+        'html-12-boss-card',
+        'html-architecture',
+        'Level 12: Boss Fight - The Card Structure',
+        'BOSS_FIGHT',
+        12,
+        60,
+        'Ujian kerangka! Bangun hierarki untuk sebuah "Profile Card". Kamu butuh satu <div> Parent utama. Di dalamnya ada <img/>, lalu sebuah <div> Child pembungkus untuk membungkus <h2> (Nama), <p> (Bio), dan <button> (Aksi). Jangan sampai salah memasukkan kotak!',
+        'Struktur: <div> utama -> <img/> dan <div> pembungkus teks (di dalamnya ada <h2>, <p>, dan <button>).',
+        'Boss Fight menguji pemahaman nesting multi-level yang merupakan arsitektur dasar semua kartu komponen antarmuka web modern.',
+        '["<div>\\n  <img src=\\"avatar.jpg\\" />\\n  <div>\\n    <h2>Nama</h2>\\n    <p>Bio</p>\\n    <button>Follow</button>\\n  </div>\\n</div>"]'::jsonb,
+        '{"element": "html-arena"}'::jsonb,
+        '{"preview": "<div class=\\"card\\"><img src=\\"...\\" /><div><h2>Alex</h2><p>Frontend Dev</p><button>Follow</button></div></div>"}'::jsonb,
+        '<!-- Bangun kerangka Profile Card di sini -->',
+        '{"goals": [{"bossCardHierarchy": true}]}'::jsonb
+      ),
       (
         'flexbox-1-activation',
         'css-flexbox',
@@ -439,10 +646,11 @@ async function main() {
         role = EXCLUDED.role;
     `);
 
-    // 4. Enroll Demo User to CSS Flexbox Mastery
+    // 4. Enroll Demo User to HTML Architecture and CSS Flexbox
     await client.query(`
       INSERT INTO user_enrollments (id, user_id, class_id, status) VALUES
-      ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'css-flexbox', 'ACTIVE')
+      ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'css-flexbox', 'ACTIVE'),
+      ('d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'html-architecture', 'ACTIVE')
       ON CONFLICT (user_id, class_id) DO UPDATE SET status = 'ACTIVE';
     `);
 
@@ -450,7 +658,8 @@ async function main() {
     await client.query(`
       INSERT INTO user_progress (user_id, challenge_id, status, code_snapshot) VALUES
       ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'flexbox-1-activation', 'COMPLETED', '.arena {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}'),
-      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'flexbox-2-space-between', 'IN_PROGRESS', '.arena {\n  display: flex;\n  /* Lengkapi agar terpisah ke kedua ujung */\n}')
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'flexbox-2-space-between', 'IN_PROGRESS', '.arena {\n  display: flex;\n  /* Lengkapi agar terpisah ke kedua ujung */\n}'),
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'html-1-raw-content', 'IN_PROGRESS', '<!-- Tulis tag heading 1 di sini -->')
       ON CONFLICT (user_id, challenge_id) DO UPDATE SET
         status = EXCLUDED.status,
         code_snapshot = EXCLUDED.code_snapshot;
