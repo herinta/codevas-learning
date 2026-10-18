@@ -115,7 +115,7 @@ export default function AllClassesCatalogPage() {
             Eksplorasi Kurikulum Frontend
           </h1>
           <p className="mt-3 text-sm sm:text-base text-on-surface-variant font-medium leading-relaxed">
-            Pilih trek belajar sesuai kemampuanmu. Mulai dari pemula hingga mahir dengan sistem validasi visual otomatis!
+            Pilih trek belajar sesuai kemampuanmu. Mulai dari pemula hingga mahir dengan live code interaktif!
           </p>
         </div>
 

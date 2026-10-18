@@ -31,7 +31,7 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
 
           {/* Subtitle */}
           <p className="mt-2.5 sm:mt-3 text-sm sm:text-base text-on-surface-variant font-medium leading-relaxed max-w-2xl">
-            Asah kemampuanmu lewat mini-quiz interaktif, puzzle blok kode kosong, dan validasi visual seketika yang siap melatih insting developer profesionalmu!
+            Asah kemampuanmu lewat mini-quiz seru, puzzle tantangan kode, dan live preview seketika yang siap melatih insting developer profesionalmu!
           </p>
         </div>
 
@@ -53,7 +53,7 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
             </span>
             <div className="flex flex-col">
               <span className="text-xs font-black text-on-surface">Puzzle Level</span>
-              <span className="text-[10px] font-bold text-on-surface-variant">Validasi Visual Instan</span>
+              <span className="text-[10px] font-bold text-on-surface-variant">Tantangan Interaktif</span>
             </div>
           </div>
 

@@ -876,7 +876,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                   <div>
                     <div className="font-headline font-bold text-on-surface">Level Selesai</div>
                     <div className="text-[11px] text-on-surface-variant font-medium">
-                      Tantangan tervalidasi dan XP telah masuk ke akunmu.
+                      Tantangan berhasil dan XP telah masuk ke akunmu.
                     </div>
                   </div>
                 </div>
@@ -911,7 +911,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
             <div className="bg-surface-container-low border-2 border-on-surface rounded-2xl p-5 space-y-2.5">
               <div className="text-xs font-bold text-on-surface flex items-center gap-2">
                 <Award className="w-4 h-4 text-primary shrink-0" />
-                <span>Validasi Otomatis &amp; Real-time Preview</span>
+                <span>Cek Kode Otomatis &amp; Real-time Preview</span>
               </div>
               <div className="text-xs font-bold text-on-surface flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-600 shrink-0" />
