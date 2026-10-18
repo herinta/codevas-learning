@@ -37,6 +37,7 @@ services:
       DB_PASSWORD: root
       DB_NAME: codevas_db
       NEXTAUTH_URL: https://codevas.my.id
+      AUTH_SECRET: "553944c209bc9108472aae9f980de0918e867fd58a5ceb52e7232a155900b507"
       PORT: 3000
       HOSTNAME: "0.0.0.0"
     depends_on:
