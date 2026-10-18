@@ -239,6 +239,84 @@ export class UserService {
   }
 
   /**
+   * Get Leaderboard rankings based on XP points
+   */
+  static async getLeaderboard(limit: number = 10): Promise<Array<{
+    rank: number;
+    id: string;
+    username: string;
+    full_name: string;
+    avatar_url: string | null;
+    xp_points: number;
+    level: number;
+    rank_title: string;
+    rank_badge: string;
+    streak_days: number;
+    completed_challenges_count: number;
+  }>> {
+    const rows = await query<{
+      id: string;
+      username: string;
+      full_name: string | null;
+      avatar_url: string | null;
+      xp_points: number;
+      level: number;
+      streak_days: number;
+      completed_challenges_count: string;
+    }>(
+      `SELECT 
+         u.id,
+         u.username,
+         u.full_name,
+         u.avatar_url,
+         u.xp_points,
+         u.level,
+         u.streak_days,
+         COUNT(up.id) FILTER (WHERE up.status = 'COMPLETED')::text AS completed_challenges_count
+       FROM users u
+       LEFT JOIN user_progress up ON u.id = up.user_id
+       WHERE u.role = 'USER'
+       GROUP BY u.id
+       ORDER BY u.xp_points DESC, u.created_at ASC
+       LIMIT $1`,
+      [limit]
+    );
+
+    return rows.map((row, index) => {
+      const stats = calculateGamificationStats(row.xp_points);
+      return {
+        rank: index + 1,
+        id: row.id,
+        username: row.username,
+        full_name: row.full_name || row.username,
+        avatar_url: row.avatar_url,
+        xp_points: row.xp_points,
+        level: stats.level,
+        rank_title: stats.rank_title,
+        rank_badge: stats.rank_badge,
+        streak_days: row.streak_days,
+        completed_challenges_count: parseInt(row.completed_challenges_count || "0", 10),
+      };
+    });
+  }
+
+  /**
+   * Get specific user's leaderboard rank
+   */
+  static async getUserRank(userId: string): Promise<number> {
+    const rows = await query<{ rank: string }>(
+      `WITH ranked_users AS (
+         SELECT id, ROW_NUMBER() OVER (ORDER BY xp_points DESC, created_at ASC) as rank
+         FROM users
+         WHERE role = 'USER'
+       )
+       SELECT rank FROM ranked_users WHERE id = $1`,
+      [userId]
+    );
+    return parseInt(rows[0]?.rank || "0", 10);
+  }
+
+  /**
    * Update last seen timestamp when active
    */
   static async touchLastSeen(userId: string): Promise<void> {
