@@ -30,9 +30,9 @@ export async function query<T = unknown>(
   text: string,
   params?: unknown[]
 ): Promise<T[]> {
-  const start = Date.now();
+  const start = performance.now();
   const res = await pool.query(text, params);
-  const duration = Date.now() - start;
+  const duration = Math.round(performance.now() - start);
   if (process.env.NODE_ENV === 'development') {
     console.log(`[SQL Query] (${duration}ms):`, text.replace(/\s+/g, ' ').slice(0, 100));
   }
