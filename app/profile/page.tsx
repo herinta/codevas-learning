@@ -21,7 +21,6 @@ import {
   UploadCloud,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
 import { useAuth } from "@/components/auth/auth-context";
 
 const PRESET_AVATARS = [
@@ -514,8 +513,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

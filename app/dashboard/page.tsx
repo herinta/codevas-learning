@@ -10,7 +10,6 @@ import { DailyBlitzWidget } from "@/components/dashboard/daily-blitz-widget";
 import { LeaderboardWidget } from "@/components/dashboard/leaderboard-widget";
 import { StatsWidget } from "@/components/dashboard/stats-widget";
 import { DailyTargetWidget } from "@/components/dashboard/daily-target-widget";
-import { Footer } from "@/components/layout/footer";
 import { useRouter } from "next/navigation";
 import { ClassCategory } from "@/lib/db/entities";
 import { Compass, BookOpen, Sparkles, ArrowRight, Loader2, Rocket } from "lucide-react";
@@ -323,8 +322,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

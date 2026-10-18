@@ -27,7 +27,6 @@ import {
 } from "lucide-react";
 import { ClassDetail } from "@/lib/classes-data";
 import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
 
 interface ClassDetailViewProps {
   classData: ClassDetail;
@@ -674,8 +673,6 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({ classData }) =
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };

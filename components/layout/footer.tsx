@@ -7,6 +7,18 @@ import { Terminal, Heart } from "lucide-react";
 
 export const Footer: React.FC = () => {
   const pathname = usePathname();
+
+  // Hide footer inside dashboard, classes detail, profile, and admin app scope
+  const isAppScope =
+    pathname?.startsWith("/dashboard") ||
+    pathname?.startsWith("/classes/") ||
+    pathname?.startsWith("/profile") ||
+    pathname?.startsWith("/admin");
+
+  if (isAppScope) {
+    return null;
+  }
+
   const registerHref = pathname?.startsWith("/demo") ? "/demo/register" : "/register";
 
   return (

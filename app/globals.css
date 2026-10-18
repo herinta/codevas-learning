@@ -151,3 +151,11 @@ body {
   color: var(--color-on-surface);
   font-family: var(--font-body);
 }
+
+/* PWA Standalone Mode Clean Styling: Hide footers when running as installed app */
+@media all and (display-mode: standalone), (display-mode: fullscreen) {
+  footer,
+  .pwa-hide-footer {
+    display: none !important;
+  }
+}

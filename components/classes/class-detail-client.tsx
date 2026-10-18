@@ -29,7 +29,6 @@ import {
 } from "lucide-react";
 import { ClassWithChallenges, ChallengeWithUserProgress } from "@/lib/db/entities";
 import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
 import { useAuth } from "@/components/auth/auth-context";
 
 interface ClassDetailClientProps {
@@ -925,8 +924,6 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
