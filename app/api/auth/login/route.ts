@@ -3,6 +3,7 @@ import { UserService } from "@/lib/services/user.service";
 import { verifyPassword } from "@/lib/auth/password";
 import { createSessionToken, AUTH_COOKIE_NAME } from "@/lib/auth/session";
 import { calculateGamificationStats } from "@/lib/gamification";
+import { checkRateLimit, resetRateLimit, getClientIp } from "@/lib/security/rate-limiter";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,11 +17,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Rate limiting: cegah brute-force dan credential stuffing
+    const ip = getClientIp(req);
+    const ipRate = checkRateLimit(`login:ip:${ip}`, 10, 60_000);
+    const userRate = checkRateLimit(`login:id:${identifier.trim().toLowerCase()}`, 5, 60_000);
+
+    if (ipRate.isLimited || userRate.isLimited) {
+      const waitTime = Math.max(ipRate.retryAfterSeconds, userRate.retryAfterSeconds);
+      return NextResponse.json(
+        { error: `Terlalu banyak percobaan masuk. Harap tunggu ${waitTime} detik.` },
+        { status: 429 }
+      );
+    }
+
     // 1. Cari user berdasarkan email atau username
     const user = await UserService.findByIdentifier(identifier);
     if (!user) {
       return NextResponse.json(
-        { error: "Email atau username tidak ditemukan." },
+        { error: "Email/username atau kata sandi tidak valid." },
         { status: 401 }
       );
     }
@@ -29,10 +43,13 @@ export async function POST(req: NextRequest) {
     const isValid = await verifyPassword(password, user.password_hash);
     if (!isValid) {
       return NextResponse.json(
-        { error: "Kata sandi yang Anda masukkan salah." },
+        { error: "Email/username atau kata sandi tidak valid." },
         { status: 401 }
       );
     }
+
+    // Reset rate limiter on successful authentication
+    resetRateLimit(`login:id:${identifier.trim().toLowerCase()}`);
 
     // 3. Buat session token
     const token = createSessionToken({

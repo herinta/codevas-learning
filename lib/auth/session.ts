@@ -11,7 +11,15 @@ export interface SessionPayload {
 }
 
 function getSecretKey(): string {
-  return process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "codevas-super-secure-production-secret-key-2026";
+  const secret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("CRITICAL SECURITY ERROR: AUTH_SECRET must be set in production environment!");
+    }
+    console.warn("[SECURITY WARNING]: AUTH_SECRET is not set in .env. Using development fallback.");
+    return "dev-local-secret-replace-with-auth-secret-in-production-env";
+  }
+  return secret;
 }
 
 /**

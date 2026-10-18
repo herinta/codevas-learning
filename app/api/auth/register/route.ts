@@ -3,9 +3,20 @@ import { UserService } from "@/lib/services/user.service";
 import { createSessionToken, AUTH_COOKIE_NAME } from "@/lib/auth/session";
 import { calculateGamificationStats } from "@/lib/gamification";
 import { validateHumanName } from "@/lib/security/content-filter";
+import { checkRateLimit, getClientIp } from "@/lib/security/rate-limiter";
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit: Maksimal 5 pendaftaran per IP per 15 menit untuk mencegah bot spamming
+    const ip = getClientIp(req);
+    const rate = checkRateLimit(`register:ip:${ip}`, 5, 15 * 60 * 1000);
+    if (rate.isLimited) {
+      return NextResponse.json(
+        { error: `Terlalu banyak permintaan pendaftaran dari perangkat ini. Harap tunggu ${rate.retryAfterSeconds} detik.` },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
     const { fullname, username, email, password } = body;
 

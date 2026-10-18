@@ -505,17 +505,24 @@ function ChallengePlaygroundContent({
   const isHtmlMode =
     challenge?.class_id === "html-architecture" || challengeId.startsWith("html-");
 
-  // Sanitized HTML for safe real-time 60 FPS arena preview (prevents XSS, iframe injection, meta redirects)
+  // Sanitized HTML for safe real-time 60 FPS arena preview (comprehensive XSS, event-handler, & script injection protection)
   const sanitizedUserHtml = useMemo(() => {
     if (!cssCode) return "";
     return cssCode
+      // Strip dangerous tags completely
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
       .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
       .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
       .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, "")
+      .replace(/<link\b[^>]*>/gi, "")
       .replace(/<meta\b[^>]*>/gi, "")
-      .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
-      .replace(/javascript:/gi, "");
+      .replace(/<base\b[^>]*>/gi, "")
+      // Strip all event handlers: quoted ("..."), single-quoted ('...'), and UNQUOTED (onerror=alert(1))
+      .replace(/\bon[a-z0-9_-]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+      // Strip dangerous pseudo-protocols
+      .replace(/(javascript|vbscript|data):/gi, "")
+      // Strip autofocus to prevent focus-trap / event escalation
+      .replace(/\bautofocus\b/gi, "");
   }, [cssCode]);
 
   // Real-time Live Evaluation as user types (instant reactivity)

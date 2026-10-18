@@ -1,13 +1,19 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { setupDatabase } from '@/lib/db/setup';
 import { pool } from '@/lib/db/pool';
+import { verifyAdminRequest } from '@/lib/auth/admin-guard';
 
 /**
  * GET /api/setup-db
- * Checks database health and table status
+ * Checks database health and table status (Protected: Admin only)
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const auth = await verifyAdminRequest(req);
+    if (!auth.isAdmin || auth.errorResponse) {
+      return auth.errorResponse!;
+    }
+
     const client = await pool.connect();
     try {
       const res = await client.query(`
@@ -40,10 +46,25 @@ export async function GET() {
 
 /**
  * POST /api/setup-db
- * Creates tables from entity code and seeds initial data
+ * Creates tables from entity code and seeds initial data (Protected: Admin only, disabled in production)
  */
-export async function POST() {
+export async function POST(req: NextRequest) {
   try {
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Akses ditolak: Setup/reset database via web API dinonaktifkan di lingkungan produksi. Gunakan CLI scripts/setup-db.mjs.',
+        },
+        { status: 403 }
+      );
+    }
+
+    const auth = await verifyAdminRequest(req);
+    if (!auth.isAdmin || auth.errorResponse) {
+      return auth.errorResponse!;
+    }
+
     const result = await setupDatabase();
     return NextResponse.json({
       success: true,
@@ -61,3 +82,4 @@ export async function POST() {
     );
   }
 }
+

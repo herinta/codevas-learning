@@ -1,22 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { EnrollmentService } from '@/lib/services/enrollment.service';
+import { verifySessionToken, AUTH_COOKIE_NAME } from '@/lib/auth/session';
 
 /**
  * GET /api/enrollments?userId=...
+ * Authenticated: Returns enrollments of the logged-in user (or any user if caller is ADMIN)
  */
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-
-    if (!userId) {
+    const cookie = request.cookies.get(AUTH_COOKIE_NAME);
+    if (!cookie?.value) {
       return NextResponse.json(
-        { success: false, message: 'userId query parameter is required' },
-        { status: 400 }
+        { success: false, message: 'Autentikasi diperlukan. Silakan login terlebih dahulu.' },
+        { status: 401 }
       );
     }
 
-    const enrolledClasses = await EnrollmentService.getUserEnrolledClasses(userId);
+    const payload = verifySessionToken(cookie.value);
+    if (!payload?.userId) {
+      return NextResponse.json(
+        { success: false, message: 'Sesi tidak valid atau telah berakhir.' },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const requestedUserId = searchParams.get('userId') || payload.userId;
+
+    // Prevent IDOR: Normal users can only view their own enrollments
+    if (requestedUserId !== payload.userId && payload.role !== 'ADMIN') {
+      return NextResponse.json(
+        { success: false, message: 'Akses ditolak: Anda tidak diizinkan melihat data kelas pengguna lain.' },
+        { status: 403 }
+      );
+    }
+
+    const enrolledClasses = await EnrollmentService.getUserEnrolledClasses(requestedUserId);
     const enrolledClassIds = enrolledClasses.map((c) => c.id);
 
     return NextResponse.json({
@@ -40,21 +59,37 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/enrollments
- * Body: { userId, classId }
+ * Authenticated: Enrolls the logged-in user strictly (prevents IDOR)
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { userId, classId } = body;
-
-    if (!userId || !classId) {
+    const cookie = request.cookies.get(AUTH_COOKIE_NAME);
+    if (!cookie?.value) {
       return NextResponse.json(
-        { success: false, message: 'userId and classId are required' },
+        { success: false, message: 'Autentikasi diperlukan. Silakan login terlebih dahulu.' },
+        { status: 401 }
+      );
+    }
+
+    const payload = verifySessionToken(cookie.value);
+    if (!payload?.userId) {
+      return NextResponse.json(
+        { success: false, message: 'Sesi tidak valid atau telah berakhir.' },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const { classId } = body;
+
+    if (!classId) {
+      return NextResponse.json(
+        { success: false, message: 'classId is required' },
         { status: 400 }
       );
     }
 
-    const enrollment = await EnrollmentService.enrollUser(userId, classId);
+    const enrollment = await EnrollmentService.enrollUser(payload.userId, classId);
     return NextResponse.json({
       success: true,
       message: 'Successfully enrolled in class',
