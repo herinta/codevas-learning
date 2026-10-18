@@ -102,7 +102,7 @@ export const StreakReminderCard: React.FC = () => {
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-headline font-black text-xs text-on-surface">
-                Pengingat Streak PWA
+                Pengingat Streak
               </span>
               <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 bg-amber-100 text-amber-900 border border-amber-300 rounded-md text-[10px] font-mono font-bold">
                 <Flame className="w-3 h-3 text-amber-600 fill-amber-500" />
