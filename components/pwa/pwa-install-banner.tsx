@@ -13,10 +13,27 @@ export const PwaInstallBanner: React.FC = () => {
   const [isStandalone, setIsStandalone] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isIos, setIsIos] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [showIosGuide, setShowIosGuide] = useState(false);
 
   useEffect(() => {
-    // 1. Check if already installed / running in standalone PWA mode
+    // 1. Check if mobile web (UA or screen width < 768px)
+    const checkIsMobile = () => {
+      if (typeof window === "undefined") return false;
+      const ua = window.navigator.userAgent.toLowerCase();
+      const isMobileUA = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua);
+      const isNarrow = window.innerWidth < 768;
+      return isMobileUA || isNarrow;
+    };
+
+    setIsMobile(checkIsMobile());
+
+    const handleResize = () => {
+      setIsMobile(checkIsMobile());
+    };
+    window.addEventListener("resize", handleResize);
+
+    // 2. Check if already installed / running in standalone PWA mode
     if (typeof window !== "undefined") {
       const isStandaloneMode =
         window.matchMedia("(display-mode: standalone)").matches ||
@@ -33,7 +50,7 @@ export const PwaInstallBanner: React.FC = () => {
       setIsDismissed(dismissed);
     }
 
-    // 2. Listen for beforeinstallprompt (Chrome / Android / Edge)
+    // 3. Listen for beforeinstallprompt (Chrome / Android / Edge)
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -42,6 +59,7 @@ export const PwaInstallBanner: React.FC = () => {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
@@ -72,6 +90,11 @@ export const PwaInstallBanner: React.FC = () => {
     sessionStorage.setItem("codevas_pwa_banner_dismissed", "true");
   };
 
+  // Strictly only show on mobile web! Never on desktop
+  if (!isMobile) {
+    return null;
+  }
+
   // If already standalone or user dismissed, don't show
   if (isStandalone || isDismissed) {
     return null;
@@ -84,9 +107,9 @@ export const PwaInstallBanner: React.FC = () => {
 
   return (
     <>
-      {/* FLOATING MOBILE PWA INSTALL BANNER */}
-      <div className="fixed bottom-4 inset-x-4 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-md z-50 animate-in slide-in-from-bottom-5 duration-300">
-        <div className="bg-surface-container-lowest border-3 border-on-surface rounded-2xl p-4 sm:p-5 shadow-[0_8px_0_#2e1a28] relative">
+      {/* FLOATING MOBILE PWA INSTALL BANNER - KHUSUS MOBILE */}
+      <div className="fixed bottom-4 inset-x-4 z-50 animate-in slide-in-from-bottom-5 duration-300 md:hidden">
+        <div className="bg-surface-container-lowest border-3 border-on-surface rounded-2xl p-4 shadow-[0_8px_0_#2e1a28] relative">
           {/* Close button */}
           <button
             onClick={handleDismiss}

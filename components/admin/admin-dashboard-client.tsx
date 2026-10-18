@@ -33,10 +33,11 @@ import {
   Globe,
   Compass,
   MousePointerClick,
+  Menu,
+  X,
+  LayoutDashboard,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
 
 interface AdminStats {
   totalUsers: number;
@@ -118,6 +119,9 @@ export function AdminDashboardClient() {
 
   // Active top navigation tab
   const [activeTab, setActiveTab] = useState<"overview" | "users" | "classes">("overview");
+
+  // Mobile sidebar open state
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Selected class for managing levels (null means viewing classes list)
   const [selectedClassForLevels, setSelectedClassForLevels] = useState<ClassItem | null>(null);
@@ -715,12 +719,10 @@ export function AdminDashboardClient() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-on-surface">
-      <Navbar />
-
+    <div className="min-h-screen flex bg-background text-on-surface">
       {/* Floating Action Notification */}
       {actionMessage && (
-        <div className="fixed top-20 right-4 z-50 animate-in fade-in slide-in-from-top duration-200">
+        <div className="fixed top-6 right-6 z-50 animate-in fade-in slide-in-from-top duration-200">
           <div
             className={`px-4 py-3 rounded-2xl border-3 border-on-surface shadow-brutal flex items-center gap-2.5 text-xs font-headline font-black ${
               actionMessage.type === "success"
@@ -738,25 +740,260 @@ export function AdminDashboardClient() {
         </div>
       )}
 
-      {/* Admin Header Banner */}
-      <section className="w-full bg-surface-container-low border-b-2 border-on-surface pt-24 pb-6 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black uppercase tracking-wider bg-amber-400 text-on-surface border border-on-surface">
-                ADMIN CONSOLE
-              </span>
-              <span className="text-xs text-on-surface-variant font-medium">
-                Pusat Kendali Sistem &amp; Kurikulum
-              </span>
+      {/* MOBILE SIDEBAR BACKDROP */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs lg:hidden transition-opacity"
+        />
+      )}
+
+      {/* ADMIN SIDEBAR (Desktop: Sticky, Mobile: Slide-over Drawer) */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-surface-container-lowest border-r-3 border-on-surface flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:h-screen lg:sticky lg:top-0 shrink-0 ${
+          sidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
+        }`}
+      >
+        {/* Sidebar Header */}
+        <div className="p-5 border-b-2 border-on-surface flex items-center justify-between">
+          <Link href="/admin" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-2xl bg-primary text-white border-2 border-on-surface shadow-xs flex items-center justify-center font-black text-xl group-hover:scale-105 transition-transform">
+              C
             </div>
-            <h1 className="font-display font-black text-2xl sm:text-3xl text-on-surface">
-              Dashboard Manajemen Admin
-            </h1>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-display font-black text-xl text-on-surface tracking-tight">
+                  Codevas
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-black uppercase tracking-wider bg-amber-300 text-amber-950 border border-on-surface">
+                  ADMIN
+                </span>
+              </div>
+              <p className="text-[10px] text-on-surface-variant font-medium">
+                Pusat Kendali Sistem
+              </p>
+            </div>
+          </Link>
+
+          {/* Mobile Close Button */}
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="p-1.5 rounded-xl border border-on-surface hover:bg-surface-container lg:hidden text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+            aria-label="Tutup Menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Sidebar Navigation Links */}
+        <div className="p-4 flex-1 overflow-y-auto space-y-6">
+          {/* Main Navigation Group */}
+          <div>
+            <span className="px-3 text-[10px] font-mono font-black uppercase tracking-wider text-on-surface-variant block mb-2">
+              Menu Navigasi
+            </span>
+            <div className="space-y-1.5">
+              {/* Tab 1: Overview */}
+              <button
+                onClick={() => {
+                  setActiveTab("overview");
+                  setSelectedClassForLevels(null);
+                  setSidebarOpen(false);
+                }}
+                className={`w-full px-3.5 py-2.5 rounded-xl font-headline font-bold text-xs sm:text-sm flex items-center justify-between transition-all cursor-pointer ${
+                  activeTab === "overview"
+                    ? "bg-primary text-white border-2 border-on-surface shadow-brutal-sm scale-[1.02]"
+                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Activity className="w-4 h-4 shrink-0" />
+                  <span>Monitoring &amp; Ikhtisar</span>
+                </div>
+                {stats && stats.onlineUsers > 0 && (
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                      activeTab === "overview"
+                        ? "bg-white/20 text-white"
+                        : "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                    }`}
+                  >
+                    {stats.onlineUsers} online
+                  </span>
+                )}
+              </button>
+
+              {/* Tab 2: Users */}
+              <button
+                onClick={() => {
+                  setActiveTab("users");
+                  setSelectedClassForLevels(null);
+                  setSidebarOpen(false);
+                }}
+                className={`w-full px-3.5 py-2.5 rounded-xl font-headline font-bold text-xs sm:text-sm flex items-center justify-between transition-all cursor-pointer ${
+                  activeTab === "users"
+                    ? "bg-primary text-white border-2 border-on-surface shadow-brutal-sm scale-[1.02]"
+                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Users className="w-4 h-4 shrink-0" />
+                  <span>Manajemen Pengguna</span>
+                </div>
+                <span
+                  className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                    activeTab === "users"
+                      ? "bg-white/20 text-white"
+                      : "bg-surface-container text-on-surface border border-outline-variant"
+                  }`}
+                >
+                  {stats?.totalUsers ?? users.length}
+                </span>
+              </button>
+
+              {/* Tab 3: Classes & Challenges */}
+              <button
+                onClick={() => {
+                  setActiveTab("classes");
+                  setSidebarOpen(false);
+                }}
+                className={`w-full px-3.5 py-2.5 rounded-xl font-headline font-bold text-xs sm:text-sm flex items-center justify-between transition-all cursor-pointer ${
+                  activeTab === "classes"
+                    ? "bg-primary text-white border-2 border-on-surface shadow-brutal-sm scale-[1.02]"
+                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Layers className="w-4 h-4 shrink-0" />
+                  <span>Kelas &amp; Tantangan</span>
+                </div>
+                <span
+                  className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                    activeTab === "classes"
+                      ? "bg-white/20 text-white"
+                      : "bg-surface-container text-on-surface border border-outline-variant"
+                  }`}
+                >
+                  {stats?.totalClasses ?? classes.length}
+                </span>
+              </button>
+            </div>
           </div>
 
-          {/* Quick Refresh & User Status */}
+          {/* Quick External Links */}
+          <div>
+            <span className="px-3 text-[10px] font-mono font-black uppercase tracking-wider text-on-surface-variant block mb-2">
+              Aplikasi Pengguna
+            </span>
+            <div className="space-y-1.5">
+              <Link
+                href="/dashboard"
+                className="w-full px-3.5 py-2.5 rounded-xl font-headline font-bold text-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container flex items-center justify-between transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Compass className="w-4 h-4 shrink-0 text-primary" />
+                  <span>Ke Dashboard Siswa</span>
+                </div>
+                <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+              </Link>
+
+              <Link
+                href="/classes"
+                className="w-full px-3.5 py-2.5 rounded-xl font-headline font-bold text-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container flex items-center justify-between transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <BookOpen className="w-4 h-4 shrink-0 text-secondary" />
+                  <span>Katalog Kelas Publik</span>
+                </div>
+                <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar Footer - Admin Profile & Data Sync */}
+        <div className="p-4 border-t-2 border-on-surface bg-surface-container-low space-y-3">
           <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={user?.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`}
+              alt={user.username}
+              className="w-9 h-9 rounded-xl border border-on-surface bg-white shrink-0 object-cover"
+            />
+            <div className="min-w-0 flex-1">
+              <span className="font-headline font-black text-xs text-on-surface block truncate">
+                {user.full_name || user.username}
+              </span>
+              <span className="text-[11px] text-on-surface-variant font-medium flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>@{user.username}</span>
+              </span>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              fetchStats();
+              fetchUsers();
+              fetchClasses();
+              if (selectedClassForLevels) fetchChallenges(selectedClassForLevels.id);
+              setActionMessage({ type: "success", text: "Data sistem berhasil disinkronkan!" });
+            }}
+            className="w-full py-2 px-3 rounded-xl bg-surface-container-lowest hover:bg-surface-container border-2 border-on-surface font-headline font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>Sinkronkan Data</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* RIGHT MAIN WRAPPER */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
+        {/* TOP BAR FOR RIGHT SIDE */}
+        <header className="sticky top-0 z-30 bg-surface-container-low/95 backdrop-blur-md border-b-2 border-on-surface px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            {/* Mobile Sidebar Toggle Button */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 rounded-xl border-2 border-on-surface bg-surface-container-lowest text-on-surface lg:hidden hover:bg-surface-container shadow-xs cursor-pointer"
+              aria-label="Buka Menu Sidebar"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] sm:text-[11px] font-mono font-bold text-on-surface-variant uppercase tracking-wider">
+                  Admin Console /
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-mono font-bold text-primary uppercase tracking-wider">
+                  {activeTab === "overview"
+                    ? "Monitoring"
+                    : activeTab === "users"
+                    ? "Pengguna"
+                    : "Kurikulum"}
+                </span>
+              </div>
+              <h1 className="font-display font-black text-base sm:text-xl text-on-surface leading-tight">
+                {activeTab === "overview" && "Monitoring & Ikhtisar Sistem"}
+                {activeTab === "users" && "Manajemen & Audit Pengguna"}
+                {activeTab === "classes" &&
+                  (selectedClassForLevels
+                    ? `Level Tantangan: ${selectedClassForLevels.title}`
+                    : "Manajemen Kelas & Kurikulum")}
+              </h1>
+            </div>
+          </div>
+
+          {/* Top Bar Quick Stats & Actions */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {stats && (
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-400 text-emerald-950 text-xs font-bold font-mono">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+                <span>{stats.onlineUsers} Online</span>
+              </div>
+            )}
+
             <button
               onClick={() => {
                 fetchStats();
@@ -765,66 +1002,25 @@ export function AdminDashboardClient() {
                 if (selectedClassForLevels) fetchChallenges(selectedClassForLevels.id);
                 setActionMessage({ type: "success", text: "Data sistem berhasil diperbarui!" });
               }}
-              className="px-3.5 py-2 rounded-xl bg-surface-container-lowest border-2 border-on-surface font-headline font-bold text-xs flex items-center gap-1.5 shadow-sm hover:bg-surface-container transition-colors cursor-pointer"
+              className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-surface-container-lowest border-2 border-on-surface font-headline font-bold text-xs flex items-center gap-1.5 shadow-xs hover:bg-surface-container transition-colors cursor-pointer"
+              title="Perbarui Data"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Sinkronkan Data</span>
+              <RefreshCw className="w-4 h-4 text-on-surface" />
+              <span className="hidden md:inline">Sinkronkan</span>
             </button>
-            <div className="px-3 py-1.5 bg-primary-fixed border-2 border-on-surface rounded-xl flex items-center gap-2 text-xs font-bold text-primary">
-              <ShieldCheck className="w-4 h-4 text-primary" />
-              <span>@{user.username} (Admin)</span>
-            </div>
+
+            <Link
+              href="/dashboard"
+              className="px-3 py-1.5 rounded-xl bg-primary text-white border-2 border-on-surface font-headline font-bold text-xs flex items-center gap-1.5 shadow-brutal-sm hover:scale-105 active:scale-95 transition-all"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Ke Dashboard</span>
+            </Link>
           </div>
-        </div>
+        </header>
 
-        {/* Tab Navigation Navigation Bar */}
-        <div className="max-w-7xl mx-auto mt-6 flex items-center gap-2 border-b border-outline-variant pb-1 overflow-x-auto">
-          <button
-            onClick={() => {
-              setActiveTab("overview");
-              setSelectedClassForLevels(null);
-            }}
-            className={`px-4 py-2 rounded-xl font-headline font-black text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === "overview"
-                ? "bg-primary text-white border-2 border-on-surface shadow-brutal-sm scale-105"
-                : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
-            }`}
-          >
-            <Activity className="w-4 h-4" />
-            <span>Monitoring &amp; Ikhtisar</span>
-          </button>
-
-          <button
-            onClick={() => {
-              setActiveTab("users");
-              setSelectedClassForLevels(null);
-            }}
-            className={`px-4 py-2 rounded-xl font-headline font-black text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === "users"
-                ? "bg-primary text-white border-2 border-on-surface shadow-brutal-sm scale-105"
-                : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
-            }`}
-          >
-            <Users className="w-4 h-4" />
-            <span>Manajemen Pengguna ({stats?.totalUsers ?? users.length})</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("classes")}
-            className={`px-4 py-2 rounded-xl font-headline font-black text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === "classes"
-                ? "bg-primary text-white border-2 border-on-surface shadow-brutal-sm scale-105"
-                : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
-            }`}
-          >
-            <Layers className="w-4 h-4" />
-            <span>Manajemen Kelas &amp; Level</span>
-          </button>
-        </div>
-      </section>
-
-      {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+        {/* Main Content Area */}
+        <main className="p-4 sm:p-6 lg:p-8 flex-1 w-full space-y-8">
         {/* ========================================================= */}
         {/* TAB 1: MONITORING & OVERVIEW */}
         {/* ========================================================= */}
@@ -1568,9 +1764,8 @@ export function AdminDashboardClient() {
             )}
           </div>
         )}
-      </main>
-
-      <Footer />
+        </main>
+      </div>
 
       {/* ========================================================= */}
       {/* MODAL: ADD / EDIT USER */}
