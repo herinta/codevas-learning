@@ -248,4 +248,30 @@ Sebelum melakukan commit atau push ke repositori:
 
 ---
 
+## 8. Konfigurasi Lingkungan & Pemisahan Database (Dev vs Prod Profiles)
+
+Pemisahan antara database **Development (Lokal)** dan **Production (Server)** bersifat mutlak untuk mencegah risiko kehilangan data pengguna asli.
+
+### 8.1 File Profil Konfigurasi
+Mirip konsep `application-dev.properties` & `application-prod.properties` di Spring Boot:
+- [`.env.development`](file:///d:/Project/codevas/.env.development): Mode dev lokal (di laptop), mengarah ke database lokal (`localhost:5432/codevas_db`).
+- [`.env.production`](file:///d:/Project/codevas/.env.production): Mode production resmi (di Docker / Synology NAS), mengarah ke database container internal (`codevas-db:5432/codevas_db`).
+- [`.env.local`](file:///d:/Project/codevas/.env.local): Overrides lokal untuk developer. Cukup ubah `DB_MODE="local"` atau `DB_MODE="server"` untuk beralih target database.
+
+### 8.2 Perintah Sinkronisasi Database
+- Migrasi Database Lokal:
+  ```bash
+  npm run db:setup:local
+  ```
+- Migrasi Database Server (Synology NAS LAN):
+  ```bash
+  npm run db:setup:server
+  ```
+- Migrasi Otomatis (sesuai `DB_MODE` aktif):
+  ```bash
+  npm run db:setup
+  ```
+
+---
+
 *Aturan ini bersifat mengikat dan wajib diperbarui jika terdapat penambahan modul, perubahan arsitektur, atau konvensi baru pada Codevas.*

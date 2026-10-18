@@ -6,26 +6,52 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Read .env if present
-const envPath = path.resolve(__dirname, '../.env.local');
-if (fs.existsSync(envPath)) {
-  const envContent = fs.readFileSync(envPath, 'utf-8');
-  for (const line of envContent.split('\n')) {
-    const trimmed = line.trim();
-    if (trimmed && !trimmed.startsWith('#')) {
-      const [key, ...rest] = trimmed.split('=');
-      const val = rest.join('=').replace(/^["']|["']$/g, '');
-      if (key && !process.env[key]) {
-        process.env[key] = val;
+// Read .env.local, .env.development, or .env if present
+const possibleEnvFiles = ['.env.local', '.env.development', '.env'];
+for (const file of possibleEnvFiles) {
+  const envPath = path.resolve(__dirname, `../${file}`);
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf-8');
+    for (const line of envContent.split('\n')) {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith('#')) {
+        const [key, ...rest] = trimmed.split('=');
+        const val = rest.join('=').replace(/^["']|["']$/g, '');
+        if (key && !process.env[key]) {
+          process.env[key] = val;
+        }
       }
     }
   }
 }
 
-const connectionString =
-  process.env.DATABASE_URL || 'postgresql://postgres:root@localhost:5432/codevas_db';
+// Check CLI arguments (--local or --server)
+const args = process.argv.slice(2);
+const forceServer = args.includes('--server');
+const forceLocal = args.includes('--local');
+const dbMode = (process.env.DB_MODE || '').toLowerCase().trim();
 
-console.log('🚀 Connecting to PostgreSQL:', connectionString.replace(/:[^:]*@/, ':****@'));
+let connectionString = process.env.DATABASE_URL || 'postgresql://postgres:root@localhost:5432/codevas_db';
+let targetLabel = 'Default';
+
+if (forceServer || (!forceLocal && (dbMode === 'server' || dbMode === 'prod'))) {
+  if (process.env.DATABASE_URL_SERVER) {
+    connectionString = process.env.DATABASE_URL_SERVER;
+    targetLabel = 'SERVER (Synology NAS / Remote)';
+  } else {
+    targetLabel = 'SERVER (DATABASE_URL)';
+  }
+} else if (forceLocal || dbMode === 'local' || dbMode === 'dev') {
+  if (process.env.DATABASE_URL_LOCAL) {
+    connectionString = process.env.DATABASE_URL_LOCAL;
+    targetLabel = 'LOCAL (Dev Machine)';
+  } else {
+    targetLabel = 'LOCAL (DATABASE_URL)';
+  }
+}
+
+console.log(`🚀 [DB Setup Migration] Target: ${targetLabel}`);
+console.log('🔗 Connecting to PostgreSQL:', connectionString.replace(/:[^:@]*@/, ':****@'));
 
 const pool = new pg.Pool({ connectionString });
 

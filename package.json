@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:setup": "node scripts/setup-db.mjs"
+    "db:setup": "node scripts/setup-db.mjs",
+    "db:setup:local": "node scripts/setup-db.mjs --local",
+    "db:setup:server": "node scripts/setup-db.mjs --server"
   },
   "dependencies": {
     "lucide-react": "^1.59.0",
