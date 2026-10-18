@@ -118,6 +118,12 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
         const refJson = await ref.json();
         if (refJson.success && refJson.data) {
           setCourse(refJson.data);
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("codevas:progress-updated"));
+            try {
+              localStorage.setItem("codevas:progress-synced", Date.now().toString());
+            } catch {}
+          }
         }
       }
     } catch {

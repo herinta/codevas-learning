@@ -38,10 +38,28 @@ const AuthContext = createContext<AuthContextType>({
   setUser: () => {},
 });
 
+const CACHED_USER_KEY = "codevas_auth_user_cache";
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  // 1. Instant Cache Hydration: Render cached user immediately in 0ms to eliminate reload spinners
+  useEffect(() => {
+    try {
+      const cached = localStorage.getItem(CACHED_USER_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed && parsed.id) {
+          setUser(parsed);
+          setLoading(false);
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load cached user session:", e);
+    }
+  }, []);
 
   const refreshUser = useCallback(async () => {
     try {
@@ -50,7 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const data = await res.json();
         if (data.user) {
           const stats = calculateGamificationStats(data.user.xp_points);
-          setUser({
+          const fullUser: AuthUser = {
             ...data.user,
             level: data.user.level ?? stats.level,
             rank_title: data.user.rank_title ?? stats.rank_title,
@@ -59,15 +77,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             next_level_xp: data.user.next_level_xp ?? stats.next_level_xp,
             level_progress_percent: data.user.level_progress_percent ?? stats.level_progress_percent,
             xp_remaining: data.user.xp_remaining ?? stats.xp_remaining,
-          });
+          };
+          setUser(fullUser);
+          try {
+            localStorage.setItem(CACHED_USER_KEY, JSON.stringify(fullUser));
+          } catch {}
         } else {
           setUser(null);
+          try {
+            localStorage.removeItem(CACHED_USER_KEY);
+          } catch {}
         }
       } else {
         setUser(null);
+        try {
+          localStorage.removeItem(CACHED_USER_KEY);
+        } catch {}
       }
     } catch {
-      setUser(null);
+      // Keep existing cached user on temporary network hiccups
     } finally {
       setLoading(false);
     }
@@ -80,12 +108,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error("Logout failed:", err);
     } finally {
       setUser(null);
+      try {
+        localStorage.removeItem(CACHED_USER_KEY);
+        localStorage.removeItem("codevas_dashboard_classes_cache");
+      } catch {}
       // Use replace to erase the authenticated page from the browser history stack
       window.location.replace("/login");
     }
   }, []);
 
   useEffect(() => {
+    // Initial silent background revalidation
     refreshUser();
 
     // Listen to browser Back/Forward Cache (bfcache) restore
@@ -95,8 +128,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     };
 
+    // Auto-update when returning to tab without manual reload
+    const handleFocus = () => {
+      refreshUser();
+    };
+
+    // Cross-tab synchronization when a challenge passes in another tab
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "codevas:progress-synced") {
+        refreshUser();
+      }
+    };
+
+    const handleCustomProgress = () => {
+      refreshUser();
+    };
+
     window.addEventListener("pageshow", handlePageShow);
-    return () => window.removeEventListener("pageshow", handlePageShow);
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener("codevas:progress-updated", handleCustomProgress);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("codevas:progress-updated", handleCustomProgress);
+    };
   }, [refreshUser]);
 
   return (

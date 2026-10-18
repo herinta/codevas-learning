@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 import { DashboardHero } from "@/components/dashboard/dashboard-hero";
@@ -32,6 +32,13 @@ interface ApiClassItem {
   isEnrolled: boolean;
 }
 
+const DASHBOARD_CLASSES_CACHE_KEY = "codevas_dashboard_classes_cache";
+
+interface DashboardClassesCache {
+  allClasses: ApiClassItem[];
+  myClasses: ApiClassItem[];
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
@@ -41,6 +48,23 @@ export default function DashboardPage() {
   const [allClasses, setAllClasses] = useState<ApiClassItem[]>([]);
   const [myClasses, setMyClasses] = useState<ApiClassItem[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // 1. Instant Cache Hydration: Render classes & progress bars in 0ms from localStorage
+  useEffect(() => {
+    try {
+      const cached = localStorage.getItem(DASHBOARD_CLASSES_CACHE_KEY);
+      if (cached) {
+        const parsed: DashboardClassesCache = JSON.parse(cached);
+        if (Array.isArray(parsed.allClasses) && parsed.allClasses.length > 0) {
+          setAllClasses(parsed.allClasses);
+          setMyClasses(parsed.myClasses || []);
+          setLoading(false);
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to read dashboard cache:", e);
+    }
+  }, []);
 
   // Client-side authentication guard: redirect immediately if logged out
   useEffect(() => {
@@ -60,47 +84,93 @@ export default function DashboardPage() {
     return () => window.removeEventListener("pageshow", handlePageShow);
   }, []);
 
-  // Load real data from APIs only when authenticated
-  useEffect(() => {
-    if (!user?.id) return;
+  // Fetch or revalidate dashboard data
+  const fetchDashboardData = useCallback(
+    async (isBackground = false) => {
+      // Only show full loading spinner if we don't have any cached data yet
+      if (!isBackground && allClasses.length === 0) {
+        setLoading(true);
+      }
 
-    let isMounted = true;
-
-    async function fetchDashboardData() {
-      setLoading(true);
       try {
-        // Parallel fetch classes and enrolled classes
         const [resClasses, resMyClasses] = await Promise.all([
           fetch("/api/classes"),
           fetch("/api/user/my-classes", { cache: "no-store" }),
         ]);
 
+        let fetchedAll = allClasses;
+        let fetchedMy = myClasses;
+
         if (resClasses.ok) {
           const json = await resClasses.json();
-          if (isMounted && json.success && Array.isArray(json.data)) {
+          if (json.success && Array.isArray(json.data)) {
+            fetchedAll = json.data;
             setAllClasses(json.data);
           }
         }
 
         if (resMyClasses.ok) {
           const json = await resMyClasses.json();
-          if (isMounted && json.success && Array.isArray(json.data)) {
+          if (json.success && Array.isArray(json.data)) {
+            fetchedMy = json.data;
             setMyClasses(json.data);
           }
         }
+
+        // Update instant cache for next reloads
+        try {
+          localStorage.setItem(
+            DASHBOARD_CLASSES_CACHE_KEY,
+            JSON.stringify({
+              allClasses: fetchedAll,
+              myClasses: fetchedMy,
+            })
+          );
+        } catch {}
       } catch (err) {
         console.error("Gagal memuat data dashboard:", err);
       } finally {
-        if (isMounted) setLoading(false);
+        setLoading(false);
       }
-    }
+    },
+    [allClasses.length, allClasses, myClasses]
+  );
 
-    fetchDashboardData();
+  // Initial load when user session is available
+  useEffect(() => {
+    if (!user?.id) return;
+    fetchDashboardData(allClasses.length > 0);
+  }, [user?.id]);
+
+  // 2. Auto-Update Tanpa Perlu Reload:
+  // Revalidate on tab focus, custom progress events, and cross-tab storage broadcast
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const handleFocus = () => {
+      fetchDashboardData(true);
+    };
+
+    const handleProgressUpdate = () => {
+      fetchDashboardData(true);
+    };
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "codevas:progress-synced") {
+        fetchDashboardData(true);
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("codevas:progress-updated", handleProgressUpdate);
+    window.addEventListener("storage", handleStorage);
 
     return () => {
-      isMounted = false;
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("codevas:progress-updated", handleProgressUpdate);
+      window.removeEventListener("storage", handleStorage);
     };
-  }, [user?.id]);
+  }, [user?.id, fetchDashboardData]);
 
   // Filtered tracks
   const displayedTracks = useMemo(() => {

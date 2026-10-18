@@ -572,6 +572,12 @@ function ChallengePlaygroundContent({
           newTotalXp: data.newTotalXp,
         });
         refreshUser();
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("codevas:progress-updated"));
+          try {
+            localStorage.setItem("codevas:progress-synced", Date.now().toString());
+          } catch {}
+        }
       }
     } catch (err) {
       console.error("Error auto-saving progress:", err);
