@@ -87,11 +87,15 @@ export class UserService {
 
     const newUser = rows[0];
     if (newUser) {
-      await query(
-        `INSERT INTO xp_transactions (user_id, amount, source, reference_id, description)
-         VALUES ($1, $2, 'REGISTER_BONUS', 'welcome', 'Bonus selamat datang registrasi akun baru')`,
-        [newUser.id, initialXp]
-      );
+      try {
+        await query(
+          `INSERT INTO xp_transactions (user_id, amount, source, reference_id, description)
+           VALUES ($1, $2, 'REGISTER_BONUS', 'welcome', 'Bonus selamat datang registrasi akun baru')`,
+          [newUser.id, initialXp]
+        );
+      } catch (txErr) {
+        console.warn("[UserService.createUser] xp_transactions warning:", txErr);
+      }
     }
 
     return newUser;
@@ -209,11 +213,15 @@ export class UserService {
 
     // Record transaction audit trail
     if (pointsToAdd !== 0) {
-      await query(
-        `INSERT INTO xp_transactions (user_id, amount, source, reference_id, description)
-         VALUES ($1, $2, $3, $4, $5)`,
-        [userId, pointsToAdd, source, referenceId || null, description || `Perolehan EXP dari ${source}`]
-      );
+      try {
+        await query(
+          `INSERT INTO xp_transactions (user_id, amount, source, reference_id, description)
+           VALUES ($1, $2, $3, $4, $5)`,
+          [userId, pointsToAdd, source, referenceId || null, description || `Perolehan EXP dari ${source}`]
+        );
+      } catch (txErr) {
+        console.warn("[UserService.addXp] xp_transactions warning:", txErr);
+      }
     }
 
     return {

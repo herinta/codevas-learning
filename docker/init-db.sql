@@ -129,6 +129,19 @@ CREATE TABLE IF NOT EXISTS user_daily_activity (
 
 CREATE INDEX IF NOT EXISTS idx_user_daily_activity_lookup ON user_daily_activity(user_id, activity_date);
 
+-- 8. Table: xp_transactions (Ledger & Audit Trail EXP Pengguna)
+CREATE TABLE IF NOT EXISTS xp_transactions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    amount INT NOT NULL,
+    source VARCHAR(50) NOT NULL,
+    reference_id VARCHAR(100),
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_xp_transactions_user ON xp_transactions(user_id);
+
 -- ========================================================
 -- SEED DATA: Classes & Full 10 Levels for CSS Flexbox
 -- ========================================================

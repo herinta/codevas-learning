@@ -99,9 +99,10 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
     console.error("[API Login Error]:", err);
     return NextResponse.json(
-      { error: "Terjadi kesalahan server saat masuk. Silakan coba lagi." },
+      { error: `Gagal masuk: ${msg}` },
       { status: 500 }
     );
   }
