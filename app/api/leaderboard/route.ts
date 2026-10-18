@@ -3,8 +3,6 @@ import { UserService } from "@/lib/services/user.service";
 import { verifySessionToken, AUTH_COOKIE_NAME } from "@/lib/auth/session";
 import { calculateGamificationStats } from "@/lib/gamification";
 
-export const dynamic = "force-dynamic";
-
 /**
  * GET /api/leaderboard
  * Returns top learners ranking based on XP points, and current user's rank

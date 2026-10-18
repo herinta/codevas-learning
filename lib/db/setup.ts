@@ -106,6 +106,21 @@ CREATE TABLE IF NOT EXISTS user_progress (
 CREATE INDEX IF NOT EXISTS idx_user_progress_user ON user_progress(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_progress_challenge ON user_progress(challenge_id);
 CREATE INDEX IF NOT EXISTS idx_user_progress_status ON user_progress(status);
+
+-- Table: user_daily_activity (Tracking Waktu Target Harian 10 Menit & Ephemeral Progress)
+CREATE TABLE IF NOT EXISTS user_daily_activity (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    activity_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    active_seconds INT NOT NULL DEFAULT 0,
+    target_seconds INT NOT NULL DEFAULT 600,
+    is_completed BOOLEAN NOT NULL DEFAULT FALSE,
+    xp_claimed BOOLEAN NOT NULL DEFAULT FALSE,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_user_activity_date UNIQUE (user_id, activity_date)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_daily_activity_lookup ON user_daily_activity(user_id, activity_date);
 `;
 
 /**

@@ -21,8 +21,10 @@ import {
   LogOut,
   RefreshCw,
   HelpCircle,
+  Target,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
+import { useDailyTargetTracker } from "@/lib/hooks/use-daily-target-tracker";
 
 interface ChallengeData {
   id: string;
@@ -439,6 +441,7 @@ function ChallengePlaygroundContent({
   const [loading, setLoading] = useState(true);
   const [showHint, setShowHint] = useState(false);
   const [mobileTab, setMobileTab] = useState<"mission" | "arena" | "editor" | "all">("all");
+  const dailyTarget = useDailyTargetTracker();
 
   // Auto-sync state when passed
   const [hasSavedPass, setHasSavedPass] = useState(false);
@@ -1050,6 +1053,16 @@ function ChallengePlaygroundContent({
             <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#e65100] fill-[#e65100]" />
             <span className="text-[11px] sm:text-xs font-headline font-black text-on-surface">
               {user ? `${(user as any).streak_days || 1}d` : "1d"}
+            </span>
+          </div>
+
+          <div
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-1 bg-surface-container-high border-2 border-on-surface rounded-full shadow-xs shrink-0"
+            title={`Target Harian: 10 Menit Fokus Belajar (${dailyTarget.percent}% tercapai)`}
+          >
+            <Target className={`w-3.5 h-3.5 ${dailyTarget.isCompleted ? 'text-emerald-600' : 'text-primary'}`} />
+            <span className="text-[11px] font-mono font-black text-on-surface">
+              {dailyTarget.formattedActive}
             </span>
           </div>
 

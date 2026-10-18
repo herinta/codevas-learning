@@ -9,6 +9,7 @@ import { ClassTrackCard } from "@/components/dashboard/class-card";
 import { DailyBlitzWidget } from "@/components/dashboard/daily-blitz-widget";
 import { LeaderboardWidget } from "@/components/dashboard/leaderboard-widget";
 import { StatsWidget } from "@/components/dashboard/stats-widget";
+import { DailyTargetWidget } from "@/components/dashboard/daily-target-widget";
 import { Footer } from "@/components/layout/footer";
 import { ClassCategory } from "@/lib/db/entities";
 import { Compass, BookOpen, Sparkles, ArrowRight, Loader2, Rocket } from "lucide-react";
@@ -198,6 +199,7 @@ export default function DashboardPage() {
 
           {/* RIGHT: 4 Columns Sidebar Widgets */}
           <div className="lg:col-span-4 flex flex-col gap-6">
+            <DailyTargetWidget />
             <StatsWidget
               streakDays={user?.streak_days ?? 1}
               solvedCount={myClasses.reduce(

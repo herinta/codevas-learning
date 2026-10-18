@@ -45,6 +45,21 @@ export interface XpTransactionEntity {
 }
 
 /**
+ * Entity: user_daily_activity
+ * Tracks daily focus time (e.g. 10 minutes target) with 1 record per user per day
+ */
+export interface UserDailyActivityEntity {
+  id: string; // UUID
+  user_id: string;
+  activity_date: string | Date;
+  active_seconds: number;
+  target_seconds: number;
+  is_completed: boolean;
+  xp_claimed: boolean;
+  updated_at: string | Date;
+}
+
+/**
  * Entity: classes
  * Table mapping for curriculum (CSS Flexbox, CSS Grid, etc.)
  */
