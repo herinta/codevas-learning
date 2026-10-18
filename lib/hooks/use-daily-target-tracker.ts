@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "@/components/auth/auth-context";
 import { DailyTargetStatus } from "@/lib/services/daily-target.service";
-import { triggerTestStreakNotification } from "@/lib/pwa/streak-notifications";
 
 const SYNC_INTERVAL_SECONDS = 30;
 

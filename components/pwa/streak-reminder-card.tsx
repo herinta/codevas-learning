@@ -5,18 +5,14 @@ import {
   Bell,
   BellRing,
   Flame,
-  CheckCircle2,
   AlertCircle,
   Sparkles,
-  Send,
-  Loader2,
 } from "lucide-react";
 import {
   isNotificationSupported,
   getNotificationPermission,
   isStreakReminderEnabled,
   requestStreakNotificationPermission,
-  triggerTestStreakNotification,
   setStreakReminderEnabled,
 } from "@/lib/pwa/streak-notifications";
 import { useAuth } from "@/components/auth/auth-context";
@@ -27,7 +23,6 @@ export const StreakReminderCard: React.FC = () => {
   const [permission, setPermission] = useState<NotificationPermission>("default");
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [testSent, setTestSent] = useState(false);
 
   useEffect(() => {
     const isSupp = isNotificationSupported();
@@ -42,16 +37,13 @@ export const StreakReminderCard: React.FC = () => {
     if (!supported) return;
 
     setLoading(true);
-    setTestSent(false);
 
     if (permission !== "granted") {
       const perm = await requestStreakNotificationPermission();
       setPermission(perm);
       if (perm === "granted") {
         setEnabled(true);
-        // Automatically fire one test notification to delight the user!
-        await triggerTestStreakNotification(user?.streak_days || 1, user?.username);
-        setTestSent(true);
+        setStreakReminderEnabled(true);
       }
     } else {
       const nextState = !enabled;
@@ -60,20 +52,6 @@ export const StreakReminderCard: React.FC = () => {
     }
 
     setLoading(false);
-  };
-
-  const handleTestNotification = async () => {
-    setLoading(true);
-    setTestSent(false);
-    const success = await triggerTestStreakNotification(
-      user?.streak_days || 1,
-      user?.username
-    );
-    setLoading(false);
-    if (success) {
-      setTestSent(true);
-      setTimeout(() => setTestSent(false), 4000);
-    }
   };
 
   if (!supported) {
@@ -137,30 +115,6 @@ export const StreakReminderCard: React.FC = () => {
         <div className="mt-3 p-2.5 bg-red-50 border border-red-300 rounded-xl text-[11px] text-red-900 font-medium flex items-center gap-2">
           <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
           <span>Izin notifikasi diblokir. Aktifkan izin notifikasi pada setelan browsermu.</span>
-        </div>
-      )}
-
-      {/* Active State Actions */}
-      {isGranted && (
-        <div className="mt-3 pt-3 border-t border-outline-variant flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-800">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-            <span>{testSent ? "Notifikasi terkirim!" : "Notifikasi Aktif"}</span>
-          </div>
-
-          <button
-            onClick={handleTestNotification}
-            disabled={loading}
-            className="px-3 py-1 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-lg border border-on-surface text-[11px] font-headline font-bold flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-60"
-            title="Kirim notifikasi uji coba ke perangkat"
-          >
-            {loading ? (
-              <Loader2 className="w-3 h-3 animate-spin" />
-            ) : (
-              <Send className="w-3 h-3 text-primary" />
-            )}
-            <span>Tes Notifikasi</span>
-          </button>
         </div>
       )}
     </div>
