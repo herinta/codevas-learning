@@ -200,6 +200,8 @@ export function AdminDashboardClient() {
     if (!authLoading) {
       if (!user) {
         router.push("/login?redirect=/admin");
+      } else if (user.role !== "ADMIN") {
+        router.push("/dashboard");
       }
     }
   }, [user, authLoading, router]);
