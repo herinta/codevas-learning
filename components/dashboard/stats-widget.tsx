@@ -1,6 +1,7 @@
 import React from "react";
 import { BarChart3, Target, Flame, CheckCircle, Award, Sparkles, Zap } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
+import { StreakReminderCard } from "@/components/pwa/streak-reminder-card";
 
 export interface StatsWidgetProps {
   readonly accuracy?: number;
@@ -95,8 +96,11 @@ export const StatsWidget: React.FC<StatsWidgetProps> = ({
         </div>
       </div>
 
+      {/* Streak Notification Reminder Box */}
+      <StreakReminderCard />
+
       {/* Motivational Banner */}
-      <div className="mt-4 p-3 bg-secondary-fixed/40 rounded-xl border-2 border-secondary flex items-center gap-3">
+      <div className="p-3 bg-secondary-fixed/40 rounded-xl border-2 border-secondary flex items-center gap-3">
         <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white flex-shrink-0">
           <Award className="w-4 h-4" />
         </div>
@@ -105,7 +109,7 @@ export const StatsWidget: React.FC<StatsWidgetProps> = ({
             Hebat! Kamu on-fire! 🎯
           </span>
           <span className="text-on-surface-variant font-medium leading-tight block mt-0.5">
-            2 kuis lagi untuk membuka lencana "Syntax Wizard".
+            Pertahankan streak harian untuk meraih bonus XP eksklusif.
           </span>
         </div>
       </div>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="codevasGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#f43f5e" />
+      <stop offset="50%" stopColor="#e040a0" />
+      <stop offset="100%" stopColor="#7c52aa" />
+    </linearGradient>
+    <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="0" flood-color="#2e1a28" />
+    </filter>
+  </defs>
+
+  <!-- Neo-brutalist Base Tile -->
+  <rect x="32" y="32" width="448" height="448" rx="112" fill="#2e1a28" />
+  <rect x="32" y="20" width="448" height="448" rx="112" fill="url(#codevasGrad)" stroke="#2e1a28" stroke-width="20" />
+
+  <!-- Inner Screen Container -->
+  <rect x="80" y="80" width="352" height="328" rx="48" fill="#181825" stroke="#2e1a28" stroke-width="12" />
+
+  <!-- Window Header Dots -->
+  <circle cx="125" cy="122" r="12" fill="#ef4444" stroke="#2e1a28" stroke-width="4" />
+  <circle cx="165" cy="122" r="12" fill="#f59e0b" stroke="#2e1a28" stroke-width="4" />
+  <circle cx="205" cy="122" r="12" fill="#10b981" stroke="#2e1a28" stroke-width="4" />
+
+  <!-- Codevas Terminal Prompt Symbol: ">_" -->
+  <path d="M 130 200 L 220 270 L 130 340" fill="none" stroke="#f43f5e" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="250" y="320" width="100" height="24" rx="12" fill="#38bdf8" />
+
+  <!-- Gaming Sparkle / Trophy Flame Badge -->
+  <g transform="translate(350, 100) scale(1.1)">
+    <circle cx="0" cy="0" r="32" fill="#fbbf24" stroke="#2e1a28" stroke-width="8" />
+    <path d="M -8 10 C -12 2, -6 -14, 0 -22 C 6 -14, 12 2, 8 10 C 6 15, -6 15, -8 10 Z" fill="#ea580c" />
+    <circle cx="0" cy="2" r="4" fill="#fef08a" />
+  </g>
+</svg>

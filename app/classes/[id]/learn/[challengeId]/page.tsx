@@ -438,6 +438,7 @@ function ChallengePlaygroundContent({
   const [cssCode, setCssCode] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [showHint, setShowHint] = useState(false);
+  const [mobileTab, setMobileTab] = useState<"mission" | "arena" | "editor" | "all">("all");
 
   // Auto-sync state when passed
   const [hasSavedPass, setHasSavedPass] = useState(false);
@@ -1035,24 +1036,24 @@ function ChallengePlaygroundContent({
         </div>
 
         {/* User Status Pills */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           <div
-            className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-300 border-2 border-on-surface rounded-full shadow-sm"
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-1 bg-amber-300 border-2 border-on-surface rounded-full shadow-xs shrink-0"
             title={`Level ${user?.level || 1} • ${user?.rank_title || 'Siswa Pemula'}`}
           >
-            <span className="text-xs font-mono font-black text-on-surface">
+            <span className="text-[11px] sm:text-xs font-mono font-black text-on-surface">
               Lv.{user?.level || 1}
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1 bg-[#fff3e0] border-2 border-on-surface rounded-full shadow-sm">
-            <Flame className="w-4 h-4 text-[#e65100] fill-[#e65100]" />
-            <span className="text-xs font-headline font-black text-on-surface">
-              {user ? `${(user as any).streak_days || 1} Hari` : "1 Hari"}
+          <div className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-[#fff3e0] border-2 border-on-surface rounded-full shadow-xs shrink-0">
+            <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#e65100] fill-[#e65100]" />
+            <span className="text-[11px] sm:text-xs font-headline font-black text-on-surface">
+              {user ? `${(user as any).streak_days || 1}d` : "1d"}
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1 bg-secondary-fixed border-2 border-on-surface rounded-full shadow-sm">
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-secondary-fixed border-2 border-on-surface rounded-full shadow-xs shrink-0">
             <Star className="w-4 h-4 text-secondary fill-secondary" />
             <span className="text-xs font-headline font-black text-secondary">
               {user ? `${user.xp_points} XP` : "50 XP"}
@@ -1061,10 +1062,54 @@ function ChallengePlaygroundContent({
         </div>
       </header>
 
+      {/* Mobile Workspace Tabs (only visible on small / mobile screens) */}
+      <div className="lg:hidden flex items-center justify-between bg-surface-container-high border-b-2 border-on-surface p-1 sticky top-[57px] z-30 shadow-xs">
+        <button
+          onClick={() => setMobileTab("all")}
+          className={`flex-1 py-1.5 text-[11px] font-headline font-black rounded-lg transition-all ${
+            mobileTab === "all"
+              ? "bg-on-surface text-white shadow-xs"
+              : "text-on-surface-variant hover:text-on-surface"
+          }`}
+        >
+          👁️ Semua
+        </button>
+        <button
+          onClick={() => setMobileTab("mission")}
+          className={`flex-1 py-1.5 text-[11px] font-headline font-black rounded-lg transition-all ${
+            mobileTab === "mission"
+              ? "bg-primary text-white shadow-xs"
+              : "text-on-surface-variant hover:text-on-surface"
+          }`}
+        >
+          📋 Misi
+        </button>
+        <button
+          onClick={() => setMobileTab("arena")}
+          className={`flex-1 py-1.5 text-[11px] font-headline font-black rounded-lg transition-all ${
+            mobileTab === "arena"
+              ? "bg-primary text-white shadow-xs"
+              : "text-on-surface-variant hover:text-on-surface"
+          }`}
+        >
+          🎨 Arena
+        </button>
+        <button
+          onClick={() => setMobileTab("editor")}
+          className={`flex-1 py-1.5 text-[11px] font-headline font-black rounded-lg transition-all ${
+            mobileTab === "editor"
+              ? "bg-primary text-white shadow-xs"
+              : "text-on-surface-variant hover:text-on-surface"
+          }`}
+        >
+          💻 Editor
+        </button>
+      </div>
+
       {/* Main Workspace Grid: 3 Panels */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-y-auto lg:overflow-hidden">
         {/* PANEL 1: INSTRUCTIONS & VISUAL TARGET GOAL (4 Cols) */}
-        <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-r-2 border-on-surface p-5 sm:p-6 bg-surface-container-lowest overflow-y-auto space-y-6">
+        <div className={`lg:col-span-4 border-b-2 lg:border-b-0 lg:border-r-2 border-on-surface p-4 sm:p-6 bg-surface-container-lowest overflow-y-auto space-y-6 ${mobileTab !== 'all' && mobileTab !== 'mission' ? 'hidden lg:block' : 'block'}`}>
           {/* Mission Box (Soal Dinamis dari API) */}
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-primary-fixed border border-primary text-primary font-headline font-black text-xs">
@@ -1115,7 +1160,7 @@ function ChallengePlaygroundContent({
         </div>
 
         {/* PANEL 2: INTERACTIVE LIVE CANVAS (4 Cols) */}
-        <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-r-2 border-on-surface p-5 sm:p-6 bg-surface-container flex flex-col justify-between">
+        <div className={`lg:col-span-4 border-b-2 lg:border-b-0 lg:border-r-2 border-on-surface p-4 sm:p-6 bg-surface-container flex flex-col justify-between ${mobileTab !== 'all' && mobileTab !== 'arena' ? 'hidden lg:flex' : 'flex'}`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface flex items-center gap-1.5">
@@ -1271,7 +1316,7 @@ function ChallengePlaygroundContent({
         </div>
 
         {/* PANEL 3: CODE EDITOR & REAL-TIME ACTION (4 Cols) */}
-        <div className="lg:col-span-4 p-5 sm:p-6 bg-surface-container-lowest flex flex-col justify-between relative overflow-hidden">
+        <div className={`lg:col-span-4 p-4 sm:p-6 bg-surface-container-lowest flex flex-col justify-between relative overflow-hidden ${mobileTab !== 'all' && mobileTab !== 'editor' ? 'hidden lg:flex' : 'flex'}`}>
           {/* Localized Mini Confetti Canvas (Sebelah kanan saja, tidak full layar) */}
           <canvas
             ref={confettiCanvasRef}

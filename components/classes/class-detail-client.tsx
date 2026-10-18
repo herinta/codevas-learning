@@ -378,7 +378,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
           <div className="lg:col-span-7 xl:col-span-8 flex flex-col items-center">
             {viewMode === "path" ? (
               /* DUOLINGO WINDING PATH BOARD */
-              <div className="w-full bg-surface-container-lowest border-4 border-on-surface rounded-3xl p-6 sm:p-10 shadow-[0_8px_0_#2e1a28] relative overflow-hidden">
+              <div className="w-full bg-surface-container-lowest border-3 sm:border-4 border-on-surface rounded-3xl p-3 sm:p-8 md:p-10 shadow-[0_6px_0_#2e1a28] sm:shadow-[0_8px_0_#2e1a28] relative overflow-hidden">
                 {/* Board Unit Header */}
                 <div className="bg-gradient-to-r from-primary to-secondary text-white p-4 sm:p-5 rounded-2xl border-3 border-on-surface shadow-[0_4px_0_#2e1a28] mb-8 flex items-center justify-between">
                   <div className="flex items-center gap-3">

@@ -90,30 +90,30 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
         </nav>
 
         {/* Gamification Pills & Profile */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           {/* Streak Counter Pill */}
           <div
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#fff3e0] border-2 border-on-surface rounded-full candy-btn-shadow"
+            className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 bg-[#fff3e0] border-2 border-on-surface rounded-full candy-btn-shadow shrink-0"
             title={`${streakDays} Hari Streak Aktif`}
           >
-            <Flame className="w-4 h-4 text-[#e65100] fill-[#e65100] animate-pulse" />
-            <span className="text-xs font-display font-black text-on-surface">
-              {streakDays} Hari
+            <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#e65100] fill-[#e65100] animate-pulse" />
+            <span className="text-[11px] sm:text-xs font-display font-black text-on-surface">
+              {streakDays} <span className="hidden sm:inline">Hari</span>
             </span>
           </div>
 
           {/* Level Pill */}
           <div
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-300 border-2 border-on-surface rounded-full candy-btn-shadow"
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-1 sm:py-1.5 bg-amber-300 border-2 border-on-surface rounded-full candy-btn-shadow shrink-0"
             title={`Level ${user?.level || 1} — ${user?.rank_title || 'Siswa Pemula'}`}
           >
-            <span className="text-xs font-mono font-black text-on-surface">
+            <span className="text-[11px] sm:text-xs font-mono font-black text-on-surface">
               Lv.{user?.level || 1}
             </span>
           </div>
 
-          {/* XP Pill */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary-fixed border-2 border-on-surface rounded-full candy-btn-shadow">
+          {/* XP Pill (Hidden on tiny screens to avoid overflow) */}
+          <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-secondary-fixed border-2 border-on-surface rounded-full candy-btn-shadow shrink-0">
             <Star className="w-4 h-4 text-secondary fill-secondary" />
             <span className="text-xs font-display font-black text-secondary">
               {displayXp.toLocaleString()} XP
@@ -122,7 +122,7 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
 
           {/* Notification Button */}
           <button
-            className="w-9 h-9 rounded-full bg-surface-container-high border-2 border-on-surface flex items-center justify-center text-on-surface hover:bg-secondary-fixed transition-colors candy-btn-shadow"
+            className="hidden sm:flex w-9 h-9 rounded-full bg-surface-container-high border-2 border-on-surface items-center justify-center text-on-surface hover:bg-secondary-fixed transition-colors candy-btn-shadow shrink-0"
             aria-label="Notifikasi"
           >
             <Bell className="w-4 h-4" />

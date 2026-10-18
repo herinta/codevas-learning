@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import { AuthProvider } from "@/components/auth/auth-context";
+import { PwaProvider } from "@/components/pwa/pwa-provider";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -15,12 +16,37 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500", "600", "700"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#e040a0",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
+
 export const metadata: Metadata = {
   title: "Codevas — Belajar Coding Jadi Semenyenangkan Bermain Game",
   description:
     "Interactive UI Learning Engine untuk pemula. Buka browser, manipulasi template kode secara real-time, dan taklukkan quest coding seru berhadiah XP!",
+  manifest: "/manifest.webmanifest",
+  applicationName: "Codevas",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Codevas",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
@@ -35,7 +61,9 @@ export default function RootLayout({
       className={`${dmSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <PwaProvider>{children}</PwaProvider>
+        </AuthProvider>
       </body>
     </html>
   );
