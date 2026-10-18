@@ -190,13 +190,45 @@ export const ClassesSection: React.FC<ClassesSectionProps> = ({ initialClasses }
         })}
       </div>
 
-      {/* Loading Skeleton */}
+      {/* Loading Skeleton Grid */}
       {loading && (
-        <div className="py-16 flex flex-col items-center justify-center gap-3">
-          <Loader2 className="w-8 h-8 text-primary animate-spin" />
-          <p className="font-headline font-bold text-sm text-on-surface-variant">
-            Memuat kurikulum kelas terbaru dari server...
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+          {[1, 2, 3].map((n) => (
+            <div
+              key={n}
+              className="bg-surface-container-lowest rounded-2xl border-4 border-on-surface shadow-[0_8px_0_#2e1a28] flex flex-col justify-between overflow-hidden animate-pulse"
+            >
+              <div>
+                <div className="h-40 bg-surface-container border-b-4 border-on-surface p-5 flex flex-col justify-between">
+                  <div className="flex items-center justify-between">
+                    <div className="h-6 w-24 bg-surface-container-high rounded-full border border-on-surface/20" />
+                    <div className="h-6 w-16 bg-surface-container-high rounded-full border border-on-surface/20" />
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-surface-container-highest border-2 border-on-surface/30" />
+                    <div className="space-y-2">
+                      <div className="h-3 w-24 bg-surface-container-high rounded" />
+                      <div className="h-2.5 w-16 bg-surface-container-high rounded" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-5 space-y-3">
+                  <div className="h-6 w-3/4 bg-surface-container-high rounded-lg" />
+                  <div className="h-3.5 w-full bg-surface-container rounded" />
+                  <div className="h-3.5 w-4/5 bg-surface-container rounded" />
+                  <div className="pt-2 flex justify-between">
+                    <div className="h-3 w-28 bg-surface-container rounded" />
+                    <div className="h-3 w-16 bg-surface-container rounded" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-5 pt-0">
+                <div className="w-full h-11 bg-surface-container-high rounded-xl border-2 border-on-surface/30" />
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

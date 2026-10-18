@@ -249,13 +249,31 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Loading Indicator */}
+            {/* Loading Skeletons */}
             {loading ? (
-              <div className="py-20 flex flex-col items-center justify-center gap-3">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                <p className="font-headline font-bold text-sm text-on-surface-variant">
-                  Mengambil data kelas dari server...
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3].map((n) => (
+                  <div
+                    key={n}
+                    className="bg-surface-container-lowest border-2 border-on-surface rounded-2xl p-6 shadow-brutal flex flex-col justify-between animate-pulse"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="h-6 w-24 bg-surface-container-high rounded-full border border-on-surface/20" />
+                        <div className="h-6 w-16 bg-surface-container-high rounded-full border border-on-surface/20" />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="h-6 w-3/4 bg-surface-container-high rounded-lg" />
+                        <div className="h-3.5 w-full bg-surface-container rounded" />
+                        <div className="h-3.5 w-2/3 bg-surface-container rounded" />
+                      </div>
+                    </div>
+                    <div className="pt-6 mt-6 border-t border-outline-variant flex items-center justify-between">
+                      <div className="h-3.5 w-20 bg-surface-container rounded" />
+                      <div className="h-9 w-24 bg-surface-container-high rounded-xl border border-on-surface/30" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : displayedTracks.length === 0 ? (
               /* Empty state jika belum enroll kelas */
