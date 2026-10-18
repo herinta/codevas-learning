@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Search,
   Flame,
@@ -34,6 +35,10 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const { user, logout } = useAuth();
+  const pathname = usePathname();
+
+  const isWorkspace = pathname === "/dashboard";
+  const isClasses = pathname === "/dashboard/classes" || pathname?.startsWith("/dashboard/classes");
 
   // Gunakan XP real dari user jika sedang login, atau prop fallback
   const displayXp = user ? user.xp_points : (propUserXp ?? 50);
@@ -68,25 +73,33 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
         <nav className="hidden lg:flex items-center gap-6">
           <Link
             href="/dashboard"
-            className="text-primary font-bold border-b-2 border-primary pb-0.5 text-sm flex items-center gap-1.5"
+            className={`${
+              isWorkspace
+                ? "text-primary font-bold border-b-2 border-primary pb-0.5"
+                : "text-on-surface-variant hover:text-on-surface font-bold hover:text-primary"
+            } text-sm flex items-center gap-1.5 transition-colors`}
           >
             <LayoutGrid className="w-4 h-4" />
             <span>Workspace</span>
           </Link>
           <Link
-            href="/classes"
-            className="text-on-surface-variant hover:text-on-surface font-bold text-sm transition-colors flex items-center gap-1.5"
+            href="/dashboard/classes"
+            className={`${
+              isClasses
+                ? "text-primary font-bold border-b-2 border-primary pb-0.5"
+                : "text-on-surface-variant hover:text-on-surface font-bold hover:text-primary"
+            } text-sm flex items-center gap-1.5 transition-colors`}
           >
             <Compass className="w-4 h-4" />
             <span>Silabus</span>
           </Link>
-          <a
-            href="#leaderboard"
-            className="text-on-surface-variant hover:text-on-surface font-bold text-sm transition-colors flex items-center gap-1.5"
+          <Link
+            href="/dashboard#leaderboard"
+            className="text-on-surface-variant hover:text-on-surface font-bold text-sm transition-colors flex items-center gap-1.5 hover:text-primary"
           >
             <Trophy className="w-4 h-4" />
             <span>Leaderboard</span>
-          </a>
+          </Link>
         </nav>
 
         {/* Gamification Pills & Profile */}
@@ -244,23 +257,27 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
             <Link
               href="/dashboard"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-xl bg-primary-fixed text-primary"
+              className={`px-3 py-2 rounded-xl transition-colors ${
+                isWorkspace ? "bg-primary-fixed text-primary font-black" : "hover:bg-surface-container"
+              }`}
             >
               Workspace Dashboard
             </Link>
             <Link
-              href="/classes"
+              href="/dashboard/classes"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-xl hover:bg-surface-container"
+              className={`px-3 py-2 rounded-xl transition-colors ${
+                isClasses ? "bg-primary-fixed text-primary font-black" : "hover:bg-surface-container"
+              }`}
             >
               Silabus Kelas
             </Link>
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-xl hover:bg-surface-container"
+              className="px-3 py-2 rounded-xl hover:bg-surface-container text-on-surface-variant"
             >
-              Landing Page
+              Halaman Utama
             </Link>
           </div>
         </div>

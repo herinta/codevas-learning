@@ -44,7 +44,7 @@ export const Navbar: React.FC = () => {
             Dashboard
           </Link>
           <Link
-            href={user ? "/classes" : "#classes"}
+            href={user ? "/dashboard/classes" : "#classes"}
             className="px-4 py-1.5 rounded-full text-sm font-label font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
           >
             Silabus
@@ -186,7 +186,7 @@ export const Navbar: React.FC = () => {
             </Link>
           )}
           <Link
-            href={user ? "/classes" : "#classes"}
+            href={user ? "/dashboard/classes" : "#classes"}
             onClick={() => setMobileMenuOpen(false)}
             className="px-3 py-2 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container"
           >

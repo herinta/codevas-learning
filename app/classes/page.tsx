@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import {
@@ -38,10 +39,18 @@ interface ApiClassItem {
 }
 
 export default function AllClassesCatalogPage() {
+  const router = useRouter();
   const { user } = useAuth();
   const [classes, setClasses] = useState<ApiClassItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
+
+  // Jika user sudah login, arahkan ke halaman silabus versi dashboard dengan breadcrumb
+  useEffect(() => {
+    if (user) {
+      router.replace("/dashboard/classes");
+    }
+  }, [user, router]);
 
   useEffect(() => {
     async function fetchClasses() {

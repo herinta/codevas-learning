@@ -192,11 +192,11 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
           <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap scrollbar-none py-1">
             <Link
-              href="/#classes"
+              href={user ? "/dashboard/classes" : "/#classes"}
               className="inline-flex items-center gap-1 font-bold text-primary hover:underline hover:scale-[1.02] transition-transform"
             >
               <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
-              <span>Katalog Silabus</span>
+              <span>{user ? "Silabus Dashboard" : "Katalog Silabus"}</span>
             </Link>
             <span className="text-outline">/</span>
             <span className="text-on-surface-variant font-medium">Kelas</span>
