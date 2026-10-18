@@ -504,12 +504,17 @@ function ChallengePlaygroundContent({
   const isHtmlMode =
     challenge?.class_id === "html-architecture" || challengeId.startsWith("html-");
 
-  // Sanitized HTML for safe real-time 60 FPS arena preview
+  // Sanitized HTML for safe real-time 60 FPS arena preview (prevents XSS, iframe injection, meta redirects)
   const sanitizedUserHtml = useMemo(() => {
     if (!cssCode) return "";
     return cssCode
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-      .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
+      .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+      .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
+      .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, "")
+      .replace(/<meta\b[^>]*>/gi, "")
+      .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
+      .replace(/javascript:/gi, "");
   }, [cssCode]);
 
   // Real-time Live Evaluation as user types (instant reactivity)

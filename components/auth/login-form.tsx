@@ -50,9 +50,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
 
       setUser(data.user);
       
-      // Direct redirect ke Dashboard atau tujuan redirect tanpa alert/jeda
+      // Direct redirect ke Dashboard atau tujuan redirect aman tanpa open redirect
       const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-      const redirectUrl = params?.get("redirect") || "/dashboard";
+      const rawRedirect = params?.get("redirect") || "/dashboard";
+      const isSafeRelativeUrl =
+        rawRedirect.startsWith("/") && !rawRedirect.startsWith("//") && !rawRedirect.includes("://");
+      const redirectUrl = isSafeRelativeUrl ? rawRedirect : "/dashboard";
       router.push(redirectUrl);
       router.refresh();
     } catch {

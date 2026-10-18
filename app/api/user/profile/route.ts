@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { UserService } from "@/lib/services/user.service";
 import { verifySessionToken, AUTH_COOKIE_NAME } from "@/lib/auth/session";
 import { calculateGamificationStats } from "@/lib/gamification";
+import { validateHumanName, validateAvatarUrl } from "@/lib/security/content-filter";
 
 /**
  * GET /api/user/profile
@@ -78,9 +79,32 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { full_name, avatar_url } = body;
 
+    let sanitizedFullName: string | undefined = undefined;
+    if (full_name !== undefined) {
+      const validName = validateHumanName(String(full_name), 40);
+      if (!validName.isValid) {
+        return NextResponse.json(
+          { success: false, message: validName.reason || "Nama lengkap tidak diizinkan." },
+          { status: 400 }
+        );
+      }
+      sanitizedFullName = validName.sanitized;
+    }
+
+    let sanitizedAvatarUrl: string | undefined = undefined;
+    if (avatar_url !== undefined && avatar_url !== "") {
+      if (!validateAvatarUrl(String(avatar_url))) {
+        return NextResponse.json(
+          { success: false, message: "Format atau sumber URL avatar tidak diizinkan." },
+          { status: 400 }
+        );
+      }
+      sanitizedAvatarUrl = String(avatar_url).trim();
+    }
+
     const updatedUser = await UserService.updateProfile(payload.userId, {
-      full_name,
-      avatar_url,
+      full_name: sanitizedFullName,
+      avatar_url: sanitizedAvatarUrl,
     });
 
     if (!updatedUser) {

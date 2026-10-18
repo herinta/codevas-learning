@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { UserService } from "@/lib/services/user.service";
 import { createSessionToken, AUTH_COOKIE_NAME } from "@/lib/auth/session";
 import { calculateGamificationStats } from "@/lib/gamification";
+import { validateHumanName } from "@/lib/security/content-filter";
 
 export async function POST(req: NextRequest) {
   try {
@@ -29,6 +30,28 @@ export async function POST(req: NextRequest) {
         { error: "Username hanya boleh menggunakan huruf, angka, dan underscore (_)." },
         { status: 400 }
       );
+    }
+
+    // Filter anti-judol & anti-spam pada username
+    const validUsername = validateHumanName(cleanUsername, 24);
+    if (!validUsername.isValid) {
+      return NextResponse.json(
+        { error: validUsername.reason || "Username tidak diizinkan." },
+        { status: 400 }
+      );
+    }
+
+    // Filter anti-judol & anti-spam pada full name jika ada
+    let sanitizedFullName = cleanUsername;
+    if (fullname && typeof fullname === "string") {
+      const validFullname = validateHumanName(fullname, 40);
+      if (!validFullname.isValid) {
+        return NextResponse.json(
+          { error: validFullname.reason || "Nama lengkap tidak diizinkan." },
+          { status: 400 }
+        );
+      }
+      sanitizedFullName = validFullname.sanitized || cleanUsername;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,6 +92,7 @@ export async function POST(req: NextRequest) {
       username: cleanUsername,
       email,
       password,
+      full_name: sanitizedFullName,
     });
 
     // 5. Generate secure session token

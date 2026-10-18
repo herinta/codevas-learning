@@ -25,6 +25,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://codevas.dev"),
   title: "Codevas — Belajar Coding Jadi Semenyenangkan Bermain Game",
   description:
     "Interactive UI Learning Engine untuk pemula. Buka browser, manipulasi template kode secara real-time, dan taklukkan quest coding seru berhadiah XP!",
@@ -47,6 +48,30 @@ export const metadata: Metadata = {
     apple: [
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: "https://codevas.dev",
+    siteName: "Codevas",
+    title: "Codevas — Belajar Coding Jadi Semenyenangkan Bermain Game",
+    description:
+      "Interactive UI Learning Engine untuk pemula. Buka browser, manipulasi template kode secara real-time, dan taklukkan quest coding seru berhadiah XP!",
+    images: [
+      {
+        url: "/icons/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "Codevas Logo Banner",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Codevas — Belajar Coding Jadi Semenyenangkan Bermain Game",
+    description:
+      "Interactive UI Learning Engine untuk pemula. Buka browser, manipulasi template kode secara real-time, dan taklukkan quest coding seru berhadiah XP!",
+    images: ["/icons/icon-512.png"],
   },
 };
 
