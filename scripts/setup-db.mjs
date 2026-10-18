@@ -169,11 +169,38 @@ CREATE TABLE IF NOT EXISTS challenges (
 
 DO $$
 BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='xp_reward') THEN
+        ALTER TABLE challenges ADD COLUMN xp_reward INT NOT NULL DEFAULT 20;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='difficulty') THEN
+        ALTER TABLE challenges ADD COLUMN difficulty VARCHAR(20) NOT NULL DEFAULT 'EASY';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='order_index') THEN
+        ALTER TABLE challenges ADD COLUMN order_index INT NOT NULL DEFAULT 1;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='instruction') THEN
+        ALTER TABLE challenges ADD COLUMN instruction TEXT NOT NULL DEFAULT '';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='hint') THEN
+        ALTER TABLE challenges ADD COLUMN hint TEXT;
+    END IF;
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='theory') THEN
         ALTER TABLE challenges ADD COLUMN theory TEXT;
     END IF;
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='syntax_helpers') THEN
         ALTER TABLE challenges ADD COLUMN syntax_helpers JSONB NOT NULL DEFAULT '[]'::jsonb;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='locked_template') THEN
+        ALTER TABLE challenges ADD COLUMN locked_template JSONB NOT NULL DEFAULT '{}'::jsonb;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='target_visual') THEN
+        ALTER TABLE challenges ADD COLUMN target_visual JSONB NOT NULL DEFAULT '{}'::jsonb;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='initial_state') THEN
+        ALTER TABLE challenges ADD COLUMN initial_state TEXT NOT NULL DEFAULT '';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='validation_rules') THEN
+        ALTER TABLE challenges ADD COLUMN validation_rules JSONB NOT NULL DEFAULT '{}'::jsonb;
     END IF;
 END $$;
 
