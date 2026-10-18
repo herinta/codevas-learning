@@ -1205,7 +1205,7 @@ function ChallengePlaygroundContent({
             {isHtmlMode ? (
               <div
                 id="live-arena"
-                className={`arena w-full min-h-[19rem] bg-white border-4 rounded-2xl p-5 shadow-brutal overflow-auto transition-all relative ${
+                className={`arena w-full min-h-[11rem] sm:min-h-[18rem] bg-white border-4 rounded-2xl p-4 sm:p-5 shadow-brutal overflow-auto transition-all relative ${
                   liveEval.passed
                     ? "border-emerald-500 ring-4 ring-emerald-300/60"
                     : "border-on-surface"
@@ -1219,7 +1219,7 @@ function ChallengePlaygroundContent({
             ) : (
               <div
                 id="live-arena"
-                className={`arena w-full h-80 bg-surface-container-lowest border-4 rounded-2xl p-4 shadow-brutal overflow-auto transition-all relative ${
+                className={`arena w-full h-44 sm:h-60 lg:h-80 bg-surface-container-lowest border-4 rounded-2xl p-4 shadow-brutal overflow-auto transition-all relative ${
                   liveEval.passed
                     ? "border-emerald-500 ring-4 ring-emerald-300/60"
                     : "border-on-surface"
@@ -1338,15 +1338,63 @@ function ChallengePlaygroundContent({
         </div>
 
         {/* PANEL 3: CODE EDITOR & REAL-TIME ACTION (4 Cols) */}
-        <div className={`lg:col-span-4 p-4 sm:p-6 bg-surface-container-lowest flex flex-col justify-between relative overflow-hidden ${mobileTab !== 'all' && mobileTab !== 'editor' ? 'hidden lg:flex' : 'flex'}`}>
+        <div className={`lg:col-span-4 p-3.5 sm:p-6 bg-surface-container-lowest flex flex-col justify-between relative overflow-hidden ${mobileTab !== 'all' && mobileTab !== 'editor' ? 'hidden lg:flex' : 'flex'}`}>
           {/* Localized Mini Confetti Canvas (Sebelah kanan saja, tidak full layar) */}
           <canvas
             ref={confettiCanvasRef}
             className="pointer-events-none absolute inset-0 z-30 w-full h-full"
           />
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface">
+            {/* COMPACT MISSION BANNER: Always visible above the editor so user never has to scroll */}
+            <div className="p-3 bg-primary-fixed/25 border-2 border-on-surface rounded-2xl shadow-xs space-y-1">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-primary animate-ping" />
+                  <span className="text-[10px] font-headline font-black text-primary uppercase tracking-wider">
+                    MISI LEVEL {challenge?.order_index || 1}:
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full shadow-xs">
+                  +{challenge?.xp_reward} XP
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm font-bold text-on-surface leading-snug">
+                {challenge?.instruction}
+              </p>
+            </div>
+
+            {/* Quick Syntax Pills (Ketik Cepat) inside Editor for 1-Tap Coding */}
+            {challenge?.syntax_helpers && challenge.syntax_helpers.length > 0 && (
+              <div className="space-y-1">
+                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block">
+                  Ketik Cepat (Klik pasang / hapus):
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {challenge.syntax_helpers.map((snippet) => {
+                    const active = isHelperActive(snippet, cssCode);
+                    return (
+                      <button
+                        key={snippet}
+                        onClick={() => handleToggleHelper(snippet)}
+                        className={`px-2.5 py-1 text-[11px] font-mono rounded-lg transition-all cursor-pointer active:scale-95 flex items-center gap-1 ${
+                          active
+                            ? "bg-primary text-white border-2 border-primary shadow-xs font-black ring-2 ring-primary/30"
+                            : "bg-surface-container-high border border-on-surface text-on-surface font-bold hover:bg-primary-fixed hover:text-primary shadow-xs"
+                        }`}
+                        title={active ? `Hapus "${snippet}"` : `Pasang "${snippet}"`}
+                      >
+                        <span className="text-[10px] font-black">{active ? "✕" : "+"}</span>
+                        <span>{snippet}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between pt-1">
+              <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 {isHtmlMode ? "HTML Editor" : "CSS Editor"}
               </span>
               <button
@@ -1359,22 +1407,25 @@ function ChallengePlaygroundContent({
               </button>
             </div>
 
-            {/* Code Input Area */}
+            {/* Code Input Area: Compact rows on mobile to fit 1 screen without scrolling */}
             <div className="rounded-2xl border-3 border-on-surface overflow-hidden bg-[#1e1e2e] shadow-brutal">
-              <div className="bg-[#181825] px-3.5 py-2 border-b border-[#313244] flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                <span className="text-[11px] font-mono text-[#a6adc8] ml-2">
-                  {isHtmlMode ? "index.html" : "style.css"}
-                </span>
+              <div className="bg-[#181825] px-3 py-1.5 border-b border-[#313244] flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <span className="text-[11px] font-mono text-[#a6adc8] ml-1.5">
+                    {isHtmlMode ? "index.html" : "style.css"}
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-[#6c7086]">Live Eval</span>
               </div>
               <textarea
                 value={cssCode}
                 onChange={(e) => setCssCode(e.target.value)}
-                rows={11}
+                rows={5}
                 spellCheck={false}
-                className="w-full p-4 bg-transparent text-[#cdd6f4] font-mono text-xs sm:text-sm focus:outline-none resize-none leading-relaxed"
+                className="w-full p-3 sm:p-4 bg-transparent text-[#cdd6f4] font-mono text-xs sm:text-sm focus:outline-none resize-none leading-relaxed"
                 placeholder={isHtmlMode ? "<!-- Tulis tag HTML di sini -->" : ".arena { display: flex; ... }"}
               />
             </div>

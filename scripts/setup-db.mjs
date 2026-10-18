@@ -239,6 +239,13 @@ CREATE INDEX IF NOT EXISTS idx_user_progress_user ON user_progress(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_progress_challenge ON user_progress(challenge_id);
 CREATE INDEX IF NOT EXISTS idx_user_progress_status ON user_progress(status);
 
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='user_progress' AND column_name='completed_at') THEN
+        ALTER TABLE user_progress ADD COLUMN completed_at TIMESTAMP WITH TIME ZONE;
+    END IF;
+END $$;
+
 -- 7. Table: site_visits (Tracking Pengunjung Landing Page Tanpa Login)
 CREATE TABLE IF NOT EXISTS site_visits (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
