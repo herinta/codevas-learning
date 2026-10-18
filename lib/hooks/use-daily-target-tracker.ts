@@ -7,7 +7,17 @@ import { triggerTestStreakNotification } from "@/lib/pwa/streak-notifications";
 
 const SYNC_INTERVAL_SECONDS = 30;
 
-export function useDailyTargetTracker() {
+export interface DailyTargetTrackerOptions {
+  /**
+   * If true, the timer ticks every second and syncs active learning time to server.
+   * MUST be set to true ONLY in active learning/coding pages.
+   * Defaults to false (display/read-only mode).
+   */
+  activeMode?: boolean;
+}
+
+export function useDailyTargetTracker(options?: DailyTargetTrackerOptions) {
+  const activeMode = options?.activeMode ?? false;
   const { user, refreshUser } = useAuth();
   const [status, setStatus] = useState<DailyTargetStatus | null>(null);
   const [localSeconds, setLocalSeconds] = useState<number>(0);
@@ -39,6 +49,27 @@ export function useDailyTargetTracker() {
       fetchStatus();
     }
   }, [fetchStatus, user?.id]);
+
+  // Auto-refresh target status on window focus or when challenges are passed
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const handleFocus = () => {
+      fetchStatus();
+    };
+
+    const handleProgress = () => {
+      fetchStatus();
+    };
+
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("codevas:progress-updated", handleProgress);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("codevas:progress-updated", handleProgress);
+    };
+  }, [user?.id, fetchStatus]);
 
   // 2. Sync accumulated seconds to server
   const syncToServer = useCallback(async () => {
@@ -95,9 +126,10 @@ export function useDailyTargetTracker() {
     }
   }, [user, refreshUser]);
 
-  // 3. Heartbeat Active Timer (only when user is active & tab is visible)
+  // 3. Heartbeat Active Timer (ONLY runs when activeMode is true and tab is visible)
   useEffect(() => {
-    if (!user) return;
+    // If not in active learning mode, do NOT run the timer
+    if (!activeMode || !user?.id) return;
 
     const interval = setInterval(() => {
       // Only count active time if tab is visible
@@ -132,11 +164,12 @@ export function useDailyTargetTracker() {
       clearInterval(interval);
       window.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      // Immediately stop & flush any remaining unsynced seconds when exiting learn page
       if (unsyncedSecondsRef.current > 0) {
         syncToServer();
       }
     };
-  }, [user?.id, syncToServer]);
+  }, [activeMode, user?.id, syncToServer]);
 
   // Compute live local percentage and formatted time
   const targetSeconds = status?.targetSeconds || 600;

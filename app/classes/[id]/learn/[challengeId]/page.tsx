@@ -441,7 +441,8 @@ function ChallengePlaygroundContent({
   const [loading, setLoading] = useState(true);
   const [showHint, setShowHint] = useState(false);
   const [mobileTab, setMobileTab] = useState<"mission" | "arena" | "editor" | "all">("all");
-  const dailyTarget = useDailyTargetTracker();
+  // Target belajar harian hanya aktif berdetik di halaman workspace belajar ini
+  const dailyTarget = useDailyTargetTracker({ activeMode: true });
 
   // Auto-sync state when passed
   const [hasSavedPass, setHasSavedPass] = useState(false);
