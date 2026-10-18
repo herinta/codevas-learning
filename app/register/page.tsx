@@ -4,8 +4,12 @@ import { AuthShell } from "@/components/auth/auth-shell";
 import { RegisterForm } from "@/components/auth/register-form";
 
 export const metadata: Metadata = {
-  title: "Daftar Akun Baru — Codevas",
-  description: "Mulai belajar coding web interaktif dan kumpulkan XP di Codevas.",
+  title: "Daftar Akun Baru Gratis",
+  description:
+    "Mulai belajar coding web interaktif, live playground, kuis, dan kumpulkan XP seru di Codevas. 100% gratis untuk pemula.",
+  alternates: {
+    canonical: "/register",
+  },
 };
 
 export default function RegisterPage() {
