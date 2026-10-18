@@ -12,8 +12,16 @@ export async function POST() {
     value: "",
     httpOnly: true,
     expires: new Date(0),
+    maxAge: 0,
     path: "/",
   });
+
+  // Ensure browser flushes cache and history snapshot
+  response.headers.set(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+  );
+  response.headers.set("Clear-Site-Data", '"cache", "cookies", "storage"');
 
   return response;
 }

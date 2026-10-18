@@ -75,8 +75,13 @@ export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const isApiAdmin = pathname.startsWith("/api/admin");
   const isPageAdmin = pathname.startsWith("/admin");
+  const isProtectedUserPage =
+    pathname === "/dashboard" ||
+    pathname.startsWith("/dashboard/") ||
+    pathname === "/profile" ||
+    pathname.startsWith("/profile/");
 
-  if (!isApiAdmin && !isPageAdmin) {
+  if (!isApiAdmin && !isPageAdmin && !isProtectedUserPage) {
     return NextResponse.next();
   }
 
@@ -90,7 +95,12 @@ export async function proxy(req: NextRequest) {
     }
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(loginUrl);
+    const redirectResponse = NextResponse.redirect(loginUrl);
+    redirectResponse.headers.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+    );
+    return redirectResponse;
   }
 
   const payload = await verifyEdgeToken(cookie.value);
@@ -103,22 +113,44 @@ export async function proxy(req: NextRequest) {
     }
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(loginUrl);
+    const redirectResponse = NextResponse.redirect(loginUrl);
+    redirectResponse.cookies.delete(AUTH_COOKIE_NAME);
+    redirectResponse.headers.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+    );
+    return redirectResponse;
   }
 
-  if (payload.role !== "ADMIN") {
-    if (isApiAdmin) {
-      return NextResponse.json(
-        { success: false, message: "Akses ditolak: Hanya Administrator yang diizinkan." },
-        { status: 403 }
-      );
+  // Admin role check only for admin paths
+  if (isApiAdmin || isPageAdmin) {
+    if (payload.role !== "ADMIN") {
+      if (isApiAdmin) {
+        return NextResponse.json(
+          { success: false, message: "Akses ditolak: Hanya Administrator yang diizinkan." },
+          { status: 403 }
+        );
+      }
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
-    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  // Prevent bfcache for sensitive authenticated pages so Back button never shows stale logged-in UI
+  response.headers.set(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+  );
+  return response;
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/api/admin/:path*",
+    "/dashboard",
+    "/dashboard/:path*",
+    "/profile",
+    "/profile/:path*",
+  ],
 };

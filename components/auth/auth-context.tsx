@@ -76,16 +76,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = useCallback(async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
-      setUser(null);
-      router.push("/login");
-      router.refresh();
     } catch (err) {
       console.error("Logout failed:", err);
+    } finally {
+      setUser(null);
+      // Use replace to erase the authenticated page from the browser history stack
+      window.location.replace("/login");
     }
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     refreshUser();
+
+    // Listen to browser Back/Forward Cache (bfcache) restore
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        refreshUser();
+      }
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
   }, [refreshUser]);
 
   return (

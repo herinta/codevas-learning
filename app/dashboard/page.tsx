@@ -11,6 +11,7 @@ import { LeaderboardWidget } from "@/components/dashboard/leaderboard-widget";
 import { StatsWidget } from "@/components/dashboard/stats-widget";
 import { DailyTargetWidget } from "@/components/dashboard/daily-target-widget";
 import { Footer } from "@/components/layout/footer";
+import { useRouter } from "next/navigation";
 import { ClassCategory } from "@/lib/db/entities";
 import { Compass, BookOpen, Sparkles, ArrowRight, Loader2, Rocket } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
@@ -32,7 +33,8 @@ interface ApiClassItem {
 }
 
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
 
   const [activeCategory, setActiveCategory] = useState<CategoryFilterType>("MY_CLASSES");
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,8 +42,28 @@ export default function DashboardPage() {
   const [myClasses, setMyClasses] = useState<ApiClassItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load real data from APIs
+  // Client-side authentication guard: redirect immediately if logged out
   useEffect(() => {
+    if (!authLoading && !user) {
+      window.location.replace("/login?redirect=/dashboard");
+    }
+  }, [user, authLoading, router]);
+
+  // Handle browser Back/Forward Cache (bfcache)
+  useEffect(() => {
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        window.location.reload();
+      }
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, []);
+
+  // Load real data from APIs only when authenticated
+  useEffect(() => {
+    if (!user) return;
+
     async function fetchDashboardData() {
       setLoading(true);
       try {
@@ -92,6 +114,17 @@ export default function DashboardPage() {
         (c.tagline && c.tagline.toLowerCase().includes(q))
     );
   }, [activeCategory, myClasses, allClasses, searchQuery]);
+
+  if (authLoading || !user) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+        <p className="font-headline font-bold text-sm text-on-surface">
+          Memeriksa sesi pengguna...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background text-on-surface flex flex-col">

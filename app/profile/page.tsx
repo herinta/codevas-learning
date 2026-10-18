@@ -52,7 +52,7 @@ export default function ProfilePage() {
   // Sync initial values from auth user & fetch detailed profile + XP history
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push("/login?redirect=/profile");
+      window.location.replace("/login?redirect=/profile");
     } else if (user) {
       setFullName((user as any).full_name || user.username || "");
       setAvatarUrl(
@@ -72,7 +72,18 @@ export default function ProfilePage() {
         })
         .catch(() => {});
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading]);
+
+  // Handle browser Back/Forward Cache (bfcache)
+  useEffect(() => {
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        window.location.reload();
+      }
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, []);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
