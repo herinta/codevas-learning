@@ -6,6 +6,8 @@ services:
     image: postgres:16-alpine
     container_name: codevas-db
     restart: unless-stopped
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: codevas_db
       POSTGRES_USER: postgres
