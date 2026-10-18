@@ -26,7 +26,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://codevas.dev"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://codevas.my.id"),
   title: {
     default: "Codevas — Belajar Coding Interaktif & Gamifikasi Pemula",
     template: "%s — Codevas",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     "kursus frontend developer gratis",
     "codevas",
   ],
-  authors: [{ name: "Codevas Team", url: "https://codevas.dev" }],
+  authors: [{ name: "Codevas Team", url: "https://codevas.my.id" }],
   creator: "Codevas",
   publisher: "Codevas",
   category: "Education",
@@ -75,17 +75,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://codevas.dev",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://codevas.my.id",
     siteName: "Codevas",
     title: "Codevas — Belajar Coding Interaktif & Gamifikasi Pemula",
     description:
       "Platform belajar coding interaktif dan gamifikasi web development nomor 1 di Indonesia. Kuasai HTML, CSS Flexbox, Grid, dan Frontend langsung di browser secara visual dan gratis!",
     images: [
       {
-        url: "/icons/icon-512.png",
-        width: 512,
-        height: 512,
-        alt: "Codevas — Interactive Coding Platform",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Codevas — Platform Belajar Coding Interaktif & Gamifikasi",
       },
     ],
   },
@@ -94,7 +94,7 @@ export const metadata: Metadata = {
     title: "Codevas — Belajar Coding Interaktif & Gamifikasi Pemula",
     description:
       "Platform belajar coding interaktif dan gamifikasi web development nomor 1 di Indonesia. Kuasai HTML, CSS Flexbox, Grid, dan Frontend langsung di browser secara visual dan gratis!",
-    images: ["/icons/icon-512.png"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
