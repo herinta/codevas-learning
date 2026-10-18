@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -18,6 +18,7 @@ import {
   Calendar,
   AtSign,
   Mail,
+  UploadCloud,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -36,9 +37,11 @@ export default function ProfilePage() {
   const router = useRouter();
   const { user, refreshUser, loading: authLoading } = useAuth();
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [fullName, setFullName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [xpHistory, setXpHistory] = useState<Array<{
@@ -48,6 +51,54 @@ export default function ProfilePage() {
     description: string;
     created_at: string;
   }>>([]);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setErrorMsg("Harap pilih file gambar (JPG, PNG, WebP).");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMsg("Ukuran foto maksimal 5MB.");
+      return;
+    }
+
+    setErrorMsg(null);
+    setSuccessMsg(null);
+    setUploadingImage(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/user/upload-avatar", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Gagal mengunggah foto profil.");
+      }
+
+      setAvatarUrl(data.avatarUrl);
+      setSuccessMsg("Foto profil berhasil diunggah!");
+      await refreshUser();
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("codevas:progress-updated"));
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Gagal mengunggah foto profil.";
+      setErrorMsg(msg);
+      setAvatarUrl(user?.avatar_url || "");
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   // Sync initial values from auth user & fetch detailed profile + XP history
   useEffect(() => {
@@ -211,59 +262,90 @@ export default function ProfilePage() {
                 Foto Profil / Avatar
               </label>
 
+              {/* Hidden file input */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
+                className="hidden"
+              />
+
               <div className="flex flex-col sm:flex-row items-center gap-6">
-                {/* Avatar Preview */}
-                <div className="relative group shrink-0">
-                  <div className="w-24 h-24 rounded-3xl border-4 border-on-surface overflow-hidden bg-primary-fixed flex items-center justify-center shadow-brutal">
+                {/* Avatar Preview & Direct Click Upload */}
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="relative group shrink-0 cursor-pointer"
+                  title="Klik untuk memilih foto dari perangkatmu"
+                >
+                  <div className="w-24 h-24 rounded-3xl border-4 border-on-surface overflow-hidden bg-primary-fixed flex items-center justify-center shadow-brutal relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=user`}
                       alt="Avatar Preview"
                       className="w-full h-full object-cover"
                     />
+                    {uploadingImage && (
+                      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white">
+                        <Loader2 className="w-6 h-6 animate-spin text-white" />
+                        <span className="text-[10px] font-bold mt-1">Mengunggah...</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[11px] font-bold">
+                      Ganti Foto
+                    </div>
                   </div>
-                  <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-surface-container-lowest border-2 border-on-surface flex items-center justify-center text-on-surface shadow-sm">
+                  <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-primary text-white border-2 border-on-surface flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
                     <Camera className="w-4 h-4" />
                   </div>
                 </div>
 
-                {/* Preset Avatar Selection */}
-                <div className="flex-1 space-y-2">
-                  <span className="text-xs font-bold text-on-surface-variant block">
-                    Pilih Preset Avatar Karakter:
-                  </span>
-                  <div className="flex flex-wrap gap-2.5">
-                    {PRESET_AVATARS.map((preset, idx) => (
-                      <button
-                        type="button"
-                        key={idx}
-                        onClick={() => setAvatarUrl(preset)}
-                        className={`w-11 h-11 rounded-2xl border-2 overflow-hidden transition-all cursor-pointer ${
-                          avatarUrl === preset
-                            ? "border-primary ring-3 ring-primary scale-110 shadow-sm"
-                            : "border-on-surface hover:scale-105 opacity-80"
-                        }`}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={preset} alt="preset" className="w-full h-full" />
-                      </button>
-                    ))}
+                {/* Upload action and preset avatar choices */}
+                <div className="flex-1 space-y-3 text-center sm:text-left">
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploadingImage}
+                      className="px-4 py-2 bg-primary hover:bg-[#ec4899] text-white rounded-xl font-headline font-black text-xs border-2 border-on-surface shadow-[0_3px_0_#2e1a28] inline-flex items-center gap-2 hover:scale-102 active:translate-y-0.5 transition-all cursor-pointer disabled:opacity-50"
+                    >
+                      {uploadingImage ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <UploadCloud className="w-4 h-4" />
+                      )}
+                      <span>{uploadingImage ? "Mengunggah..." : "Unggah Foto dari Perangkat"}</span>
+                    </button>
+                    <p className="text-[11px] text-on-surface-variant font-medium mt-1">
+                      Pilih foto JPG, PNG, atau WebP dari komputer / HP kamu (Maks. 5MB).
+                    </p>
                   </div>
-                  <p className="text-[11px] text-on-surface-variant font-medium pt-1">
-                    Atau tempelkan link URL foto profil kamu sendiri di bawah.
-                  </p>
-                </div>
-              </div>
 
-              {/* Custom Avatar URL Input */}
-              <div className="mt-4">
-                <input
-                  type="url"
-                  placeholder="https://example.com/foto-kamu.png"
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="w-full bg-surface-container-low border-2 border-on-surface text-on-surface placeholder:text-outline font-mono text-xs rounded-xl py-2.5 px-3.5 focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+                  {/* Preset Avatar Selection */}
+                  <div className="pt-2 border-t border-on-surface/10">
+                    <span className="text-[11px] font-bold text-on-surface-variant block mb-1.5">
+                      Atau pilih karakter preset:
+                    </span>
+                    <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+                      {PRESET_AVATARS.map((preset, idx) => (
+                        <button
+                          type="button"
+                          key={idx}
+                          onClick={() => setAvatarUrl(preset)}
+                          className={`w-10 h-10 rounded-2xl border-2 overflow-hidden transition-all cursor-pointer ${
+                            avatarUrl === preset
+                              ? "border-primary ring-3 ring-primary scale-110 shadow-sm"
+                              : "border-on-surface hover:scale-105 opacity-80"
+                          }`}
+                          title="Gunakan avatar karakter ini"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={preset} alt="preset" className="w-full h-full" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

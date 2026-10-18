@@ -45,3 +45,6 @@ docker/tunnel-creds.json
 
 silabus_live_code_curriculum*.md
 qa_test_plan_detailed.md
+
+# uploaded user media
+/public/uploads/
