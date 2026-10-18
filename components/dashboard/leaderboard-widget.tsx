@@ -35,7 +35,7 @@ export const LeaderboardWidget: React.FC = () => {
     else setLoading(true);
 
     try {
-      const res = await fetch("/api/leaderboard?limit=5", { cache: "no-store" });
+      const res = await fetch("/api/leaderboard?limit=5");
       if (res.ok) {
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {
@@ -60,7 +60,7 @@ export const LeaderboardWidget: React.FC = () => {
     setShowFullModal(true);
     setFullLoading(true);
     try {
-      const res = await fetch("/api/leaderboard?limit=25", { cache: "no-store" });
+      const res = await fetch("/api/leaderboard?limit=25");
       if (res.ok) {
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {

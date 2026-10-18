@@ -62,37 +62,45 @@ export default function DashboardPage() {
 
   // Load real data from APIs only when authenticated
   useEffect(() => {
-    if (!user) return;
+    if (!user?.id) return;
+
+    let isMounted = true;
 
     async function fetchDashboardData() {
       setLoading(true);
       try {
-        // 1. Fetch all classes
-        const resClasses = await fetch("/api/classes", { cache: "no-store" });
+        // Parallel fetch classes and enrolled classes
+        const [resClasses, resMyClasses] = await Promise.all([
+          fetch("/api/classes"),
+          fetch("/api/user/my-classes", { cache: "no-store" }),
+        ]);
+
         if (resClasses.ok) {
           const json = await resClasses.json();
-          if (json.success && Array.isArray(json.data)) {
+          if (isMounted && json.success && Array.isArray(json.data)) {
             setAllClasses(json.data);
           }
         }
 
-        // 2. Fetch user's enrolled classes
-        const resMyClasses = await fetch("/api/user/my-classes", { cache: "no-store" });
         if (resMyClasses.ok) {
           const json = await resMyClasses.json();
-          if (json.success && Array.isArray(json.data)) {
+          if (isMounted && json.success && Array.isArray(json.data)) {
             setMyClasses(json.data);
           }
         }
       } catch (err) {
         console.error("Gagal memuat data dashboard:", err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     }
 
     fetchDashboardData();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user?.id]);
 
   // Filtered tracks
   const displayedTracks = useMemo(() => {

@@ -55,15 +55,18 @@ export async function GET(req: NextRequest) {
       isCurrentUser: currentUserId ? item.id === currentUserId : false,
     }));
 
-    return NextResponse.json(
-      {
-        success: true,
-        data,
-        currentUserRank,
-        currentUser: currentUserData,
-      },
-      { status: 200 }
+    const response = NextResponse.json({
+      success: true,
+      data,
+      currentUserRank,
+      currentUser: currentUserData,
+    });
+    // Cache for 15s in browser, revalidate in background up to 60s
+    response.headers.set(
+      "Cache-Control",
+      "private, max-age=15, stale-while-revalidate=60"
     );
+    return response;
   } catch (error) {
     console.error("[API GET /api/leaderboard Error]:", error);
     return NextResponse.json(

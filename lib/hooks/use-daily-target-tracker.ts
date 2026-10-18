@@ -17,10 +17,11 @@ export function useDailyTargetTracker() {
   const unsyncedSecondsRef = useRef<number>(0);
   const isSyncingRef = useRef<boolean>(false);
 
-  // 1. Initial fetch from API
+  // 1. Initial fetch from API (only for authenticated users)
   const fetchStatus = useCallback(async () => {
+    if (!user?.id) return;
     try {
-      const res = await fetch("/api/user/daily-target", { cache: "no-store" });
+      const res = await fetch("/api/user/daily-target");
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.data) {
@@ -31,11 +32,13 @@ export function useDailyTargetTracker() {
     } catch (err) {
       console.warn("[DailyTarget] Failed to fetch status:", err);
     }
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => {
-    fetchStatus();
-  }, [fetchStatus, user]);
+    if (user?.id) {
+      fetchStatus();
+    }
+  }, [fetchStatus, user?.id]);
 
   // 2. Sync accumulated seconds to server
   const syncToServer = useCallback(async () => {
@@ -111,21 +114,29 @@ export function useDailyTargetTracker() {
 
     // Sync when tab visibility changes or page unloads
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
+      if (document.visibilityState === "hidden" && unsyncedSecondsRef.current > 0) {
+        syncToServer();
+      }
+    };
+
+    const handleBeforeUnload = () => {
+      if (unsyncedSecondsRef.current > 0) {
         syncToServer();
       }
     };
 
     window.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("beforeunload", syncToServer);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
       clearInterval(interval);
       window.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("beforeunload", syncToServer);
-      syncToServer();
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (unsyncedSecondsRef.current > 0) {
+        syncToServer();
+      }
     };
-  }, [user, syncToServer]);
+  }, [user?.id, syncToServer]);
 
   // Compute live local percentage and formatted time
   const targetSeconds = status?.targetSeconds || 600;

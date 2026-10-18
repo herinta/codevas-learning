@@ -20,10 +20,18 @@ export async function GET(request: NextRequest) {
 
     const classes = await ClassService.getAllClasses(userId);
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: classes,
     });
+    // Cache for 30s in browser, revalidate in background up to 5 minutes
+    response.headers.set(
+      "Cache-Control",
+      userId
+        ? "private, max-age=30, stale-while-revalidate=300"
+        : "public, max-age=60, s-maxage=300, stale-while-revalidate=600"
+    );
+    return response;
   } catch (error: unknown) {
     if (error && typeof error === "object" && "digest" in error) {
       throw error;

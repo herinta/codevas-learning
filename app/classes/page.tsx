@@ -46,7 +46,7 @@ export default function AllClassesCatalogPage() {
   useEffect(() => {
     async function fetchClasses() {
       try {
-        const res = await fetch("/api/classes", { cache: "no-store" });
+        const res = await fetch("/api/classes");
         if (res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.data)) {
