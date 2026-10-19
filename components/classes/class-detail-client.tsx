@@ -183,42 +183,42 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
     course.completedLevels === course.totalLevels && course.totalLevels > 0;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-on-surface">
+    <div className="min-h-screen flex flex-col bg-[#FFFDF7] text-slate-900">
       <Navbar />
 
       {/* Top Breadcrumb & Status Navigation */}
-      <div className="w-full bg-surface-container-low border-b-2 border-outline-variant pt-24 pb-3">
+      <div className="w-full bg-white/90 backdrop-blur-md border-b-2 border-slate-900 pt-24 pb-3 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
           <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap scrollbar-none py-1">
             <Link
               href={user ? "/dashboard/classes" : "/#classes"}
-              className="inline-flex items-center gap-1 font-bold text-primary hover:underline hover:scale-[1.02] transition-transform"
+              className="inline-flex items-center gap-1 font-display font-black text-xs text-[#EF4444] hover:underline hover:scale-[1.02] transition-transform"
             >
               <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
               <span>{user ? "Silabus Dashboard" : "Katalog Silabus"}</span>
             </Link>
-            <span className="text-outline">/</span>
-            <span className="text-on-surface-variant font-medium">Kelas</span>
-            <span className="text-outline">/</span>
-            <span className="text-secondary font-bold truncate max-w-xs sm:max-w-sm">
+            <span className="text-slate-300 font-bold">/</span>
+            <span className="text-slate-500 font-medium">Kelas</span>
+            <span className="text-slate-300 font-bold">/</span>
+            <span className="text-slate-900 font-bold truncate max-w-xs sm:max-w-sm">
               {course.title}
             </span>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary bg-secondary-fixed px-3 py-1 rounded-full border border-secondary-fixed-dim">
-              <ShieldCheck className="w-3.5 h-3.5 text-secondary" />
+            <span className="inline-flex items-center gap-1.5 text-xs font-display font-black text-slate-900 bg-[#FEF08A] px-3 py-1 rounded-full border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
+              <ShieldCheck className="w-3.5 h-3.5 text-slate-900" />
               <span>Kurikulum Interaktif 2026</span>
             </span>
 
             {/* View Mode Switcher */}
-            <div className="inline-flex items-center p-0.5 bg-surface-container-high rounded-xl border border-on-surface">
+            <div className="inline-flex items-center p-0.5 bg-slate-100 rounded-xl border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
               <button
                 onClick={() => setViewMode("path")}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-headline font-bold transition-colors cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-display font-black transition-colors cursor-pointer ${
                   viewMode === "path"
-                    ? "bg-primary text-white shadow-xs"
-                    : "text-on-surface-variant hover:text-on-surface"
+                    ? "bg-[#EF4444] text-white shadow-xs"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
                 title="Tampilan Peta Mengular (Duolingo Style)"
               >
@@ -227,10 +227,10 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-headline font-bold transition-colors cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-display font-black transition-colors cursor-pointer ${
                   viewMode === "list"
-                    ? "bg-primary text-white shadow-xs"
-                    : "text-on-surface-variant hover:text-on-surface"
+                    ? "bg-[#EF4444] text-white shadow-xs"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
                 title="Tampilan Ringkas Daftar Silabus"
               >
@@ -243,28 +243,28 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
       </div>
 
       {/* COMPACT GAMIFIED CLASS BANNER */}
-      <section className="bg-gradient-to-b from-surface-container-low via-surface to-background border-b-2 border-outline-variant py-6">
+      <section className="bg-gradient-to-r from-amber-50/80 via-sky-50/70 to-rose-50/80 border-b-3 border-slate-900 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             {/* Title & Tagline */}
             <div className="space-y-2 max-w-2xl">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-3 py-0.5 rounded-full border-2 border-on-surface bg-primary text-white font-headline font-black text-xs">
+                <span className="px-3 py-0.5 rounded-full border-2 border-slate-900 bg-[#EF4444] text-white font-display font-black text-xs shadow-[0_2px_0_#991b1b]">
                   {course.category.replace("_", " ")}
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full border border-on-surface bg-surface-container-high font-mono text-xs font-bold">
+                <span className="px-2.5 py-0.5 rounded-full border-2 border-slate-900 bg-[#FEF08A] font-mono text-xs font-black text-slate-900 shadow-[0_2px_0_#0f172a]">
                   {course.difficulty_level}
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full border border-on-surface bg-surface-container-high font-mono text-xs font-bold">
+                <span className="px-2.5 py-0.5 rounded-full border-2 border-slate-900 bg-white font-mono text-xs font-bold text-slate-900 shadow-[0_2px_0_#0f172a]">
                   ⏱️ {course.estimated_time}
                 </span>
               </div>
 
-              <h1 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-on-surface tracking-tight">
+              <h1 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-slate-900 tracking-tight">
                 {course.title}
               </h1>
 
-              <p className="text-sm sm:text-base text-on-surface-variant font-medium leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed">
                 {course.description || course.tagline}
               </p>
             </div>
@@ -272,11 +272,11 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
             {/* Quick Stats Ticker & CTA */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
               {/* Gamification Pills */}
-              <div className="flex items-center gap-3 bg-surface-container-lowest border-2 border-on-surface p-3 rounded-2xl shadow-[0_3px_0_#2e1a28]">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 rounded-xl border border-amber-200">
+              <div className="flex items-center gap-3 bg-white border-3 border-slate-900 p-3 rounded-2xl shadow-[0_4px_0_#0f172a]">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FEF08A]/60 rounded-xl border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
                   <Flame className="w-4 h-4 text-amber-500 fill-amber-400" />
                   <div className="text-left">
-                    <div className="text-[10px] font-bold text-amber-800 uppercase leading-none">
+                    <div className="text-[10px] font-black text-amber-900 uppercase leading-none">
                       XP Reward
                     </div>
                     <div className="text-xs font-mono font-black text-amber-950">
@@ -285,15 +285,15 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                   </div>
                 </div>
 
-                <div className="w-px h-8 bg-outline-variant" />
+                <div className="w-0.5 h-8 bg-slate-200" />
 
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-secondary-fixed/50 rounded-xl border border-secondary-fixed-dim">
-                  <BookOpen className="w-4 h-4 text-secondary" />
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-100/70 rounded-xl border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
+                  <BookOpen className="w-4 h-4 text-sky-800" />
                   <div className="text-left">
-                    <div className="text-[10px] font-bold text-secondary uppercase leading-none">
+                    <div className="text-[10px] font-black text-sky-900 uppercase leading-none">
                       Progress
                     </div>
-                    <div className="text-xs font-mono font-black text-secondary">
+                    <div className="text-xs font-mono font-black text-sky-950">
                       {course.completedLevels} / {course.totalLevels} Level
                     </div>
                   </div>
@@ -304,14 +304,14 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
               {isComingSoon ? (
                 <button
                   disabled
-                  className="px-5 py-3 rounded-2xl bg-surface-container-high text-on-surface-variant font-headline font-bold text-sm border-2 border-on-surface cursor-not-allowed"
+                  className="px-5 py-3 rounded-2xl bg-slate-100 text-slate-400 font-display font-black text-sm border-2 border-slate-300 cursor-not-allowed"
                 >
                   Segera Hadir
                 </button>
               ) : isEnrolled ? (
                 firstActiveChallenge ? (
                   <Link href={`/classes/${course.id}/learn/${firstActiveChallenge.id}`}>
-                    <button className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-primary text-white font-headline font-black text-sm border-2 border-on-surface shadow-[0_4px_0_#2e1a28] flex items-center justify-center gap-2 hover:scale-[1.02] active:translate-y-0.5 transition-transform cursor-pointer">
+                    <button className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-sm border-3 border-slate-900 shadow-[0_4px_0_#991b1b] flex items-center justify-center gap-2 hover:scale-[1.02] active:translate-y-1 active:shadow-none transition-all cursor-pointer">
                       <Play className="w-4 h-4 fill-white" />
                       <span>Lanjutkan Level ({firstActiveChallenge.order_index})</span>
                     </button>
@@ -319,7 +319,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                 ) : (
                   <button
                     disabled
-                    className="px-6 py-3 rounded-2xl bg-emerald-500 text-white font-headline font-black text-sm border-2 border-on-surface flex items-center justify-center gap-1.5"
+                    className="px-6 py-3 rounded-2xl bg-emerald-500 text-white font-display font-black text-sm border-3 border-slate-900 shadow-[0_4px_0_#065f46] flex items-center justify-center gap-1.5"
                   >
                     <Trophy className="w-4 h-4" />
                     <span>Semua Selesai!</span>
@@ -329,7 +329,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                 <button
                   onClick={handleEnroll}
                   disabled={enrolling}
-                  className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-primary hover:bg-[#ec4899] text-white font-headline font-black text-sm border-2 border-on-surface shadow-[0_4px_0_#2e1a28] flex items-center justify-center gap-2 hover:scale-[1.02] active:translate-y-0.5 transition-transform cursor-pointer disabled:opacity-60"
+                  className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-sm border-3 border-slate-900 shadow-[0_4px_0_#991b1b] flex items-center justify-center gap-2 hover:scale-[1.02] active:translate-y-1 active:shadow-none transition-all cursor-pointer disabled:opacity-60"
                 >
                   {enrolling ? (
                     <>
@@ -349,17 +349,17 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
 
           {/* Progress Bar Ribbon */}
           {isEnrolled && (
-            <div className="mt-5 pt-4 border-t border-outline-variant/60 flex items-center gap-4">
-              <span className="text-xs font-mono font-black text-on-surface shrink-0">
+            <div className="mt-5 pt-4 border-t-2 border-slate-200 flex items-center gap-4">
+              <span className="text-xs font-mono font-black text-slate-900 shrink-0">
                 {course.progressPercent}% Dikuasai
               </span>
-              <div className="flex-1 bg-surface-container-highest rounded-full h-3 border border-on-surface overflow-hidden">
+              <div className="flex-1 bg-slate-200 rounded-full h-3 border-2 border-slate-900 overflow-hidden">
                 <div
-                  className="bg-primary h-full transition-all duration-500 rounded-full"
+                  className="bg-[#EF4444] h-full transition-all duration-500 rounded-full"
                   style={{ width: `${course.progressPercent}%` }}
                 />
               </div>
-              <span className="text-xs font-bold text-on-surface-variant shrink-0 hidden sm:inline">
+              <span className="text-xs font-bold text-slate-600 shrink-0 hidden sm:inline">
                 {course.completedLevels} dari {course.totalLevels} quest selesai
               </span>
             </div>
@@ -383,15 +383,15 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
           <div className="lg:col-span-7 xl:col-span-8 flex flex-col items-center">
             {viewMode === "path" ? (
               /* DUOLINGO WINDING PATH BOARD */
-              <div className="w-full bg-surface-container-lowest border-3 sm:border-4 border-on-surface rounded-3xl p-3 sm:p-8 md:p-10 shadow-[0_6px_0_#2e1a28] sm:shadow-[0_8px_0_#2e1a28] relative overflow-hidden">
+              <div className="w-full bg-white border-3 sm:border-4 border-slate-900 rounded-3xl p-3 sm:p-8 md:p-10 shadow-[0_6px_0_#0f172a] sm:shadow-[0_8px_0_#0f172a] relative overflow-hidden">
                 {/* Board Unit Header */}
-                <div className="bg-gradient-to-r from-primary to-secondary text-white p-4 sm:p-5 rounded-2xl border-3 border-on-surface shadow-[0_4px_0_#2e1a28] mb-8 flex items-center justify-between">
+                <div className="bg-[#1E3A8A] text-white p-4 sm:p-5 rounded-2xl border-3 border-slate-900 shadow-[0_4px_0_#0f172a] mb-8 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-white/20 border-2 border-white flex items-center justify-center font-black">
                       <Flag className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <div className="text-[11px] font-black uppercase tracking-wider text-pink-100">
+                      <div className="text-[11px] font-display font-black uppercase tracking-wider text-sky-200">
                         Peta Petualangan
                       </div>
                       <h2 className="font-display font-black text-lg sm:text-xl text-white">
@@ -400,22 +400,22 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                     </div>
                   </div>
 
-                  <span className="text-xs font-headline font-black bg-white text-on-surface px-3 py-1 rounded-full border border-on-surface shadow-xs shrink-0">
+                  <span className="text-xs font-display font-black bg-[#FEF08A] text-slate-900 px-3 py-1 rounded-full border-2 border-slate-900 shadow-[0_2px_0_#0f172a] shrink-0">
                     {course.challenges.length} Quest
                   </span>
                 </div>
 
                 {/* Decorative floating game background code chips */}
-                <div className="absolute top-36 left-4 text-[10px] font-mono text-outline/30 select-none pointer-events-none">
+                <div className="absolute top-36 left-4 text-[10px] font-mono text-slate-300 select-none pointer-events-none">
                   &lt;section&gt;
                 </div>
-                <div className="absolute top-80 right-6 text-[10px] font-mono text-outline/30 select-none pointer-events-none">
+                <div className="absolute top-80 right-6 text-[10px] font-mono text-slate-300 select-none pointer-events-none">
                   display: flex;
                 </div>
-                <div className="absolute top-[520px] left-6 text-[10px] font-mono text-outline/30 select-none pointer-events-none">
+                <div className="absolute top-[520px] left-6 text-[10px] font-mono text-slate-300 select-none pointer-events-none">
                   &lt;/div&gt;
                 </div>
-                <div className="absolute top-[800px] right-8 text-[10px] font-mono text-outline/30 select-none pointer-events-none">
+                <div className="absolute top-[800px] right-8 text-[10px] font-mono text-slate-300 select-none pointer-events-none">
                   gap: 1rem;
                 </div>
 
@@ -436,8 +436,8 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                         <stop offset="100%" stopColor="#059669" />
                       </linearGradient>
                       <linearGradient id="activePulseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#e040a0" />
-                        <stop offset="100%" stopColor="#7c52aa" />
+                        <stop offset="0%" stopColor="#EF4444" />
+                        <stop offset="100%" stopColor="#DC2626" />
                       </linearGradient>
                     </defs>
 
@@ -445,7 +445,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                     <path
                       d={pathD}
                       fill="none"
-                      stroke="#2e1a28"
+                      stroke="#0f172a"
                       strokeWidth="22"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -455,7 +455,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                     <path
                       d={pathD}
                       fill="none"
-                      stroke="#f1e6f2"
+                      stroke="#f1f5f9"
                       strokeWidth="14"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -465,7 +465,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                     <path
                       d={pathD}
                       fill="none"
-                      stroke="#d8c5db"
+                      stroke="#94a3b8"
                       strokeWidth="4"
                       strokeDasharray="8 8"
                       strokeLinecap="round"
@@ -477,7 +477,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                     className="absolute -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center"
                     style={{ top: "32px", left: `${(CANVAS_WIDTH / 2 / CANVAS_WIDTH) * 100}%` }}
                   >
-                    <span className="px-3.5 py-1 bg-surface-container-high border-2 border-on-surface rounded-full text-[11px] font-headline font-black text-on-surface shadow-[0_2px_0_#2e1a28] flex items-center gap-1.5">
+                    <span className="px-3.5 py-1 bg-[#FEF08A] border-2 border-slate-900 rounded-full text-[11px] font-display font-black text-slate-900 shadow-[0_2px_0_#0f172a] flex items-center gap-1.5">
                       <span>🚩</span>
                       <span>Mulai Petualangan</span>
                     </span>
@@ -505,11 +505,11 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                         {/* DUOLINGO-STYLE FLOATING SPEECH BUBBLE FOR ACTIVE LEVEL */}
                         {isInProgress && (
                           <div className="absolute -top-12 z-30 animate-bounce flex flex-col items-center pointer-events-none">
-                            <div className="px-3 py-1 bg-on-surface text-white rounded-xl border-2 border-white shadow-md font-headline font-black text-[11px] flex items-center gap-1 whitespace-nowrap">
-                              <Sparkles className="w-3 h-3 text-amber-400" />
+                            <div className="px-3 py-1 bg-slate-900 text-white rounded-xl border-2 border-white shadow-[0_3px_0_#0f172a] font-display font-black text-[11px] flex items-center gap-1 whitespace-nowrap">
+                              <Sparkles className="w-3 h-3 text-[#FEF08A]" />
                               <span>QUEST AKTIF!</span>
                             </div>
-                            <div className="w-0 h-0 border-x-4 border-x-transparent border-t-6 border-t-on-surface" />
+                            <div className="w-0 h-0 border-x-4 border-x-transparent border-t-6 border-t-slate-900" />
                           </div>
                         )}
 
@@ -527,13 +527,13 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                           onClick={() => {
                             setSelectedChallengeId(ch.id);
                           }}
-                          className={`group relative w-18 h-18 sm:w-20 sm:h-20 rounded-full border-4 border-on-surface flex flex-col items-center justify-center transition-all cursor-pointer ${
+                          className={`group relative w-18 h-18 sm:w-20 sm:h-20 rounded-full border-4 border-slate-900 flex flex-col items-center justify-center transition-all cursor-pointer ${
                             isCompleted
                               ? "bg-gradient-to-b from-emerald-400 to-emerald-600 shadow-[0_8px_0_#065f46] hover:shadow-[0_10px_0_#065f46] active:translate-y-2 active:shadow-none"
                               : isInProgress
-                              ? "bg-gradient-to-b from-primary via-[#e040a0] to-[#be185d] shadow-[0_8px_0_#881337] hover:shadow-[0_10px_0_#881337] ring-4 ring-primary/40 ring-offset-2 active:translate-y-2 active:shadow-none"
-                              : "bg-surface-container-high text-on-surface-variant/40 shadow-[0_6px_0_#cbd5e1] hover:shadow-[0_8px_0_#cbd5e1] cursor-pointer"
-                          } ${isSelected ? "ring-4 ring-on-surface" : ""}`}
+                              ? "bg-gradient-to-b from-[#EF4444] via-[#DC2626] to-[#B91C1C] shadow-[0_8px_0_#991b1b] hover:shadow-[0_10px_0_#991b1b] ring-4 ring-[#EF4444]/40 ring-offset-2 active:translate-y-2 active:shadow-none"
+                              : "bg-slate-200 text-slate-400 shadow-[0_6px_0_#94a3b8] hover:shadow-[0_8px_0_#94a3b8] cursor-pointer"
+                          } ${isSelected ? "ring-4 ring-slate-900" : ""}`}
                           title={`${ch.title} - ${isCompleted ? "Selesai" : isInProgress ? "Aktif" : "Terkunci"}`}
                         >
                           {/* Inner Bevel Highlight */}
@@ -545,17 +545,17 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                           ) : isInProgress ? (
                             <Play className="w-7 h-7 text-white fill-white ml-0.5 drop-shadow-sm group-hover:scale-110 transition-transform" />
                           ) : (
-                            <Lock className="w-6 h-6 text-on-surface-variant/50" />
+                            <Lock className="w-6 h-6 text-slate-400" />
                           )}
 
                           {/* Level Number Pill */}
                           <span
-                            className={`absolute -bottom-2 text-[10px] font-mono font-black px-2 py-0.5 rounded-full border-2 border-on-surface shadow-xs ${
+                            className={`absolute -bottom-2 text-[10px] font-mono font-black px-2 py-0.5 rounded-full border-2 border-slate-900 shadow-xs ${
                               isCompleted
                                 ? "bg-emerald-100 text-emerald-950"
                                 : isInProgress
-                                ? "bg-amber-100 text-amber-950"
-                                : "bg-surface-container-highest text-on-surface-variant"
+                                ? "bg-[#FEF08A] text-slate-900"
+                                : "bg-slate-300 text-slate-700"
                             }`}
                           >
                             Lv.{idx + 1}
@@ -563,8 +563,8 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                         </button>
 
                         {/* Title pill below */}
-                        <div className="mt-3.5 text-center max-w-[135px] bg-surface-container-lowest/95 backdrop-blur-xs px-2.5 py-1 rounded-xl border-2 border-on-surface shadow-[0_2px_0_#2e1a28] flex flex-col items-center">
-                          <p className="font-headline font-black text-[11px] text-on-surface truncate w-full">
+                        <div className="mt-3.5 text-center max-w-[135px] bg-white px-2.5 py-1 rounded-xl border-2 border-slate-900 shadow-[0_2px_0_#0f172a] flex flex-col items-center">
+                          <p className="font-display font-black text-[11px] text-slate-900 truncate w-full">
                             {ch.title.split(":")[1]?.trim() || ch.title}
                           </p>
                           <span className="text-[10px] font-mono font-bold text-amber-800">
@@ -584,26 +584,26 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                     }}
                   >
                     <div
-                      className={`w-22 h-22 sm:w-24 sm:h-24 rounded-3xl border-4 border-on-surface flex flex-col items-center justify-center transition-all ${
+                      className={`w-22 h-22 sm:w-24 sm:h-24 rounded-3xl border-4 border-slate-900 flex flex-col items-center justify-center transition-all ${
                         isAllCompleted
-                          ? "bg-gradient-to-b from-amber-300 via-amber-400 to-amber-500 shadow-[0_8px_0_#92400e] ring-4 ring-amber-300/50 animate-pulse"
-                          : "bg-surface-container-high shadow-[0_6px_0_#cbd5e1] opacity-75"
+                          ? "bg-gradient-to-b from-[#FEF08A] via-[#FACC15] to-amber-500 shadow-[0_8px_0_#0f172a] ring-4 ring-amber-300/50 animate-pulse"
+                          : "bg-slate-100 shadow-[0_6px_0_#94a3b8] opacity-75"
                       }`}
                     >
                       <Trophy
                         className={`w-10 h-10 ${
                           isAllCompleted
                             ? "text-amber-950 fill-amber-300"
-                            : "text-on-surface-variant/50"
+                            : "text-slate-400"
                         }`}
                       />
-                      <span className="text-[10px] font-headline font-black mt-1 text-on-surface">
+                      <span className="text-[10px] font-display font-black mt-1 text-slate-900">
                         {isAllCompleted ? "TAMAT!" : "MASTERY"}
                       </span>
                     </div>
 
                     <div className="mt-3 text-center">
-                      <span className="px-3 py-1 bg-surface-container-lowest border-2 border-on-surface rounded-full text-xs font-headline font-black text-on-surface shadow-xs">
+                      <span className="px-3 py-1 bg-white border-2 border-slate-900 rounded-full text-xs font-display font-black text-slate-900 shadow-[0_2px_0_#0f172a]">
                         {isAllCompleted ? "🏆 Sertifikat Terbuka!" : "Puncak Tantangan"}
                       </span>
                     </div>
@@ -612,10 +612,10 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
 
                 {/* INTERACTIVE POPOVER CARD DOCKED AT BOTTOM OF GAME BOARD */}
                 {selectedChallenge && (
-                  <div className="mt-12 bg-surface-container-high border-3 border-on-surface rounded-2xl p-5 shadow-[0_6px_0_#2e1a28] relative">
+                  <div className="mt-12 bg-slate-50 border-3 border-slate-900 rounded-2xl p-5 shadow-[0_6px_0_#0f172a] relative">
                     <button
                       onClick={() => setSelectedChallengeId(null)}
-                      className="absolute top-3 right-3 p-1 rounded-lg hover:bg-surface-container-highest text-on-surface-variant"
+                      className="absolute top-3 right-3 p-1 rounded-lg hover:bg-slate-200 text-slate-600 transition-colors"
                       title="Tutup dialog"
                     >
                       <X className="w-4 h-4" />
@@ -624,19 +624,19 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 bg-primary text-white text-[10px] font-mono font-black rounded-md">
+                          <span className="px-2 py-0.5 bg-slate-900 text-white text-[10px] font-mono font-black rounded-md">
                             LEVEL {selectedChallenge.order_index}
                           </span>
-                          <span className="text-[11px] font-mono font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full">
+                          <span className="text-[11px] font-mono font-bold text-amber-950 bg-[#FEF08A] border-2 border-slate-900 px-2 py-0.5 rounded-full shadow-[0_1px_0_#0f172a]">
                             +{selectedChallenge.xp_reward} XP
                           </span>
                           <span
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full border-2 ${
                               selectedChallenge.userStatus === "COMPLETED"
-                                ? "bg-emerald-100 text-emerald-800"
+                                ? "bg-emerald-100 text-emerald-800 border-emerald-500"
                                 : selectedChallenge.userStatus === "IN_PROGRESS"
-                                ? "bg-pink-100 text-pink-800"
-                                : "bg-gray-100 text-gray-700"
+                                ? "bg-rose-100 text-rose-800 border-rose-500"
+                                : "bg-slate-200 text-slate-700 border-slate-400"
                             }`}
                           >
                             {selectedChallenge.userStatus === "COMPLETED"
@@ -647,11 +647,11 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                           </span>
                         </div>
 
-                        <h3 className="font-display font-black text-base sm:text-lg text-on-surface">
+                        <h3 className="font-display font-black text-base sm:text-lg text-slate-900">
                           {selectedChallenge.title}
                         </h3>
 
-                        <p className="text-xs sm:text-sm text-on-surface-variant font-medium leading-relaxed max-w-xl">
+                        <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed max-w-xl">
                           {selectedChallenge.instruction}
                         </p>
                       </div>
@@ -661,18 +661,18 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                           <button
                             onClick={handleEnroll}
                             disabled={enrolling}
-                            className="px-5 py-2.5 bg-primary text-white rounded-xl font-headline font-bold text-xs border-2 border-on-surface shadow-[0_3px_0_#2e1a28] hover:scale-105 active:translate-y-0.5 transition-transform cursor-pointer"
+                            className="px-5 py-2.5 bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-xl font-display font-black text-xs border-2 border-slate-900 shadow-[0_3px_0_#991b1b] hover:scale-105 active:translate-y-0.5 transition-transform cursor-pointer"
                           >
                             Daftar Kelas Dulu
                           </button>
                         ) : selectedChallenge.userStatus === "LOCKED" ? (
-                          <div className="px-4 py-2 bg-surface-container-highest text-on-surface-variant rounded-xl border-2 border-on-surface text-xs font-bold flex items-center gap-1.5">
+                          <div className="px-4 py-2 bg-slate-200 text-slate-600 rounded-xl border-2 border-slate-900 text-xs font-bold flex items-center gap-1.5">
                             <Lock className="w-3.5 h-3.5" />
                             <span>Selesaikan level sebelumnya</span>
                           </div>
                         ) : (
                           <Link href={`/classes/${course.id}/learn/${selectedChallenge.id}`}>
-                            <button className="px-5 py-2.5 bg-primary text-white rounded-xl font-headline font-black text-xs border-2 border-on-surface shadow-[0_3px_0_#2e1a28] hover:scale-105 active:translate-y-0.5 transition-transform cursor-pointer flex items-center gap-2">
+                            <button className="px-5 py-2.5 bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-xl font-display font-black text-xs border-2 border-slate-900 shadow-[0_3px_0_#991b1b] hover:scale-105 active:translate-y-0.5 transition-transform cursor-pointer flex items-center gap-2">
                               {selectedChallenge.userStatus === "COMPLETED" ? (
                                 <>
                                   <RotateCcw className="w-3.5 h-3.5" />
@@ -695,12 +695,12 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
             ) : (
               /* COMPACT SYLLABUS LIST VIEW (ACCESSIBILITY / ALTERNATIVE MODE) */
               <div className="w-full space-y-4">
-                <div className="bg-surface-container-lowest border-4 border-on-surface rounded-3xl p-6 shadow-[0_6px_0_#2e1a28] mb-4">
-                  <h2 className="font-display font-black text-xl text-on-surface flex items-center gap-2">
-                    <BookOpen className="w-5 h-5 text-primary" />
+                <div className="bg-white border-3 sm:border-4 border-slate-900 rounded-3xl p-6 shadow-[0_6px_0_#0f172a] mb-4">
+                  <h2 className="font-display font-black text-xl text-slate-900 flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-[#EF4444]" />
                     <span>Daftar Silabus Seluruh Level</span>
                   </h2>
-                  <p className="text-xs text-on-surface-variant font-medium mt-1">
+                  <p className="text-xs text-slate-600 font-medium mt-1">
                     Pelajari setiap konsep langkah demi langkah untuk membangun keahlian praktis.
                   </p>
                 </div>
@@ -713,22 +713,22 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                   return (
                     <div
                       key={ch.id}
-                      className={`p-5 rounded-2xl border-3 border-on-surface flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+                      className={`p-5 rounded-2xl border-3 border-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
                         isCompleted
-                          ? "bg-emerald-50 border-emerald-600 shadow-[0_3px_0_#059669]"
+                          ? "bg-emerald-50 shadow-[0_4px_0_#065f46]"
                           : isInProgress
-                          ? "bg-surface-container-lowest border-primary shadow-[0_4px_0_#2e1a28] scale-[1.01]"
-                          : "bg-surface-container-low opacity-75"
+                          ? "bg-white shadow-[0_6px_0_#0f172a] scale-[1.01]"
+                          : "bg-slate-100 opacity-75"
                       }`}
                     >
                       <div className="flex items-start gap-3.5">
                         <div
-                          className={`w-10 h-10 rounded-xl border-2 border-on-surface flex items-center justify-center font-headline font-black text-sm shrink-0 ${
+                          className={`w-10 h-10 rounded-xl border-2 border-slate-900 flex items-center justify-center font-display font-black text-sm shrink-0 ${
                             isCompleted
                               ? "bg-emerald-500 text-white"
                               : isInProgress
-                              ? "bg-primary text-white"
-                              : "bg-surface-container-high text-on-surface-variant"
+                              ? "bg-[#EF4444] text-white"
+                              : "bg-slate-200 text-slate-500"
                           }`}
                         >
                           {isCompleted ? (
@@ -742,14 +742,14 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
 
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="font-display font-black text-base text-on-surface">
+                            <h3 className="font-display font-black text-base text-slate-900">
                               {ch.title}
                             </h3>
-                            <span className="text-[11px] font-mono font-bold text-amber-700 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full">
+                            <span className="text-[11px] font-mono font-bold text-amber-950 bg-[#FEF08A] border-2 border-slate-900 px-2 py-0.5 rounded-full shadow-[0_1px_0_#0f172a]">
                               +{ch.xp_reward} XP
                             </span>
                           </div>
-                          <p className="text-xs sm:text-sm text-on-surface-variant font-medium mt-1 max-w-xl leading-relaxed">
+                          <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1 max-w-xl leading-relaxed">
                             {ch.instruction}
                           </p>
                         </div>
@@ -757,13 +757,13 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
 
                       <div className="shrink-0 flex items-center gap-2">
                         {isLocked ? (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-high text-on-surface-variant text-xs font-bold rounded-xl border border-on-surface">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-200 text-slate-600 text-xs font-bold rounded-xl border-2 border-slate-900">
                             <Lock className="w-3.5 h-3.5" />
                             <span>{isEnrolled ? "Terkunci" : "Daftar Dulu"}</span>
                           </span>
                         ) : (
                           <Link href={`/classes/${course.id}/learn/${ch.id}`}>
-                            <button className="px-4 py-2 bg-primary text-white rounded-xl font-headline font-bold text-xs border-2 border-on-surface shadow-[0_2px_0_#2e1a28] hover:scale-105 active:translate-y-0.5 flex items-center gap-1.5 transition-transform cursor-pointer">
+                            <button className="px-4 py-2 bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-xl font-display font-black text-xs border-2 border-slate-900 shadow-[0_2px_0_#991b1b] hover:scale-105 active:translate-y-0.5 flex items-center gap-1.5 transition-transform cursor-pointer">
                               <span>{isCompleted ? "Buka Lagi" : "Mulai Quest"}</span>
                               <ChevronRight className="w-4 h-4" />
                             </button>
@@ -782,15 +782,15 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
           {/* ======================================================== */}
           <div className="lg:col-span-5 xl:col-span-4 space-y-6 lg:sticky lg:top-24">
             {/* CARD 1: RADAR QUEST AKTIF (JUMP DIRECTLY TO CURRENT CHALLENGE) */}
-            <div className="bg-surface-container-lowest border-4 border-on-surface rounded-3xl p-6 shadow-[0_8px_0_#2e1a28]">
-              <div className="flex items-center justify-between pb-3 border-b-2 border-outline-variant mb-4">
+            <div className="bg-white border-3 sm:border-4 border-slate-900 rounded-3xl p-6 shadow-[0_8px_0_#0f172a]">
+              <div className="flex items-center justify-between pb-3 border-b-2 border-slate-100 mb-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-primary animate-ping" />
-                  <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#EF4444] animate-ping" />
+                  <span className="font-display font-black text-xs uppercase tracking-wider text-slate-900">
                     Radar Quest Aktif
                   </span>
                 </div>
-                <span className="text-[11px] font-mono font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-full border border-secondary-fixed-dim">
+                <span className="text-[11px] font-mono font-bold text-slate-900 bg-[#FEF08A] px-2 py-0.5 rounded-full border-2 border-slate-900 shadow-[0_1px_0_#0f172a]">
                   Tingkat {firstActiveChallenge?.difficulty || "EASY"}
                 </span>
               </div>
@@ -798,16 +798,16 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
               {firstActiveChallenge ? (
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-display font-black text-lg text-on-surface">
+                    <h3 className="font-display font-black text-lg text-slate-900">
                       {firstActiveChallenge.title}
                     </h3>
-                    <p className="text-xs text-on-surface-variant font-medium mt-1.5 line-clamp-3 leading-relaxed">
+                    <p className="text-xs text-slate-600 font-medium mt-1.5 line-clamp-3 leading-relaxed">
                       {firstActiveChallenge.instruction}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs font-mono font-bold bg-surface-container-low p-2.5 rounded-xl border border-outline-variant">
-                    <span className="text-on-surface-variant">Bonus XP Quest:</span>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold bg-slate-50 p-2.5 rounded-xl border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
+                    <span className="text-slate-600">Bonus XP Quest:</span>
                     <span className="text-amber-800 font-black">
                       +{firstActiveChallenge.xp_reward} XP
                     </span>
@@ -818,7 +818,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                       href={`/classes/${course.id}/learn/${firstActiveChallenge.id}`}
                       className="block w-full"
                     >
-                      <button className="w-full py-3.5 rounded-2xl bg-primary text-white font-headline font-black text-base border-2 border-on-surface shadow-[0_5px_0_#2e1a28] flex items-center justify-center gap-2 hover:scale-[1.02] active:translate-y-1 transition-all cursor-pointer">
+                      <button className="w-full py-3.5 rounded-2xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-base border-3 border-slate-900 shadow-[0_5px_0_#991b1b] flex items-center justify-center gap-2 hover:scale-[1.02] active:translate-y-1 active:shadow-none transition-all cursor-pointer">
                         <Play className="w-5 h-5 fill-white" />
                         <span>
                           {firstActiveChallenge.userStatus === "COMPLETED"
@@ -831,7 +831,7 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                     <button
                       onClick={handleEnroll}
                       disabled={enrolling}
-                      className="w-full py-3.5 rounded-2xl bg-primary hover:bg-[#ec4899] text-white font-headline font-black text-base border-2 border-on-surface shadow-[0_5px_0_#2e1a28] flex items-center justify-center gap-2 hover:scale-[1.02] active:translate-y-1 transition-all cursor-pointer"
+                      className="w-full py-3.5 rounded-2xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-base border-3 border-slate-900 shadow-[0_5px_0_#991b1b] flex items-center justify-center gap-2 hover:scale-[1.02] active:translate-y-1 active:shadow-none transition-all cursor-pointer"
                     >
                       {enrolling ? (
                         <>
@@ -850,10 +850,10 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
               ) : (
                 <div className="text-center py-4">
                   <Trophy className="w-12 h-12 text-amber-500 mx-auto mb-2" />
-                  <p className="font-headline font-bold text-sm text-on-surface">
+                  <p className="font-display font-black text-sm text-slate-900">
                     Semua Quest Selesai!
                   </p>
-                  <p className="text-xs text-on-surface-variant mt-1">
+                  <p className="text-xs text-slate-600 mt-1">
                     Hebat! Kamu telah menaklukkan seluruh tantangan kelas ini.
                   </p>
                 </div>
@@ -861,44 +861,44 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
             </div>
 
             {/* CARD 2: PANDUAN PETA (LEGEND) */}
-            <div className="bg-surface-container-lowest border-4 border-on-surface rounded-3xl p-6 shadow-[0_6px_0_#2e1a28]">
-              <h4 className="font-headline font-black text-xs uppercase tracking-wider text-on-surface mb-3 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-primary" />
+            <div className="bg-white border-3 sm:border-4 border-slate-900 rounded-3xl p-6 shadow-[0_6px_0_#0f172a]">
+              <h4 className="font-display font-black text-xs uppercase tracking-wider text-slate-900 mb-3 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#EF4444]" />
                 <span>Panduan Status Peta</span>
               </h4>
 
               <div className="space-y-3 text-xs">
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-emerald-500 border-2 border-on-surface flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center shrink-0">
                     <Check className="w-4 h-4 text-white stroke-[3]" />
                   </div>
                   <div>
-                    <div className="font-headline font-bold text-on-surface">Level Selesai</div>
-                    <div className="text-[11px] text-on-surface-variant font-medium">
+                    <div className="font-display font-black text-slate-900">Level Selesai</div>
+                    <div className="text-[11px] text-slate-600 font-medium">
                       Tantangan berhasil dan XP telah masuk ke akunmu.
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-primary border-2 border-on-surface flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-full bg-[#EF4444] border-2 border-slate-900 flex items-center justify-center shrink-0">
                     <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
                   </div>
                   <div>
-                    <div className="font-headline font-bold text-on-surface">Quest Aktif</div>
-                    <div className="text-[11px] text-on-surface-variant font-medium">
+                    <div className="font-display font-black text-slate-900">Quest Aktif</div>
+                    <div className="text-[11px] text-slate-600 font-medium">
                       Level yang saat ini terbuka untuk kamu kerjakan.
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-surface-container-high border-2 border-on-surface flex items-center justify-center shrink-0">
-                    <Lock className="w-3.5 h-3.5 text-on-surface-variant" />
+                  <div className="w-7 h-7 rounded-full bg-slate-200 border-2 border-slate-900 flex items-center justify-center shrink-0">
+                    <Lock className="w-3.5 h-3.5 text-slate-600" />
                   </div>
                   <div>
-                    <div className="font-headline font-bold text-on-surface">Terkunci</div>
-                    <div className="text-[11px] text-on-surface-variant font-medium">
+                    <div className="font-display font-black text-slate-900">Terkunci</div>
+                    <div className="text-[11px] text-slate-600 font-medium">
                       Selesaikan quest sebelumnya untuk membuka kunci level ini.
                     </div>
                   </div>
@@ -907,17 +907,17 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
             </div>
 
             {/* CARD 3: BENEFIT & JAMINAN BELAJAR */}
-            <div className="bg-surface-container-low border-2 border-on-surface rounded-2xl p-5 space-y-2.5">
-              <div className="text-xs font-bold text-on-surface flex items-center gap-2">
-                <Award className="w-4 h-4 text-primary shrink-0" />
+            <div className="bg-[#FEF08A] border-3 border-slate-900 rounded-2xl p-5 space-y-2.5 shadow-[0_4px_0_#0f172a]">
+              <div className="text-xs font-black text-slate-900 flex items-center gap-2">
+                <Award className="w-4 h-4 text-[#EF4444] shrink-0" />
                 <span>Cek Kode Otomatis &amp; Real-time Preview</span>
               </div>
-              <div className="text-xs font-bold text-on-surface flex items-center gap-2">
-                <Zap className="w-4 h-4 text-amber-600 shrink-0" />
+              <div className="text-xs font-black text-slate-900 flex items-center gap-2">
+                <Zap className="w-4 h-4 text-amber-800 shrink-0" />
                 <span>Akumulasi XP untuk Naik Peringkat Leaderboard</span>
               </div>
-              <div className="text-xs font-bold text-on-surface flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-secondary shrink-0" />
+              <div className="text-xs font-black text-slate-900 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-sky-800 shrink-0" />
                 <span>Bebas Akses Kapan Saja &amp; 100% Gratis</span>
               </div>
             </div>

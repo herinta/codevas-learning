@@ -1027,9 +1027,9 @@ function ChallengePlaygroundContent({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-8 h-8 text-primary animate-spin" />
-        <p className="font-headline font-bold text-sm text-on-surface">
+      <div className="min-h-screen bg-[#FFFDF7] flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-8 h-8 text-[#EF4444] animate-spin" />
+        <p className="font-display font-black text-sm text-slate-900">
           Memuat Workspace Pembelajaran...
         </p>
       </div>
@@ -1038,27 +1038,27 @@ function ChallengePlaygroundContent({
 
   if (loadError || !challenge) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4 p-6 text-center">
-        <div className="w-16 h-16 rounded-3xl bg-error/10 border-2 border-error/30 flex items-center justify-center text-error">
+      <div className="min-h-screen bg-[#FFFDF7] flex flex-col items-center justify-center gap-4 p-6 text-center">
+        <div className="w-16 h-16 rounded-3xl bg-red-100 border-3 border-slate-900 flex items-center justify-center text-red-600 shadow-[0_4px_0_#0f172a]">
           <AlertCircle className="w-8 h-8" />
         </div>
-        <h2 className="text-xl font-display font-black text-on-surface">
+        <h2 className="text-xl font-display font-black text-slate-900">
           {loadError ? "Gagal Memuat Tantangan" : "Tantangan Tidak Ditemukan"}
         </h2>
-        <p className="text-xs text-on-surface-variant max-w-sm leading-relaxed">
+        <p className="text-xs text-slate-600 max-w-sm leading-relaxed">
           {loadError || "Soal tantangan tidak ditemukan di server. Periksa koneksi internet Anda atau kembali ke silabus kelas."}
         </p>
         <div className="flex items-center gap-3 mt-2">
           <button
             onClick={() => loadData()}
-            className="px-4 py-2.5 rounded-xl bg-primary text-white font-headline font-bold text-xs shadow-xs hover:opacity-90 flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-xs border-2 border-slate-900 shadow-[0_3px_0_#991b1b] flex items-center gap-1.5 cursor-pointer active:translate-y-0.5"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Coba Muat Ulang</span>
           </button>
           <Link
             href={`/classes/${classId}`}
-            className="px-4 py-2.5 rounded-xl border border-on-surface bg-surface-container font-headline font-bold text-xs hover:bg-surface-container-high"
+            className="px-4 py-2.5 rounded-xl border-2 border-slate-900 bg-white font-display font-black text-xs hover:bg-slate-50 shadow-[0_2px_0_#0f172a] text-slate-900"
           >
             Kembali ke Kelas
           </Link>
@@ -1068,7 +1068,7 @@ function ChallengePlaygroundContent({
   }
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col">
+    <div className="min-h-screen bg-[#FFFDF7] text-slate-900 flex flex-col">
       {/* Scoped Dynamic Styles for Live Arena with Spring Glide Animations */}
       <style>{`
         #live-arena {
@@ -1083,12 +1083,12 @@ function ChallengePlaygroundContent({
           0%, 100% {
             opacity: 1;
             transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7);
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
           }
           50% {
             opacity: 0.85;
             transform: scale(1.04);
-            box-shadow: 0 0 0 6px rgba(236, 72, 153, 0);
+            box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
           }
         }
         .blinking-tutorial-choice {
@@ -1183,27 +1183,27 @@ function ChallengePlaygroundContent({
       `}</style>
 
       {/* Top Bar Navigation */}
-      <header className="w-full bg-surface-container-lowest border-b-2 border-on-surface px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-40">
+      <header className="w-full bg-white border-b-3 border-slate-900 px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
         <div className="flex items-center gap-3">
           <Link
             href={`/classes/${classId}`}
-            className="p-2 rounded-full border border-on-surface bg-surface-container hover:bg-surface-container-high transition-colors"
+            className="p-2 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-50 text-slate-900 shadow-[0_2px_0_#0f172a] transition-all active:translate-y-0.5 cursor-pointer"
             title="Kembali ke Silabus"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold text-secondary tracking-widest uppercase">
+              <span className="text-[11px] font-mono font-black text-slate-500 tracking-wider uppercase">
                 LEVEL {challenge?.order_index || 1} / 12
               </span>
               {challenge?.difficulty && (
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-on-surface bg-primary text-white">
+                <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-full border-2 border-slate-900 bg-[#FEF08A] text-slate-900 shadow-[0_1px_0_#0f172a]">
                   {challenge.difficulty}
                 </span>
               )}
             </div>
-            <h1 className="font-display font-black text-sm sm:text-base text-on-surface truncate max-w-xs sm:max-w-md">
+            <h1 className="font-display font-black text-sm sm:text-base text-slate-900 truncate max-w-xs sm:max-w-md">
               {challenge?.title || "Level"}
             </h1>
           </div>
@@ -1212,34 +1212,34 @@ function ChallengePlaygroundContent({
         {/* User Status Pills */}
         <div className="flex items-center gap-1.5 sm:gap-2.5">
           <div
-            className="flex items-center gap-1 px-2 sm:px-2.5 py-1 bg-amber-300 border-2 border-on-surface rounded-full shadow-xs shrink-0"
+            className="flex items-center gap-1 px-2.5 py-1 bg-[#FEF08A] border-2 border-slate-900 rounded-full shadow-[0_2px_0_#0f172a] shrink-0"
             title={`Level ${user?.level || 1} • ${user?.rank_title || 'Siswa Pemula'}`}
           >
-            <span className="text-[11px] sm:text-xs font-mono font-black text-on-surface">
+            <span className="text-[11px] sm:text-xs font-mono font-black text-slate-900">
               Lv.{user?.level || 1}
             </span>
           </div>
 
-          <div className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-[#fff3e0] border-2 border-on-surface rounded-full shadow-xs shrink-0">
+          <div className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-[#FFF3E0] border-2 border-slate-900 rounded-full shadow-[0_2px_0_#0f172a] shrink-0">
             <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#e65100] fill-[#e65100]" />
-            <span className="text-[11px] sm:text-xs font-headline font-black text-on-surface">
+            <span className="text-[11px] sm:text-xs font-display font-black text-slate-900">
               {user ? `${(user as any).streak_days || 1}d` : "1d"}
             </span>
           </div>
 
           <div
-            className="flex items-center gap-1 px-2 sm:px-2.5 py-1 bg-surface-container-high border-2 border-on-surface rounded-full shadow-xs shrink-0"
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-1 bg-sky-100 border-2 border-slate-900 rounded-full shadow-[0_2px_0_#0f172a] shrink-0"
             title={`Target Harian: 10 Menit Fokus Belajar (${dailyTarget.percent}% tercapai)`}
           >
-            <Target className={`w-3.5 h-3.5 ${dailyTarget.isCompleted ? 'text-emerald-600' : 'text-primary'}`} />
-            <span className="text-[11px] font-mono font-black text-on-surface">
+            <Target className={`w-3.5 h-3.5 ${dailyTarget.isCompleted ? 'text-emerald-600' : 'text-[#EF4444]'}`} />
+            <span className="text-[11px] font-mono font-black text-slate-900">
               {dailyTarget.formattedActive}
             </span>
           </div>
 
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-secondary-fixed border-2 border-on-surface rounded-full shadow-xs shrink-0">
-            <Star className="w-4 h-4 text-secondary fill-secondary" />
-            <span className="text-xs font-headline font-black text-secondary">
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-[#BAE6FD] border-2 border-slate-900 rounded-full shadow-[0_2px_0_#0f172a] shrink-0">
+            <Star className="w-4 h-4 text-sky-900 fill-sky-800" />
+            <span className="text-xs font-display font-black text-slate-900">
               {user ? `${user.xp_points} XP` : "50 XP"}
             </span>
           </div>
@@ -1249,7 +1249,7 @@ function ChallengePlaygroundContent({
       {/* ======================================================== */}
       {/* MOBILE WORKSPACE (Unified 1-Screen: Soal + Preview + Code) */}
       {/* ======================================================== */}
-      <div className="lg:hidden flex flex-col flex-1 min-h-0 overflow-hidden bg-surface-container-lowest relative">
+      <div className="lg:hidden flex flex-col flex-1 min-h-0 overflow-hidden bg-[#FFFDF7] relative">
         {/* Localized Mini Confetti Canvas for mobile */}
         <canvas
           ref={confettiCanvasMobileRef}
@@ -1257,12 +1257,12 @@ function ChallengePlaygroundContent({
         />
 
         {/* 1. COMPACT MISSION BANNER */}
-        <div className="px-3 py-1.5 bg-surface-container border-b-2 border-on-surface flex items-center justify-between gap-2 shrink-0">
+        <div className="px-3 py-2 bg-white border-b-2 border-slate-900 flex items-center justify-between gap-2 shrink-0 shadow-xs">
           <div className="flex items-center gap-1.5 min-w-0">
-            <span className="px-1.5 py-0.5 rounded-md bg-primary text-white font-headline font-black text-[10px] shrink-0">
+            <span className="px-1.5 py-0.5 rounded-md bg-[#EF4444] text-white font-display font-black text-[10px] shrink-0">
               Lvl {challenge?.order_index || 1}
             </span>
-            <p className="text-xs font-bold text-on-surface truncate leading-tight">
+            <p className="text-xs font-bold text-slate-900 truncate leading-tight">
               {challenge?.instruction}
             </p>
           </div>
@@ -1270,25 +1270,25 @@ function ChallengePlaygroundContent({
             {challenge?.theory && (
               <button
                 onClick={() => setShowTheoryModal(true)}
-                className="px-2 py-0.5 rounded-lg bg-surface-container-high border border-on-surface text-[10px] font-bold text-on-surface hover:bg-surface-container-highest flex items-center gap-1 cursor-pointer transition-colors"
+                className="px-2 py-0.5 rounded-lg bg-[#FEF08A] border-2 border-slate-900 text-[10px] font-black text-slate-900 hover:bg-yellow-200 shadow-[0_1px_0_#0f172a] flex items-center gap-1 cursor-pointer transition-colors"
               >
-                <BookOpen className="w-3 h-3 text-primary" />
+                <BookOpen className="w-3 h-3 text-[#EF4444]" />
                 <span>Teori</span>
               </button>
             )}
-            <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-mono font-black text-amber-950 bg-[#FEF08A] border-2 border-slate-900 px-1.5 py-0.5 rounded-full shadow-[0_1px_0_#0f172a]">
               +{challenge?.xp_reward}XP
             </span>
           </div>
         </div>
 
         {/* 2. COMPACT LIVE ARENA PREVIEW */}
-        <div className="p-2 bg-surface-container-low border-b-2 border-on-surface flex flex-col items-center justify-center shrink-0">
+        <div className="p-2.5 bg-slate-100 border-b-2 border-slate-900 flex flex-col items-center justify-center shrink-0">
           {isHtmlMode ? (
             <div
               id="live-arena"
-              className={`arena w-full h-28 sm:h-36 bg-white border-2 rounded-xl p-2.5 shadow-xs overflow-auto transition-all ${
-                liveEval.passed ? "border-emerald-500 ring-2 ring-emerald-300" : "border-on-surface"
+              className={`arena w-full h-28 sm:h-36 bg-white border-3 rounded-2xl p-2.5 shadow-[0_4px_0_#0f172a] overflow-auto transition-all ${
+                liveEval.passed ? "border-emerald-600 ring-4 ring-emerald-300/60" : "border-slate-900"
               }`}
             >
               <div
@@ -1299,8 +1299,8 @@ function ChallengePlaygroundContent({
           ) : isCssBasicsMode ? (
             <div
               id="live-arena"
-              className={`arena w-full h-28 sm:h-36 bg-surface-container-lowest border-2 rounded-xl p-3 shadow-xs overflow-auto flex items-center justify-center transition-all ${
-                liveEval.passed ? "border-emerald-500 ring-2 ring-emerald-300" : "border-on-surface"
+              className={`arena w-full h-28 sm:h-36 bg-white border-3 rounded-2xl p-3 shadow-[0_4px_0_#0f172a] overflow-auto flex items-center justify-center transition-all ${
+                liveEval.passed ? "border-emerald-600 ring-4 ring-emerald-300/60" : "border-slate-900"
               }`}
             >
               {challengeId === "css-basics-12-boss-fight" ? (
@@ -1312,7 +1312,7 @@ function ChallengePlaygroundContent({
                 </span>
               ) : (
                 <div
-                  className="box transition-all w-full max-w-xs text-center font-body p-3 bg-white text-slate-800 border border-slate-200 rounded-lg shadow-xs"
+                  className="box transition-all w-full max-w-xs text-center font-body p-3 bg-white text-slate-800 border-2 border-slate-200 rounded-xl shadow-xs"
                   style={itemStyles["box"] || arenaStyle}
                 >
                   <h3 className="font-bold text-sm">Belajar CSS</h3>
@@ -1323,8 +1323,8 @@ function ChallengePlaygroundContent({
           ) : (
             <div
               id="live-arena"
-              className={`arena w-full h-28 sm:h-36 bg-surface-container-lowest border-2 rounded-xl p-2 shadow-xs overflow-hidden transition-all relative ${
-                liveEval.passed ? "border-emerald-500 ring-2 ring-emerald-300" : "border-on-surface"
+              className={`arena w-full h-28 sm:h-36 bg-white border-3 rounded-2xl p-2 shadow-[0_4px_0_#0f172a] overflow-hidden transition-all relative ${
+                liveEval.passed ? "border-emerald-600 ring-4 ring-emerald-300/60" : "border-slate-900"
               }`}
               style={arenaStyle}
             >
@@ -1337,7 +1337,7 @@ function ChallengePlaygroundContent({
                   <div
                     key={i}
                     style={itemSpecificStyle}
-                    className={`permen-${i + 1} card-${i + 1} rounded-xl border-2 border-on-surface flex flex-col items-center justify-center shadow-xs transition-all duration-200 ${
+                    className={`permen-${i + 1} card-${i + 1} rounded-xl border-2 border-slate-900 flex flex-col items-center justify-center shadow-[0_2px_0_#0f172a] transition-all duration-200 ${
                       color.bg
                     } ${
                       isLevel10
@@ -1350,7 +1350,7 @@ function ChallengePlaygroundContent({
                     <span className={itemsCount > 4 ? "text-xs" : "text-base"}>
                       {color.emoji}
                     </span>
-                    <span className="text-[9px] font-bold font-mono text-on-surface text-center truncate max-w-full">
+                    <span className="text-[9px] font-bold font-mono text-slate-900 text-center truncate max-w-full">
                       {label}
                     </span>
                   </div>
@@ -1362,17 +1362,17 @@ function ChallengePlaygroundContent({
 
         {/* 3. CLEAN CODE CHIPS (Minimalist, Diverse & Never putting key at index 0) */}
         {shuffledHelpers && shuffledHelpers.length > 0 && (
-          <div className="px-2 py-1 flex flex-wrap gap-1 bg-surface-container-lowest border-b border-outline-variant shrink-0 max-h-16 overflow-y-auto">
+          <div className="px-2 py-1.5 flex flex-wrap gap-1.5 bg-white border-b-2 border-slate-900 shrink-0 max-h-20 overflow-y-auto">
             {shuffledHelpers.map((snippet) => {
               const active = isHelperActive(snippet, cssCode);
               return (
                 <button
                   key={snippet}
                   onClick={() => handleToggleHelper(snippet)}
-                  className={`px-2 py-0.5 text-[11px] font-mono rounded-lg transition-all cursor-pointer active:scale-95 flex items-center gap-1 shrink-0 ${
+                  className={`px-2.5 py-1 text-[11px] font-mono rounded-lg transition-all cursor-pointer active:scale-95 flex items-center gap-1 shrink-0 ${
                     active
-                      ? "bg-primary text-white border-2 border-primary font-bold shadow-xs"
-                      : "bg-surface-container-high border border-on-surface text-on-surface font-semibold hover:border-primary shadow-xs"
+                      ? "bg-[#EF4444] text-white border-2 border-slate-900 font-bold shadow-[0_2px_0_#991b1b]"
+                      : "bg-slate-100 border-2 border-slate-900 text-slate-800 font-bold hover:bg-slate-200 shadow-[0_1px_0_#0f172a]"
                   }`}
                 >
                   <span className="text-[9px] opacity-75">{active ? "✓" : "+"}</span>
@@ -1383,15 +1383,14 @@ function ChallengePlaygroundContent({
           </div>
         )}
 
-
         {/* 4. COMPACT CODE EDITOR */}
-        <div className="flex-1 p-2 flex flex-col min-h-[80px] max-h-[140px] bg-surface-container-lowest">
-          <div className="rounded-xl border-2 border-on-surface overflow-hidden bg-[#1e1e2e] flex flex-col flex-1 shadow-xs">
-            <div className="bg-[#181825] px-2.5 py-1 border-b border-[#313244] flex items-center justify-between shrink-0">
+        <div className="flex-1 p-2 flex flex-col min-h-[90px] max-h-[150px] bg-[#FFFDF7]">
+          <div className="rounded-2xl border-3 border-slate-900 overflow-hidden bg-[#1e1e2e] flex flex-col flex-1 shadow-[0_4px_0_#0f172a]">
+            <div className="bg-[#181825] px-2.5 py-1.5 border-b border-[#313244] flex items-center justify-between shrink-0">
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-red-500"></span>
-                <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                 <span className="text-[10px] font-mono text-[#a6adc8] ml-1">
                   {isHtmlMode ? "index.html" : "style.css"}
                 </span>
@@ -1415,13 +1414,13 @@ function ChallengePlaygroundContent({
         </div>
 
         {/* 5. BOTTOM ACTION BAR (Success / Next / Status) */}
-        <div className="p-2 bg-surface-container border-t-2 border-on-surface shrink-0">
+        <div className="p-2.5 bg-white border-t-2 border-slate-900 shrink-0 shadow-xs">
           {liveEval.passed ? (
             <div className="space-y-1.5 animate-in fade-in duration-200">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1.5 min-w-0">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="text-xs font-headline font-black text-emerald-950 truncate">
+                  <span className="text-xs font-display font-black text-emerald-950 truncate">
                     Target Berhasil Dicapai!
                   </span>
                   {earnedXpInfo?.earnedXp && earnedXpInfo.earnedXp > 0 && (
@@ -1432,14 +1431,14 @@ function ChallengePlaygroundContent({
                 </div>
                 {isClassCompleted || challenge?.order_index === 10 ? (
                   <Link href="/dashboard">
-                    <button className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-headline font-black text-xs border-2 border-on-surface shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0">
+                    <button className="px-3.5 py-1.5 rounded-xl bg-[#FEF08A] hover:bg-yellow-300 text-slate-900 font-display font-black text-xs border-2 border-slate-900 shadow-[0_2px_0_#0f172a] flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0">
                       <span>Tamat! Dashboard</span>
                     </button>
                   </Link>
                 ) : (
                   <button
                     onClick={handleNextLevel}
-                    className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-black text-xs border-2 border-on-surface shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
+                    className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-display font-black text-xs border-2 border-slate-900 shadow-[0_2px_0_#065f46] flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
                   >
                     <span>Lanjut</span>
                     <Rocket className="w-3.5 h-3.5" />
@@ -1462,17 +1461,17 @@ function ChallengePlaygroundContent({
               )}
             </div>
           ) : (
-            <div className="flex items-center justify-between text-xs text-on-surface-variant px-1">
+            <div className="flex items-center justify-between text-xs text-slate-600 px-1">
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                <span className="text-[11px] font-medium text-on-surface">Ubah kode atau pilih chip di atas</span>
+                <span className="w-2 h-2 rounded-full bg-[#EF4444] animate-pulse" />
+                <span className="text-[11px] font-medium text-slate-900">Ubah kode atau pilih chip di atas</span>
               </div>
               {challenge?.hint && (
                 <button
                   onClick={() => setShowTheoryModal(true)}
-                  className="text-[11px] font-bold text-secondary hover:underline flex items-center gap-1 cursor-pointer"
+                  className="text-[11px] font-bold text-slate-800 hover:underline flex items-center gap-1 cursor-pointer"
                 >
-                  <Lightbulb className="w-3.5 h-3.5 text-secondary" />
+                  <Lightbulb className="w-3.5 h-3.5 text-[#EF4444]" />
                   <span>Petunjuk</span>
                 </button>
               )}
@@ -1484,35 +1483,35 @@ function ChallengePlaygroundContent({
       {/* ======================================================== */}
       {/* DESKTOP WORKSPACE (3 Columns: Mission | Arena | Editor)  */}
       {/* ======================================================== */}
-      <div className="hidden lg:grid lg:grid-cols-12 flex-1 gap-0 overflow-hidden">
+      <div className="hidden lg:grid lg:grid-cols-12 flex-1 gap-0 overflow-hidden bg-[#FFFDF7]">
         {/* PANEL 1: INSTRUCTIONS & VISUAL TARGET GOAL (4 Cols) */}
-        <div className="lg:col-span-4 border-r-2 border-on-surface p-4 sm:p-6 bg-surface-container-lowest overflow-y-auto space-y-6">
+        <div className="lg:col-span-4 border-r-3 border-slate-900 p-6 bg-white overflow-y-auto space-y-6 shadow-xs">
           {/* Mission Box (Soal Dinamis dari API) */}
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-primary-fixed border border-primary text-primary font-headline font-black text-xs">
-              <Zap className="w-3.5 h-3.5 fill-primary" />
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF08A] border-2 border-slate-900 text-slate-900 font-display font-black text-xs shadow-[0_2px_0_#0f172a]">
+              <Zap className="w-3.5 h-3.5 fill-[#EF4444] text-[#EF4444]" />
               <span>Misi Tantangan (+{challenge?.xp_reward} XP)</span>
             </div>
-            <h2 className="font-display font-black text-xl text-on-surface">
+            <h2 className="font-display font-black text-2xl text-slate-900 tracking-tight">
               {challenge?.title}
             </h2>
-            <div className="text-xs sm:text-sm text-on-surface font-medium leading-relaxed bg-surface-container-low p-3.5 rounded-xl border border-outline-variant">
+            <div className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed bg-[#FFFDF7] p-4 rounded-2xl border-2 border-slate-900 shadow-[0_3px_0_#0f172a]">
               {challenge?.instruction}
             </div>
           </div>
 
           {/* Materi & Konsep Teori (Dinamis dari API) */}
           {challenge?.theory && (
-            <div className="p-4 bg-primary-fixed/20 border-2 border-primary/40 rounded-2xl space-y-2">
+            <div className="p-4 bg-sky-50 border-3 border-slate-900 rounded-2xl space-y-2.5 shadow-[0_4px_0_#0f172a]">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-lg bg-primary/20 border border-primary/40 flex items-center justify-center">
-                  <BookOpen className="w-3.5 h-3.5 text-primary" />
+                <div className="w-6 h-6 rounded-lg bg-white border-2 border-slate-900 flex items-center justify-center shadow-xs">
+                  <BookOpen className="w-3.5 h-3.5 text-sky-800" />
                 </div>
-                <span className="text-xs font-headline font-black uppercase tracking-wider text-primary">
+                <span className="text-xs font-display font-black uppercase tracking-wider text-slate-900">
                   Materi &amp; Teori Pembelajaran
                 </span>
               </div>
-              <p className="text-xs text-on-surface font-medium leading-relaxed whitespace-pre-line pl-1">
+              <p className="text-xs text-slate-700 font-medium leading-relaxed whitespace-pre-line pl-1">
                 {challenge.theory}
               </p>
             </div>
@@ -1522,13 +1521,13 @@ function ChallengePlaygroundContent({
           <div className="pt-2">
             <button
               onClick={() => setShowHint(!showHint)}
-              className="flex items-center gap-1.5 text-xs font-bold text-secondary hover:underline cursor-pointer"
+              className="flex items-center gap-1.5 text-xs font-display font-black text-slate-800 hover:text-[#EF4444] cursor-pointer transition-colors"
             >
-              <Lightbulb className="w-4 h-4 text-secondary" />
+              <Lightbulb className="w-4 h-4 text-amber-500" />
               <span>{showHint ? "Sembunyikan Petunjuk" : "Butuh Bantuan? Lihat Petunjuk"}</span>
             </button>
             {showHint && (
-              <div className="mt-2 p-3 bg-secondary-fixed/30 border border-secondary rounded-xl text-xs text-on-surface font-medium leading-relaxed">
+              <div className="mt-2 p-3.5 bg-[#FEF08A]/70 border-2 border-slate-900 rounded-xl text-xs text-slate-900 font-medium leading-relaxed shadow-[0_2px_0_#0f172a]">
                 {challenge?.hint ||
                   "Gunakan display: flex; justify-content: center; align-items: center;"}
               </div>
@@ -1537,11 +1536,11 @@ function ChallengePlaygroundContent({
         </div>
 
         {/* PANEL 2: INTERACTIVE LIVE CANVAS (4 Cols) */}
-        <div className="lg:col-span-4 border-r-2 border-on-surface p-4 sm:p-6 bg-surface-container flex flex-col justify-between">
+        <div className="lg:col-span-4 border-r-3 border-slate-900 p-6 bg-slate-50 flex flex-col justify-between overflow-y-auto">
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-primary" />
+            <div className="flex items-center justify-between mb-4">
+              <span className="font-display font-black text-xs uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-[#EF4444]" />
                 <span>Arena Koding</span>
               </span>
             </div>
@@ -1550,10 +1549,10 @@ function ChallengePlaygroundContent({
             {isHtmlMode ? (
               <div
                 id="live-arena"
-                className={`arena w-full min-h-[11rem] sm:min-h-[18rem] bg-white border-4 rounded-2xl p-4 sm:p-5 shadow-brutal overflow-auto transition-all relative ${
+                className={`arena w-full min-h-[14rem] sm:min-h-[20rem] bg-white border-4 rounded-3xl p-5 shadow-[0_8px_0_#0f172a] overflow-auto transition-all relative ${
                   liveEval.passed
-                    ? "border-emerald-500 ring-4 ring-emerald-300/60"
-                    : "border-on-surface"
+                    ? "border-emerald-600 ring-4 ring-emerald-300/60"
+                    : "border-slate-900"
                 }`}
               >
                 <div
@@ -1564,10 +1563,10 @@ function ChallengePlaygroundContent({
             ) : isCssBasicsMode ? (
               <div
                 id="live-arena"
-                className={`arena w-full h-44 sm:h-60 lg:h-80 bg-surface-container-lowest border-4 rounded-2xl p-6 shadow-brutal overflow-auto flex items-center justify-center transition-all ${
+                className={`arena w-full h-56 sm:h-72 lg:h-96 bg-white border-4 rounded-3xl p-6 shadow-[0_8px_0_#0f172a] overflow-auto flex items-center justify-center transition-all ${
                   liveEval.passed
-                    ? "border-emerald-500 ring-4 ring-emerald-300/60"
-                    : "border-on-surface"
+                    ? "border-emerald-600 ring-4 ring-emerald-300/60"
+                    : "border-slate-900"
                 }`}
               >
                 {challengeId === "css-basics-12-boss-fight" ? (
@@ -1590,10 +1589,10 @@ function ChallengePlaygroundContent({
             ) : (
               <div
                 id="live-arena"
-                className={`arena w-full h-44 sm:h-60 lg:h-80 bg-surface-container-lowest border-4 rounded-2xl p-4 shadow-brutal overflow-auto transition-all relative ${
+                className={`arena w-full h-56 sm:h-72 lg:h-96 bg-white border-4 rounded-3xl p-5 shadow-[0_8px_0_#0f172a] overflow-auto transition-all relative ${
                   liveEval.passed
-                    ? "border-emerald-500 ring-4 ring-emerald-300/60"
-                    : "border-on-surface"
+                    ? "border-emerald-600 ring-4 ring-emerald-300/60"
+                    : "border-slate-900"
                 }`}
                 style={arenaStyle}
               >
@@ -1608,7 +1607,7 @@ function ChallengePlaygroundContent({
                       style={itemSpecificStyle}
                       className={`permen-${i + 1} card-${
                         i + 1
-                      } rounded-2xl border-3 border-on-surface flex flex-col items-center justify-center shadow-brutal-sm transition-all duration-200 ${
+                      } rounded-2xl border-3 border-slate-900 flex flex-col items-center justify-center shadow-[0_4px_0_#0f172a] transition-all duration-200 ${
                         color.bg
                       } ${
                         isLevel10
@@ -1625,7 +1624,7 @@ function ChallengePlaygroundContent({
                       >
                         {color.emoji}
                       </span>
-                      <span className="text-[10px] font-bold font-mono text-on-surface text-center truncate max-w-full">
+                      <span className="text-[10px] font-bold font-mono text-slate-900 text-center truncate max-w-full">
                         {label}
                       </span>
                     </div>
@@ -1637,16 +1636,16 @@ function ChallengePlaygroundContent({
         </div>
 
         {/* PANEL 3: CODE EDITOR & REAL-TIME ACTION (4 Cols) */}
-        <div className="lg:col-span-4 p-3.5 sm:p-6 bg-surface-container-lowest flex flex-col justify-between relative overflow-hidden">
+        <div className="lg:col-span-4 p-6 bg-white flex flex-col justify-between relative overflow-y-auto">
           {/* Localized Mini Confetti Canvas */}
           <canvas
             ref={confettiCanvasRef}
             className="pointer-events-none absolute inset-0 z-30 w-full h-full"
           />
-          <div className="space-y-3">
+          <div className="space-y-4">
             {/* Clean Code Chips Bar (Minimalist, Diverse & Never putting key at index 0) */}
             {shuffledHelpers && shuffledHelpers.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 py-0.5">
+              <div className="flex flex-wrap gap-2 py-1">
                 {shuffledHelpers.map((snippet) => {
                   const active = isHelperActive(snippet, cssCode);
 
@@ -1654,10 +1653,10 @@ function ChallengePlaygroundContent({
                     <button
                       key={snippet}
                       onClick={() => handleToggleHelper(snippet)}
-                      className={`px-2.5 py-1 text-xs font-mono rounded-xl transition-all cursor-pointer active:scale-95 flex items-center gap-1.5 ${
+                      className={`px-3 py-1 text-xs font-mono rounded-xl transition-all cursor-pointer active:scale-95 flex items-center gap-1.5 ${
                         active
-                          ? "bg-primary text-white border-2 border-primary font-bold shadow-xs"
-                          : "bg-surface-container-high border border-on-surface text-on-surface font-semibold hover:border-primary shadow-xs"
+                          ? "bg-[#EF4444] text-white border-2 border-slate-900 font-bold shadow-[0_2px_0_#991b1b]"
+                          : "bg-slate-100 border-2 border-slate-900 text-slate-800 font-bold hover:bg-slate-200 shadow-[0_2px_0_#0f172a]"
                       }`}
                     >
                       <span className="text-[10px] opacity-75">{active ? "✓" : "+"}</span>
@@ -1669,13 +1668,13 @@ function ChallengePlaygroundContent({
             )}
 
             <div className="flex items-center justify-between pt-1">
-              <span className="font-headline font-black text-xs uppercase tracking-wider text-on-surface flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="font-display font-black text-xs uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                 {isHtmlMode ? "HTML Editor" : "CSS Editor"}
               </span>
               <button
                 onClick={handleReset}
-                className="text-xs font-bold text-on-surface-variant hover:text-on-surface flex items-center gap-1 cursor-pointer"
+                className="text-xs font-display font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1 cursor-pointer transition-colors"
                 title="Reset kode awal"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -1684,8 +1683,8 @@ function ChallengePlaygroundContent({
             </div>
 
             {/* Code Input Area */}
-            <div className="rounded-2xl border-3 border-on-surface overflow-hidden bg-[#1e1e2e] shadow-brutal">
-              <div className="bg-[#181825] px-3 py-1.5 border-b border-[#313244] flex items-center justify-between">
+            <div className="rounded-2xl border-3 border-slate-900 overflow-hidden bg-[#1e1e2e] shadow-[0_6px_0_#0f172a]">
+              <div className="bg-[#181825] px-3.5 py-2 border-b border-[#313244] flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
@@ -1709,8 +1708,8 @@ function ChallengePlaygroundContent({
 
           {/* Bottom Action Area: Appears when target is achieved */}
           {liveEval.passed && (
-            <div className="pt-4 mt-4 border-t border-outline-variant space-y-2.5 animate-in fade-in duration-300">
-              <div className="p-3.5 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-center justify-between text-xs font-headline font-black text-emerald-950 shadow-sm">
+            <div className="pt-4 mt-4 border-t-2 border-slate-200 space-y-3 animate-in fade-in duration-300">
+              <div className="p-4 bg-emerald-100 border-3 border-emerald-600 rounded-2xl flex items-center justify-between text-xs font-display font-black text-emerald-950 shadow-[0_4px_0_#065f46]">
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
                   <div>
@@ -1747,9 +1746,9 @@ function ChallengePlaygroundContent({
               )}
 
               {!user && (
-                <div className="p-2.5 bg-amber-100 border border-amber-400 rounded-xl text-[11px] text-amber-950 font-medium">
+                <div className="p-2.5 bg-[#FEF08A]/70 border-2 border-slate-900 rounded-xl text-[11px] text-slate-900 font-medium">
                   💡 Kamu sedang belajar sebagai Tamu.{" "}
-                  <Link href={`/login?redirect=/classes/${classId}/learn/${challengeId}`} className="font-bold underline text-amber-900">
+                  <Link href={`/login?redirect=/classes/${classId}/learn/${challengeId}`} className="font-black underline text-slate-900">
                     Login di sini
                   </Link>{" "}
                   agar poin XP dan rekor streak tersimpan di profilmu.
@@ -1758,14 +1757,14 @@ function ChallengePlaygroundContent({
 
               {isClassCompleted || challenge?.order_index === 10 ? (
                 <Link href="/dashboard" className="block w-full">
-                  <button className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all">
+                  <button className="w-full py-4 rounded-2xl bg-[#FEF08A] hover:bg-yellow-300 text-slate-900 font-display font-black text-base border-3 border-slate-900 shadow-[0_6px_0_#0f172a] flex items-center justify-center gap-2 cursor-pointer active:translate-y-1 active:shadow-none transition-all">
                     <span>🏆 Selamat! Kamu Menamatkan Kelas (Ke Dashboard)</span>
                   </button>
                 </Link>
               ) : (
                 <button
                   onClick={handleNextLevel}
-                  className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-black text-base border-3 border-on-surface shadow-brutal flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5 transition-all"
+                  className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-display font-black text-base border-3 border-slate-900 shadow-[0_6px_0_#065f46] flex items-center justify-center gap-2 cursor-pointer active:translate-y-1 active:shadow-none transition-all"
                 >
                   <span>Lanjut ke Level Berikutnya</span>
                   <Rocket className="w-5 h-5" />
@@ -1774,7 +1773,7 @@ function ChallengePlaygroundContent({
 
               <Link
                 href={`/classes/${classId}`}
-                className="block w-full text-center py-1 text-xs font-bold text-on-surface-variant hover:underline"
+                className="block w-full text-center py-1 text-xs font-bold text-slate-500 hover:text-slate-900 hover:underline"
               >
                 Kembali ke Silabus Kelas
               </Link>
@@ -1786,32 +1785,32 @@ function ChallengePlaygroundContent({
       {/* Theory & Hint Modal / Drawer (Responsive Bottom Sheet on Mobile) */}
       {showTheoryModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
-          <div className="bg-surface-container-lowest border-t-3 sm:border-3 border-on-surface rounded-t-3xl sm:rounded-3xl p-5 max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-brutal space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-outline-variant">
+          <div className="bg-white border-t-3 sm:border-3 border-slate-900 rounded-t-3xl sm:rounded-3xl p-6 max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-[0_8px_0_#0f172a] space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b-2 border-slate-100">
               <div className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-primary" />
-                <h3 className="font-display font-black text-base text-on-surface">
+                <BookOpen className="w-5 h-5 text-[#EF4444]" />
+                <h3 className="font-display font-black text-lg text-slate-900">
                   Materi &amp; Teori Pembelajaran
                 </h3>
               </div>
               <button
                 onClick={() => setShowTheoryModal(false)}
-                className="p-1.5 rounded-full hover:bg-surface-container text-on-surface-variant hover:text-on-surface cursor-pointer"
+                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-900 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {challenge?.theory && (
-              <p className="text-xs sm:text-sm text-on-surface font-medium leading-relaxed whitespace-pre-line">
+              <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed whitespace-pre-line">
                 {challenge.theory}
               </p>
             )}
 
             {challenge?.hint && (
-              <div className="p-3 bg-secondary-fixed/30 border border-secondary rounded-xl text-xs text-on-surface font-medium leading-relaxed space-y-1">
-                <div className="flex items-center gap-1.5 font-bold text-secondary">
-                  <Lightbulb className="w-3.5 h-3.5" />
+              <div className="p-3.5 bg-[#FEF08A] border-2 border-slate-900 rounded-xl text-xs text-slate-900 font-medium leading-relaxed space-y-1 shadow-[0_2px_0_#0f172a]">
+                <div className="flex items-center gap-1.5 font-bold text-slate-900">
+                  <Lightbulb className="w-3.5 h-3.5 text-[#EF4444]" />
                   <span>Petunjuk Tantangan:</span>
                 </div>
                 <p>{challenge.hint}</p>
@@ -1820,7 +1819,7 @@ function ChallengePlaygroundContent({
 
             <button
               onClick={() => setShowTheoryModal(false)}
-              className="w-full py-3 rounded-xl bg-primary text-white font-headline font-black text-xs border-2 border-on-surface shadow-xs text-center cursor-pointer hover:opacity-90 transition-opacity"
+              className="w-full py-3 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-xs border-2 border-slate-900 shadow-[0_3px_0_#991b1b] text-center cursor-pointer hover:opacity-90 transition-opacity"
             >
               Paham, Lanjut Koding
             </button>
@@ -1828,30 +1827,29 @@ function ChallengePlaygroundContent({
         </div>
       )}
 
-
       {/* Session Expired Modal */}
       {sessionExpired && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-surface-container-lowest border-3 border-on-surface rounded-3xl p-6 max-w-sm w-full shadow-brutal space-y-4 text-center">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-100 border-2 border-amber-400 flex items-center justify-center text-amber-700">
+          <div className="bg-white border-3 border-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-[0_8px_0_#0f172a] space-y-4 text-center">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-[#FEF08A] border-3 border-slate-900 flex items-center justify-center text-slate-900 shadow-[0_3px_0_#0f172a]">
               <LogOut className="w-7 h-7" />
             </div>
-            <h3 className="font-display font-black text-lg text-on-surface">
+            <h3 className="font-display font-black text-lg text-slate-900">
               Sesi Login Anda Telah Habis
             </h3>
-            <p className="text-xs text-on-surface-variant font-medium leading-relaxed">
+            <p className="text-xs text-slate-600 font-medium leading-relaxed">
               Sesi login Anda telah berakhir. Silakan login kembali untuk menyimpan progres level, poin XP, dan rekor streak Anda.
             </p>
             <div className="flex flex-col gap-2 pt-2">
               <Link
                 href={`/login?redirect=/classes/${classId}/learn/${challengeId}`}
-                className="w-full py-3 rounded-xl bg-primary text-white font-headline font-black text-sm border-2 border-on-surface shadow-xs text-center hover:opacity-90 transition-opacity"
+                className="w-full py-3 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b] text-center transition-all cursor-pointer"
               >
                 Login Kembali
               </Link>
               <button
                 onClick={() => setSessionExpired(false)}
-                className="w-full py-2.5 rounded-xl border border-outline font-headline font-bold text-xs text-on-surface-variant hover:bg-surface-container cursor-pointer"
+                className="w-full py-2.5 rounded-xl border-2 border-slate-900 font-display font-bold text-xs text-slate-700 hover:bg-slate-50 cursor-pointer shadow-[0_2px_0_#0f172a]"
               >
                 Tetap Belajar (Mode Tamu)
               </button>
