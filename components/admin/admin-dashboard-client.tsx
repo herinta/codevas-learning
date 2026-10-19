@@ -692,25 +692,25 @@ export function AdminDashboardClient() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
-        <RefreshCw className="w-8 h-8 text-primary animate-spin" />
-        <p className="font-headline font-bold text-sm text-on-surface">Memverifikasi Otoritas Admin...</p>
+      <div className="min-h-screen bg-[#FFFDF7] flex flex-col items-center justify-center gap-3">
+        <RefreshCw className="w-8 h-8 text-[#EF4444] animate-spin" />
+        <p className="font-display font-black text-sm text-slate-900">Memverifikasi Otoritas Admin...</p>
       </div>
     );
   }
 
   if (!user || user.role !== "ADMIN") {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-16 h-16 rounded-3xl bg-red-100 border-3 border-on-surface flex items-center justify-center shadow-brutal mb-4 text-red-600">
+      <div className="min-h-screen bg-[#FFFDF7] flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-16 h-16 rounded-3xl bg-red-100 border-3 border-slate-900 flex items-center justify-center shadow-[0_4px_0_#991b1b] mb-4 text-red-600">
           <Lock className="w-8 h-8 stroke-[2.5]" />
         </div>
-        <h1 className="font-display font-black text-2xl text-on-surface mb-2">Akses Terbatas: Administrator Saja</h1>
-        <p className="text-sm text-on-surface-variant max-w-md mb-6 font-medium">
+        <h1 className="font-display font-black text-2xl text-slate-900 mb-2">Akses Terbatas: Administrator Saja</h1>
+        <p className="text-sm text-slate-600 max-w-md mb-6 font-medium">
           Halaman ini khusus untuk pemantauan sistem, pengelolaan pengguna, dan setup kurikulum kelas interaktif Codevas.
         </p>
         <Link href="/dashboard">
-          <button className="px-6 py-2.5 bg-primary text-white font-headline font-bold rounded-full border-2 border-on-surface shadow-brutal-sm hover:scale-105 active:scale-95 transition-all">
+          <button className="px-6 py-3 bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black rounded-2xl border-2 border-slate-900 shadow-[0_4px_0_#991b1b] hover:scale-102 active:translate-y-1 active:shadow-none transition-all cursor-pointer">
             Kembali ke Dashboard Saya
           </button>
         </Link>
@@ -719,12 +719,12 @@ export function AdminDashboardClient() {
   }
 
   return (
-    <div className="min-h-screen flex bg-background text-on-surface">
+    <div className="min-h-screen flex bg-[#FFFDF7] text-slate-900">
       {/* Floating Action Notification */}
       {actionMessage && (
         <div className="fixed top-6 right-6 z-50 animate-in fade-in slide-in-from-top duration-200">
           <div
-            className={`px-4 py-3 rounded-2xl border-3 border-on-surface shadow-brutal flex items-center gap-2.5 text-xs font-headline font-black ${
+            className={`px-4 py-3 rounded-2xl border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex items-center gap-2.5 text-xs font-display font-black ${
               actionMessage.type === "success"
                 ? "bg-emerald-100 text-emerald-950 border-emerald-900"
                 : "bg-red-100 text-red-950 border-red-900"
@@ -750,26 +750,26 @@ export function AdminDashboardClient() {
 
       {/* ADMIN SIDEBAR (Desktop: Sticky, Mobile: Slide-over Drawer) */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-surface-container-lowest border-r-3 border-on-surface flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:h-screen lg:sticky lg:top-0 shrink-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-white border-r-3 border-slate-900 flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:h-screen lg:sticky lg:top-0 shrink-0 ${
           sidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
         }`}
       >
         {/* Sidebar Header */}
-        <div className="p-5 border-b-2 border-on-surface flex items-center justify-between">
+        <div className="p-5 border-b-2 border-slate-200 flex items-center justify-between">
           <Link href="/admin" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-2xl bg-primary text-white border-2 border-on-surface shadow-xs flex items-center justify-center font-black text-xl group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-2xl bg-[#EF4444] text-white border-2 border-slate-900 shadow-[0_2px_0_#991b1b] flex items-center justify-center font-black text-xl group-hover:scale-105 transition-transform">
               C
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-display font-black text-xl text-on-surface tracking-tight">
+                <span className="font-display font-black text-xl text-slate-900 tracking-tight">
                   Codevas
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-black uppercase tracking-wider bg-amber-300 text-amber-950 border border-on-surface">
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-black uppercase tracking-wider bg-[#FEF08A] text-slate-900 border border-slate-900">
                   ADMIN
                 </span>
               </div>
-              <p className="text-[10px] text-on-surface-variant font-medium">
+              <p className="text-[10px] text-slate-500 font-medium">
                 Pusat Kendali Sistem
               </p>
             </div>
@@ -778,7 +778,7 @@ export function AdminDashboardClient() {
           {/* Mobile Close Button */}
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-1.5 rounded-xl border border-on-surface hover:bg-surface-container lg:hidden text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl border border-slate-300 hover:bg-slate-100 lg:hidden text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
             aria-label="Tutup Menu"
           >
             <X className="w-5 h-5" />
@@ -789,7 +789,7 @@ export function AdminDashboardClient() {
         <div className="p-4 flex-1 overflow-y-auto space-y-6">
           {/* Main Navigation Group */}
           <div>
-            <span className="px-3 text-[10px] font-mono font-black uppercase tracking-wider text-on-surface-variant block mb-2">
+            <span className="px-3 text-[10px] font-mono font-black uppercase tracking-wider text-slate-500 block mb-2">
               Menu Navigasi
             </span>
             <div className="space-y-1.5">
@@ -800,21 +800,21 @@ export function AdminDashboardClient() {
                   setSelectedClassForLevels(null);
                   setSidebarOpen(false);
                 }}
-                className={`w-full px-3.5 py-2.5 rounded-xl font-headline font-bold text-xs sm:text-sm flex items-center justify-between transition-all cursor-pointer ${
+                className={`w-full px-3.5 py-2.5 rounded-xl font-display font-bold text-xs sm:text-sm flex items-center justify-between transition-all cursor-pointer ${
                   activeTab === "overview"
-                    ? "bg-primary text-white border-2 border-on-surface shadow-brutal-sm scale-[1.02]"
-                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                    ? "bg-[#FEF08A] text-slate-900 border-2 border-slate-900 shadow-[0_2px_0_#0f172a] font-black scale-[1.02]"
+                    : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Activity className="w-4 h-4 shrink-0" />
+                  <Activity className="w-4 h-4 shrink-0 text-[#EF4444]" />
                   <span>Monitoring &amp; Ikhtisar</span>
                 </div>
                 {stats && stats.onlineUsers > 0 && (
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
                       activeTab === "overview"
-                        ? "bg-white/20 text-white"
+                        ? "bg-slate-900 text-white"
                         : "bg-emerald-100 text-emerald-800 border border-emerald-300"
                     }`}
                   >
@@ -830,21 +830,21 @@ export function AdminDashboardClient() {
                   setSelectedClassForLevels(null);
                   setSidebarOpen(false);
                 }}
-                className={`w-full px-3.5 py-2.5 rounded-xl font-headline font-bold text-xs sm:text-sm flex items-center justify-between transition-all cursor-pointer ${
+                className={`w-full px-3.5 py-2.5 rounded-xl font-display font-bold text-xs sm:text-sm flex items-center justify-between transition-all cursor-pointer ${
                   activeTab === "users"
-                    ? "bg-primary text-white border-2 border-on-surface shadow-brutal-sm scale-[1.02]"
-                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                    ? "bg-[#FEF08A] text-slate-900 border-2 border-slate-900 shadow-[0_2px_0_#0f172a] font-black scale-[1.02]"
+                    : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Users className="w-4 h-4 shrink-0" />
+                  <Users className="w-4 h-4 shrink-0 text-sky-600" />
                   <span>Manajemen Pengguna</span>
                 </div>
                 <span
                   className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
                     activeTab === "users"
-                      ? "bg-white/20 text-white"
-                      : "bg-surface-container text-on-surface border border-outline-variant"
+                      ? "bg-slate-900 text-white"
+                      : "bg-slate-100 text-slate-900 border border-slate-300"
                   }`}
                 >
                   {stats?.totalUsers ?? users.length}
@@ -857,21 +857,21 @@ export function AdminDashboardClient() {
                   setActiveTab("classes");
                   setSidebarOpen(false);
                 }}
-                className={`w-full px-3.5 py-2.5 rounded-xl font-headline font-bold text-xs sm:text-sm flex items-center justify-between transition-all cursor-pointer ${
+                className={`w-full px-3.5 py-2.5 rounded-xl font-display font-bold text-xs sm:text-sm flex items-center justify-between transition-all cursor-pointer ${
                   activeTab === "classes"
-                    ? "bg-primary text-white border-2 border-on-surface shadow-brutal-sm scale-[1.02]"
-                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                    ? "bg-[#FEF08A] text-slate-900 border-2 border-slate-900 shadow-[0_2px_0_#0f172a] font-black scale-[1.02]"
+                    : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Layers className="w-4 h-4 shrink-0" />
+                  <Layers className="w-4 h-4 shrink-0 text-emerald-600" />
                   <span>Kelas &amp; Tantangan</span>
                 </div>
                 <span
                   className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
                     activeTab === "classes"
-                      ? "bg-white/20 text-white"
-                      : "bg-surface-container text-on-surface border border-outline-variant"
+                      ? "bg-slate-900 text-white"
+                      : "bg-slate-100 text-slate-900 border border-slate-300"
                   }`}
                 >
                   {stats?.totalClasses ?? classes.length}
@@ -950,12 +950,12 @@ export function AdminDashboardClient() {
       {/* RIGHT MAIN WRAPPER */}
       <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
         {/* TOP BAR FOR RIGHT SIDE */}
-        <header className="sticky top-0 z-30 bg-surface-container-low/95 backdrop-blur-md border-b-2 border-on-surface px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b-2 border-slate-900 px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             {/* Mobile Sidebar Toggle Button */}
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-xl border-2 border-on-surface bg-surface-container-lowest text-on-surface lg:hidden hover:bg-surface-container shadow-xs cursor-pointer"
+              className="p-2 rounded-xl border-2 border-slate-900 bg-white text-slate-900 lg:hidden hover:bg-slate-100 shadow-[0_2px_0_#0f172a] cursor-pointer"
               aria-label="Buka Menu Sidebar"
             >
               <Menu className="w-5 h-5" />
@@ -963,10 +963,10 @@ export function AdminDashboardClient() {
 
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-[10px] sm:text-[11px] font-mono font-bold text-on-surface-variant uppercase tracking-wider">
+                <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
                   Admin Console /
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono font-bold text-primary uppercase tracking-wider">
+                <span className="text-[10px] sm:text-[11px] font-mono font-bold text-[#EF4444] uppercase tracking-wider">
                   {activeTab === "overview"
                     ? "Monitoring"
                     : activeTab === "users"
@@ -974,7 +974,7 @@ export function AdminDashboardClient() {
                     : "Kurikulum"}
                 </span>
               </div>
-              <h1 className="font-display font-black text-base sm:text-xl text-on-surface leading-tight">
+              <h1 className="font-display font-black text-base sm:text-xl text-slate-900 leading-tight">
                 {activeTab === "overview" && "Monitoring & Ikhtisar Sistem"}
                 {activeTab === "users" && "Manajemen & Audit Pengguna"}
                 {activeTab === "classes" &&
@@ -988,7 +988,7 @@ export function AdminDashboardClient() {
           {/* Top Bar Quick Stats & Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
             {stats && (
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-400 text-emerald-950 text-xs font-bold font-mono">
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-400 text-emerald-950 text-xs font-bold font-mono shadow-[0_1px_0_#065f46]">
                 <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
                 <span>{stats.onlineUsers} Online</span>
               </div>
@@ -1002,16 +1002,16 @@ export function AdminDashboardClient() {
                 if (selectedClassForLevels) fetchChallenges(selectedClassForLevels.id);
                 setActionMessage({ type: "success", text: "Data sistem berhasil diperbarui!" });
               }}
-              className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-surface-container-lowest border-2 border-on-surface font-headline font-bold text-xs flex items-center gap-1.5 shadow-xs hover:bg-surface-container transition-colors cursor-pointer"
+              className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-white border-2 border-slate-900 font-display font-bold text-xs flex items-center gap-1.5 shadow-[0_2px_0_#0f172a] hover:bg-slate-100 transition-colors cursor-pointer"
               title="Perbarui Data"
             >
-              <RefreshCw className="w-4 h-4 text-on-surface" />
+              <RefreshCw className="w-4 h-4 text-slate-900" />
               <span className="hidden md:inline">Sinkronkan</span>
             </button>
 
             <Link
               href="/dashboard"
-              className="px-3 py-1.5 rounded-xl bg-primary text-white border-2 border-on-surface font-headline font-bold text-xs flex items-center gap-1.5 shadow-brutal-sm hover:scale-105 active:scale-95 transition-all"
+              className="px-3.5 py-1.5 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] text-white border-2 border-slate-900 font-display font-black text-xs flex items-center gap-1.5 shadow-[0_2px_0_#991b1b] hover:scale-102 active:translate-y-0.5 active:shadow-none transition-all"
             >
               <Compass className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Ke Dashboard</span>

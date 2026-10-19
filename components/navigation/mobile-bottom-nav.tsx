@@ -60,7 +60,7 @@ export const MobileBottomNav: React.FC = () => {
         <img
           src={user.avatar_url}
           alt="Avatar"
-          className="w-5 h-5 rounded-full object-cover border border-on-surface"
+          className="w-5 h-5 rounded-full object-cover border border-slate-900"
         />
       ) : (
         <User className="w-5 h-5" />

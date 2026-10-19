@@ -38,9 +38,9 @@ export default function AdminPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
-          <Loader2 className="w-8 h-8 text-primary animate-spin" />
-          <p className="font-headline font-bold text-sm text-on-surface">
+        <div className="min-h-screen bg-[#FFFDF7] flex flex-col items-center justify-center gap-3">
+          <Loader2 className="w-8 h-8 text-[#EF4444] animate-spin" />
+          <p className="font-display font-black text-sm text-slate-900">
             Mempersiapkan Admin Console...
           </p>
         </div>

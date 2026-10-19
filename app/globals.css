@@ -41,10 +41,10 @@
   --color-outline: #907898;
   --color-outline-variant: #dcc8e0;
 
-  --color-on-surface: #2e1a28;
-  --color-on-surface-variant: #604868;
+  --color-on-surface: #0f172a;
+  --color-on-surface-variant: #475569;
 
-  --color-inverse-surface: #2e1a28;
+  --color-inverse-surface: #0f172a;
   --color-inverse-on-surface: #fef7ff;
   --color-inverse-primary: #f0a0cc;
 
@@ -60,44 +60,44 @@
 
 /* Neo-Brutalist & Candy Shadow Utilities */
 .candy-btn-shadow {
-  box-shadow: 3px 3px 0 #2e1a28;
+  box-shadow: 3px 3px 0 #0f172a;
 }
 .candy-btn-shadow:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 #2e1a28;
+  box-shadow: 1px 1px 0 #0f172a;
 }
 
 .candy-card-shadow {
-  box-shadow: 4px 4px 0px #2e1a28;
+  box-shadow: 4px 4px 0px #0f172a;
 }
 .candy-card-shadow-lg {
-  box-shadow: 6px 6px 0px #2e1a28;
+  box-shadow: 6px 6px 0px #0f172a;
 }
 
 .neo-shadow {
-  box-shadow: 0 10px 0 #2e1a28;
+  box-shadow: 0 10px 0 #0f172a;
 }
 .neo-shadow-sm {
-  box-shadow: 0 4px 0 #2e1a28;
+  box-shadow: 0 4px 0 #0f172a;
 }
 .neo-shadow-button {
-  box-shadow: 0 4px 0 #2e1a28;
+  box-shadow: 0 4px 0 #0f172a;
   transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .neo-shadow-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 0 #2e1a28;
+  box-shadow: 0 6px 0 #0f172a;
 }
 .neo-shadow-button:active {
   transform: translateY(2px);
-  box-shadow: 0 2px 0 #2e1a28;
+  box-shadow: 0 2px 0 #0f172a;
 }
 
 .shadow-brutal {
-  box-shadow: 0 8px 0 #2e1a28;
+  box-shadow: 0 8px 0 #0f172a;
 }
 .shadow-brutal-sm {
-  box-shadow: 0 3px 0 #2e1a28;
+  box-shadow: 0 3px 0 #0f172a;
 }
 
 /* Candy Glow Drop Shadows */

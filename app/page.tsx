@@ -35,8 +35,8 @@ export default function HomePage() {
 
   if (!loading && user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-on-surface">
-        <div className="flex items-center gap-2 font-headline font-bold text-sm text-primary animate-pulse">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFDF7] text-slate-900">
+        <div className="flex items-center gap-2 font-display font-black text-sm text-[#EF4444] animate-pulse">
           <span>Mengalihkan ke Dashboard...</span>
         </div>
       </div>

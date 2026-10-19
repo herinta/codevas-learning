@@ -155,7 +155,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrgAndWebsite) }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+      <body className="min-h-full flex flex-col bg-[#FFFDF7] text-slate-900 font-body selection:bg-[#FEF08A] selection:text-slate-900">
         <AuthProvider>
           <PwaProvider>
             {children}

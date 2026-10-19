@@ -170,9 +170,9 @@ export default function ProfilePage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-8 h-8 text-primary animate-spin" />
-        <p className="font-headline font-bold text-sm text-on-surface">
+      <div className="min-h-screen bg-[#FFFDF7] flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-8 h-8 text-[#EF4444] animate-spin" />
+        <p className="font-display font-black text-sm text-slate-900">
           Memuat Profil Pengguna...
         </p>
       </div>
@@ -180,7 +180,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col">
+    <div className="min-h-screen bg-[#FFFDF7] text-slate-900 flex flex-col">
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-28 pb-28 md:pb-16 flex-1 w-full">
@@ -188,50 +188,50 @@ export default function ProfilePage() {
         <div className="flex items-center gap-2 mb-6 text-sm">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-1 font-bold text-primary hover:underline"
+            className="inline-flex items-center gap-1 font-display font-black text-[#EF4444] hover:underline"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Kembali ke Dashboard</span>
           </Link>
-          <span className="text-outline">/</span>
-          <span className="text-on-surface-variant font-medium">Pengaturan Akun</span>
+          <span className="text-slate-300">/</span>
+          <span className="text-slate-600 font-bold">Pengaturan Akun</span>
         </div>
 
-        <div className="bg-surface-container-lowest border-4 border-on-surface rounded-3xl p-6 sm:p-9 shadow-[0_8px_0_#2e1a28]">
+        <div className="bg-white border-3 sm:border-4 border-slate-900 rounded-3xl p-6 sm:p-9 shadow-[0_8px_0_#0f172a]">
           {/* Top Title */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b-2 border-outline-variant">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b-2 border-slate-200">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-secondary-fixed border border-on-surface rounded-full text-xs font-headline font-black text-secondary mb-2">
-                <Sparkles className="w-3.5 h-3.5 fill-secondary" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FEF08A] border-2 border-slate-900 rounded-full text-xs font-display font-black text-slate-900 mb-2 shadow-[0_2px_0_#0f172a]">
+                <Sparkles className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
                 <span>Profil Developer</span>
               </div>
-              <h1 className="font-display font-black text-2xl sm:text-3xl text-on-surface">
+              <h1 className="font-display font-black text-2xl sm:text-3xl text-slate-900">
                 Edit Profil Saya
               </h1>
-              <p className="font-body text-xs sm:text-sm text-on-surface-variant font-medium mt-1">
+              <p className="font-body text-xs sm:text-sm text-slate-600 font-medium mt-1">
                 Kustomisasi nama tampilan dan avatar unik untuk reputasi di leaderboard.
               </p>
             </div>
 
             {/* Gamification Pills */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-300 border-2 border-on-surface rounded-full shadow-sm">
-                <span className="text-xs font-mono font-black text-on-surface">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FEF08A] border-2 border-slate-900 rounded-full shadow-[0_2px_0_#0f172a]">
+                <span className="text-xs font-mono font-black text-slate-900">
                   Lv.{user?.level || 1}
                 </span>
-                <span className="text-xs font-headline font-bold text-on-surface">
+                <span className="text-xs font-display font-bold text-slate-900">
                   {user?.rank_title || "Siswa Pemula"}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#fff3e0] border-2 border-on-surface rounded-full shadow-sm">
-                <Flame className="w-4 h-4 text-[#e65100] fill-[#e65100]" />
-                <span className="text-xs font-headline font-black text-on-surface">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-100 border-2 border-slate-900 rounded-full shadow-[0_2px_0_#0f172a]">
+                <Flame className="w-4 h-4 text-orange-600 fill-orange-600" />
+                <span className="text-xs font-display font-black text-slate-900">
                   {user ? `${(user as any).streak_days || 1} Hari` : "1 Hari"}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary-fixed border-2 border-on-surface rounded-full shadow-sm">
-                <Star className="w-4 h-4 text-secondary fill-secondary" />
-                <span className="text-xs font-headline font-black text-secondary">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#c8eaff] border-2 border-slate-900 rounded-full shadow-[0_2px_0_#0f172a]">
+                <Star className="w-4 h-4 text-sky-600 fill-sky-500" />
+                <span className="text-xs font-display font-black text-slate-900">
                   {user?.xp_points || 50} XP
                 </span>
               </div>
@@ -240,14 +240,14 @@ export default function ProfilePage() {
 
           {/* Feedback Banners */}
           {errorMsg && (
-            <div className="mt-6 p-4 bg-red-100 border-2 border-red-500 rounded-2xl flex items-center gap-2.5 text-red-900 text-xs sm:text-sm font-bold">
+            <div className="mt-6 p-4 bg-red-100 border-2 border-red-500 rounded-2xl flex items-center gap-2.5 text-red-900 text-xs sm:text-sm font-bold shadow-[0_2px_0_#991b1b]">
               <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="mt-6 p-4 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-center gap-2.5 text-emerald-950 text-xs sm:text-sm font-bold animate-pulse">
+            <div className="mt-6 p-4 bg-emerald-100 border-2 border-emerald-600 rounded-2xl flex items-center gap-2.5 text-emerald-950 text-xs sm:text-sm font-bold shadow-[0_2px_0_#065f46]">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
               <span>{successMsg}</span>
             </div>
@@ -257,7 +257,7 @@ export default function ProfilePage() {
           <form onSubmit={handleSave} className="mt-8 space-y-7">
             {/* Avatar Section */}
             <div>
-              <label className="block font-label font-bold text-xs uppercase tracking-wider text-on-surface mb-3">
+              <label className="block font-display font-bold text-xs uppercase tracking-wider text-slate-900 mb-3">
                 Foto Profil / Avatar
               </label>
 
@@ -277,7 +277,7 @@ export default function ProfilePage() {
                   className="relative group shrink-0 cursor-pointer"
                   title="Klik untuk memilih foto dari perangkatmu"
                 >
-                  <div className="w-24 h-24 rounded-3xl border-4 border-on-surface overflow-hidden bg-primary-fixed flex items-center justify-center shadow-brutal relative">
+                  <div className="w-24 h-24 rounded-3xl border-3 sm:border-4 border-slate-900 overflow-hidden bg-slate-100 flex items-center justify-center shadow-[0_4px_0_#0f172a] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=user`}
@@ -294,7 +294,7 @@ export default function ProfilePage() {
                       Ganti Foto
                     </div>
                   </div>
-                  <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-primary text-white border-2 border-on-surface flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                  <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-[#EF4444] text-white border-2 border-slate-900 flex items-center justify-center shadow-[0_2px_0_#0f172a] group-hover:scale-110 transition-transform">
                     <Camera className="w-4 h-4" />
                   </div>
                 </div>
@@ -306,7 +306,7 @@ export default function ProfilePage() {
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={uploadingImage}
-                      className="px-4 py-2 bg-primary hover:bg-[#ec4899] text-white rounded-xl font-headline font-black text-xs border-2 border-on-surface shadow-[0_3px_0_#2e1a28] inline-flex items-center gap-2 hover:scale-102 active:translate-y-0.5 transition-all cursor-pointer disabled:opacity-50"
+                      className="px-4 py-2 bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-xl font-display font-black text-xs border-2 border-slate-900 shadow-[0_3px_0_#991b1b] inline-flex items-center gap-2 hover:scale-102 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer disabled:opacity-50"
                     >
                       {uploadingImage ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -315,14 +315,14 @@ export default function ProfilePage() {
                       )}
                       <span>{uploadingImage ? "Mengunggah..." : "Unggah Foto dari Perangkat"}</span>
                     </button>
-                    <p className="text-[11px] text-on-surface-variant font-medium mt-1">
+                    <p className="text-[11px] text-slate-500 font-medium mt-1">
                       Pilih foto JPG, PNG, atau WebP dari komputer / HP kamu (Maks. 5MB).
                     </p>
                   </div>
 
                   {/* Preset Avatar Selection */}
-                  <div className="pt-2 border-t border-on-surface/10">
-                    <span className="text-[11px] font-bold text-on-surface-variant block mb-1.5">
+                  <div className="pt-2 border-t border-slate-200">
+                    <span className="text-[11px] font-bold text-slate-600 block mb-1.5">
                       Atau pilih karakter preset:
                     </span>
                     <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
@@ -333,8 +333,8 @@ export default function ProfilePage() {
                           onClick={() => setAvatarUrl(preset)}
                           className={`w-10 h-10 rounded-2xl border-2 overflow-hidden transition-all cursor-pointer ${
                             avatarUrl === preset
-                              ? "border-primary ring-3 ring-primary scale-110 shadow-sm"
-                              : "border-on-surface hover:scale-105 opacity-80"
+                              ? "border-slate-900 ring-3 ring-[#EF4444] scale-110 shadow-[0_2px_0_#0f172a]"
+                              : "border-slate-300 hover:border-slate-900 hover:scale-105 opacity-80"
                           }`}
                           title="Gunakan avatar karakter ini"
                         >
@@ -351,13 +351,13 @@ export default function ProfilePage() {
             {/* Full Name */}
             <div>
               <label
-                className="block font-label font-bold text-xs uppercase tracking-wider text-on-surface mb-1.5"
+                className="block font-display font-bold text-xs uppercase tracking-wider text-slate-900 mb-1.5"
                 htmlFor="full-name"
               >
                 Nama Lengkap
               </label>
-              <div className="flex items-center bg-surface-container-low rounded-xl border-2 border-on-surface px-3.5 py-2.5 transition-all focus-within:ring-2 focus-within:ring-primary">
-                <User className="w-5 h-5 text-on-surface-variant mr-2.5 shrink-0" />
+              <div className="flex items-center bg-slate-50 rounded-2xl border-2 border-slate-900 px-4 py-3 transition-all focus-within:ring-2 focus-within:ring-[#EF4444] shadow-[0_2px_0_#0f172a]">
+                <User className="w-5 h-5 text-slate-400 mr-2.5 shrink-0" />
                 <input
                   id="full-name"
                   type="text"
@@ -365,7 +365,7 @@ export default function ProfilePage() {
                   placeholder="Contoh: Budi Santoso"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full bg-transparent border-0 p-0 text-on-surface font-body font-bold text-sm focus:outline-none"
+                  className="w-full bg-transparent border-0 p-0 text-slate-900 font-body font-bold text-sm focus:outline-none"
                 />
               </div>
             </div>
@@ -373,20 +373,20 @@ export default function ProfilePage() {
             {/* Read-Only Account Info (Username & Email) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div>
-                <label className="block font-label font-bold text-xs uppercase tracking-wider text-on-surface-variant mb-1.5">
+                <label className="block font-display font-bold text-xs uppercase tracking-wider text-slate-600 mb-1.5">
                   Username (Permanen)
                 </label>
-                <div className="flex items-center bg-surface-container-high rounded-xl border-2 border-outline-variant px-3.5 py-2.5 text-on-surface-variant font-mono font-bold text-sm">
+                <div className="flex items-center bg-slate-100 rounded-2xl border-2 border-slate-300 px-4 py-3 text-slate-700 font-mono font-bold text-sm">
                   <AtSign className="w-4 h-4 mr-2 shrink-0" />
                   <span>@{user?.username}</span>
                 </div>
               </div>
 
               <div>
-                <label className="block font-label font-bold text-xs uppercase tracking-wider text-on-surface-variant mb-1.5">
+                <label className="block font-display font-bold text-xs uppercase tracking-wider text-slate-600 mb-1.5">
                   Email Terdaftar
                 </label>
-                <div className="flex items-center bg-surface-container-high rounded-xl border-2 border-outline-variant px-3.5 py-2.5 text-on-surface-variant font-mono text-sm truncate">
+                <div className="flex items-center bg-slate-100 rounded-2xl border-2 border-slate-300 px-4 py-3 text-slate-700 font-mono text-sm truncate">
                   <Mail className="w-4 h-4 mr-2 shrink-0" />
                   <span className="truncate">{user?.email}</span>
                 </div>
@@ -394,11 +394,11 @@ export default function ProfilePage() {
             </div>
 
             {/* Save Button */}
-            <div className="pt-4 border-t-2 border-outline-variant flex justify-end">
+            <div className="pt-4 border-t-2 border-slate-200 flex justify-end">
               <button
                 type="submit"
                 disabled={saving}
-                className="px-7 py-3.5 bg-primary hover:bg-[#ec4899] text-white font-headline font-black text-sm rounded-2xl border-3 border-on-surface shadow-brutal flex items-center gap-2 cursor-pointer active:translate-y-0.5 transition-all disabled:opacity-60"
+                className="px-7 py-3.5 bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-sm rounded-2xl border-3 border-slate-900 shadow-[0_4px_0_#991b1b] flex items-center gap-2 cursor-pointer active:translate-y-1 active:shadow-none transition-all disabled:opacity-60"
               >
                 {saving ? (
                   <>
@@ -416,37 +416,37 @@ export default function ProfilePage() {
           </form>
 
           {/* Card Reputasi & EXP Gamifikasi */}
-          <div className="mt-8 pt-8 border-t-4 border-on-surface space-y-6">
+          <div className="mt-8 pt-8 border-t-3 border-slate-900 space-y-6">
             <div className="flex items-center gap-2">
-              <span className="w-8 h-8 rounded-full bg-amber-300 text-on-surface border-2 border-on-surface flex items-center justify-center font-mono font-black text-xs">
+              <span className="w-8 h-8 rounded-full bg-[#FEF08A] text-slate-900 border-2 border-slate-900 flex items-center justify-center font-mono font-black text-xs shadow-[0_2px_0_#0f172a]">
                 Lv
               </span>
               <div>
-                <h2 className="font-display font-black text-xl text-on-surface">
+                <h2 className="font-display font-black text-xl text-slate-900">
                   Reputasi &amp; Tingkat EXP
                 </h2>
-                <p className="font-body text-xs text-on-surface-variant font-medium">
+                <p className="font-body text-xs text-slate-600 font-medium">
                   Selesaikan quest coding dan tantangan untuk meningkatkan level dan membuka reputasi developer.
                 </p>
               </div>
             </div>
 
             {/* Level Progress Banner */}
-            <div className="p-5 bg-surface-container-low rounded-2xl border-2 border-on-surface space-y-3">
+            <div className="p-5 bg-slate-50 rounded-2xl border-2 sm:border-3 border-slate-900 shadow-[0_4px_0_#0f172a] space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{user?.rank_badge || "🌱"}</span>
                   <div>
-                    <span className="font-headline font-black text-base text-on-surface block">
+                    <span className="font-display font-black text-base text-slate-900 block">
                       {user?.rank_title || "Siswa Pemula"}
                     </span>
-                    <span className="font-mono text-xs text-on-surface-variant font-bold">
+                    <span className="font-mono text-xs text-slate-600 font-bold">
                       Level {user?.level || 1} • {user?.xp_points || 50} Total XP
                     </span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs font-mono font-bold text-secondary">
+                  <span className="text-xs font-mono font-bold text-sky-700">
                     {user?.xp_remaining && user.xp_remaining > 0
                       ? `${user.xp_remaining} XP lagi menuju Level ${(user?.level || 1) + 1}`
                       : "Peringkat Tertinggi"}
@@ -455,14 +455,14 @@ export default function ProfilePage() {
               </div>
 
               {/* Bar */}
-              <div className="w-full bg-surface-container-high rounded-full h-4 border-2 border-on-surface overflow-hidden p-0.5">
+              <div className="w-full bg-slate-200 rounded-full h-4 border-2 border-slate-900 overflow-hidden p-0.5">
                 <div
-                  className="bg-gradient-to-r from-amber-400 via-primary to-secondary h-full rounded-full transition-all duration-500"
+                  className="bg-gradient-to-r from-amber-400 via-[#EF4444] to-emerald-400 h-full rounded-full transition-all duration-500"
                   style={{ width: `${Math.max(5, user?.level_progress_percent ?? 50)}%` }}
                 />
               </div>
 
-              <div className="flex justify-between items-center text-[11px] font-bold text-on-surface-variant">
+              <div className="flex justify-between items-center text-[11px] font-bold text-slate-600">
                 <span>{user?.current_level_xp ?? 50} XP di level ini</span>
                 <span>Progres: {user?.level_progress_percent ?? 50}%</span>
               </div>
@@ -470,13 +470,13 @@ export default function ProfilePage() {
 
             {/* XP Transactions History List */}
             <div className="space-y-3">
-              <h3 className="font-display font-black text-base text-on-surface flex items-center gap-2">
+              <h3 className="font-display font-black text-base text-slate-900 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-amber-500" />
                 <span>Riwayat Perolehan EXP</span>
               </h3>
 
               {xpHistory.length === 0 ? (
-                <div className="p-4 bg-surface-container-low rounded-xl border border-outline-variant text-center text-xs text-on-surface-variant font-medium">
+                <div className="p-4 bg-slate-50 rounded-xl border-2 border-slate-200 text-center text-xs text-slate-600 font-medium">
                   Belum ada catatan transaksi EXP. Selesaikan quest tantangan pertamamu untuk mulai mengumpulkan EXP!
                 </div>
               ) : (
@@ -484,17 +484,17 @@ export default function ProfilePage() {
                   {xpHistory.map((item) => (
                     <div
                       key={item.id}
-                      className="p-3 bg-surface-container-low rounded-xl border border-on-surface flex items-center justify-between gap-3 text-xs"
+                      className="p-3 bg-white rounded-xl border-2 border-slate-900 shadow-[0_2px_0_#0f172a] flex items-center justify-between gap-3 text-xs"
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className="px-2 py-0.5 bg-secondary-fixed text-secondary font-mono font-black rounded-lg border border-on-surface text-[11px]">
+                        <span className="px-2 py-0.5 bg-[#FEF08A] text-slate-900 font-mono font-black rounded-lg border border-slate-900 text-[11px]">
                           +{item.amount} XP
                         </span>
                         <div>
-                          <p className="font-headline font-bold text-on-surface leading-snug">
+                          <p className="font-display font-bold text-slate-900 leading-snug">
                             {item.description || item.source}
                           </p>
-                          <span className="text-[10px] text-on-surface-variant font-mono">
+                          <span className="text-[10px] text-slate-500 font-mono">
                             {new Date(item.created_at).toLocaleString("id-ID", {
                               dateStyle: "medium",
                               timeStyle: "short",
@@ -502,7 +502,7 @@ export default function ProfilePage() {
                           </span>
                         </div>
                       </div>
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded border border-outline-variant">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
                         {item.source}
                       </span>
                     </div>

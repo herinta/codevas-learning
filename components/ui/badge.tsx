@@ -27,16 +27,16 @@ export const Badge: React.FC<BadgeProps> = ({
     size === "sm" ? "px-3 py-1 text-xs" : "px-4 py-1.5 text-sm";
 
   const borderStyle = bordered
-    ? "border-2 border-on-surface shadow-[0_2px_0_#2e1a28]"
+    ? "border-2 border-slate-900 shadow-[0_2px_0_#0f172a]"
     : "";
 
   const variantStyles = {
-    pink: "bg-primary-fixed text-on-primary-fixed",
-    purple: "bg-secondary-container text-on-secondary-container",
-    blue: "bg-tertiary-fixed text-on-tertiary-container",
-    yellow: "bg-[#FEF08A] text-[#713f12]",
-    green: "bg-emerald-100 text-emerald-800 border-emerald-500",
-    surface: "bg-surface-container-lowest text-on-surface",
+    pink: "bg-[#ffd6ee] text-slate-900",
+    purple: "bg-[#eedcff] text-slate-900",
+    blue: "bg-[#c8eaff] text-slate-900",
+    yellow: "bg-[#FEF08A] text-slate-900",
+    green: "bg-emerald-100 text-emerald-950 border-emerald-500",
+    surface: "bg-white text-slate-900",
   }[variant];
 
   return (

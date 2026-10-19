@@ -32,15 +32,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary:
-        "bg-primary text-white border-2 border-on-surface candy-btn-shadow hover:scale-[1.02] active:scale-95",
+        "bg-[#EF4444] text-white border-2 border-slate-900 shadow-[0_3px_0_#991b1b] hover:bg-[#DC2626] active:translate-y-0.5 active:shadow-none cursor-pointer",
       secondary:
-        "bg-secondary text-white border-2 border-on-surface candy-btn-shadow hover:scale-[1.02] active:scale-95",
+        "bg-[#FEF08A] text-slate-900 border-2 border-slate-900 shadow-[0_3px_0_#0f172a] hover:bg-[#fde047] active:translate-y-0.5 active:shadow-none cursor-pointer",
       outline:
-        "bg-surface-container-lowest text-on-surface border-2 border-on-surface candy-btn-shadow hover:bg-surface-container",
+        "bg-white text-slate-800 border-2 border-slate-900 shadow-[0_3px_0_#0f172a] hover:bg-slate-100 active:translate-y-0.5 active:shadow-none cursor-pointer",
       ghost:
-        "bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-container",
+        "bg-transparent text-slate-700 hover:text-slate-900 hover:bg-slate-100 cursor-pointer",
       dark:
-        "bg-inverse-surface text-inverse-on-surface border-2 border-on-surface neo-shadow-button hover:bg-[#1a0f17]",
+        "bg-slate-900 text-white border-2 border-slate-900 shadow-[0_3px_0_#020617] hover:bg-slate-800 active:translate-y-0.5 active:shadow-none cursor-pointer",
     }[variant];
 
     return (

@@ -158,8 +158,8 @@ export default function ClassDetailPage({ params }: PageProps) {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-background text-on-surface">
-          <div className="flex items-center gap-2 font-headline font-bold text-lg text-primary animate-pulse">
+        <div className="min-h-screen flex items-center justify-center bg-[#FFFDF7] text-slate-900">
+          <div className="flex items-center gap-2 font-display font-black text-lg text-[#EF4444] animate-pulse">
             <span>Memuat Rincian Kelas...</span>
           </div>
         </div>

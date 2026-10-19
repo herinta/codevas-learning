@@ -13,7 +13,7 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const bgStyles = {
-    white: "bg-surface-container-lowest",
+    white: "bg-white",
     lemon: "bg-[#FEF08A]",
     pink: "bg-[#ffd6ee]",
     blue: "bg-[#c8eaff]",
@@ -21,14 +21,14 @@ export const Card: React.FC<CardProps> = ({
   }[bgVariant];
 
   const shadowStyles = {
-    sm: "shadow-[0_4px_0_#2e1a28]",
-    md: "shadow-[0_8px_0_#2e1a28]",
-    lg: "shadow-[0_12px_0_#2e1a28]",
+    sm: "shadow-[0_4px_0_#0f172a]",
+    md: "shadow-[0_6px_0_#0f172a]",
+    lg: "shadow-[0_8px_0_#0f172a]",
   }[shadowSize];
 
   return (
     <div
-      className={`rounded-2xl border-4 border-on-surface ${bgStyles} ${shadowStyles} ${className}`}
+      className={`rounded-2xl border-3 sm:border-4 border-slate-900 ${bgStyles} ${shadowStyles} ${className}`}
       {...props}
     >
       {children}
