@@ -591,5 +591,6 @@ export const CLASSES_MAP: Record<string, ClassDetail> = CLASSES_LIST.reduce(
 // Backward-compatibility aliases
 CLASSES_MAP["css-flexbox-magic"] = CLASSES_MAP["css-flexbox"];
 CLASSES_MAP["advanced-js-logic"] = CLASSES_MAP["css-grid"];
+CLASSES_MAP["js-logic-blocks"] = CLASSES_MAP["javascript-logic-blocks"];
 
 export const DEFAULT_CLASS = CLASSES_MAP["css-flexbox"];

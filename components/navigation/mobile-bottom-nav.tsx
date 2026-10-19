@@ -72,7 +72,7 @@ export const MobileBottomNav: React.FC = () => {
   return (
     <aside
       aria-label="Navigasi Bawah Mobile"
-      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-surface-container-lowest/95 backdrop-blur-md border-t-2 border-on-surface shadow-[0_-4px_16px_rgba(46,26,40,0.1)] px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t-3 border-slate-900 shadow-[0_-4px_16px_rgba(15,23,42,0.08)] px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
     >
       <nav className="flex items-center justify-around max-w-md mx-auto">
         {navItems.map((item) => {
@@ -80,16 +80,16 @@ export const MobileBottomNav: React.FC = () => {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center py-1 px-3.5 rounded-2xl transition-all cursor-pointer ${
+              className={`flex flex-col items-center justify-center py-1.5 px-3.5 rounded-2xl transition-all cursor-pointer ${
                 item.active
-                  ? "bg-primary-fixed text-primary font-black scale-105 shadow-xs border-2 border-on-surface"
-                  : "text-on-surface-variant hover:text-on-surface font-bold opacity-80 hover:opacity-100"
+                  ? "bg-[#FEF08A] text-slate-900 font-display font-black shadow-[0_2px_0_#0f172a] border-2 border-slate-900 -translate-y-0.5"
+                  : "text-slate-600 hover:text-slate-900 font-bold opacity-80 hover:opacity-100"
               }`}
             >
               <div className="relative">
                 {item.icon}
                 {item.active && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#EF4444] border border-slate-900" />
                 )}
               </div>
               <span className="text-[10px] tracking-tight mt-0.5 leading-tight">

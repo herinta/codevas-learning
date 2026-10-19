@@ -75,28 +75,28 @@ export const LeaderboardWidget: React.FC = () => {
   };
 
   const getRankBadgeClass = (rank: number) => {
-    if (rank === 1) return "bg-amber-400 text-amber-950 border-on-surface";
-    if (rank === 2) return "bg-slate-300 text-slate-900 border-on-surface";
-    if (rank === 3) return "bg-amber-700 text-white border-on-surface";
-    return "bg-surface-container-high text-on-surface border-outline-variant";
+    if (rank === 1) return "bg-[#FEF08A] text-slate-900 border-2 border-slate-900 shadow-[0_2px_0_#0f172a]";
+    if (rank === 2) return "bg-[#E0F2FE] text-slate-900 border-2 border-slate-900 shadow-[0_2px_0_#0f172a]";
+    if (rank === 3) return "bg-[#FECDD3] text-slate-900 border-2 border-slate-900 shadow-[0_2px_0_#0f172a]";
+    return "bg-slate-100 text-slate-700 border-2 border-slate-900";
   };
 
   // Check if current user is within the top 5
   const isCurrentUserInTop = users.some((u) => u.isCurrentUser || (authUser && u.id === authUser.id));
 
   return (
-    <div id="leaderboard" className="bg-surface-container-lowest rounded-2xl border-2 border-on-surface p-5 sm:p-6 candy-card-shadow space-y-4">
+    <div id="leaderboard" className="bg-white rounded-3xl border-3 sm:border-4 border-slate-900 p-5 sm:p-6 shadow-[0_6px_0_#0f172a] space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center border-2 border-on-surface font-black text-sm">
-            <Trophy className="w-4 h-4 text-secondary fill-secondary" />
+          <span className="w-9 h-9 rounded-xl bg-[#FEF08A] text-slate-900 flex items-center justify-center border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
+            <Trophy className="w-5 h-5 text-amber-700 fill-amber-500" />
           </span>
           <div>
-            <h3 className="font-display font-black text-base text-on-surface leading-tight">
+            <h3 className="font-display font-black text-lg text-slate-900 leading-tight">
               Papan Peringkat
             </h3>
-            <span className="text-[11px] font-bold text-on-surface-variant">
+            <span className="text-[11px] font-bold text-slate-500">
               Top Learner Komunitas
             </span>
           </div>
@@ -106,7 +106,7 @@ export const LeaderboardWidget: React.FC = () => {
           <button
             onClick={() => fetchLeaderboard(true)}
             disabled={refreshing}
-            className="p-1.5 rounded-lg border border-on-surface bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant"
+            className="p-2 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-100 transition-colors text-slate-900 shadow-[0_2px_0_#0f172a] cursor-pointer"
             title="Refresh Leaderboard"
             aria-label="Refresh Leaderboard"
           >
@@ -114,7 +114,7 @@ export const LeaderboardWidget: React.FC = () => {
           </button>
           <button
             onClick={fetchFullLeaderboard}
-            className="text-xs font-bold text-secondary hover:underline cursor-pointer"
+            className="px-2.5 py-1 text-xs font-display font-black text-slate-900 bg-[#E0F2FE] hover:bg-[#BAE6FD] border-2 border-slate-900 rounded-lg shadow-[0_2px_0_#0f172a] cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
           >
             Lihat Semua
           </button>
@@ -124,11 +124,11 @@ export const LeaderboardWidget: React.FC = () => {
       {/* Loading Skeleton */}
       {loading ? (
         <div className="py-8 flex flex-col items-center justify-center gap-2">
-          <Loader2 className="w-6 h-6 text-primary animate-spin" />
-          <span className="text-xs font-bold text-on-surface-variant">Memuat skor peringkat...</span>
+          <Loader2 className="w-6 h-6 text-[#EF4444] animate-spin" />
+          <span className="text-xs font-bold text-slate-600">Memuat skor peringkat...</span>
         </div>
       ) : users.length === 0 ? (
-        <div className="p-4 bg-surface-container-low rounded-xl border border-dashed border-on-surface text-center text-xs text-on-surface-variant font-medium">
+        <div className="p-4 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-900 text-center text-xs text-slate-600 font-bold">
           Belum ada pengguna di leaderboard. Jadilah yang pertama meraih XP!
         </div>
       ) : (
@@ -140,18 +140,18 @@ export const LeaderboardWidget: React.FC = () => {
             return (
               <div
                 key={u.id}
-                className={`flex items-center justify-between p-2.5 rounded-xl border-2 transition-transform ${
+                className={`flex items-center justify-between p-3 rounded-2xl border-2 sm:border-3 transition-transform ${
                   isMe
-                    ? "bg-secondary-fixed/40 border-secondary shadow-xs scale-[1.01]"
+                    ? "bg-[#FEF08A]/50 border-slate-900 shadow-[0_3px_0_#0f172a] scale-[1.01]"
                     : u.rank === 1
-                    ? "bg-amber-100/60 border-on-surface shadow-xs"
-                    : "bg-surface-container-low border-outline-variant hover:border-on-surface"
+                    ? "bg-amber-50 border-slate-900 shadow-[0_2px_0_#0f172a]"
+                    : "bg-slate-50 border-slate-900 hover:bg-white"
                 }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   {/* Rank Badge */}
                   <span
-                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black border shrink-0 ${getRankBadgeClass(
+                    className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-black shrink-0 ${getRankBadgeClass(
                       u.rank
                     )}`}
                   >
@@ -159,12 +159,12 @@ export const LeaderboardWidget: React.FC = () => {
                   </span>
 
                   {/* Avatar */}
-                  <div className="w-8 h-8 rounded-full border border-on-surface overflow-hidden bg-primary-fixed shrink-0 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-xl border-2 border-slate-900 overflow-hidden bg-[#BAE6FD] shrink-0 flex items-center justify-center">
                     {u.avatar_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={u.avatar_url} alt={u.username} className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-xs font-black uppercase text-primary">
+                      <span className="text-xs font-black uppercase text-slate-900">
                         {u.username.slice(0, 2)}
                       </span>
                     )}
@@ -172,16 +172,16 @@ export const LeaderboardWidget: React.FC = () => {
 
                   {/* User Details */}
                   <div className="min-w-0">
-                    <div className="text-xs font-black text-on-surface flex items-center gap-1.5 truncate">
+                    <div className="text-xs font-display font-black text-slate-900 flex items-center gap-1.5 truncate">
                       <span className="truncate">{u.full_name || u.username}</span>
                       {isMe && (
-                        <span className="text-[9px] bg-secondary text-white px-1.5 py-0.2 rounded-full font-mono font-bold shrink-0">
+                        <span className="text-[9px] bg-[#EF4444] text-white px-1.5 py-0.5 rounded-md font-mono font-black border border-slate-900 shrink-0">
                           Kamu
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-on-surface-variant font-medium">
-                      <span className="font-mono font-bold text-amber-800 bg-amber-200/80 px-1 rounded">
+                    <div className="flex items-center gap-1.5 text-[10px] text-slate-600 font-bold">
+                      <span className="font-mono font-black text-slate-900 bg-[#FEF08A] px-1 rounded border border-slate-900">
                         Lv.{u.level}
                       </span>
                       <span>•</span>
@@ -191,7 +191,7 @@ export const LeaderboardWidget: React.FC = () => {
                 </div>
 
                 {/* XP Count */}
-                <span className="text-xs font-mono font-black text-secondary shrink-0 ml-2">
+                <span className="text-xs font-mono font-black text-slate-900 bg-white px-2 py-1 rounded-lg border border-slate-900 shadow-xs shrink-0 ml-2">
                   {u.xp_points.toLocaleString()} XP
                 </span>
               </div>
@@ -202,25 +202,25 @@ export const LeaderboardWidget: React.FC = () => {
 
       {/* Pinned Card if Current User is Outside Top 5 */}
       {!loading && !isCurrentUserInTop && authUser && (
-        <div className="pt-2 border-t border-dashed border-outline-variant">
-          <div className="p-3 bg-secondary-fixed/40 rounded-xl border-2 border-secondary flex items-center justify-between shadow-xs">
+        <div className="pt-2 border-t-2 border-dashed border-slate-300">
+          <div className="p-3.5 bg-[#FEF08A]/40 rounded-2xl border-3 border-slate-900 flex items-center justify-between shadow-[0_3px_0_#0f172a]">
             <div className="flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-secondary text-white font-mono font-black text-xs flex items-center justify-center border border-on-surface">
+              <span className="w-7 h-7 rounded-xl bg-slate-900 text-white font-mono font-black text-xs flex items-center justify-center border border-slate-900">
                 {currentUserRank ? `#${currentUserRank}` : "—"}
               </span>
               <div>
-                <div className="text-xs font-headline font-black text-on-surface flex items-center gap-1.5">
+                <div className="text-xs font-display font-black text-slate-900 flex items-center gap-1.5">
                   <span>Kamu (@{authUser.username})</span>
-                  <span className="text-[9px] bg-secondary text-white px-1.5 py-0.2 rounded-full font-bold">
+                  <span className="text-[9px] bg-[#EF4444] text-white px-1.5 py-0.5 rounded-md font-mono font-black border border-slate-900">
                     Peringkatmu
                   </span>
                 </div>
-                <div className="text-[10px] text-on-surface-variant font-medium">
+                <div className="text-[10px] text-slate-700 font-bold">
                   Level {authUser.level || 1} • {authUser.rank_title || "Siswa Pemula"}
                 </div>
               </div>
             </div>
-            <span className="text-xs font-mono font-black text-secondary">
+            <span className="text-xs font-mono font-black text-slate-900 bg-white px-2 py-1 rounded-lg border border-slate-900 shadow-xs">
               {authUser.xp_points.toLocaleString()} XP
             </span>
           </div>
@@ -229,29 +229,29 @@ export const LeaderboardWidget: React.FC = () => {
 
       {/* Full Leaderboard Modal */}
       {showFullModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-surface-container-lowest border-4 border-on-surface rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-brutal space-y-4 max-h-[85vh] flex flex-col">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white border-4 border-slate-900 rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-[0_12px_0_#0f172a] space-y-4 max-h-[85vh] flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-3 border-b-2 border-outline-variant shrink-0">
-              <div className="flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center border-2 border-on-surface font-black">
+            <div className="flex items-center justify-between pb-3 border-b-2 border-slate-900 shrink-0">
+              <div className="flex items-center gap-2.5">
+                <span className="w-9 h-9 rounded-xl bg-[#FEF08A] text-slate-900 flex items-center justify-center border-2 border-slate-900 shadow-[0_2px_0_#0f172a] font-black">
                   🏆
                 </span>
                 <div>
-                  <h3 className="font-display font-black text-lg text-on-surface">
+                  <h3 className="font-display font-black text-xl text-slate-900">
                     Top 25 Papan Peringkat
                   </h3>
-                  <p className="text-xs text-on-surface-variant font-medium">
+                  <p className="text-xs text-slate-600 font-medium">
                     Peringkat keseluruhan berdasarkan perolehan XP &amp; quest selesai
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowFullModal(false)}
-                className="p-1.5 rounded-full border border-on-surface hover:bg-surface-container transition-colors"
+                className="p-2 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-100 transition-colors shadow-[0_2px_0_#0f172a] cursor-pointer"
                 aria-label="Tutup"
               >
-                <X className="w-5 h-5 text-on-surface" />
+                <X className="w-5 h-5 text-slate-900" />
               </button>
             </div>
 
@@ -259,11 +259,11 @@ export const LeaderboardWidget: React.FC = () => {
             <div className="overflow-y-auto space-y-2 flex-1 pr-1">
               {fullLoading ? (
                 <div className="py-12 flex flex-col items-center justify-center gap-2">
-                  <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                  <span className="text-xs font-bold text-on-surface-variant">Memuat data lengkap...</span>
+                  <Loader2 className="w-6 h-6 text-[#EF4444] animate-spin" />
+                  <span className="text-xs font-bold text-slate-600">Memuat data lengkap...</span>
                 </div>
               ) : fullList.length === 0 ? (
-                <div className="py-8 text-center text-xs text-on-surface-variant">
+                <div className="py-8 text-center text-xs text-slate-600 font-bold">
                   Tidak ada data leaderboard.
                 </div>
               ) : (
@@ -272,45 +272,45 @@ export const LeaderboardWidget: React.FC = () => {
                   return (
                     <div
                       key={u.id}
-                      className={`flex items-center justify-between p-3 rounded-xl border-2 transition-transform ${
+                      className={`flex items-center justify-between p-3 rounded-2xl border-2 transition-transform ${
                         isMe
-                          ? "bg-secondary-fixed/40 border-secondary shadow-xs"
+                          ? "bg-[#FEF08A]/50 border-slate-900 shadow-[0_2px_0_#0f172a]"
                           : u.rank === 1
-                          ? "bg-amber-100/70 border-on-surface"
-                          : "bg-surface-container-low border-outline-variant"
+                          ? "bg-amber-50 border-slate-900"
+                          : "bg-slate-50 border-slate-200"
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <span
-                          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono font-black border shrink-0 ${getRankBadgeClass(
+                          className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-black shrink-0 ${getRankBadgeClass(
                             u.rank
                           )}`}
                         >
                           {u.rank === 1 ? "🥇" : u.rank === 2 ? "🥈" : u.rank === 3 ? "🥉" : u.rank}
                         </span>
 
-                        <div className="w-8 h-8 rounded-full border border-on-surface overflow-hidden bg-primary-fixed shrink-0 flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-xl border-2 border-slate-900 overflow-hidden bg-[#BAE6FD] shrink-0 flex items-center justify-center">
                           {u.avatar_url ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={u.avatar_url} alt={u.username} className="w-full h-full object-cover" />
                           ) : (
-                            <span className="text-xs font-black uppercase text-primary">
+                            <span className="text-xs font-black uppercase text-slate-900">
                               {u.username.slice(0, 2)}
                             </span>
                           )}
                         </div>
 
                         <div className="min-w-0">
-                          <div className="text-xs font-black text-on-surface flex items-center gap-1.5 truncate">
+                          <div className="text-xs font-display font-black text-slate-900 flex items-center gap-1.5 truncate">
                             <span className="truncate">{u.full_name || u.username}</span>
                             {isMe && (
-                              <span className="text-[9px] bg-secondary text-white px-1.5 py-0.2 rounded-full font-mono font-bold shrink-0">
+                              <span className="text-[9px] bg-[#EF4444] text-white px-1.5 py-0.5 rounded-md font-mono font-black border border-slate-900 shrink-0">
                                 Kamu
                               </span>
                             )}
                           </div>
-                          <div className="flex items-center gap-1.5 text-[10px] text-on-surface-variant font-medium">
-                            <span className="font-mono font-bold text-amber-800 bg-amber-200/80 px-1 rounded">
+                          <div className="flex items-center gap-1.5 text-[10px] text-slate-600 font-bold">
+                            <span className="font-mono font-black text-slate-900 bg-[#FEF08A] px-1 rounded border border-slate-900">
                               Lv.{u.level}
                             </span>
                             <span>•</span>
@@ -321,7 +321,7 @@ export const LeaderboardWidget: React.FC = () => {
                         </div>
                       </div>
 
-                      <span className="text-xs font-mono font-black text-secondary shrink-0 ml-2">
+                      <span className="text-xs font-mono font-black text-slate-900 bg-white px-2 py-1 rounded-lg border border-slate-900 shadow-xs shrink-0 ml-2">
                         {u.xp_points.toLocaleString()} XP
                       </span>
                     </div>
@@ -331,10 +331,10 @@ export const LeaderboardWidget: React.FC = () => {
             </div>
 
             {/* Modal Footer */}
-            <div className="pt-2 border-t border-outline-variant flex justify-end shrink-0">
+            <div className="pt-3 border-t-2 border-slate-900 flex justify-end shrink-0">
               <button
                 onClick={() => setShowFullModal(false)}
-                className="px-5 py-2.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface border-2 border-on-surface rounded-xl font-headline font-bold text-xs cursor-pointer"
+                className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white border-2 border-slate-900 rounded-xl font-display font-black text-xs shadow-[0_3px_0_#0f172a] cursor-pointer"
               >
                 Tutup
               </button>

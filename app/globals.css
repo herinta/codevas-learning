@@ -146,6 +146,10 @@
   animation: floatReverse 7s ease-in-out infinite;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-on-surface);

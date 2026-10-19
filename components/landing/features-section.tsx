@@ -3,7 +3,7 @@ import { Zap, Sparkles, Eye, CheckCircle2, Heart, Award } from "lucide-react";
 
 export const FeaturesSection: React.FC = () => {
   return (
-    <section className="py-24 px-4 bg-[#FFFDF7] max-w-6xl mx-auto" id="features">
+    <section className="py-24 px-4 bg-[#FFFDF7] max-w-6xl mx-auto scroll-mt-24" id="features">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-16">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FEF08A] border-3 border-slate-900 text-slate-900 font-display font-black text-xs uppercase tracking-wider shadow-[0_3px_0_#0f172a]">

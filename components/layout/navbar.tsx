@@ -65,7 +65,7 @@ export const Navbar: React.FC = () => {
         </nav>
 
         {/* Right CTAs / User Auth State */}
-        <div className="hidden sm:flex items-center gap-2 md:gap-3">
+        <div className="hidden md:flex items-center gap-2 md:gap-3">
           {user ? (
             <div className="flex items-center gap-2">
               <Link
@@ -115,22 +115,24 @@ export const Navbar: React.FC = () => {
             </div>
           ) : (
             <>
-              <Link href={loginHref}>
-                <button className="px-4 py-2 rounded-full text-sm font-bold text-slate-800 hover:bg-[#FEF08A] transition-colors border border-slate-300 cursor-pointer">
-                  Masuk
-                </button>
+              <Link
+                href={loginHref}
+                className="px-4 py-2 rounded-full text-sm font-bold text-slate-800 hover:bg-[#FEF08A] transition-colors border border-slate-300 cursor-pointer"
+              >
+                Masuk
               </Link>
-              <Link href={registerHref}>
-                <button className="px-5 py-2 rounded-full bg-[#EF4444] hover:bg-[#dc2626] text-white font-black text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b] hover:scale-105 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer">
-                  Daftar Gratis
-                </button>
+              <Link
+                href={registerHref}
+                className="px-5 py-2 rounded-full bg-[#EF4444] hover:bg-[#dc2626] text-white font-black text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b] hover:scale-105 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+              >
+                Daftar Gratis
               </Link>
             </>
           )}
         </div>
 
         {/* Mobile Hamburger Toggle */}
-        <div className="flex sm:hidden items-center gap-2">
+        <div className="flex md:hidden items-center gap-2">
           {user ? (
             <Link href="/dashboard">
               <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-black flex items-center justify-center border-2 border-on-surface uppercase">
@@ -138,15 +140,16 @@ export const Navbar: React.FC = () => {
               </div>
             </Link>
           ) : (
-            <Link href={loginHref}>
-              <Button variant="ghost" size="sm" className="px-2.5">
-                Masuk
-              </Button>
+            <Link
+              href={loginHref}
+              className="px-3 py-1.5 rounded-full text-xs font-bold text-slate-800 hover:bg-[#FEF08A] transition-colors border border-slate-300"
+            >
+              Masuk
             </Link>
           )}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 rounded-full border border-on-surface bg-surface-container hover:bg-surface-container-high transition-colors"
+            className="p-1.5 rounded-full border border-on-surface bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
@@ -160,7 +163,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className="sm:hidden mt-2 max-w-sm mx-auto bg-surface-container-lowest border-2 border-on-surface rounded-2xl p-4 shadow-[0_6px_0_#2e1a28] flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="md:hidden mt-2 max-w-sm mx-auto bg-surface-container-lowest border-2 border-on-surface rounded-2xl p-4 shadow-[0_6px_0_#2e1a28] flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-150">
           <Link
             href="/dashboard"
             onClick={() => setMobileMenuOpen(false)}
@@ -224,10 +227,12 @@ export const Navbar: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <Link href={registerHref} onClick={() => setMobileMenuOpen(false)}>
-                <button className="w-full py-2.5 rounded-xl bg-[#EF4444] text-white font-bold text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b]">
-                  Daftar Gratis
-                </button>
+              <Link
+                href={registerHref}
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full py-2.5 rounded-xl bg-[#EF4444] text-white font-bold text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b] text-center block"
+              >
+                Daftar Gratis
               </Link>
             )}
           </div>

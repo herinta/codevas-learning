@@ -11,7 +11,7 @@ export const StatsBanner: React.FC = () => {
   const registerHref = pathname?.startsWith("/demo") ? "/demo/register" : "/register";
 
   return (
-    <section className="py-16 px-4" id="community">
+    <section className="py-16 px-4 scroll-mt-24" id="community">
       <div className="max-w-6xl mx-auto bg-[#FEF08A] rounded-3xl border-4 border-slate-900 p-8 md:p-12 shadow-[0_12px_0_#0f172a] flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
         {/* Left Text & CTA */}
         <div className="max-w-xl text-center lg:text-left z-10">

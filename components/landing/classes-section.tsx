@@ -141,7 +141,9 @@ export const ClassesSection: React.FC<ClassesSectionProps> = ({ initialClasses }
   };
 
   return (
-    <section className="py-20 px-4 bg-[#FFFDF7] max-w-6xl mx-auto" id="classes">
+    <section className="py-20 px-4 bg-[#FFFDF7] max-w-6xl mx-auto scroll-mt-24 relative" id="classes">
+      {/* Anchor alias for #curriculum */}
+      <div id="curriculum" className="absolute -top-24" />
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
         <div>
@@ -287,11 +289,17 @@ export const ClassesSection: React.FC<ClassesSectionProps> = ({ initialClasses }
 
                   {/* Card Body */}
                   <div className="p-6 space-y-3">
-                    <Link href={`/classes/${item.id}`}>
-                      <h3 className="font-display font-black text-xl text-slate-900 leading-snug group-hover:text-[#EF4444] transition-colors line-clamp-2 cursor-pointer">
+                    {isComingSoon ? (
+                      <h3 className="font-display font-black text-xl text-slate-700 leading-snug line-clamp-2">
                         {item.title}
                       </h3>
-                    </Link>
+                    ) : (
+                      <Link href={`/classes/${item.id}`}>
+                        <h3 className="font-display font-black text-xl text-slate-900 leading-snug group-hover:text-[#EF4444] transition-colors line-clamp-2 cursor-pointer">
+                          {item.title}
+                        </h3>
+                      </Link>
+                    )}
 
                     <p className="text-xs text-slate-600 font-medium line-clamp-2 leading-relaxed">
                       {item.tagline || item.description}
@@ -314,24 +322,39 @@ export const ClassesSection: React.FC<ClassesSectionProps> = ({ initialClasses }
                 {/* Card Footer CTA */}
                 <div className="p-6 pt-0">
                   {isComingSoon ? (
-                    <button
-                      disabled
-                      className="w-full py-3 px-4 rounded-2xl border-2 border-slate-900 font-display font-black text-xs text-slate-400 bg-slate-100 cursor-not-allowed text-center"
+                    <div
+                      className="w-full py-3.5 px-4 rounded-2xl border-2 border-slate-300 font-display font-black text-xs text-slate-400 bg-slate-100 cursor-not-allowed text-center select-none"
                     >
                       Segera Hadir
-                    </button>
+                    </div>
                   ) : (
-                    <Link href={`/classes/${item.id}`} className="block w-full">
-                      <button className="w-full py-3.5 px-4 rounded-2xl border-3 border-slate-900 font-display font-black text-sm text-white bg-[#3B82F6] hover:bg-[#2563EB] shadow-[0_4px_0_#1e3a8a] flex items-center justify-center gap-2 group/btn transition-transform active:translate-y-0.5 active:shadow-none cursor-pointer">
-                        <span>{item.isEnrolled ? "Lanjutkan Kelas" : "Mulai Kelas"}</span>
-                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
+                    <Link
+                      href={`/classes/${item.id}`}
+                      className="w-full py-3.5 px-4 rounded-2xl border-3 border-slate-900 font-display font-black text-sm text-white bg-[#3B82F6] hover:bg-[#2563EB] shadow-[0_4px_0_#1e3a8a] flex items-center justify-center gap-2 group/btn transition-transform active:translate-y-0.5 active:shadow-none cursor-pointer"
+                    >
+                      <span>{item.isEnrolled ? "Lanjutkan Kelas" : "Mulai Kelas"}</span>
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                     </Link>
                   )}
                 </div>
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Empty State when category has no classes */}
+      {!loading && filteredClasses.length === 0 && (
+        <div className="text-center py-16 px-6 bg-white rounded-3xl border-3 border-dashed border-slate-300">
+          <p className="font-display font-bold text-slate-700 text-base">
+            Belum ada kelas yang tersedia untuk kategori ini.
+          </p>
+          <button
+            onClick={() => setSelectedCategory("ALL")}
+            className="mt-4 px-5 py-2.5 rounded-full bg-[#FEF08A] border-2 border-slate-900 text-xs font-display font-black text-slate-900 shadow-[0_2px_0_#0f172a] hover:bg-yellow-300 transition-colors cursor-pointer"
+          >
+            Tampilkan Semua Kategori
+          </button>
         </div>
       )}
     </section>

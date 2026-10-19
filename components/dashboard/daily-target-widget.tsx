@@ -29,68 +29,68 @@ export const DailyTargetWidget: React.FC = () => {
   return (
     <>
       {/* DAILY TARGET CARD */}
-      <div className="bg-surface-container-lowest border-2 border-on-surface rounded-2xl p-5 sm:p-6 candy-card-shadow space-y-4 relative overflow-hidden">
+      <div className="bg-white border-3 sm:border-4 border-slate-900 rounded-3xl p-5 sm:p-6 shadow-[0_6px_0_#0f172a] space-y-4 relative overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <span
-              className={`w-8 h-8 rounded-full border-2 border-on-surface flex items-center justify-center ${
+              className={`w-9 h-9 rounded-2xl border-2 border-slate-900 flex items-center justify-center shadow-[0_2px_0_#0f172a] ${
                 isCompleted
-                  ? "bg-emerald-500 text-white"
-                  : "bg-primary-fixed text-primary"
+                  ? "bg-[#DCFCE7] text-[#15803D]"
+                  : "bg-[#FEF08A] text-slate-900"
               }`}
             >
-              <Target className="w-4 h-4" />
+              <Target className="w-4 h-4 stroke-[2.5]" />
             </span>
             <div>
-              <h3 className="font-display font-black text-base text-on-surface leading-tight">
+              <h3 className="font-display font-black text-base text-slate-900 leading-tight">
                 Target Harian 10 Menit
               </h3>
-              <span className="text-[11px] font-bold text-on-surface-variant">
+              <span className="text-[11px] font-bold text-slate-500">
                 Fokus Belajar &amp; Koding
               </span>
             </div>
           </div>
 
           <span
-            className={`text-xs font-mono font-black px-2.5 py-1 rounded-full border border-on-surface flex items-center gap-1 shadow-xs ${
+            className={`text-xs font-mono font-black px-2.5 py-1 rounded-full border-2 border-slate-900 flex items-center gap-1 shadow-[0_2px_0_#0f172a] ${
               isCompleted
-                ? "bg-emerald-100 text-emerald-950 border-emerald-600"
-                : "bg-amber-300 text-on-surface"
+                ? "bg-[#DCFCE7] text-[#15803D]"
+                : "bg-[#FEF08A] text-slate-900"
             }`}
           >
-            <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
+            <Flame className="w-3.5 h-3.5 text-[#D97706] fill-[#F59E0B]" />
             <span>+30 XP</span>
           </span>
         </div>
 
         {/* Live Timer Counter Box */}
-        <div className="p-3.5 bg-surface-container-low rounded-xl border-2 border-on-surface space-y-2.5">
+        <div className="p-3.5 bg-slate-50 rounded-2xl border-2 border-slate-900 space-y-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-1.5">
-              <span className="font-mono font-black text-2xl text-on-surface tracking-tight">
+              <span className="font-mono font-black text-2xl text-slate-900 tracking-tight">
                 {formattedActive}
               </span>
-              <span className="text-xs font-mono font-bold text-on-surface-variant">
+              <span className="text-xs font-mono font-bold text-slate-500">
                 / {formattedTarget}
               </span>
             </div>
 
             <span
-              className={`px-2.5 py-0.5 rounded-full text-[11px] font-headline font-bold flex items-center gap-1 ${
+              className={`px-2.5 py-1 rounded-full text-[11px] font-display font-black flex items-center gap-1 border-2 border-slate-900 shadow-xs ${
                 isCompleted
-                  ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
-                  : "bg-amber-100 text-amber-900 border border-amber-300 animate-pulse"
+                  ? "bg-[#DCFCE7] text-[#15803D]"
+                  : "bg-[#FEF08A] text-slate-900 animate-pulse"
               }`}
             >
               {isCompleted ? (
                 <>
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#15803D] stroke-[2.5]" />
                   <span>Target Tercapai!</span>
                 </>
               ) : (
                 <>
-                  <Clock className="w-3 h-3 text-amber-700" />
+                  <Clock className="w-3.5 h-3.5 text-[#D97706]" />
                   <span>Sedang Berjalan</span>
                 </>
               )}
@@ -98,18 +98,18 @@ export const DailyTargetWidget: React.FC = () => {
           </div>
 
           {/* Progress Bar */}
-          <div className="w-full bg-surface-container-high rounded-full h-3 border border-on-surface overflow-hidden p-0.5">
+          <div className="w-full bg-slate-200 rounded-full h-3.5 border-2 border-slate-900 overflow-hidden p-0.5">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
                 isCompleted
-                  ? "bg-emerald-500"
-                  : "bg-gradient-to-r from-amber-400 via-primary to-secondary"
+                  ? "bg-[#10B981]"
+                  : "bg-[#EF4444]"
               }`}
               style={{ width: `${Math.max(6, percent)}%` }}
             />
           </div>
 
-          <div className="flex items-center justify-between text-[11px] font-bold text-on-surface-variant">
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
             <span>{percent}% dari target harian</span>
             <span>
               {isCompleted
@@ -121,10 +121,10 @@ export const DailyTargetWidget: React.FC = () => {
 
         {/* 7-Day History Mini-Heatmap */}
         {weeklyHistory.length > 0 && (
-          <div className="pt-2 border-t border-outline-variant space-y-1.5">
-            <div className="flex items-center justify-between text-[11px] font-headline font-bold text-on-surface-variant">
+          <div className="pt-2 border-t-2 border-slate-100 space-y-1.5">
+            <div className="flex items-center justify-between text-[11px] font-display font-black text-slate-700">
               <span>Aktivitas 7 Hari Terakhir:</span>
-              <span className="font-mono text-primary font-bold">
+              <span className="font-mono text-[#0284C7] font-black">
                 {weeklyHistory.filter((d) => d.isCompleted).length}/7 Hari Target
               </span>
             </div>
@@ -133,22 +133,22 @@ export const DailyTargetWidget: React.FC = () => {
               {weeklyHistory.map((day, idx) => (
                 <div key={day.date} className="flex flex-col items-center gap-1">
                   <div
-                    className={`w-7 h-7 rounded-xl border flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
+                    className={`w-7 h-7 rounded-xl border-2 flex items-center justify-center text-[10px] font-mono font-black transition-all ${
                       day.isCompleted
-                        ? "bg-emerald-500 text-white border-emerald-700 shadow-xs"
+                        ? "bg-[#10B981] text-white border-slate-900 shadow-[0_2px_0_#065f46]"
                         : idx === 6
-                        ? "bg-amber-100 text-amber-900 border-amber-400"
-                        : "bg-surface-container text-on-surface-variant/60 border-outline-variant/60"
+                        ? "bg-[#FEF08A] text-slate-900 border-slate-900 shadow-[0_2px_0_#0f172a]"
+                        : "bg-slate-100 text-slate-400 border-slate-300"
                     }`}
                     title={`${day.date} (${day.dayName}): ${day.activeMinutes} menit`}
                   >
                     {day.isCompleted ? (
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
                     ) : (
                       <span>{day.activeMinutes}m</span>
                     )}
                   </div>
-                  <span className="text-[10px] font-bold text-on-surface-variant">
+                  <span className="text-[10px] font-bold text-slate-500">
                     {day.dayName}
                   </span>
                 </div>
@@ -161,41 +161,41 @@ export const DailyTargetWidget: React.FC = () => {
       {/* TARGET COMPLETED CELEBRATION MODAL */}
       {justCompletedModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-surface-container-lowest border-4 border-on-surface rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-[0_12px_0_#2e1a28] text-center space-y-4 relative">
+          <div className="bg-white border-4 border-slate-900 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-[0_12px_0_#0f172a] text-center space-y-4 relative">
             <button
               onClick={dismissJustCompletedModal}
-              className="absolute top-3 right-3 p-1 rounded-lg text-on-surface-variant hover:bg-surface-container"
+              className="absolute top-3 right-3 p-1.5 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 cursor-pointer"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
 
-            <div className="w-16 h-16 rounded-3xl bg-amber-300 border-3 border-on-surface mx-auto flex items-center justify-center text-amber-950 shadow-sm animate-bounce">
+            <div className="w-16 h-16 rounded-2xl bg-[#FEF08A] border-3 border-slate-900 mx-auto flex items-center justify-center text-[#D97706] shadow-[0_4px_0_#0f172a] animate-bounce">
               <Trophy className="w-8 h-8" />
             </div>
 
             <div>
-              <div className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-headline font-black mb-1">
-                <Sparkles className="w-3 h-3 text-emerald-600" />
+              <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#DCFCE7] text-[#15803D] border-2 border-slate-900 text-xs font-display font-black mb-1 shadow-sm">
+                <Sparkles className="w-3.5 h-3.5 text-[#15803D]" />
                 <span>Target Harian Tercapai!</span>
               </div>
-              <h3 className="font-display font-black text-xl text-on-surface">
+              <h3 className="font-display font-black text-xl text-slate-900 mt-1">
                 10 Menit Fokus Belajar
               </h3>
-              <p className="text-xs text-on-surface-variant font-medium mt-1 leading-relaxed">
+              <p className="text-xs text-slate-600 font-medium mt-1 leading-relaxed">
                 Luar biasa! Konsistensi belajarmu hari ini menjaga streak tetap menyala dan kamu berhak mendapat bonus EXP.
               </p>
             </div>
 
-            <div className="p-3 bg-amber-50 rounded-2xl border-2 border-amber-300 flex items-center justify-center gap-2">
-              <Zap className="w-5 h-5 text-amber-600 fill-amber-500" />
-              <span className="font-mono font-black text-base text-amber-950">
+            <div className="p-3 bg-[#FEF08A] rounded-2xl border-2 border-slate-900 flex items-center justify-center gap-2 shadow-[0_2px_0_#0f172a]">
+              <Zap className="w-5 h-5 text-[#D97706] fill-[#F59E0B]" />
+              <span className="font-mono font-black text-base text-slate-900">
                 +30 EXP Masuk ke Akunmu
               </span>
             </div>
 
             <button
               onClick={dismissJustCompletedModal}
-              className="w-full py-3 bg-primary text-white font-headline font-black text-sm rounded-xl border-2 border-on-surface shadow-[0_4px_0_#2e1a28] hover:scale-102 active:translate-y-0.5 transition-transform cursor-pointer"
+              className="w-full py-3 bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-sm rounded-2xl border-2 border-slate-900 shadow-[0_4px_0_#991b1b] hover:scale-102 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
             >
               Keren, Lanjutkan Belajar! 🚀
             </button>

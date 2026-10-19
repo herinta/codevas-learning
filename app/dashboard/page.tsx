@@ -194,9 +194,9 @@ export default function DashboardPage() {
 
   if (authLoading || !user) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-8 h-8 text-primary animate-spin" />
-        <p className="font-headline font-bold text-sm text-on-surface">
+      <div className="min-h-screen bg-[#FFFDF7] flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-8 h-8 text-[#EF4444] animate-spin" />
+        <p className="font-display font-black text-sm text-slate-900">
           Memeriksa sesi pengguna...
         </p>
       </div>
@@ -204,7 +204,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col">
+    <div className="min-h-screen bg-[#FFFDF7] text-slate-900 flex flex-col">
       {/* Top Navigation Bar with synchronized user XP & streak */}
       <DashboardNav
         searchQuery={searchQuery}
@@ -235,15 +235,15 @@ export default function DashboardPage() {
           <div className="lg:col-span-8 flex flex-col gap-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex items-center gap-2.5">
-                <span className="w-3.5 h-3.5 rounded-full bg-primary border-2 border-on-surface" />
-                <h2 className="font-display font-black text-lg sm:text-xl text-on-surface">
+                <span className="w-4 h-4 rounded-full bg-[#EF4444] border-2 border-slate-900 shadow-xs" />
+                <h2 className="font-display font-black text-xl sm:text-2xl text-slate-900 tracking-tight">
                   {activeCategory === "MY_CLASSES"
                     ? "Kelas Saya yang Di-enroll"
                     : "Pilihan Modul & Tantangan"}
                 </h2>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full border border-outline-variant">
+                <span className="text-xs font-mono font-black text-slate-900 bg-white px-3 py-1 rounded-full border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
                   {displayedTracks.length} Kelas Tersedia
                 </span>
               </div>
@@ -255,39 +255,39 @@ export default function DashboardPage() {
                 {[1, 2, 3].map((n) => (
                   <div
                     key={n}
-                    className="bg-surface-container-lowest border-2 border-on-surface rounded-2xl p-6 shadow-brutal flex flex-col justify-between animate-pulse"
+                    className="bg-white border-3 border-slate-900 rounded-3xl p-6 shadow-[0_6px_0_#0f172a] flex flex-col justify-between animate-pulse"
                   >
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <div className="h-6 w-24 bg-surface-container-high rounded-full border border-on-surface/20" />
-                        <div className="h-6 w-16 bg-surface-container-high rounded-full border border-on-surface/20" />
+                        <div className="h-6 w-24 bg-slate-200 rounded-full border-2 border-slate-900" />
+                        <div className="h-6 w-16 bg-slate-200 rounded-full border-2 border-slate-900" />
                       </div>
                       <div className="space-y-2">
-                        <div className="h-6 w-3/4 bg-surface-container-high rounded-lg" />
-                        <div className="h-3.5 w-full bg-surface-container rounded" />
-                        <div className="h-3.5 w-2/3 bg-surface-container rounded" />
+                        <div className="h-6 w-3/4 bg-slate-200 rounded-lg" />
+                        <div className="h-3.5 w-full bg-slate-100 rounded" />
+                        <div className="h-3.5 w-2/3 bg-slate-100 rounded" />
                       </div>
                     </div>
-                    <div className="pt-6 mt-6 border-t border-outline-variant flex items-center justify-between">
-                      <div className="h-3.5 w-20 bg-surface-container rounded" />
-                      <div className="h-9 w-24 bg-surface-container-high rounded-xl border border-on-surface/30" />
+                    <div className="pt-6 mt-6 border-t-2 border-slate-200 flex items-center justify-between">
+                      <div className="h-3.5 w-20 bg-slate-100 rounded" />
+                      <div className="h-9 w-24 bg-slate-200 rounded-xl border-2 border-slate-900" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : displayedTracks.length === 0 ? (
               /* Empty state jika belum enroll kelas */
-              <div className="bg-surface-container-lowest border-2 border-dashed border-on-surface rounded-2xl p-8 sm:p-12 text-center flex flex-col items-center gap-4 shadow-brutal-sm">
-                <div className="w-16 h-16 rounded-2xl bg-secondary-fixed border-2 border-on-surface flex items-center justify-center text-secondary">
+              <div className="bg-white border-3 sm:border-4 border-dashed border-slate-900 rounded-3xl p-8 sm:p-12 text-center flex flex-col items-center gap-4 shadow-[0_6px_0_#0f172a]">
+                <div className="w-16 h-16 rounded-2xl bg-[#FEF08A] border-3 border-slate-900 flex items-center justify-center text-slate-900 shadow-[0_4px_0_#0f172a]">
                   <BookOpen className="w-8 h-8" />
                 </div>
                 <div className="max-w-md">
-                  <h3 className="font-display font-black text-xl text-on-surface">
+                  <h3 className="font-display font-black text-2xl text-slate-900">
                     {activeCategory === "MY_CLASSES"
                       ? "Belum Ada Kelas yang Di-enroll"
                       : "Tidak Ada Kelas yang Cocok"}
                   </h3>
-                  <p className="font-body text-sm text-on-surface-variant mt-1.5 leading-relaxed">
+                  <p className="font-body text-sm text-slate-600 mt-1.5 leading-relaxed">
                     {activeCategory === "MY_CLASSES"
                       ? "Kamu belum mendaftar di kelas mana pun. Jelajahi kurikulum dan mulai petualangan koding pertamamu!"
                       : "Coba ubah kata kunci pencarian atau pilih kategori lain."}
@@ -296,7 +296,7 @@ export default function DashboardPage() {
                 {activeCategory === "MY_CLASSES" && (
                   <button
                     onClick={() => setActiveCategory("LIVE_CODE")}
-                    className="px-6 py-3 bg-primary text-white font-headline font-black text-sm rounded-full border-2 border-on-surface candy-btn-shadow flex items-center gap-2 hover:scale-105 transition-transform cursor-pointer"
+                    className="px-6 py-3 bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-sm rounded-2xl border-3 border-slate-900 shadow-[0_4px_0_#991b1b] flex items-center gap-2 hover:-translate-y-0.5 active:translate-y-1 active:shadow-[0_1px_0_#991b1b] transition-all cursor-pointer"
                   >
                     <Rocket className="w-4 h-4" />
                     <span>Jelajahi Kelas Live Code</span>

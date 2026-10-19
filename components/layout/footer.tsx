@@ -49,24 +49,24 @@ export const Footer: React.FC = () => {
           </h4>
           <ul className="space-y-2 text-sm font-medium text-on-surface-variant">
             <li>
-              <a href="#demo" className="hover:text-primary transition-colors">
+              <Link href="/classes/css-flexbox" className="hover:text-primary transition-colors">
                 CSS Flexbox
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#curriculum" className="hover:text-primary transition-colors">
+              <Link href="/classes/css-grid" className="hover:text-primary transition-colors">
                 CSS Grid
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#curriculum" className="hover:text-primary transition-colors">
+              <Link href="/classes/html-architecture" className="hover:text-primary transition-colors">
                 HTML5 Semantik
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#curriculum" className="hover:text-primary transition-colors">
-                React 19 Components
-              </a>
+              <Link href="/classes/component-styling" className="hover:text-primary transition-colors">
+                Komponen &amp; Styling
+              </Link>
             </li>
           </ul>
         </div>
@@ -83,17 +83,17 @@ export const Footer: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="#features" className="hover:text-primary transition-colors">
-                Tantangan Kode
+              <a href="#classes" className="hover:text-primary transition-colors">
+                Kurikulum Interaktif
               </a>
             </li>
             <li>
               <a href="#community" className="hover:text-primary transition-colors">
-                Sistem XP & Trofi
+                Sistem XP &amp; Trofi
               </a>
             </li>
             <li>
-              <Link href={registerHref} className="hover:text-primary transition-colors">
+              <Link href="/classes/css-selectors-quiz" className="hover:text-primary transition-colors">
                 Kuis Live Syntax
               </Link>
             </li>
@@ -107,7 +107,7 @@ export const Footer: React.FC = () => {
           </h4>
           <div className="space-y-2 text-sm font-medium text-on-surface-variant">
             <p className="text-xs">
-              Bergabung bersama 45,000+ pelajar dan selesaikan tantangan pertamamu hari ini.
+              Bergabung bersama 50,000+ pelajar dan selesaikan tantangan pertamamu hari ini.
             </p>
             <div className="pt-2 flex flex-col gap-2">
               <Link
@@ -124,13 +124,13 @@ export const Footer: React.FC = () => {
       <div className="max-w-6xl mx-auto mt-12 pt-6 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-on-surface-variant">
         <p>© 2026 Codevas. Hak Cipta Dilindungi.</p>
         <div className="flex items-center gap-6">
-          <a href="#" className="hover:underline">
+          <span className="text-slate-500 cursor-default">
             Ketentuan Layanan
-          </a>
-          <a href="#" className="hover:underline">
+          </span>
+          <span className="text-slate-500 cursor-default">
             Kebijakan Privasi
-          </a>
-          <a href="#" className="hover:underline">
+          </span>
+          <a href="mailto:support@codevas.dev" className="hover:underline">
             Bantuan
           </a>
         </div>

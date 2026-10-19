@@ -12,7 +12,7 @@ export const SocialAuth: React.FC<SocialAuthProps> = ({ mode = "login" }) => {
       {/* GitHub Button */}
       <button
         type="button"
-        className="flex items-center justify-center gap-2.5 w-full py-2.5 sm:py-3 px-4 bg-surface-container-low hover:bg-surface-container border-2 border-on-surface text-on-surface font-label font-bold text-sm rounded-full neo-shadow-button"
+        className="flex items-center justify-center gap-2.5 w-full py-3 px-4 bg-white hover:bg-slate-50 border-2 sm:border-3 border-slate-900 text-slate-900 font-display font-black text-xs sm:text-sm rounded-2xl shadow-[0_3px_0_#0f172a] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_1px_0_#0f172a] transition-all cursor-pointer"
       >
         <svg
           aria-hidden="true"
@@ -31,7 +31,7 @@ export const SocialAuth: React.FC<SocialAuthProps> = ({ mode = "login" }) => {
       {/* Google Button */}
       <button
         type="button"
-        className="flex items-center justify-center gap-2.5 w-full py-2.5 sm:py-3 px-4 bg-surface-container-low hover:bg-surface-container border-2 border-on-surface text-on-surface font-label font-bold text-sm rounded-full neo-shadow-button"
+        className="flex items-center justify-center gap-2.5 w-full py-3 px-4 bg-white hover:bg-slate-50 border-2 sm:border-3 border-slate-900 text-slate-900 font-display font-black text-xs sm:text-sm rounded-2xl shadow-[0_3px_0_#0f172a] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_1px_0_#0f172a] transition-all cursor-pointer"
       >
         <svg aria-hidden="true" className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
           <path

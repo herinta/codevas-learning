@@ -119,9 +119,9 @@ export default function DashboardClassesPage() {
 
   if (authLoading && !user) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-8 h-8 text-primary animate-spin" />
-        <p className="font-headline font-bold text-sm text-on-surface">
+      <div className="min-h-screen bg-[#FFFDF7] flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-8 h-8 text-[#EF4444] animate-spin" />
+        <p className="font-display font-black text-sm text-slate-900">
           Memuat Silabus Dashboard...
         </p>
       </div>
@@ -129,7 +129,7 @@ export default function DashboardClassesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col">
+    <div className="min-h-screen bg-[#FFFDF7] text-slate-900 flex flex-col">
       {/* Top Dashboard Navigation */}
       <DashboardNav
         searchQuery={searchQuery}
@@ -140,17 +140,17 @@ export default function DashboardClassesPage() {
 
       {/* Breadcrumbs Navigation */}
       <nav aria-label="Breadcrumb" className="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-2">
-        <div className="flex items-center gap-2 text-xs font-bold text-on-surface-variant flex-wrap">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-600 flex-wrap">
           <Link
             href="/dashboard"
-            className="hover:text-primary transition-colors flex items-center gap-1.5"
+            className="hover:text-[#EF4444] transition-colors flex items-center gap-1.5"
           >
             <LayoutGrid className="w-3.5 h-3.5" />
             <span>Dashboard</span>
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-outline" />
-          <span className="text-primary font-black flex items-center gap-1.5 bg-primary-fixed/40 px-2.5 py-0.5 rounded-full border border-primary/20">
-            <Compass className="w-3.5 h-3.5 text-primary" />
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+          <span className="text-slate-900 font-display font-black flex items-center gap-1.5 bg-[#FEF08A] px-2.5 py-1 rounded-full border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
+            <Compass className="w-3.5 h-3.5 text-slate-900" />
             <span>Silabus &amp; Kurikulum</span>
           </span>
         </div>
@@ -159,46 +159,46 @@ export default function DashboardClassesPage() {
       {/* Main Content Area */}
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 flex-1 pb-24 md:pb-6">
         {/* Banner Section */}
-        <div className="bg-surface-container-lowest border-2 border-on-surface rounded-2xl sm:rounded-3xl p-6 sm:p-8 candy-card-shadow mb-8 relative overflow-hidden">
+        <div className="bg-gradient-to-r from-amber-100 via-sky-100 to-rose-100 border-3 sm:border-4 border-slate-900 rounded-3xl p-6 sm:p-8 shadow-[0_8px_0_#0f172a] mb-8 relative overflow-hidden">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary text-white rounded-full text-xs font-black shadow-xs">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EF4444] text-white rounded-full text-xs font-display font-black border-2 border-slate-900 shadow-[0_2px_0_#991b1b]">
                 <BookOpen className="w-3.5 h-3.5" />
                 <span>Kurikulum Terstruktur</span>
               </div>
-              <h1 className="font-display font-black text-2xl sm:text-4xl text-on-surface tracking-tight">
+              <h1 className="font-display font-black text-2xl sm:text-4xl text-slate-900 tracking-tight">
                 Silabus Kelas &amp; Trek Belajar
               </h1>
-              <p className="text-sm sm:text-base text-on-surface-variant font-medium leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-700 font-medium leading-relaxed">
                 Pilih trek belajar sesuai kemampuanmu. Mulai dari pemula hingga mahir dengan latihan live code interaktif!
               </p>
             </div>
 
             {/* Quick Summary Pill Stats */}
-            <div className="flex items-center gap-3 sm:gap-4 shrink-0 bg-surface-container-low border-2 border-on-surface rounded-2xl p-4 candy-btn-shadow">
+            <div className="flex items-center gap-3 sm:gap-4 shrink-0 bg-white border-3 border-slate-900 rounded-2xl p-4 shadow-[0_4px_0_#0f172a]">
               <div className="text-center px-2">
-                <span className="block font-display font-black text-xl text-primary">
+                <span className="block font-display font-black text-xl text-[#0369A1]">
                   {classes.length}
                 </span>
-                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
+                <span className="text-[10px] font-black text-slate-600 uppercase tracking-wider">
                   Total Trek
                 </span>
               </div>
-              <div className="w-0.5 h-8 bg-outline-variant" />
+              <div className="w-0.5 h-8 bg-slate-200" />
               <div className="text-center px-2">
-                <span className="block font-display font-black text-xl text-secondary">
+                <span className="block font-display font-black text-xl text-[#A16207]">
                   {classes.reduce((acc, c) => acc + (c.totalLevels || 0), 0)}
                 </span>
-                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
+                <span className="text-[10px] font-black text-slate-600 uppercase tracking-wider">
                   Tantangan
                 </span>
               </div>
-              <div className="w-0.5 h-8 bg-outline-variant" />
+              <div className="w-0.5 h-8 bg-slate-200" />
               <div className="text-center px-2">
-                <span className="block font-display font-black text-xl text-emerald-600">
+                <span className="block font-display font-black text-xl text-[#15803D]">
                   {enrolledCount}
                 </span>
-                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
+                <span className="text-[10px] font-black text-slate-600 uppercase tracking-wider">
                   Diikuti
                 </span>
               </div>
@@ -220,10 +220,10 @@ export default function DashboardClassesPage() {
               <button
                 key={tab.key}
                 onClick={() => setSelectedCategory(tab.key)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-headline font-black border-2 border-on-surface transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-2xl text-xs font-display font-black border-2 sm:border-3 border-slate-900 transition-all cursor-pointer ${
                   selectedCategory === tab.key
-                    ? "bg-primary text-white shadow-[0_2px_0_#2e1a28] scale-105"
-                    : "bg-surface-container-low text-on-surface hover:bg-surface-container-high"
+                    ? "bg-[#EF4444] text-white shadow-[0_3px_0_#991b1b] -translate-y-0.5"
+                    : "bg-white text-slate-900 shadow-[0_2px_0_#0f172a] hover:bg-slate-50"
                 }`}
               >
                 {tab.label}
@@ -232,8 +232,8 @@ export default function DashboardClassesPage() {
           </div>
 
           {/* Result Count Indicator */}
-          <span className="text-xs font-bold text-on-surface-variant shrink-0">
-            Menampilkan <strong className="text-on-surface">{filteredClasses.length}</strong> trek kelas
+          <span className="text-xs font-mono font-bold text-slate-600 shrink-0">
+            Menampilkan <strong className="text-slate-900">{filteredClasses.length}</strong> trek kelas
           </span>
         </div>
 
@@ -243,33 +243,33 @@ export default function DashboardClassesPage() {
             {[1, 2, 3, 4, 5, 6].map((n) => (
               <div
                 key={n}
-                className="bg-surface-container-lowest border-2 border-on-surface rounded-2xl p-6 shadow-brutal flex flex-col justify-between animate-pulse"
+                className="bg-white border-3 border-slate-900 rounded-3xl p-6 shadow-[0_6px_0_#0f172a] flex flex-col justify-between animate-pulse"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="h-6 w-24 bg-surface-container-high rounded-full border border-on-surface/20" />
-                    <div className="h-6 w-16 bg-surface-container-high rounded-full border border-on-surface/20" />
+                    <div className="h-6 w-24 bg-slate-200 rounded-full border-2 border-slate-900" />
+                    <div className="h-6 w-16 bg-slate-200 rounded-full border-2 border-slate-900" />
                   </div>
                   <div className="space-y-2">
-                    <div className="h-6 w-3/4 bg-surface-container-high rounded-lg" />
-                    <div className="h-3.5 w-full bg-surface-container rounded" />
-                    <div className="h-3.5 w-2/3 bg-surface-container rounded" />
+                    <div className="h-6 w-3/4 bg-slate-200 rounded-lg" />
+                    <div className="h-3.5 w-full bg-slate-100 rounded" />
+                    <div className="h-3.5 w-2/3 bg-slate-100 rounded" />
                   </div>
                 </div>
-                <div className="pt-6 mt-6 border-t border-outline-variant flex items-center justify-between">
-                  <div className="h-3.5 w-20 bg-surface-container rounded" />
-                  <div className="h-9 w-24 bg-surface-container-high rounded-xl border border-on-surface/30" />
+                <div className="pt-6 mt-6 border-t-2 border-slate-200 flex items-center justify-between">
+                  <div className="h-3.5 w-20 bg-slate-100 rounded" />
+                  <div className="h-9 w-24 bg-slate-200 rounded-xl border-2 border-slate-900" />
                 </div>
               </div>
             ))}
           </div>
         ) : filteredClasses.length === 0 ? (
-          <div className="bg-surface-container-lowest border-2 border-on-surface rounded-2xl p-10 text-center candy-card-shadow max-w-lg mx-auto my-12">
-            <Compass className="w-12 h-12 text-outline mx-auto mb-3" />
-            <h3 className="font-display font-black text-lg text-on-surface">
+          <div className="bg-white border-3 sm:border-4 border-dashed border-slate-900 rounded-3xl p-10 text-center shadow-[0_6px_0_#0f172a] max-w-lg mx-auto my-12">
+            <Compass className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+            <h3 className="font-display font-black text-xl text-slate-900">
               Tidak Ada Kelas yang Ditemukan
             </h3>
-            <p className="text-xs text-on-surface-variant font-medium mt-1">
+            <p className="text-xs text-slate-600 font-medium mt-1">
               Coba gunakan kata kunci pencarian lain atau pilih kategori lain.
             </p>
             <button
@@ -277,7 +277,7 @@ export default function DashboardClassesPage() {
                 setSearchQuery("");
                 setSelectedCategory("ALL");
               }}
-              className="mt-4 px-4 py-2 bg-primary text-white rounded-xl text-xs font-black border-2 border-on-surface shadow-[0_3px_0_#2e1a28] hover:scale-105 transition-transform cursor-pointer"
+              className="mt-4 px-5 py-2.5 bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-2xl text-xs font-display font-black border-2 border-slate-900 shadow-[0_3px_0_#991b1b] hover:-translate-y-0.5 active:translate-y-0.5 transition-all cursor-pointer"
             >
               Reset Filter
             </button>

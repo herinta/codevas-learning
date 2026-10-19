@@ -21,7 +21,7 @@ export const InteractiveDemo: React.FC = () => {
   };
 
   return (
-    <section className="py-20 px-4 bg-[#BAE6FD] border-y-4 border-slate-900 relative" id="demo">
+    <section className="py-20 px-4 bg-[#BAE6FD] border-y-4 border-slate-900 relative scroll-mt-24" id="demo">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
@@ -195,19 +195,19 @@ export const InteractiveDemo: React.FC = () => {
                   }}
                 >
                   {/* Item 1 */}
-                  <div className="w-24 h-26 rounded-2xl bg-[#EF4444] text-white border-3 border-slate-900 shadow-[0_4px_0_#991b1b] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-105 cursor-pointer shrink-0">
+                  <div className="w-24 h-28 rounded-2xl bg-[#EF4444] text-white border-3 border-slate-900 shadow-[0_4px_0_#991b1b] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-105 cursor-pointer shrink-0">
                     <span className="font-mono font-black text-sm">
                       Item 1
                     </span>
-                    <span className="text-[10px] font-mono opacity-90 bg-black/20 px-1.5 py-0.2 rounded mt-1">#01</span>
+                    <span className="text-[10px] font-mono opacity-90 bg-black/20 px-1.5 py-0.5 rounded mt-1">#01</span>
                   </div>
 
                   {/* Item 2 */}
-                  <div className="w-24 h-30 rounded-2xl bg-[#3B82F6] text-white border-3 border-slate-900 shadow-[0_4px_0_#1e3a8a] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-105 cursor-pointer shrink-0">
+                  <div className="w-24 h-36 rounded-2xl bg-[#3B82F6] text-white border-3 border-slate-900 shadow-[0_4px_0_#1e3a8a] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-105 cursor-pointer shrink-0">
                     <span className="font-mono font-black text-sm">
                       Item 2
                     </span>
-                    <span className="text-[10px] font-mono opacity-90 bg-black/20 px-1.5 py-0.2 rounded mt-1">#02</span>
+                    <span className="text-[10px] font-mono opacity-90 bg-black/20 px-1.5 py-0.5 rounded mt-1">#02</span>
                   </div>
 
                   {/* Item 3 */}
@@ -215,7 +215,7 @@ export const InteractiveDemo: React.FC = () => {
                     <span className="font-mono font-black text-sm">
                       Item 3
                     </span>
-                    <span className="text-[10px] font-mono opacity-90 bg-black/10 px-1.5 py-0.2 rounded mt-1">#03</span>
+                    <span className="text-[10px] font-mono opacity-90 bg-black/10 px-1.5 py-0.5 rounded mt-1">#03</span>
                   </div>
                 </div>
               </div>

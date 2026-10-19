@@ -24,43 +24,43 @@ export const StatsWidget: React.FC<StatsWidgetProps> = ({
   const totalXp = user?.xp_points ?? 50;
 
   return (
-    <div className="bg-surface-container-lowest rounded-2xl border-2 border-on-surface p-5 sm:p-6 candy-card-shadow space-y-4">
+    <div className="bg-white rounded-3xl border-3 sm:border-4 border-slate-900 p-5 sm:p-6 shadow-[0_6px_0_#0f172a] space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="w-8 h-8 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center border-2 border-on-surface">
-            <BarChart3 className="w-4 h-4" />
+          <span className="w-9 h-9 rounded-xl bg-[#BAE6FD] text-slate-900 flex items-center justify-center border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
+            <BarChart3 className="w-5 h-5 text-slate-900" />
           </span>
-          <h3 className="font-display font-black text-base text-on-surface">
+          <h3 className="font-display font-black text-lg text-slate-900">
             Statistik & Level EXP
           </h3>
         </div>
-        <span className="text-xs font-mono font-black bg-amber-300 text-on-surface px-2.5 py-1 rounded-full border border-on-surface shadow-xs">
+        <span className="text-xs font-mono font-black bg-[#FEF08A] text-slate-900 px-3 py-1 rounded-full border-2 border-slate-900 shadow-[0_2px_0_#0f172a]">
           Lv.{level}
         </span>
       </div>
 
       {/* EXP Progress Box */}
-      <div className="p-3.5 bg-surface-container-low rounded-xl border-2 border-on-surface space-y-2">
+      <div className="p-4 bg-slate-50 rounded-2xl border-3 border-slate-900 shadow-[0_3px_0_#0f172a] space-y-2.5">
         <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center gap-1.5 font-headline font-black text-on-surface">
+          <div className="flex items-center gap-1.5 font-display font-black text-slate-900">
             <span>{rankBadge}</span>
             <span>{rankTitle}</span>
           </div>
-          <span className="font-mono font-bold text-secondary">
+          <span className="font-mono font-black text-xs text-[#0284C7] bg-[#E0F2FE] px-2.5 py-0.5 rounded-full border border-slate-900">
             {totalXp} XP Total
           </span>
         </div>
 
         {/* Progress bar */}
-        <div className="w-full bg-surface-container-high rounded-full h-3 border border-on-surface overflow-hidden p-0.5">
+        <div className="w-full bg-slate-200 rounded-full h-3.5 border-2 border-slate-900 overflow-hidden p-0.5">
           <div
-            className="bg-gradient-to-r from-amber-400 via-primary to-secondary h-full rounded-full transition-all duration-500 ease-out"
+            className="bg-gradient-to-r from-amber-400 via-rose-500 to-sky-500 h-full rounded-full transition-all duration-500 ease-out"
             style={{ width: `${Math.max(6, progressPercent)}%` }}
           />
         </div>
 
-        <div className="flex items-center justify-between text-[11px] font-bold text-on-surface-variant">
+        <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
           <span>Progres Level: {progressPercent}%</span>
           <span>{xpRemaining > 0 ? `${xpRemaining} XP lagi ke Lv.${level + 1}` : "Level Maksimal"}</span>
         </div>
@@ -68,29 +68,29 @@ export const StatsWidget: React.FC<StatsWidgetProps> = ({
 
       {/* 3 Metric Cards */}
       <div className="grid grid-cols-3 gap-2.5 sm:gap-3 text-center">
-        <div className="p-3 bg-surface-container-low rounded-xl border-2 border-on-surface">
-          <span className="font-display font-black text-base sm:text-lg text-primary block leading-tight">
+        <div className="p-3 bg-[#E0F2FE] rounded-2xl border-2 sm:border-3 border-slate-900 shadow-[0_3px_0_#0f172a]">
+          <span className="font-display font-black text-lg sm:text-xl text-[#0369A1] block leading-tight">
             {accuracy}%
           </span>
-          <span className="text-[10px] font-bold text-on-surface-variant block mt-0.5">
+          <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 block mt-0.5">
             Akurasi
           </span>
         </div>
 
-        <div className="p-3 bg-surface-container-low rounded-xl border-2 border-on-surface">
-          <span className="font-display font-black text-base sm:text-lg text-secondary block leading-tight">
+        <div className="p-3 bg-[#DCFCE7] rounded-2xl border-2 sm:border-3 border-slate-900 shadow-[0_3px_0_#0f172a]">
+          <span className="font-display font-black text-lg sm:text-xl text-[#15803D] block leading-tight">
             {solvedCount}
           </span>
-          <span className="text-[10px] font-bold text-on-surface-variant block mt-0.5">
+          <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 block mt-0.5">
             Terjawab
           </span>
         </div>
 
-        <div className="p-3 bg-surface-container-low rounded-xl border-2 border-on-surface">
-          <span className="font-display font-black text-base sm:text-lg text-[#e65100] block leading-tight">
+        <div className="p-3 bg-[#FEF08A] rounded-2xl border-2 sm:border-3 border-slate-900 shadow-[0_3px_0_#0f172a]">
+          <span className="font-display font-black text-lg sm:text-xl text-[#A16207] block leading-tight">
             {streakDays} 🔥
           </span>
-          <span className="text-[10px] font-bold text-on-surface-variant block mt-0.5">
+          <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 block mt-0.5">
             Streak
           </span>
         </div>
@@ -100,15 +100,15 @@ export const StatsWidget: React.FC<StatsWidgetProps> = ({
       <StreakReminderCard />
 
       {/* Motivational Banner */}
-      <div className="p-3 bg-secondary-fixed/40 rounded-xl border-2 border-secondary flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white flex-shrink-0">
-          <Award className="w-4 h-4" />
+      <div className="p-3.5 bg-[#FEF3C7] rounded-2xl border-2 sm:border-3 border-slate-900 shadow-[0_3px_0_#0f172a] flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-[#FACC15] border-2 border-slate-900 flex items-center justify-center text-slate-900 flex-shrink-0 shadow-[0_2px_0_#0f172a]">
+          <Award className="w-5 h-5 text-slate-900" />
         </div>
         <div className="text-xs">
-          <span className="font-display font-black text-secondary block">
+          <span className="font-display font-black text-slate-900 block text-xs sm:text-sm">
             Hebat! Kamu on-fire! 🎯
           </span>
-          <span className="text-on-surface-variant font-medium leading-tight block mt-0.5">
+          <span className="text-slate-700 font-medium text-[11px] sm:text-xs leading-tight block mt-0.5">
             Pertahankan streak harian untuk meraih bonus XP eksklusif.
           </span>
         </div>

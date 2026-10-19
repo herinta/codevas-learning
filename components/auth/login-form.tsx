@@ -65,14 +65,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
   };
 
   return (
-    <div className="w-full max-w-lg bg-surface-container-lowest border-[3px] border-on-surface rounded-2xl p-6 sm:p-8 md:p-10 neo-shadow transition-all relative">
+    <div className="w-full max-w-lg bg-white border-3 sm:border-4 border-slate-900 rounded-3xl p-6 sm:p-8 md:p-10 shadow-[0_8px_0_#0f172a] sm:shadow-[0_10px_0_#0f172a] transition-all relative">
       {/* Header Section */}
-      <div className="text-center space-y-3 mb-6">
-        <h1 className="font-display font-black text-3xl sm:text-4xl text-on-surface tracking-tight">
+      <div className="text-center space-y-2 mb-6">
+        <h1 className="font-display font-black text-3xl sm:text-4xl text-slate-900 tracking-tight">
           Masuk ke Akun
         </h1>
-        <p className="font-body text-on-surface-variant text-sm sm:text-base leading-relaxed max-w-sm mx-auto">
-          Lanjutkan pembelajaran koding frontend dan kumpulkan XP harianmu.
+        <p className="font-body text-slate-600 text-sm sm:text-base leading-relaxed max-w-sm mx-auto">
+          Lanjutkan petualangan koding frontend dan kumpulkan XP harianmu.
         </p>
       </div>
 
@@ -81,15 +81,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
 
       {/* Divider */}
       <div className="relative flex items-center justify-center my-6">
-        <div className="border-t-2 border-on-surface w-full"></div>
-        <span className="bg-surface-container-lowest px-3 text-[11px] font-label font-black tracking-wider text-on-surface-variant uppercase relative">
+        <div className="border-t-2 border-slate-900 w-full"></div>
+        <span className="bg-white px-3 text-[11px] font-mono font-black tracking-wider text-slate-500 uppercase relative">
           ATAU DENGAN EMAIL / USERNAME
         </span>
       </div>
 
       {/* Error Banner */}
       {errorMsg && (
-        <div className="mb-5 p-3.5 bg-red-100 border-2 border-red-500 rounded-2xl flex items-start gap-2.5 text-red-900 text-xs sm:text-sm font-semibold">
+        <div className="mb-5 p-3.5 bg-red-50 border-2 border-red-500 rounded-2xl flex items-start gap-2.5 text-red-900 text-xs sm:text-sm font-bold shadow-[0_2px_0_#ef4444]">
           <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
           <span>{errorMsg}</span>
         </div>
@@ -97,16 +97,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
 
       {/* Quick Demo Credentials Helper - KHUSUS UNTUK LINK PORTO /demo */}
       {showDemoBox && (
-        <div className="mb-6 p-4 sm:p-5 bg-gradient-to-br from-amber-50 to-orange-50 border-3 border-on-surface rounded-2xl neo-shadow-sm space-y-3">
+        <div className="mb-6 p-4 sm:p-5 bg-[#FEF08A] border-3 border-slate-900 rounded-2xl shadow-[0_4px_0_#0f172a] space-y-3">
           <div className="flex items-center justify-between">
-            <span className="font-headline font-black text-xs sm:text-sm text-amber-950 flex items-center gap-1.5 uppercase tracking-wide">
+            <span className="font-display font-black text-xs sm:text-sm text-slate-900 flex items-center gap-1.5 uppercase tracking-wide">
               <span>Akses Demo Cepat</span>
             </span>
-            <span className="text-[10px] font-mono font-bold bg-amber-200 text-amber-950 px-2 py-0.5 rounded-full border border-amber-400">
+            <span className="text-[10px] font-mono font-black bg-white text-slate-900 px-2.5 py-0.5 rounded-full border-2 border-slate-900 shadow-xs">
               DEMO
             </span>
           </div>
-          <p className="text-[11px] text-amber-900/80 font-medium leading-tight">
+          <p className="text-[11px] text-slate-800 font-bold leading-tight">
             Pilih akun uji coba untuk pengisian otomatis:
           </p>
 
@@ -118,15 +118,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
                 setIdentifier("demo");
                 setPassword("demo123");
               }}
-              className="p-2.5 rounded-xl border-2 border-on-surface bg-white hover:bg-secondary-fixed/30 text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-xs"
+              className="p-3 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-50 text-left transition-all hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer shadow-[0_2px_0_#0f172a]"
             >
               <div className="flex items-center justify-between">
-                <span className="font-headline font-black text-xs text-secondary">
+                <span className="font-display font-black text-xs text-[#0284C7]">
                   Akun Siswa
                 </span>
-                <span className="text-[10px] font-mono font-bold text-secondary">Gunakan</span>
+                <span className="text-[10px] font-mono font-black text-slate-900 bg-[#BAE6FD] px-1.5 py-0.2 rounded border border-slate-900">Gunakan</span>
               </div>
-              <div className="text-[11px] font-mono text-on-surface-variant mt-0.5">
+              <div className="text-[11px] font-mono font-bold text-slate-600 mt-1">
                 demo / demo123
               </div>
             </button>
@@ -138,15 +138,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
                 setIdentifier("admin");
                 setPassword("admin123");
               }}
-              className="p-2.5 rounded-xl border-2 border-on-surface bg-white hover:bg-amber-100 text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-xs"
+              className="p-3 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-50 text-left transition-all hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer shadow-[0_2px_0_#0f172a]"
             >
               <div className="flex items-center justify-between">
-                <span className="font-headline font-black text-xs text-amber-900">
+                <span className="font-display font-black text-xs text-[#DC2626]">
                   Akun Admin
                 </span>
-                <span className="text-[10px] font-mono font-bold text-amber-800">Gunakan</span>
+                <span className="text-[10px] font-mono font-black text-slate-900 bg-[#FECDD3] px-1.5 py-0.2 rounded border border-slate-900">Gunakan</span>
               </div>
-              <div className="text-[11px] font-mono text-on-surface-variant mt-0.5">
+              <div className="text-[11px] font-mono font-bold text-slate-600 mt-1">
                 admin / admin123
               </div>
             </button>
@@ -159,7 +159,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
         {/* Email / Username Input */}
         <div>
           <label
-            className="block text-xs sm:text-sm font-label font-bold text-on-surface mb-1.5 ml-1"
+            className="block text-xs sm:text-sm font-display font-black text-slate-900 mb-1.5 ml-1"
             htmlFor="email-field"
           >
             Email atau Username
@@ -172,9 +172,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
               placeholder="nama@email.com atau @username"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              className="w-full bg-surface-container-low border-2 border-on-surface text-on-surface placeholder:text-outline font-body text-sm rounded-full py-3 pl-4 pr-11 focus:outline-none focus:ring-2 focus:ring-primary focus:border-on-surface transition-all"
+              className="w-full bg-slate-50 border-2 sm:border-3 border-slate-900 text-slate-900 placeholder:text-slate-400 font-medium text-sm rounded-2xl py-3 pl-4 pr-11 focus:outline-none focus:bg-white focus:shadow-[0_2px_0_#0f172a] transition-all"
             />
-            <Mail className="w-5 h-5 text-on-surface-variant absolute right-4 pointer-events-none" />
+            <Mail className="w-5 h-5 text-slate-500 absolute right-4 pointer-events-none" />
           </div>
         </div>
 
@@ -182,14 +182,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
         <div>
           <div className="flex items-center justify-between mb-1.5 ml-1 mr-1">
             <label
-              className="text-xs sm:text-sm font-label font-bold text-on-surface"
+              className="text-xs sm:text-sm font-display font-black text-slate-900"
               htmlFor="password-field"
             >
               Kata Sandi
             </label>
             <a
               href="#"
-              className="text-xs font-label font-bold text-secondary hover:text-primary transition-colors hover:underline"
+              className="text-xs font-display font-bold text-[#EF4444] hover:text-[#DC2626] transition-colors hover:underline"
             >
               Lupa sandi?
             </a>
@@ -202,12 +202,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
               placeholder="••••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-surface-container-low border-2 border-on-surface text-on-surface placeholder:text-outline font-body text-sm rounded-full py-3 pl-4 pr-11 focus:outline-none focus:ring-2 focus:ring-primary focus:border-on-surface transition-all font-mono"
+              className="w-full bg-slate-50 border-2 sm:border-3 border-slate-900 text-slate-900 placeholder:text-slate-400 font-mono text-sm rounded-2xl py-3 pl-4 pr-11 focus:outline-none focus:bg-white focus:shadow-[0_2px_0_#0f172a] transition-all"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 p-1 text-on-surface-variant hover:text-on-surface focus:outline-none transition-colors"
+              className="absolute right-3.5 p-1 text-slate-500 hover:text-slate-900 focus:outline-none transition-colors cursor-pointer"
               aria-label={showPassword ? "Sembunyikan password" : "Lihat password"}
             >
               {showPassword ? (
@@ -226,15 +226,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="w-4 h-4 rounded-md border-2 border-on-surface text-primary focus:ring-primary focus:ring-offset-0 transition accent-primary cursor-pointer"
+              className="w-4 h-4 rounded-md border-2 border-slate-900 text-[#EF4444] focus:ring-0 transition accent-[#EF4444] cursor-pointer"
             />
-            <span className="text-xs sm:text-sm font-label font-medium text-on-surface">
+            <span className="text-xs sm:text-sm font-bold text-slate-700">
               Ingat saya
             </span>
           </label>
           <a
             href="#"
-            className="text-xs font-label font-medium text-on-surface-variant hover:text-on-surface hover:underline"
+            className="text-xs font-bold text-slate-500 hover:text-slate-900 hover:underline"
           >
             Pusat Bantuan
           </a>
@@ -244,7 +244,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 px-6 bg-inverse-surface text-inverse-on-surface font-label font-black text-base rounded-full border-2 border-on-surface neo-shadow-button transition-transform duration-150 flex items-center justify-center gap-2 group hover:bg-[#1a0f17] active:scale-95 disabled:opacity-60 cursor-pointer"
+          className="w-full py-3.5 sm:py-4 px-6 bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-base rounded-2xl border-3 sm:border-4 border-slate-900 shadow-[0_4px_0_#991b1b] transition-all flex items-center justify-center gap-2 group hover:-translate-y-0.5 active:translate-y-1 active:shadow-[0_1px_0_#991b1b] disabled:opacity-60 cursor-pointer"
         >
           {loading ? (
             <>
@@ -261,12 +261,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isDemoMode = false }) => {
       </form>
 
       {/* Switch to Register */}
-      <div className="mt-8 text-center pt-6 border-t-2 border-dashed border-outline-variant">
-        <p className="font-body text-sm font-medium text-on-surface-variant">
+      <div className="mt-8 text-center pt-6 border-t-2 border-dashed border-slate-300">
+        <p className="font-body text-sm font-medium text-slate-600">
           Belum punya akun?{" "}
           <Link
             href={showDemoBox ? "/demo/register" : "/register"}
-            className="font-headline font-black text-primary hover:text-[#c02080] underline decoration-2 underline-offset-4 ml-1 inline-flex items-center gap-1 group"
+            className="font-display font-black text-[#EF4444] hover:text-[#DC2626] underline decoration-2 underline-offset-4 ml-1 inline-flex items-center gap-1 group"
           >
             <span>Daftar gratis sekarang</span>
             <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform text-amber-500 fill-amber-400" />
