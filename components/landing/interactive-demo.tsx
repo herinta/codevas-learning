@@ -26,14 +26,14 @@ export const InteractiveDemo: React.FC = () => {
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="px-4 py-1.5 rounded-full bg-[#FEF08A] border-3 border-slate-900 text-slate-900 font-display font-black text-xs uppercase tracking-wider shadow-[0_3px_0_#0f172a] inline-flex items-center gap-1.5">
-            <span>🎮</span>
-            <span>Arena Uji Coba Koding Cilik</span>
+            <Terminal className="w-4 h-4 text-slate-900" />
+            <span>Uji Coba Interaktif</span>
           </span>
           <h2 className="mt-4 font-display font-black text-3xl sm:text-4xl md:text-5xl text-slate-900 tracking-tight">
-            Gerakkan Karakter Ajaibmu Sendiri! 🍬🤖
+            Coba Atur Layout CSS Flexbox
           </h2>
           <p className="mt-3 text-base sm:text-lg font-medium text-slate-800">
-            Pencet tombol mantra CSS di sebelah kiri dan saksikan teman-teman permenmu melompat seketika di layar sebelah kanan!
+            Ubah nilai properti CSS di panel kontrol dan perhatikan bagaimana posisi elemen berubah secara real-time di kanvas.
           </p>
         </div>
 
@@ -42,21 +42,21 @@ export const InteractiveDemo: React.FC = () => {
           {/* Playground Top Bar */}
           <div className="bg-[#FEF08A] px-5 py-3.5 border-b-3 border-slate-900 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-xl">🍭</span>
+              <span className="text-xl">🎨</span>
               <span className="font-mono text-sm font-black text-slate-900">
-                arena_permen_ajaib.css
+                layout_flexbox.css
               </span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-xs font-display font-bold text-slate-700 hidden sm:inline">
-                ✨ Pengendali Gerakan Cilik
+                Kontrol Visual Flexbox
               </span>
               <button
                 onClick={resetValues}
                 className="px-3.5 py-1.5 rounded-full bg-white text-xs font-display font-black border-2 border-slate-900 hover:bg-slate-100 transition-all flex items-center gap-1.5 shadow-[0_2px_0_#0f172a] active:translate-y-0.5 cursor-pointer"
               >
                 <RefreshCw className="w-3.5 h-3.5 text-slate-800" />
-                <span>Ulang Dari Awal</span>
+                <span>Reset Nilai</span>
               </button>
             </div>
           </div>
@@ -74,10 +74,10 @@ export const InteractiveDemo: React.FC = () => {
                   <div className="grid grid-cols-2 gap-2">
                     {(
                       [
-                        { key: "space-between", label: "↔️ Pisah Ujung" },
-                        { key: "center", label: "🎯 Rapat Tengah" },
-                        { key: "flex-start", label: "⬅️ Kumpul Kiri" },
-                        { key: "space-around", label: "⚖️ Jarak Sama" },
+                        { key: "space-between", label: "Pisah Ujung" },
+                        { key: "center", label: "Rapat Tengah" },
+                        { key: "flex-start", label: "Rata Kiri" },
+                        { key: "space-around", label: "Jarak Merata" },
                       ] as const
                     ).map(({ key, label }) => {
                       const isActive = justifyContent === key;
@@ -106,9 +106,9 @@ export const InteractiveDemo: React.FC = () => {
                   <div className="grid grid-cols-3 gap-2">
                     {(
                       [
-                        { key: "center", label: "↕️ Tengah" },
-                        { key: "flex-start", label: "⬆️ Di Atap" },
-                        { key: "flex-end", label: "⬇️ Di Lantai" },
+                        { key: "center", label: "Tengah" },
+                        { key: "flex-start", label: "Atas" },
+                        { key: "flex-end", label: "Bawah" },
                       ] as const
                     ).map(({ key, label }) => {
                       const isActive = alignItems === key;
@@ -133,7 +133,7 @@ export const InteractiveDemo: React.FC = () => {
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="block font-display font-black text-xs uppercase tracking-wider text-slate-900">
-                      3. Jarak Antar Teman (gap):
+                      3. Jarak Antar Elemen (gap):
                     </label>
                     <span className="font-mono text-xs font-black px-2.5 py-0.5 bg-[#FEF08A] rounded-full border border-slate-900 text-slate-900">
                       {gap}px
@@ -152,9 +152,9 @@ export const InteractiveDemo: React.FC = () => {
 
               {/* Code Preview Box */}
               <div className="mt-6 p-4 rounded-2xl bg-slate-900 text-white font-mono text-xs border-2 border-slate-900 shadow-inner leading-relaxed">
-                <span className="text-[#F472B6] font-bold">.arena-permen</span> &#123;
+                <span className="text-[#38BDF8] font-bold">.flex-container</span> &#123;
                 <br />
-                &nbsp;&nbsp;display: <span className="text-[#38BDF8] font-bold">flex</span>;
+                &nbsp;&nbsp;display: <span className="text-[#F472B6] font-bold">flex</span>;
                 <br />
                 &nbsp;&nbsp;justify-content:{" "}
                 <span className="text-[#FACC15] font-black">
@@ -178,11 +178,11 @@ export const InteractiveDemo: React.FC = () => {
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-display font-black text-xs text-slate-700 flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded-full bg-[#10B981] animate-pulse border border-slate-900"></span>
-                    Kanvas Arena Gerak Langsung
+                    Pratinjau Visual (Live Canvas)
                   </span>
                   <span className="text-xs font-mono font-black text-slate-900 bg-[#FEF08A] px-3 py-1 rounded-full border border-slate-900 flex items-center gap-1">
                     <Sparkles className="w-3.5 h-3.5 text-[#EAB308]" />
-                    <span>Reaktif 60fps</span>
+                    <span>Real-Time 60 FPS</span>
                   </span>
                 </div>
 
@@ -196,28 +196,28 @@ export const InteractiveDemo: React.FC = () => {
                   }}
                 >
                   {/* Item 1: Candy Red */}
-                  <div className="w-24 h-26 rounded-2xl bg-[#EF4444] text-white border-3 border-slate-900 shadow-[0_4px_0_#991b1b] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-110 hover:-rotate-3 cursor-pointer shrink-0">
-                    <span className="text-3xl">🍬</span>
-                    <span className="font-display font-black text-xs mt-1 leading-tight">
-                      Permen Manis
+                  <div className="w-24 h-26 rounded-2xl bg-[#EF4444] text-white border-3 border-slate-900 shadow-[0_4px_0_#991b1b] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-110 hover:-rotate-2 cursor-pointer shrink-0">
+                    <span className="text-2xl">📦</span>
+                    <span className="font-display font-black text-xs mt-1.5 leading-tight">
+                      Kotak 1
                     </span>
                     <span className="text-[10px] font-mono opacity-90 bg-black/20 px-1.5 py-0.2 rounded mt-0.5">#01</span>
                   </div>
 
-                  {/* Item 2: Candy Blue Robot */}
-                  <div className="w-24 h-30 rounded-2xl bg-[#3B82F6] text-white border-3 border-slate-900 shadow-[0_4px_0_#1e3a8a] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-110 hover:rotate-3 cursor-pointer shrink-0">
-                    <span className="text-3xl">🤖</span>
-                    <span className="font-display font-black text-xs mt-1 leading-tight">
-                      Robot Cilik
+                  {/* Item 2: Candy Blue */}
+                  <div className="w-24 h-30 rounded-2xl bg-[#3B82F6] text-white border-3 border-slate-900 shadow-[0_4px_0_#1e3a8a] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-110 hover:rotate-2 cursor-pointer shrink-0">
+                    <span className="text-2xl">📦</span>
+                    <span className="font-display font-black text-xs mt-1.5 leading-tight">
+                      Kotak 2
                     </span>
                     <span className="text-[10px] font-mono opacity-90 bg-black/20 px-1.5 py-0.2 rounded mt-0.5">#02</span>
                   </div>
 
-                  {/* Item 3: Candy Gold Star */}
-                  <div className="w-24 h-24 rounded-2xl bg-[#FACC15] text-slate-900 border-3 border-slate-900 shadow-[0_4px_0_#ca8a04] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-110 hover:-rotate-2 cursor-pointer shrink-0">
-                    <span className="text-3xl">⭐️</span>
-                    <span className="font-display font-black text-xs mt-1 leading-tight">
-                      Bintang Emas
+                  {/* Item 3: Candy Yellow */}
+                  <div className="w-24 h-24 rounded-2xl bg-[#FACC15] text-slate-900 border-3 border-slate-900 shadow-[0_4px_0_#ca8a04] flex flex-col items-center justify-center p-2 text-center transform transition-all hover:scale-110 hover:-rotate-1 cursor-pointer shrink-0">
+                    <span className="text-2xl">📦</span>
+                    <span className="font-display font-black text-xs mt-1.5 leading-tight">
+                      Kotak 3
                     </span>
                     <span className="text-[10px] font-mono opacity-90 bg-black/10 px-1.5 py-0.2 rounded mt-0.5">#03</span>
                   </div>
@@ -227,10 +227,10 @@ export const InteractiveDemo: React.FC = () => {
               {/* Hint below canvas */}
               <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-slate-600 font-medium gap-2">
                 <span>
-                  💡 <strong>Tips Cilik:</strong> Pencet tombol-tombol di kiri untuk melihat ketiga karakter bergerak ke posisi baru!
+                  💡 <strong>Tips:</strong> Klik opsi tata letak di sebelah kiri untuk melihat responsivitas Flexbox secara instan.
                 </span>
                 <span className="font-mono text-[#EF4444] font-black shrink-0">
-                  ⚡ 100% Instan Tanpa Loading
+                  ⚡ Pratinjau Langsung Tanpa Reload
                 </span>
               </div>
             </div>

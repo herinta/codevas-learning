@@ -40,12 +40,10 @@ export const Footer: React.FC = () => {
             </div>
           </div>
           <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-sm">
-            Platform belajar koding visual paling seru untuk anak-anak, jagoan cilik, dan pemula. Belajar logika komputer sambil bermain game dan mengumpulkan bintang kejuaraan!
+            Platform belajar pemrograman web interaktif berbasis visual untuk semua tingkatan usia. Memahami konsep HTML, CSS, dan logika web secara bertahap dan terstruktur.
           </p>
           <div className="flex items-center gap-2 pt-2 text-xs font-bold text-slate-500">
-            <span>Dibuat dengan</span>
-            <span className="text-red-500">💖</span>
-            <span>untuk para penjelajah cilik masa depan</span>
+            <span>Dibuat untuk memudahkan pembelajaran coding modern secara visual.</span>
           </div>
         </div>
 

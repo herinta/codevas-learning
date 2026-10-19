@@ -45,30 +45,27 @@ export const Navbar: React.FC = () => {
           </Link>
           <Link
             href={user ? "/dashboard/classes" : "#classes"}
-            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#BAE6FD] transition-colors flex items-center gap-1"
+            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#BAE6FD] transition-colors"
           >
-            <span>🗺️</span>
-            <span>Peta Petualangan</span>
+            Kelas
           </Link>
           <a
             href="#demo"
-            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-[#1E3A8A] bg-[#BAE6FD] border border-[#0284C7] transition-colors flex items-center gap-1.5 hover:scale-105 active:scale-95"
+            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-[#1E3A8A] bg-[#BAE6FD] border border-[#0284C7] transition-colors hover:scale-105 active:scale-95"
           >
-            <span>🎮</span>
-            <span>Arena Main</span>
+            Demo
           </a>
           <a
             href="#features"
             className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#FECDD3] transition-colors"
           >
-            Kenapa Seru?
+            Fitur
           </a>
           <a
             href="#community"
-            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#FEF08A] transition-colors flex items-center gap-1"
+            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#FEF08A] transition-colors"
           >
-            <span>⭐️</span>
-            <span>Trofi Juara</span>
+            Komunitas
           </a>
         </nav>
 
@@ -129,9 +126,8 @@ export const Navbar: React.FC = () => {
                 </button>
               </Link>
               <Link href={registerHref}>
-                <button className="px-5 py-2 rounded-full bg-[#EF4444] hover:bg-[#dc2626] text-white font-black text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b] hover:scale-105 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5 cursor-pointer">
-                  <span>🚀</span>
-                  <span>Mulai Main!</span>
+                <button className="px-5 py-2 rounded-full bg-[#EF4444] hover:bg-[#dc2626] text-white font-black text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b] hover:scale-105 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer">
+                  Daftar Gratis
                 </button>
               </Link>
             </>
@@ -193,14 +189,28 @@ export const Navbar: React.FC = () => {
             onClick={() => setMobileMenuOpen(false)}
             className="px-3 py-2 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container"
           >
-            Silabus Kelas
+            Kelas
           </Link>
           <a
             href="#demo"
             onClick={() => setMobileMenuOpen(false)}
             className="px-3 py-2 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container"
           >
-            Playground Interaktif
+            Demo
+          </a>
+          <a
+            href="#features"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container"
+          >
+            Fitur
+          </a>
+          <a
+            href="#community"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container"
+          >
+            Komunitas
           </a>
 
           <div className="pt-2 border-t border-outline-variant flex flex-col gap-2">
@@ -220,9 +230,9 @@ export const Navbar: React.FC = () => {
               </div>
             ) : (
               <Link href={registerHref} onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="primary" size="md" className="w-full">
-                  Mulai Belajar Sekarang
-                </Button>
+                <button className="w-full py-2.5 rounded-xl bg-[#EF4444] text-white font-bold text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b]">
+                  Daftar Gratis
+                </button>
               </Link>
             )}
           </div>

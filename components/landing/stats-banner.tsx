@@ -16,14 +16,14 @@ export const StatsBanner: React.FC = () => {
         {/* Left Text & CTA */}
         <div className="max-w-xl text-center lg:text-left z-10">
           <span className="px-4 py-1.5 rounded-full bg-white text-slate-900 font-display font-black text-xs uppercase tracking-wider border-2 border-slate-900 inline-flex items-center gap-1.5 mb-4 shadow-[0_2px_0_#0f172a]">
-            <span>🏆</span>
-            <span>Papan Prestasi &amp; Komunitas Cilik</span>
+            <Trophy className="w-4 h-4 text-[#D97706]" />
+            <span>Progres &amp; Komunitas</span>
           </span>
           <h3 className="font-display font-black text-3xl sm:text-4xl text-slate-900 tracking-tight leading-tight">
-            Kumpulkan Bintang, Naikkan Level, Raih Trofi Coding Emas! ⭐️
+            Kembangkan Kemampuan Coding Sejak Dini Secara Bertahap
           </h3>
           <p className="mt-3 text-slate-700 font-medium text-base sm:text-lg leading-relaxed">
-            Lebih dari <strong>50,000+</strong> jagoan cilik aktif menyelesaikan petualangan harian, memamerkan badge keren, dan saling menyemangati di Codevas Kids!
+            Bergabung bersama lebih dari <strong>50,000+</strong> pengguna yang aktif mempelajari dasar pemrograman web dengan kurikulum interaktif di Codevas.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3">
             <Link
@@ -56,7 +56,7 @@ export const StatsBanner: React.FC = () => {
                 150K+
               </p>
               <p className="font-display font-bold text-xs text-slate-600 mt-0.5">
-                ⭐️ Bintang Terkumpul
+                Latihan Diselesaikan
               </p>
             </div>
             <div className="bg-white border-3 border-slate-900 px-6 py-4 rounded-2xl shadow-[0_4px_0_#0f172a] text-center min-w-[160px]">
@@ -65,7 +65,7 @@ export const StatsBanner: React.FC = () => {
                 <Star className="w-6 h-6 fill-[#FACC15] text-[#FACC15]" />
               </div>
               <p className="font-display font-bold text-xs text-slate-600 mt-0.5">
-                💖 Ulasan Orang Tua &amp; Guru
+                Rating Kepuasan Pengguna
               </p>
             </div>
           </div>
