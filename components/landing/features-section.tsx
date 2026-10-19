@@ -1,90 +1,87 @@
 import React from "react";
-import { Zap, Layout, Eye, CheckCircle2 } from "lucide-react";
+import { Zap, Sparkles, Eye, CheckCircle2, Heart, Award } from "lucide-react";
 
 export const FeaturesSection: React.FC = () => {
   return (
-    <section className="py-24 px-4 bg-surface max-w-6xl mx-auto" id="features">
+    <section className="py-24 px-4 bg-[#FFFDF7] max-w-6xl mx-auto" id="features">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-16">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-fixed border-2 border-on-surface text-secondary font-display font-black text-xs uppercase tracking-wider shadow-[0_3px_0_#2e1a28]">
-          Kenapa Harus Codevas
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FEF08A] border-3 border-slate-900 text-slate-900 font-display font-black text-xs uppercase tracking-wider shadow-[0_3px_0_#0f172a]">
+          <span>💖</span>
+          <span>Kenapa Jagoan Cilik &amp; Orang Tua Suka Codevas</span>
         </div>
-        <h2 className="mt-4 font-display font-black text-3xl sm:text-4xl md:text-5xl text-on-surface tracking-tight">
-          Didesain Khusus untuk Otak Kreatif
+        <h2 className="mt-4 font-display font-black text-3xl sm:text-4xl md:text-5xl text-slate-900 tracking-tight">
+          Dirancang Khusus Buat Imajinasi Cilik! 🎨🚀
         </h2>
-        <p className="mt-3 text-base sm:text-lg text-on-surface-variant font-medium">
-          Tiga pilar kenyamanan yang bikin proses belajar tidak lagi terasa seperti
-          membaca dokumentasi teknis yang membosankan.
+        <p className="mt-3 text-base sm:text-lg text-slate-600 font-medium">
+          Tiga keajaiban yang bikin proses belajar koding jadi penuh tawa, tanpa rasa bosan atau pusing.
         </p>
       </div>
 
-      {/* 3 Parallel Flat Cards */}
+      {/* 3 Parallel Chunky Cartoon Cards (Yellow, Blue, Red) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Card 1: Pastel Lemon */}
-        <div className="rounded-2xl border-4 border-on-surface bg-[#FEF08A] p-7 shadow-[0_10px_0_#2e1a28] hover:-translate-y-2 transition-transform duration-200 flex flex-col justify-between">
+        {/* Card 1: Sunny Banana Yellow */}
+        <div className="rounded-3xl border-4 border-slate-900 bg-[#FEF08A] p-7 shadow-[0_10px_0_#0f172a] hover:-translate-y-2 transition-transform duration-200 flex flex-col justify-between">
           <div>
-            <div className="w-14 h-14 rounded-2xl bg-surface-container-lowest border-2 border-on-surface flex items-center justify-center text-on-surface shadow-[0_4px_0_#2e1a28] mb-6">
-              <Zap className="w-8 h-8 text-[#d48b00] fill-[#fde047]" />
+            <div className="w-16 h-16 rounded-2xl bg-white border-3 border-slate-900 flex items-center justify-center text-3xl shadow-[0_4px_0_#0f172a] mb-6">
+              🎮
             </div>
-            <span className="inline-block px-3 py-1 rounded-full bg-surface-container-lowest border-2 border-on-surface text-xs font-display font-black text-on-surface mb-3">
-              LANGSUNG NGEBUT
+            <span className="inline-block px-3 py-1 rounded-full bg-white border-2 border-slate-900 text-xs font-display font-black text-slate-900 mb-3 shadow-[0_2px_0_#0f172a]">
+              SERU SEPERTI GAME
             </span>
-            <h3 className="font-display font-black text-2xl text-on-surface tracking-tight">
-              Zero Setup
+            <h3 className="font-display font-black text-2xl text-slate-900 tracking-tight">
+              Kumpulkan Bintang &amp; XP
             </h3>
-            <p className="mt-3 text-on-surface/90 font-medium text-sm sm:text-base leading-relaxed">
-              Lupakan instalasi Node.js, terminal bash, atau konfigurasi webpack
-              yang bikin pusing. Cukup buka peramban dan kamu siap mengoding seketika.
+            <p className="mt-3 text-slate-800 font-medium text-sm sm:text-base leading-relaxed">
+              Tiap level yang kamu taklukkan akan memberimu koin emas, XP kenaikan level, dan trofi kejuaraan. Belajar koding jadi bikin nagih!
             </p>
           </div>
-          <div className="mt-8 pt-4 border-t-2 border-on-surface/20 flex items-center justify-between text-xs font-bold text-on-surface">
-            <span>Browser Ready</span>
+          <div className="mt-8 pt-4 border-t-2 border-slate-900/20 flex items-center justify-between text-xs font-black text-slate-900">
+            <span>⭐️ 72+ Misi Gamifikasi</span>
             <CheckCircle2 className="w-5 h-5 text-emerald-700" />
           </div>
         </div>
 
-        {/* Card 2: Bubblegum Pink */}
-        <div className="rounded-2xl border-4 border-on-surface bg-[#ffd6ee] p-7 shadow-[0_10px_0_#2e1a28] hover:-translate-y-2 transition-transform duration-200 flex flex-col justify-between">
+        {/* Card 2: Electric Sky Blue */}
+        <div className="rounded-3xl border-4 border-slate-900 bg-[#BAE6FD] p-7 shadow-[0_10px_0_#0f172a] hover:-translate-y-2 transition-transform duration-200 flex flex-col justify-between">
           <div>
-            <div className="w-14 h-14 rounded-2xl bg-surface-container-lowest border-2 border-on-surface flex items-center justify-center text-primary shadow-[0_4px_0_#2e1a28] mb-6">
-              <Layout className="w-8 h-8 text-primary" />
+            <div className="w-16 h-16 rounded-2xl bg-white border-3 border-slate-900 flex items-center justify-center text-3xl shadow-[0_4px_0_#0f172a] mb-6">
+              🚀
             </div>
-            <span className="inline-block px-3 py-1 rounded-full bg-surface-container-lowest border-2 border-on-surface text-xs font-display font-black text-on-surface mb-3">
-              PRODUKSI SIAP PAKAI
+            <span className="inline-block px-3 py-1 rounded-full bg-white border-2 border-slate-900 text-xs font-display font-black text-slate-900 mb-3 shadow-[0_2px_0_#0f172a]">
+              LANGSUNG MAIN DI BROWSER
             </span>
-            <h3 className="font-display font-black text-2xl text-on-surface tracking-tight">
-              Real-world Templates
+            <h3 className="font-display font-black text-2xl text-slate-900 tracking-tight">
+              Tanpa Setup Ribet
             </h3>
-            <p className="mt-3 text-on-surface/90 font-medium text-sm sm:text-base leading-relaxed">
-              Belajar dengan memanipulasi komponen modern yang dipakai oleh
-              startup: landing page, e-commerce checkout, dashboard analitik, dan chat bubble.
+            <p className="mt-3 text-slate-800 font-medium text-sm sm:text-base leading-relaxed">
+              Nggak perlu install aplikasi aneh-aneh atau bikin laptop error. Cukup buka di laptop atau tablet, dan anak langsung siap berkarya!
             </p>
           </div>
-          <div className="mt-8 pt-4 border-t-2 border-on-surface/20 flex items-center justify-between text-xs font-bold text-on-surface">
-            <span>50+ Proyek Nyata</span>
+          <div className="mt-8 pt-4 border-t-2 border-slate-900/20 flex items-center justify-between text-xs font-black text-slate-900">
+            <span>🛡️ 100% Aman &amp; Cepat</span>
             <CheckCircle2 className="w-5 h-5 text-emerald-700" />
           </div>
         </div>
 
-        {/* Card 3: Sky Blue */}
-        <div className="rounded-2xl border-4 border-on-surface bg-[#c8eaff] p-7 shadow-[0_10px_0_#2e1a28] hover:-translate-y-2 transition-transform duration-200 flex flex-col justify-between">
+        {/* Card 3: Strawberry Candy Red */}
+        <div className="rounded-3xl border-4 border-slate-900 bg-[#FECDD3] p-7 shadow-[0_10px_0_#0f172a] hover:-translate-y-2 transition-transform duration-200 flex flex-col justify-between">
           <div>
-            <div className="w-14 h-14 rounded-2xl bg-surface-container-lowest border-2 border-on-surface flex items-center justify-center text-tertiary shadow-[0_4px_0_#2e1a28] mb-6">
-              <Eye className="w-8 h-8 text-tertiary" />
+            <div className="w-16 h-16 rounded-2xl bg-white border-3 border-slate-900 flex items-center justify-center text-3xl shadow-[0_4px_0_#0f172a] mb-6">
+              🤖
             </div>
-            <span className="inline-block px-3 py-1 rounded-full bg-surface-container-lowest border-2 border-on-surface text-xs font-display font-black text-on-surface mb-3">
-              FEEDBACK INSTAN
+            <span className="inline-block px-3 py-1 rounded-full bg-white border-2 border-slate-900 text-xs font-display font-black text-slate-900 mb-3 shadow-[0_2px_0_#0f172a]">
+              HASIL INSTAN 60FPS
             </span>
-            <h3 className="font-display font-black text-2xl text-on-surface tracking-tight">
-              Instant Visual Feedback
+            <h3 className="font-display font-black text-2xl text-slate-900 tracking-tight">
+              Visual Hidup &amp; Bergerak
             </h3>
-            <p className="mt-3 text-on-surface/90 font-medium text-sm sm:text-base leading-relaxed">
-              Tiap baris CSS atau tag HTML yang kamu ubah ter-render dalam
-              sekejap mata. Pahami bagaimana layout bereaksi tanpa rasa frustrasi.
+            <p className="mt-3 text-slate-800 font-medium text-sm sm:text-base leading-relaxed">
+              Bukan cuma tulisan hitam putih yang membosankan! Kode yang diketik langsung menyulap warna kotak, menggeser permen, dan menyalakan animasi.
             </p>
           </div>
-          <div className="mt-8 pt-4 border-t-2 border-on-surface/20 flex items-center justify-between text-xs font-bold text-on-surface">
-            <span>Kompilasi 0.02s</span>
+          <div className="mt-8 pt-4 border-t-2 border-slate-900/20 flex items-center justify-between text-xs font-black text-slate-900">
+            <span>✨ Reaksi Visual Nyata</span>
             <CheckCircle2 className="w-5 h-5 text-emerald-700" />
           </div>
         </div>

@@ -22,15 +22,15 @@ export const Navbar: React.FC = () => {
       <div className="max-w-6xl mx-auto bg-surface-container-lowest border-2 border-on-surface rounded-full py-2.5 px-4 md:px-6 shadow-[0_6px_0_#2e1a28] flex items-center justify-between transition-all duration-200">
         {/* Brand Logo */}
         <Link href={brandHref} className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white border-2 border-on-surface shadow-[0_2px_0_#2e1a28] group-hover:rotate-12 transition-transform duration-200">
-            <Terminal className="w-5 h-5 stroke-[2.5]" />
+          <div className="w-10 h-10 rounded-2xl bg-[#EF4444] flex items-center justify-center text-white border-2 border-slate-900 shadow-[0_3px_0_#991b1b] group-hover:rotate-12 transition-transform duration-200">
+            <span className="text-xl">🚀</span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-display font-black text-2xl tracking-tight text-primary leading-none">
+          <div className="flex items-center gap-1.5">
+            <span className="font-display font-black text-2xl tracking-tight text-[#1E3A8A] leading-none">
               Codevas
             </span>
-            <span className="text-[10px] font-bold text-secondary tracking-widest leading-none mt-0.5">
-              PLAYGROUND
+            <span className="bg-[#FACC15] text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full border-2 border-slate-900 shadow-[0_2px_0_#ca8a04] rotate-3 uppercase tracking-wider">
+              KIDS
             </span>
           </div>
         </Link>
@@ -39,34 +39,36 @@ export const Navbar: React.FC = () => {
         <nav className="hidden md:flex items-center gap-1 lg:gap-2">
           <Link
             href="/dashboard"
-            className="px-4 py-1.5 rounded-full text-sm font-label font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
+            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#FEF08A] transition-colors"
           >
             Dashboard
           </Link>
           <Link
             href={user ? "/dashboard/classes" : "#classes"}
-            className="px-4 py-1.5 rounded-full text-sm font-label font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
+            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#BAE6FD] transition-colors flex items-center gap-1"
           >
-            Silabus
+            <span>🗺️</span>
+            <span>Peta Petualangan</span>
           </Link>
           <a
             href="#demo"
-            className="px-4 py-1.5 rounded-full text-sm font-label font-bold text-primary bg-primary-fixed border border-primary/20 transition-colors flex items-center gap-1.5"
+            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-[#1E3A8A] bg-[#BAE6FD] border border-[#0284C7] transition-colors flex items-center gap-1.5 hover:scale-105 active:scale-95"
           >
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span>Playground</span>
+            <span>🎮</span>
+            <span>Arena Main</span>
           </a>
           <a
             href="#features"
-            className="px-4 py-1.5 rounded-full text-sm font-label font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
+            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#FECDD3] transition-colors"
           >
-            Keunggulan
+            Kenapa Seru?
           </a>
           <a
             href="#community"
-            className="px-4 py-1.5 rounded-full text-sm font-label font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
+            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#FEF08A] transition-colors flex items-center gap-1"
           >
-            Komunitas
+            <span>⭐️</span>
+            <span>Trofi Juara</span>
           </a>
         </nav>
 
@@ -122,14 +124,15 @@ export const Navbar: React.FC = () => {
           ) : (
             <>
               <Link href={loginHref}>
-                <Button variant="ghost" size="sm">
+                <button className="px-4 py-2 rounded-full text-sm font-bold text-slate-800 hover:bg-[#FEF08A] transition-colors border border-slate-300 cursor-pointer">
                   Masuk
-                </Button>
+                </button>
               </Link>
               <Link href={registerHref}>
-                <Button variant="primary" size="sm">
-                  Daftar Gratis
-                </Button>
+                <button className="px-5 py-2 rounded-full bg-[#EF4444] hover:bg-[#dc2626] text-white font-black text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b] hover:scale-105 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5 cursor-pointer">
+                  <span>🚀</span>
+                  <span>Mulai Main!</span>
+                </button>
               </Link>
             </>
           )}

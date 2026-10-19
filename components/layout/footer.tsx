@@ -27,26 +27,25 @@ export const Footer: React.FC = () => {
         {/* Brand & Tagline */}
         <div className="md:col-span-5 space-y-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white border-2 border-on-surface shadow-[0_2px_0_#2e1a28]">
-              <Terminal className="w-5 h-5 stroke-[2.5]" />
+            <div className="w-10 h-10 rounded-2xl bg-[#EF4444] flex items-center justify-center text-white border-2 border-slate-900 shadow-[0_3px_0_#991b1b]">
+              <span className="text-xl">🚀</span>
             </div>
-            <div className="flex flex-col">
-              <span className="font-display font-black text-2xl tracking-tight text-primary leading-none">
+            <div className="flex items-center gap-1.5">
+              <span className="font-display font-black text-2xl tracking-tight text-[#1E3A8A] leading-none">
                 Codevas
               </span>
-              <span className="text-[10px] font-bold text-secondary tracking-widest leading-none mt-0.5">
-                INTERACTIVE ENGINE
+              <span className="bg-[#FACC15] text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full border-2 border-slate-900 shadow-[0_2px_0_#ca8a04] rotate-3 uppercase tracking-wider">
+                KIDS
               </span>
             </div>
           </div>
-          <p className="text-sm font-medium text-on-surface-variant leading-relaxed max-w-sm">
-            Platform belajar web development modern berbasis manipulasi template
-            nyata dan gamifikasi. Didesain untuk pemula, remaja, dan developer kreatif.
+          <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-sm">
+            Platform belajar koding visual paling seru untuk anak-anak, jagoan cilik, dan pemula. Belajar logika komputer sambil bermain game dan mengumpulkan bintang kejuaraan!
           </p>
-          <div className="flex items-center gap-2 pt-2 text-xs font-bold text-on-surface-variant">
+          <div className="flex items-center gap-2 pt-2 text-xs font-bold text-slate-500">
             <span>Dibuat dengan</span>
-            <Heart className="w-4 h-4 fill-primary text-primary" />
-            <span>untuk talenta developer masa depan</span>
+            <span className="text-red-500">💖</span>
+            <span>untuk para penjelajah cilik masa depan</span>
           </div>
         </div>
 

@@ -44,7 +44,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col bg-background text-on-surface">
+    <main className="min-h-screen flex flex-col bg-[#FFFDF7] text-slate-900">
       <Navbar />
       <HeroSection />
       <ClassesSection />
