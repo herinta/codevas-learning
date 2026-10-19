@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/layout/navbar";
+import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 import { Footer } from "@/components/layout/footer";
 import {
   Code2,
@@ -109,9 +109,9 @@ export function ClassesCatalogClient({ initialClasses = [] }: { initialClasses?:
 
   return (
     <div className="min-h-screen bg-[#FFFDF7] text-slate-900 flex flex-col">
-      <Navbar />
+      <DashboardNav />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-28 pb-16 flex-1 w-full">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-16 flex-1 w-full">
         {/* Header Section */}
         <div className="mb-10 text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#FEF08A] border-2 border-slate-900 text-slate-900 font-display font-black text-xs uppercase tracking-wider shadow-[0_2px_0_#0f172a] mb-3">

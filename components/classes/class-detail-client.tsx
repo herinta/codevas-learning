@@ -28,7 +28,7 @@ import {
   Award,
 } from "lucide-react";
 import { ClassWithChallenges, ChallengeWithUserProgress } from "@/lib/db/entities";
-import { Navbar } from "@/components/layout/navbar";
+import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 import { useAuth } from "@/components/auth/auth-context";
 
 interface ClassDetailClientProps {
@@ -184,10 +184,10 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFDF7] text-slate-900">
-      <Navbar />
+      <DashboardNav />
 
       {/* Top Breadcrumb & Status Navigation */}
-      <div className="w-full bg-white/90 backdrop-blur-md border-b-2 border-slate-900 pt-24 pb-3 shadow-xs">
+      <div className="w-full bg-white/90 backdrop-blur-md border-b-2 border-slate-900 py-3 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
           <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap scrollbar-none py-1">
             <Link

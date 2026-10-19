@@ -1243,6 +1243,24 @@ function ChallengePlaygroundContent({
               {user ? `${user.xp_points} XP` : "50 XP"}
             </span>
           </div>
+
+          {/* Quick Profile / Dashboard Avatar */}
+          {user ? (
+            <Link
+              href="/profile"
+              className="w-8 h-8 rounded-full border-2 border-slate-900 overflow-hidden bg-[#EF4444] shadow-[0_2px_0_#991b1b] flex items-center justify-center text-xs font-black text-white hover:scale-105 active:translate-y-0.5 transition-transform shrink-0"
+              title={`@${user.username} — Profil Pengguna`}
+            >
+              {user.username.slice(0, 2).toUpperCase()}
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="px-2.5 py-1 rounded-full text-xs font-display font-black text-slate-700 hover:text-slate-900 hover:bg-slate-100 border-2 border-slate-900 shadow-[0_1px_0_#0f172a]"
+            >
+              Masuk
+            </Link>
+          )}
         </div>
       </header>
 

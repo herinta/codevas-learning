@@ -20,7 +20,7 @@ import {
   Mail,
   UploadCloud,
 } from "lucide-react";
-import { Navbar } from "@/components/layout/navbar";
+import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 import { useAuth } from "@/components/auth/auth-context";
 
 const PRESET_AVATARS = [
@@ -181,9 +181,9 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#FFFDF7] text-slate-900 flex flex-col">
-      <Navbar />
+      <DashboardNav />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-28 pb-28 md:pb-16 flex-1 w-full">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-28 md:pb-16 flex-1 w-full">
         {/* Header Breadcrumb */}
         <div className="flex items-center gap-2 mb-6 text-sm">
           <Link

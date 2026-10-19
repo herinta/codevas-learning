@@ -26,7 +26,7 @@ import {
   UserCheck,
 } from "lucide-react";
 import { ClassDetail } from "@/lib/classes-data";
-import { Navbar } from "@/components/layout/navbar";
+import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 
 interface ClassDetailViewProps {
   classData: ClassDetail;
@@ -60,10 +60,10 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({ classData }) =
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFDF7] text-slate-900">
-      <Navbar />
+      <DashboardNav />
 
       {/* Breadcrumb Bar */}
-      <div className="w-full bg-white border-b-2 border-slate-200 pt-24 pb-3">
+      <div className="w-full bg-white border-b-2 border-slate-200 py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm">
           <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap scrollbar-none py-1">
             <Link
