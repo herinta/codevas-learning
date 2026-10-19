@@ -20,7 +20,7 @@ export const StatsBanner: React.FC = () => {
             <span>Progres &amp; Komunitas</span>
           </span>
           <h3 className="font-display font-black text-3xl sm:text-4xl text-slate-900 tracking-tight leading-tight">
-            Kembangkan Kemampuan Coding Sejak Dini Secara Bertahap
+            Tingkatkan Kemampuan Pemrograman Web Secara Bertahap
           </h3>
           <p className="mt-3 text-slate-700 font-medium text-base sm:text-lg leading-relaxed">
             Bergabung bersama lebih dari <strong>50,000+</strong> pengguna yang aktif mempelajari dasar pemrograman web dengan kurikulum interaktif di Codevas.
@@ -42,7 +42,7 @@ export const StatsBanner: React.FC = () => {
           <div className="w-40 sm:w-48 rounded-2xl border-3 border-slate-900 overflow-hidden shadow-[0_6px_0_#0f172a] bg-white shrink-0 hover:rotate-2 transition-transform">
             <Image
               src="/images/kids-trophy-badges.jpg"
-              alt="Codevas Kids Trophy and Badges"
+              alt="Codevas Trophy and Badges"
               width={250}
               height={250}
               className="w-full h-auto object-cover"

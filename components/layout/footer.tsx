@@ -30,14 +30,9 @@ export const Footer: React.FC = () => {
             <div className="w-10 h-10 rounded-2xl bg-[#EF4444] flex items-center justify-center text-white border-2 border-slate-900 shadow-[0_3px_0_#991b1b]">
               <span className="text-xl">🚀</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-display font-black text-2xl tracking-tight text-[#1E3A8A] leading-none">
-                Codevas
-              </span>
-              <span className="bg-[#FACC15] text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full border-2 border-slate-900 shadow-[0_2px_0_#ca8a04] rotate-3 uppercase tracking-wider">
-                KIDS
-              </span>
-            </div>
+            <span className="font-display font-black text-2xl tracking-tight text-[#1E3A8A] leading-none">
+              Codevas
+            </span>
           </div>
           <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-sm">
             Platform belajar pemrograman web interaktif berbasis visual untuk semua tingkatan usia. Memahami konsep HTML, CSS, dan logika web secara bertahap dan terstruktur.

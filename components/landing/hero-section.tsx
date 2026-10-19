@@ -115,7 +115,7 @@ export const HeroSection: React.FC = () => {
               <div className="relative rounded-2xl overflow-hidden mt-3 border-2 border-slate-900 bg-gradient-to-b from-sky-50 to-amber-50">
                 <Image
                   src="/images/kids-coding-mascot.jpg"
-                  alt="Codevas Kids Coding Mascot"
+                  alt="Codevas Interactive Learning Mascot"
                   width={600}
                   height={600}
                   className="w-full h-auto object-cover"
