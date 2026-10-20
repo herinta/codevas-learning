@@ -56,12 +56,6 @@ export const Navbar: React.FC = () => {
           >
             Fitur
           </a>
-          <a
-            href="#community"
-            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#FEF08A] transition-colors"
-          >
-            Komunitas
-          </a>
         </nav>
 
         {/* Right CTAs / User Auth State */}
@@ -202,13 +196,6 @@ export const Navbar: React.FC = () => {
             className="px-3 py-2 rounded-xl text-sm font-bold text-slate-800 hover:bg-slate-100"
           >
             Fitur
-          </a>
-          <a
-            href="#community"
-            onClick={() => setMobileMenuOpen(false)}
-            className="px-3 py-2 rounded-xl text-sm font-bold text-slate-800 hover:bg-slate-100"
-          >
-            Komunitas
           </a>
 
           <div className="pt-2 border-t-2 border-slate-100 flex flex-col gap-2">

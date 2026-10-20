@@ -284,202 +284,304 @@ function evaluateCss(challengeId: string, cssCode: string): {
     };
   }
 
-  // ================= CSS FLEXBOX (10 Levels) =================
-  // LEVEL 1: Rapatkan 3 Permen ke Titik Tengah
-  if (challengeId === "flexbox-1-activation") {
-
+  // ================= CSS FLEXBOX (12 Levels) =================
+  if (challengeId === "flexbox-1-activation" || challengeId === "fb-1") {
     const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    if (!hasFlex) feedback.push("⚠️ Elemen arena belum mengaktifkan display: flex;");
-
-    const hasHorizontalCenter =
-      /justify-content\s*:\s*(center|space-around|space-evenly)/.test(normalized) ||
-      /margin\s*:\s*(auto|0\s+auto)/.test(normalized);
-    if (!hasHorizontalCenter) feedback.push("⚠️ Kotak permen belum terpusat secara horizontal (gunakan justify-content: center).");
-
-    const hasVerticalCenter =
-      /align-items\s*:\s*center/.test(normalized) ||
-      /place-items\s*:\s*center/.test(normalized) ||
-      /align-content\s*:\s*center/.test(normalized);
-    if (!hasVerticalCenter) feedback.push("⚠️ Kotak permen belum sejajar di tengah secara vertikal (gunakan align-items: center).");
-
-    const passed = hasFlex && hasHorizontalCenter && hasVerticalCenter;
+    if (!hasFlex) feedback.push("Gunakan display: flex; pada .arena.");
     return {
-      passed,
-      score: passed ? 100 : Math.round(([hasFlex, hasHorizontalCenter, hasVerticalCenter].filter(Boolean).length / 3) * 100),
-      feedback: passed
-        ? ["🎉 Luar biasa! Ketiga permen berhasil kamu kumpulkan dan ratakan di tengah arena!"]
-        : feedback,
+      passed: hasFlex,
+      score: hasFlex ? 100 : 0,
+      feedback: hasFlex ? ["Mode sakti Flexbox aktif! Kotak kini berbaris ke samping."] : feedback,
     };
   }
 
-  // LEVEL 2: Sebarkan Elemen ke Kedua Ujung Tepi (Space Between)
-  if (challengeId === "flexbox-2-space-between") {
+  if (challengeId === "flexbox-2-push-justify-end" || challengeId === "fb-2") {
     const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const hasSpaceBetween = /justify-content\s*:\s*space-between/.test(normalized);
-
-    if (!hasFlex) feedback.push("⚠️ Pastikan display: flex; tetap aktif.");
-    if (!hasSpaceBetween) feedback.push("⚠️ Gunakan justify-content: space-between; untuk menyebarkan permen ke batas tepi.");
-
-    const passed = hasFlex && hasSpaceBetween;
+    const hasEnd = /justify-content\s*:\s*(flex-end|end)/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; tetap aktif.");
+    if (!hasEnd) feedback.push("Gunakan justify-content: flex-end; untuk mendorong kotak ke ujung kanan.");
+    const passed = hasFlex && hasEnd;
     return {
       passed,
       score: passed ? 100 : (hasFlex ? 50 : 0),
-      feedback: passed
-        ? ["🎉 Sempurna! Elemen kini terpisah merata dari ujung kiri hingga ujung kanan!"]
-        : feedback,
+      feedback: passed ? ["Semua kotak berhasil didorong ke ujung kanan ruangan!"] : feedback,
     };
   }
 
-  // LEVEL 3: Distribusi Jarak Merata (Space Around / Space Evenly)
-  if (challengeId === "flexbox-3-space-around") {
+  if (challengeId === "flexbox-3-center-stage" || challengeId === "fb-3") {
     const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const hasSpaceAround = /justify-content\s*:\s*(space-around|space-evenly)/.test(normalized);
-
-    if (!hasFlex) feedback.push("⚠️ Pastikan display: flex; aktif.");
-    if (!hasSpaceAround) feedback.push("⚠️ Berikan spasi merata di sekeliling elemen dengan justify-content: space-around;.");
-
-    const passed = hasFlex && hasSpaceAround;
+    const hasCenter = /justify-content\s*:\s*center/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; aktif.");
+    if (!hasCenter) feedback.push("Gunakan justify-content: center; untuk mengumpulkan kotak di tengah horizontal.");
+    const passed = hasFlex && hasCenter;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed
-        ? ["🎉 Hebat! Ruang sela di sekeliling permen kini terbagi sangat proporsional!"]
-        : feedback,
+      feedback: passed ? ["Sempurna! Semua kotak berkumpul tepat di tengah panggung!"] : feedback,
     };
   }
 
-  // LEVEL 4: Dorong Semua Permen ke Pojok Kanan Bawah (Flex End)
-  if (challengeId === "flexbox-4-flex-end") {
+  if (challengeId === "flexbox-4-split-space-between" || challengeId === "fb-4") {
     const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const hasJustifyEnd = /justify-content\s*:\s*(flex-end|end)/.test(normalized);
-    const hasAlignEnd = /align-items\s*:\s*(flex-end|end)/.test(normalized);
-
-    if (!hasFlex) feedback.push("⚠️ Pastikan display: flex; aktif.");
-    if (!hasJustifyEnd) feedback.push("⚠️ Dorong elemen ke kanan dengan justify-content: flex-end;");
-    if (!hasAlignEnd) feedback.push("⚠️ Turunkan elemen ke dasar dengan align-items: flex-end;");
-
-    const passed = hasFlex && hasJustifyEnd && hasAlignEnd;
+    const hasBetween = /justify-content\s*:\s*space-between/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; aktif.");
+    if (!hasBetween) feedback.push("Gunakan justify-content: space-between; untuk memisahkan kotak ke kedua ujung.");
+    const passed = hasFlex && hasBetween;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed
-        ? ["🎉 Keren! Seluruh permen telah berkumpul di pojok kanan bawah arena!"]
-        : feedback,
+      feedback: passed ? ["Kotak kiri dan kanan berhasil terpisah menyentuh dinding layar!"] : feedback,
     };
   }
 
-  // LEVEL 5: Ubah Alur Menjadi Kolom Vertikal (Direction Column)
-  if (challengeId === "flexbox-5-direction-column") {
+  if (challengeId === "flexbox-5-social-distancing" || challengeId === "fb-5") {
     const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const hasColumn = /flex-direction\s*:\s*column/.test(normalized);
-    const hasCenter = /align-items\s*:\s*center/.test(normalized) || /justify-content\s*:\s*center/.test(normalized);
-
-    if (!hasFlex) feedback.push("⚠️ Pastikan display: flex; aktif.");
-    if (!hasColumn) feedback.push("⚠️ Ubah orientasi menjadi kolom dengan flex-direction: column;");
-    if (!hasCenter) feedback.push("⚠️ Posisikan kolom di tengah dengan align-items: center;");
-
-    const passed = hasFlex && hasColumn && hasCenter;
+    const hasEvenly = /justify-content\s*:\s*(space-evenly|space-around)/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; aktif.");
+    if (!hasEvenly) feedback.push("Gunakan justify-content: space-evenly; agar jarak sela dan jarak tepi sama persis.");
+    const passed = hasFlex && hasEvenly;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed
-        ? ["🎉 Mantap! Susunan elemen kini berbaris lurus vertikal di tengah arena!"]
-        : feedback,
+      feedback: passed ? ["Jarak yang adil merata (space-evenly) berhasil diterapkan di antara semua kotak!"] : feedback,
     };
   }
 
-  // LEVEL 6: Balikkan Urutan Kolom Terbalik (Column Reverse)
-  if (challengeId === "flexbox-6-column-reverse") {
+  if (challengeId === "flexbox-6-gravity-align-items" || challengeId === "fb-6") {
     const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const hasColumnReverse = /flex-direction\s*:\s*column-reverse/.test(normalized);
-
-    if (!hasFlex) feedback.push("⚠️ Pastikan display: flex; aktif.");
-    if (!hasColumnReverse) feedback.push("⚠️ Balikkan arah alur menggunakan flex-direction: column-reverse;");
-
-    const passed = hasFlex && hasColumnReverse;
+    const hasCenter = /align-items\s*:\s*center/.test(normalized) || /place-items\s*:\s*center/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; aktif.");
+    if (!hasCenter) feedback.push("Gunakan align-items: center; untuk menarik kotak ke tengah secara vertikal.");
+    const passed = hasFlex && hasCenter;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed
-        ? ["🎉 Berhasil! Permen nomor 3 sekarang berada di puncak paling atas!"]
-        : feedback,
+      feedback: passed ? ["Hebat! Gaya gravitasi Flexbox menarik semua kotak tepat di tengah vertikal!"] : feedback,
     };
   }
 
-  // LEVEL 7: Atasi Elemen Meluap dengan Multi-Baris (Flex Wrap)
-  if (challengeId === "flexbox-7-flex-wrap") {
+  if (challengeId === "flexbox-7-floor-align-end" || challengeId === "fb-7") {
     const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const hasWrap = /flex-wrap\s*:\s*wrap/.test(normalized);
-    const hasGap = /gap\s*:\s*(16px|1rem|12px|20px|1.5rem)/.test(normalized);
-
-    if (!hasFlex) feedback.push("⚠️ Pastikan display: flex; aktif.");
-    if (!hasWrap) feedback.push("⚠️ Izinkan pembungkusan baris dengan flex-wrap: wrap;");
-    if (!hasGap) feedback.push("⚠️ Berikan jarak antar permen dengan gap: 16px;");
-
-    const passed = hasFlex && hasWrap && hasGap;
+    const hasEnd = /align-items\s*:\s*(flex-end|end)/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; aktif.");
+    if (!hasEnd) feedback.push("Gunakan align-items: flex-end; untuk menjatuhkan kotak ke lantai dasar.");
+    const passed = hasFlex && hasEnd;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed
-        ? ["🎉 Rapi sekali! Elemen kini membungkus ke baris berikutnya tanpa meluap keluar arena!"]
-        : feedback,
+      feedback: passed ? ["Seluruh kotak berhasil mendarat bersandar di lantai dasar arena!"] : feedback,
     };
   }
 
-  // LEVEL 8: Turunkan Permen Bintang Sendirian (Align Self)
-  if (challengeId === "flexbox-8-align-self") {
-    const hasAlignSelf = /align-self\s*:\s*(flex-end|end)/.test(normalized);
-
-    if (!hasAlignSelf) {
-      feedback.push("⚠️ Gunakan align-self: flex-end; pada .permen-2 untuk menurunkannya sendirian.");
-    }
-
-    const passed = hasAlignSelf;
-    return {
-      passed,
-      score: passed ? 100 : 40,
-      feedback: passed
-        ? ["🎉 Trik master! Permen bintang berhasil turun secara independen tanpa menggeser temannya!"]
-        : feedback,
-    };
-  }
-
-  // LEVEL 9: Tukar Urutan Permen Juara (Order)
-  if (challengeId === "flexbox-9-order") {
-    const hasOrder = /order\s*:\s*(-1|0|-2)/.test(normalized);
-
-    if (!hasOrder) {
-      feedback.push("⚠️ Berikan nilai order negatif seperti order: -1; pada .permen-3 agar maju ke depan.");
-    }
-
-    const passed = hasOrder;
-    return {
-      passed,
-      score: passed ? 100 : 40,
-      feedback: passed
-        ? ["🎉 Juara! Permen nomor 3 berhasil memotong antrean ke posisi terdepan tanpa mengubah HTML!"]
-        : feedback,
-    };
-  }
-
-  // LEVEL 10: BOSS FIGHT — Responsive Bento Dashboard Layout
-  if (challengeId === "flexbox-10-boss-fight") {
+  if (challengeId === "flexbox-8-column-direction" || challengeId === "fb-8") {
     const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const hasWrap = /flex-wrap\s*:\s*wrap/.test(normalized);
-    const hasDistribute = /justify-content\s*:\s*(space-between|center|space-around)/.test(normalized);
-    const hasGap = /gap\s*:\s*(16px|1rem|12px|20px|1.5rem)/.test(normalized);
+    const hasColumn = /flex-direction\s*:\s*column\b/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; aktif.");
+    if (!hasColumn) feedback.push("Gunakan flex-direction: column; untuk menumpuk kotak ke bawah.");
+    const passed = hasFlex && hasColumn;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Alur arah Flexbox berhasil diubah menjadi kolom vertikal!"] : feedback,
+    };
+  }
 
-    if (!hasFlex) feedback.push("⚠️ Aktifkan display: flex;");
-    if (!hasWrap) feedback.push("⚠️ Atur multi-baris dengan flex-wrap: wrap;");
-    if (!hasDistribute) feedback.push("⚠️ Atur sebaran kartu bento dengan justify-content: space-between;");
-    if (!hasGap) feedback.push("⚠️ Berikan jarak antar kartu bento dengan gap: 16px;");
+  if (challengeId === "flexbox-9-gap" || challengeId === "fb-9") {
+    const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const hasGap = /gap\s*:\s*(20px|1\.25rem)/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; aktif.");
+    if (!hasGap) feedback.push("Gunakan gap: 20px; untuk memberi jarak antar kotak.");
+    const passed = hasFlex && hasGap;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Jarak lorong gap: 20px berhasil memisahkan kotak dengan sangat rapi!"] : feedback,
+    };
+  }
 
-    const passed = hasFlex && hasWrap && hasDistribute && hasGap;
+  if (challengeId === "flexbox-10-overflow-wrap" || challengeId === "fb-10") {
+    const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const hasWrap = /flex-wrap\s*:\s*wrap\b/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; aktif.");
+    if (!hasWrap) feedback.push("Gunakan flex-wrap: wrap; agar elemen turun ke baris baru saat ruang sempit.");
+    const passed = hasFlex && hasWrap;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Elemen kini membungkus (wrap) ke baris baru tanpa hancur menyusut!"] : feedback,
+    };
+  }
+
+  if (challengeId === "flexbox-11-perfect-center" || challengeId === "fb-11") {
+    const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const hasJustify = /justify-content\s*:\s*center/.test(normalized) || /place-items\s*:\s*center/.test(normalized);
+    const hasAlign = /align-items\s*:\s*center/.test(normalized) || /place-items\s*:\s*center/.test(normalized);
+    if (!hasFlex) feedback.push("Pastikan display: flex; aktif.");
+    if (!hasJustify) feedback.push("Pusatkan horizontal dengan justify-content: center;");
+    if (!hasAlign) feedback.push("Pusatkan vertikal dengan align-items: center;");
+    const passed = hasFlex && hasJustify && hasAlign;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Legenda interview terpecahkan! Kotak berada tepat di tengah horizontal dan vertikal!"] : feedback,
+    };
+  }
+
+  if (challengeId === "flexbox-12-boss-modern-navbar" || challengeId === "fb-12") {
+    const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const hasSpaceBetween = /justify-content\s*:\s*space-between/.test(normalized);
+    const hasAlignCenter = /align-items\s*:\s*center/.test(normalized);
+    if (!hasFlex) feedback.push("Aktifkan display: flex; pada navbar.");
+    if (!hasSpaceBetween) feedback.push("Pisahkan logo di kiri dan menu di kanan dengan justify-content: space-between;");
+    if (!hasAlignCenter) feedback.push("Sejajarkan posisi vertikal dengan align-items: center;");
+    const passed = hasFlex && hasSpaceBetween && hasAlignCenter;
     return {
       passed,
       score: passed ? 100 : 60,
       feedback: passed
-        ? ["👑 CONGRATULATIONS! Kamu berhasil menaklukkan BOSS FIGHT dan menamatkan CSS Flexbox Mastery! 🎉🏆"]
+        ? ["👑 BOSS FIGHT TAKLUK! Kamu berhasil merakit Modern Navbar dengan tata letak kelas dunia! Selamat menyelesaikan CSS Flexbox! 🎉🏆"]
+        : feedback,
+    };
+  }
+
+  // ================= CSS GRID (12 Levels) =================
+  if (challengeId === "grid-1-blueprint" || challengeId === "gr-1" || challengeId === "grid-1-two-columns") {
+    const hasGrid = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const hasCols = /grid-template-columns\s*:\s*(1fr\s+1fr|repeat\(\s*2\s*,\s*1fr\s*\)|50%\s+50%)/.test(normalized);
+    if (!hasGrid) feedback.push("Gunakan display: grid; pada container.");
+    if (!hasCols) feedback.push("Belah menjadi 2 kolom dengan grid-template-columns: 1fr 1fr; (atau repeat(2, 1fr)).");
+    const passed = hasGrid && hasCols;
+    return {
+      passed,
+      score: passed ? 100 : (hasGrid ? 50 : 0),
+      feedback: passed ? ["Blueprint Grid pertama berhasil dibangun: 2 kolom 1fr simetris!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-2-triplets" || challengeId === "gr-2") {
+    const hasGrid = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const hasRepeat = /grid-template-columns\s*:\s*(repeat\(\s*3\s*,\s*1fr\s*\)|1fr\s+1fr\s+1fr)/.test(normalized);
+    if (!hasGrid) feedback.push("Pastikan display: grid; aktif.");
+    if (!hasRepeat) feedback.push("Gunakan fungsi repeat(3, 1fr) pada grid-template-columns.");
+    const passed = hasGrid && hasRepeat;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Ringkas dan elegan! 3 kolom triplets repeat(3, 1fr) siap digunakan!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-3-asymmetry" || challengeId === "gr-3") {
+    const hasGrid = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const hasAsym = /grid-template-columns\s*:\s*(250px\s+1fr|250px\s+auto)/.test(normalized);
+    if (!hasGrid) feedback.push("Pastikan display: grid; aktif.");
+    if (!hasAsym) feedback.push("Set kolom 1 fix 250px dan kolom 2 fleksibel 1fr (grid-template-columns: 250px 1fr).");
+    const passed = hasGrid && hasAsym;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Layout Sidebar asimetris (250px 1fr) berhasil dirakit!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-4-alleyway" || challengeId === "gr-4") {
+    const hasGrid = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const hasGap = /gap\s*:\s*(24px|1\.5rem)/.test(normalized) || /grid-gap\s*:\s*24px/.test(normalized);
+    if (!hasGrid) feedback.push("Pastikan display: grid; aktif.");
+    if (!hasGap) feedback.push("Beri lorong pemisah 24px dengan gap: 24px;");
+    const passed = hasGrid && hasGap;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Lorong pemisah gap: 24px memberikan jarak sela yang presisi antar sel grid!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-5-header-expansion" || challengeId === "gr-5") {
+    const hasSpan = /grid-column\s*:\s*(span\s*3|1\s*\/\s*(4|-1))/.test(normalized);
+    if (!hasSpan) feedback.push("Bentangkan elemen header melintasi 3 kolom dengan grid-column: span 3;");
+    return {
+      passed: hasSpan,
+      score: hasSpan ? 100 : 40,
+      feedback: hasSpan ? ["Header berhasil membentang menutupi 3 kolom penuh di bagian atas!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-6-tower-expansion" || challengeId === "gr-6") {
+    const hasRowSpan = /grid-row\s*:\s*(span\s*2|1\s*\/\s*3)/.test(normalized);
+    if (!hasRowSpan) feedback.push("Tinggikan sidebar memakan 2 baris dengan grid-row: span 2;");
+    return {
+      passed: hasRowSpan,
+      score: hasRowSpan ? 100 : 40,
+      feedback: hasRowSpan ? ["Menara sidebar berhasil membentang ke bawah memakan 2 baris vertikal!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-7-absolute-placement" || challengeId === "gr-7") {
+    const hasPlacement = /grid-column\s*:\s*(1\s*\/\s*3|1\s*\/\s*span\s*2)/.test(normalized);
+    if (!hasPlacement) feedback.push("Tempatkan elemen mulai dari garis ke-1 hingga ke-3 dengan grid-column: 1 / 3;");
+    return {
+      passed: hasPlacement,
+      score: hasPlacement ? 100 : 40,
+      feedback: hasPlacement ? ["Penempatan absolut pada garis grid (1 / 3) berhasil diterapkan secara presisi!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-8-grid-center" || challengeId === "gr-8") {
+    const hasGrid = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const hasPlace = /place-items\s*:\s*center/.test(normalized) ||
+      (/justify-items\s*:\s*center/.test(normalized) && /align-items\s*:\s*center/.test(normalized));
+    if (!hasGrid) feedback.push("Pastikan display: grid; aktif.");
+    if (!hasPlace) feedback.push("Pusatkan elemen dengan jurus place-items: center;");
+    const passed = hasGrid && hasPlace;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Satu jurus sakti: place-items: center berhasil memusatkan elemen secara 2D!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-9-responsive-magic" || challengeId === "gr-9") {
+    const hasMagic = /grid-template-columns\s*:\s*repeat\(\s*(auto-fit|auto-fill)\s*,\s*minmax\(\s*200px\s*,\s*1fr\s*\)\)/.test(normalized);
+    if (!hasMagic) feedback.push("Gunakan formula ajaib: grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));");
+    return {
+      passed: hasMagic,
+      score: hasMagic ? 100 : 40,
+      feedback: hasMagic ? ["Formula responsif legendaris aktif: grid kini otomatis beradaptasi tanpa media query!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-10-grid-areas" || challengeId === "gr-10") {
+    const hasArea = /grid-area\s*:\s*header\b/.test(normalized);
+    if (!hasArea) feedback.push("Beri nama area dengan grid-area: header;");
+    return {
+      passed: hasArea,
+      score: hasArea ? 100 : 40,
+      feedback: hasArea ? ["Area berhasil dinamai 'header' secara semantik untuk cetak biru template grid!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-11-inception" || challengeId === "gr-11") {
+    const hasFlex = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    if (!hasFlex) feedback.push("Jadikan elemen kartu di dalam sel grid sebagai Flexbox dengan display: flex;");
+    return {
+      passed: hasFlex,
+      score: hasFlex ? 100 : 50,
+      feedback: hasFlex ? ["Harmoni sempurna! Grid dan Flexbox berpadu apik untuk layout makro dan mikro!"] : feedback,
+    };
+  }
+
+  if (challengeId === "grid-12-boss-bento-dashboard" || challengeId === "gr-12") {
+    const hasCols = /grid-template-columns\s*:\s*(repeat\(\s*4\s*,\s*1fr\s*\)|1fr\s+1fr\s+1fr\s+1fr)/.test(normalized);
+    const hasSpan = /grid-column\s*:\s*span\s*2/.test(normalized) || /grid-row\s*:\s*span\s*2/.test(normalized);
+    if (!hasCols) feedback.push("Atur kontainer dengan 4 kolom: grid-template-columns: repeat(4, 1fr);");
+    if (!hasSpan) feedback.push("Bentangkan kartu utama dengan grid-column: span 2;");
+    const passed = hasCols && hasSpan;
+    return {
+      passed,
+      score: passed ? 100 : 60,
+      feedback: passed
+        ? ["👑 CONGRATULATIONS! Kamu berhasil merakit Bento Box Dashboard modern ala Apple dan menamatkan seluruh level CSS Grid! 🎉🏆"]
         : feedback,
     };
   }

@@ -311,136 +311,270 @@ function evaluateLiveGoals(
     };
   }
 
-  // ================= CSS FLEXBOX LEVELS =================
-  if (challengeId === "flexbox-1-activation") {
-
+  // ================= CSS FLEXBOX (12 Levels) =================
+  if (challengeId === "flexbox-1-activation" || challengeId === "fb-1") {
     const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const g2 =
-      /justify-content\s*:\s*(center|space-around|space-evenly)/.test(normalized) ||
-      /margin\s*:\s*(auto|0\s+auto)/.test(normalized);
-    const g3 =
-      /align-items\s*:\s*center/.test(normalized) ||
-      /place-items\s*:\s*center/.test(normalized);
     return {
-      passed: g1 && g2 && g3,
+      passed: g1,
+      goals: [{ label: "display: flex;", passed: g1 }],
+    };
+  }
+
+  if (challengeId === "flexbox-2-push-justify-end" || challengeId === "fb-2") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /justify-content\s*:\s*(flex-end|end)/.test(normalized);
+    return {
+      passed: g1 && g2,
       goals: [
-        { label: "display: flex", passed: g1 },
-        { label: "justify-content: center", passed: g2 },
-        { label: "align-items: center", passed: g3 },
+        { label: "display: flex;", passed: g1 },
+        { label: "justify-content: flex-end;", passed: g2 },
       ],
     };
   }
 
-  if (challengeId === "flexbox-2-space-between") {
+  if (challengeId === "flexbox-3-center-stage" || challengeId === "fb-3") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /justify-content\s*:\s*center/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: flex;", passed: g1 },
+        { label: "justify-content: center;", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-4-split-space-between" || challengeId === "fb-4") {
     const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
     const g2 = /justify-content\s*:\s*space-between/.test(normalized);
     return {
       passed: g1 && g2,
       goals: [
-        { label: "display: flex", passed: g1 },
-        { label: "justify-content: space-between", passed: g2 },
+        { label: "display: flex;", passed: g1 },
+        { label: "justify-content: space-between;", passed: g2 },
       ],
     };
   }
 
-  if (challengeId === "flexbox-3-space-around") {
+  if (challengeId === "flexbox-5-social-distancing" || challengeId === "fb-5") {
     const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const g2 = /justify-content\s*:\s*(space-around|space-evenly)/.test(normalized);
+    const g2 = /justify-content\s*:\s*(space-evenly|space-around)/.test(normalized);
     return {
       passed: g1 && g2,
       goals: [
-        { label: "display: flex", passed: g1 },
-        { label: "justify-content: space-around", passed: g2 },
+        { label: "display: flex;", passed: g1 },
+        { label: "justify-content: space-evenly;", passed: g2 },
       ],
     };
   }
 
-  if (challengeId === "flexbox-4-flex-end") {
+  if (challengeId === "flexbox-6-gravity-align-items" || challengeId === "fb-6") {
     const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const g2 = /justify-content\s*:\s*(flex-end|end)/.test(normalized);
-    const g3 = /align-items\s*:\s*(flex-end|end)/.test(normalized);
-    return {
-      passed: g1 && g2 && g3,
-      goals: [
-        { label: "display: flex", passed: g1 },
-        { label: "justify-content: flex-end", passed: g2 },
-        { label: "align-items: flex-end", passed: g3 },
-      ],
-    };
-  }
-
-  if (challengeId === "flexbox-5-direction-column") {
-    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const g2 = /flex-direction\s*:\s*column/.test(normalized);
-    const g3 =
-      /align-items\s*:\s*center/.test(normalized) ||
-      /justify-content\s*:\s*center/.test(normalized);
-    return {
-      passed: g1 && g2 && g3,
-      goals: [
-        { label: "display: flex", passed: g1 },
-        { label: "flex-direction: column", passed: g2 },
-        { label: "align-items: center", passed: g3 },
-      ],
-    };
-  }
-
-  if (challengeId === "flexbox-6-column-reverse") {
-    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const g2 = /flex-direction\s*:\s*column-reverse/.test(normalized);
+    const g2 = /align-items\s*:\s*center/.test(normalized) || /place-items\s*:\s*center/.test(normalized);
     return {
       passed: g1 && g2,
       goals: [
-        { label: "display: flex", passed: g1 },
-        { label: "flex-direction: column-reverse", passed: g2 },
+        { label: "display: flex;", passed: g1 },
+        { label: "align-items: center;", passed: g2 },
       ],
     };
   }
 
-  if (challengeId === "flexbox-7-flex-wrap") {
+  if (challengeId === "flexbox-7-floor-align-end" || challengeId === "fb-7") {
     const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const g2 = /flex-wrap\s*:\s*wrap/.test(normalized);
-    const g3 = /gap\s*:\s*(16px|1rem|12px|20px|1.5rem)/.test(normalized);
+    const g2 = /align-items\s*:\s*(flex-end|end)/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: flex;", passed: g1 },
+        { label: "align-items: flex-end;", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-8-column-direction" || challengeId === "fb-8") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /flex-direction\s*:\s*column\b/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: flex;", passed: g1 },
+        { label: "flex-direction: column;", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-9-gap" || challengeId === "fb-9") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /gap\s*:\s*(20px|1\.25rem)/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: flex;", passed: g1 },
+        { label: "gap: 20px;", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-10-overflow-wrap" || challengeId === "fb-10") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /flex-wrap\s*:\s*wrap\b/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: flex;", passed: g1 },
+        { label: "flex-wrap: wrap;", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "flexbox-11-perfect-center" || challengeId === "fb-11") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    const g2 = /justify-content\s*:\s*center/.test(normalized) || /place-items\s*:\s*center/.test(normalized);
+    const g3 = /align-items\s*:\s*center/.test(normalized) || /place-items\s*:\s*center/.test(normalized);
     return {
       passed: g1 && g2 && g3,
       goals: [
-        { label: "display: flex", passed: g1 },
-        { label: "flex-wrap: wrap", passed: g2 },
-        { label: "gap: 16px", passed: g3 },
+        { label: "display: flex;", passed: g1 },
+        { label: "justify-content: center;", passed: g2 },
+        { label: "align-items: center;", passed: g3 },
       ],
     };
   }
 
-  if (challengeId === "flexbox-8-align-self") {
-    const g1 = /align-self\s*:\s*(flex-end|end)/.test(normalized);
-    return {
-      passed: g1,
-      goals: [{ label: ".permen-2 { align-self: flex-end; }", passed: g1 }],
-    };
-  }
-
-  if (challengeId === "flexbox-9-order") {
-    const g1 = /order\s*:\s*(-1|0|-2)/.test(normalized);
-    return {
-      passed: g1,
-      goals: [{ label: ".permen-3 { order: -1; }", passed: g1 }],
-    };
-  }
-
-  if (challengeId === "flexbox-10-boss-fight") {
+  if (challengeId === "flexbox-12-boss-modern-navbar" || challengeId === "fb-12") {
     const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
-    const g2 = /flex-wrap\s*:\s*wrap/.test(normalized);
-    const g3 = /justify-content\s*:\s*(space-between|center|space-around)/.test(
-      normalized
-    );
-    const g4 = /gap\s*:\s*(16px|1rem|12px|20px|1.5rem)/.test(normalized);
+    const g2 = /justify-content\s*:\s*space-between/.test(normalized);
+    const g3 = /align-items\s*:\s*center/.test(normalized);
     return {
-      passed: g1 && g2 && g3 && g4,
+      passed: g1 && g2 && g3,
       goals: [
-        { label: "display: flex", passed: g1 },
-        { label: "flex-wrap: wrap", passed: g2 },
-        { label: "justify-content: space-between", passed: g3 },
-        { label: "gap: 16px", passed: g4 },
+        { label: "display: flex;", passed: g1 },
+        { label: "justify-content: space-between;", passed: g2 },
+        { label: "align-items: center;", passed: g3 },
+      ],
+    };
+  }
+
+  // ================= CSS GRID (12 Levels) =================
+  if (challengeId === "grid-1-blueprint" || challengeId === "gr-1" || challengeId === "grid-1-two-columns") {
+    const g1 = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const g2 = /grid-template-columns\s*:\s*(1fr\s+1fr|repeat\(\s*2\s*,\s*1fr\s*\)|50%\s+50%)/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: grid;", passed: g1 },
+        { label: "grid-template-columns: 1fr 1fr;", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "grid-2-triplets" || challengeId === "gr-2") {
+    const g1 = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const g2 = /grid-template-columns\s*:\s*(repeat\(\s*3\s*,\s*1fr\s*\)|1fr\s+1fr\s+1fr)/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: grid;", passed: g1 },
+        { label: "grid-template-columns: repeat(3, 1fr);", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "grid-3-asymmetry" || challengeId === "gr-3") {
+    const g1 = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const g2 = /grid-template-columns\s*:\s*(250px\s+1fr|250px\s+auto)/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: grid;", passed: g1 },
+        { label: "grid-template-columns: 250px 1fr;", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "grid-4-alleyway" || challengeId === "gr-4") {
+    const g1 = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const g2 = /gap\s*:\s*(24px|1\.5rem)/.test(normalized) || /grid-gap\s*:\s*24px/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: grid;", passed: g1 },
+        { label: "gap: 24px;", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "grid-5-header-expansion" || challengeId === "gr-5") {
+    const g1 = /grid-column\s*:\s*(span\s*3|1\s*\/\s*(4|-1))/.test(normalized);
+    return {
+      passed: g1,
+      goals: [{ label: "grid-column: span 3;", passed: g1 }],
+    };
+  }
+
+  if (challengeId === "grid-6-tower-expansion" || challengeId === "gr-6") {
+    const g1 = /grid-row\s*:\s*(span\s*2|1\s*\/\s*3)/.test(normalized);
+    return {
+      passed: g1,
+      goals: [{ label: "grid-row: span 2;", passed: g1 }],
+    };
+  }
+
+  if (challengeId === "grid-7-absolute-placement" || challengeId === "gr-7") {
+    const g1 = /grid-column\s*:\s*(1\s*\/\s*3|1\s*\/\s*span\s*2)/.test(normalized);
+    return {
+      passed: g1,
+      goals: [{ label: "grid-column: 1 / 3;", passed: g1 }],
+    };
+  }
+
+  if (challengeId === "grid-8-grid-center" || challengeId === "gr-8") {
+    const g1 = /display\s*:\s*(grid|inline-grid)/.test(normalized);
+    const g2 =
+      /place-items\s*:\s*center/.test(normalized) ||
+      (/justify-items\s*:\s*center/.test(normalized) && /align-items\s*:\s*center/.test(normalized));
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "display: grid;", passed: g1 },
+        { label: "place-items: center;", passed: g2 },
+      ],
+    };
+  }
+
+  if (challengeId === "grid-9-responsive-magic" || challengeId === "gr-9") {
+    const g1 = /grid-template-columns\s*:\s*repeat\(\s*(auto-fit|auto-fill)\s*,\s*minmax\(\s*200px\s*,\s*1fr\s*\)\)/.test(normalized);
+    return {
+      passed: g1,
+      goals: [{ label: "grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));", passed: g1 }],
+    };
+  }
+
+  if (challengeId === "grid-10-grid-areas" || challengeId === "gr-10") {
+    const g1 = /grid-area\s*:\s*header\b/.test(normalized);
+    return {
+      passed: g1,
+      goals: [{ label: "grid-area: header;", passed: g1 }],
+    };
+  }
+
+  if (challengeId === "grid-11-inception" || challengeId === "gr-11") {
+    const g1 = /display\s*:\s*(flex|inline-flex)/.test(normalized);
+    return {
+      passed: g1,
+      goals: [{ label: "display: flex; (di dalam kartu)", passed: g1 }],
+    };
+  }
+
+  if (challengeId === "grid-12-boss-bento-dashboard" || challengeId === "gr-12") {
+    const g1 = /grid-template-columns\s*:\s*(repeat\(\s*4\s*,\s*1fr\s*\)|1fr\s+1fr\s+1fr\s+1fr)/.test(normalized);
+    const g2 = /grid-column\s*:\s*span\s*2/.test(normalized) || /grid-row\s*:\s*span\s*2/.test(normalized);
+    return {
+      passed: g1 && g2,
+      goals: [
+        { label: "grid-template-columns: repeat(4, 1fr);", passed: g1 },
+        { label: "grid-column: span 2; (pada .card-1)", passed: g2 },
       ],
     };
   }
@@ -450,7 +584,7 @@ function evaluateLiveGoals(
 
 // Known valid CSS values for anti-flicker live parsing
 const VALID_PROPERTIES: Record<string, RegExp> = {
-  display: /^(flex|inline-flex|grid|block|inline-block|none)$/i,
+  display: /^(flex|inline-flex|grid|inline-grid|block|inline-block|none)$/i,
   justifyContent: /^(center|space-between|space-around|space-evenly|flex-start|flex-end|start|end|left|right)$/i,
   alignItems: /^(center|flex-start|flex-end|stretch|baseline|start|end)$/i,
   flexDirection: /^(row|row-reverse|column|column-reverse)$/i,
@@ -458,6 +592,15 @@ const VALID_PROPERTIES: Record<string, RegExp> = {
   gap: /^(\d+(\.\d+)?(px|rem|em|%)?(\s+\d+(\.\d+)?(px|rem|em|%)?)?)$/i,
   alignSelf: /^(auto|flex-start|flex-end|center|baseline|stretch|start|end)$/i,
   order: /^-?\d+$/i,
+  flexGrow: /^\d+$/i,
+  flexShrink: /^\d+$/i,
+  gridTemplateColumns: /^.+$/i,
+  gridTemplateRows: /^.+$/i,
+  gridColumn: /^.+$/i,
+  gridRow: /^.+$/i,
+  gridArea: /^.+$/i,
+  placeItems: /^.+$/i,
+  justifyItems: /^.+$/i,
   backgroundColor: /^.+$/i,
   color: /^.+$/i,
   fontSize: /^.+$/i,
@@ -469,6 +612,8 @@ const VALID_PROPERTIES: Record<string, RegExp> = {
   border: /^.+$/i,
   borderRadius: /^.+$/i,
   boxShadow: /^.+$/i,
+  width: /^.+$/i,
+  height: /^.+$/i,
 };
 
 /**
@@ -543,6 +688,10 @@ function parseUserStyles(css: string): {
       if (
         selector.includes(".arena") ||
         selector === "arena" ||
+        selector.includes(".grid-arena") ||
+        selector === "grid-arena" ||
+        selector.includes(".navbar") ||
+        selector === "navbar" ||
         selector.includes(".box") ||
         selector === "box" ||
         selector.includes(".badge") ||
@@ -551,11 +700,16 @@ function parseUserStyles(css: string): {
       ) {
         Object.assign(arenaStyle, declObj);
         itemStyles["box"] = { ...(itemStyles["box"] || {}), ...declObj };
+      } else if (selector.includes(".header") || selector === "header") {
+        itemStyles["header"] = { ...(itemStyles["header"] || {}), ...declObj };
+      } else if (selector.includes(".sidebar") || selector === "sidebar") {
+        itemStyles["sidebar"] = { ...(itemStyles["sidebar"] || {}), ...declObj };
       } else {
         const itemMatch = selector.match(/\.(permen|card)-?([0-9]+)/);
         if (itemMatch) {
           const key = `item-${itemMatch[2]}`;
           itemStyles[key] = { ...(itemStyles[key] || {}), ...declObj };
+          itemStyles[`card-${itemMatch[2]}`] = { ...(itemStyles[`card-${itemMatch[2]}`] || {}), ...declObj };
         }
       }
     }
@@ -645,6 +799,10 @@ function ChallengePlaygroundContent({
               found.initial_state ||
               (found.class_id === "html-architecture" || found.id.startsWith("html-")
                 ? "<!-- Tulis tag HTML di sini -->"
+                : found.class_id === "css-grid" || found.id.startsWith("grid-") || found.id.startsWith("gr-")
+                ? `.grid-arena {\n  display: grid;\n  /* Tulis CSS Grid di sini */\n}`
+                : found.id === "flexbox-12-boss-modern-navbar" || found.id === "fb-12"
+                ? `.navbar {\n  /* Tulis CSS Flexbox di sini */\n}`
                 : `.arena {\n  /* Tulis CSS Flexbox di sini */\n}`)
           );
         } else {
@@ -669,6 +827,18 @@ function ChallengePlaygroundContent({
     challenge?.class_id === "html-architecture" || challengeId.startsWith("html-");
   const isCssBasicsMode =
     challenge?.class_id === "css-basics" || challengeId.startsWith("css-basics-");
+  const isNavbarMode =
+    challengeId === "flexbox-12-boss-modern-navbar" || challengeId === "fb-12";
+  const isGridMode =
+    challenge?.class_id === "css-grid" || challengeId.startsWith("grid-") || challengeId.startsWith("gr-");
+  const isBentoMode =
+    challengeId === "grid-12-boss-bento-dashboard" || challengeId === "gr-12";
+  const isGridHeaderMode =
+    challengeId === "grid-5-header-expansion" || challengeId === "gr-5" ||
+    challengeId === "grid-7-absolute-placement" || challengeId === "gr-7" ||
+    challengeId === "grid-10-grid-areas" || challengeId === "gr-10";
+  const isGridSidebarMode =
+    challengeId === "grid-6-tower-expansion" || challengeId === "gr-6";
 
   // Deterministically shuffled helpers so the correct answer is NEVER placed at index 0 (top/first)
   const shuffledHelpers = useMemo(() => {
@@ -713,6 +883,10 @@ function ChallengePlaygroundContent({
       .replace(/\.arena\b/g, "#live-arena, .arena")
       .replace(/\.box\b/g, "#live-arena .box, .box")
       .replace(/\.badge\b/g, "#live-arena .badge, .badge")
+      .replace(/\.navbar\b/g, "#live-arena, .navbar")
+      .replace(/\.grid-arena\b/g, "#live-arena, .grid-arena")
+      .replace(/\.header\b/g, "#live-arena .grid-header, .header")
+      .replace(/\.sidebar\b/g, "#live-arena .grid-sidebar, .sidebar")
       .replace(/\.permen-([0-9]+)\b/g, "#live-arena .permen-$1")
       .replace(/\.card-([0-9]+)\b/g, "#live-arena .card-$1");
   }, [cssCode]);
@@ -969,21 +1143,40 @@ function ChallengePlaygroundContent({
           return prev.replace(samePropRegex, `${prop}: ${val};`);
         }
 
-        // Otherwise -> INSERT into .arena { ... } or append
+        // Otherwise -> INSERT into matching container rule or append
+        if (prev.includes(".grid-arena {")) {
+          return prev.replace(".grid-arena {", `.grid-arena {\n  ${clean};`);
+        }
+        if (prev.includes(".navbar {")) {
+          return prev.replace(".navbar {", `.navbar {\n  ${clean};`);
+        }
         if (prev.includes(".arena {")) {
           return prev.replace(".arena {", `.arena {\n  ${clean};`);
+        }
+        if (prev.includes(".header {")) {
+          return prev.replace(".header {", `.header {\n  ${clean};`);
+        }
+        if (prev.includes(".sidebar {")) {
+          return prev.replace(".sidebar {", `.sidebar {\n  ${clean};`);
         }
         return `${prev}\n${clean};`;
       }
 
-      // 2. If snippet is a selector (e.g. ".permen-2" or ".permen-3")
+      // 2. If snippet is a selector (e.g. ".card-2", ".permen-2", ".header", etc.)
       if (clean.startsWith(".")) {
         const escaped = clean.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
         const blockRegex = new RegExp(`\\n*${escaped}\\s*\\{[^}]*\\}`, "gi");
         if (blockRegex.test(prev)) {
           return prev.replace(blockRegex, "").replace(/\n{3,}/g, "\n\n");
         }
-        const defaultProp = clean.includes("2") ? "align-self: flex-end;" : "order: -1;";
+        const defaultProp =
+          clean.includes("header")
+            ? "grid-column: span 3;"
+            : clean.includes("sidebar")
+            ? "grid-row: span 2;"
+            : clean.includes("3")
+            ? "order: -1;"
+            : "align-self: flex-end;";
         return `${prev}\n\n${clean} {\n  ${defaultProp}\n}`;
       }
 
@@ -1021,9 +1214,6 @@ function ChallengePlaygroundContent({
 
   // Target visual goal styles
   const targetVisual = challenge?.target_visual || {};
-  const isLevel8 = challenge?.id === "flexbox-8-align-self";
-  const isLevel9 = challenge?.id === "flexbox-9-order";
-  const isLevel10 = challenge?.id === "flexbox-10-boss-fight";
 
   if (loading) {
     return (
@@ -1338,6 +1528,148 @@ function ChallengePlaygroundContent({
                 </div>
               )}
             </div>
+          ) : isNavbarMode ? (
+            <div
+              id="live-arena"
+              className={`navbar w-full min-h-[4rem] bg-slate-900 border-3 rounded-2xl p-3 shadow-[0_4px_0_#0f172a] overflow-auto transition-all ${
+                liveEval.passed ? "border-emerald-600 ring-4 ring-emerald-300/60" : "border-slate-900"
+              }`}
+              style={arenaStyle}
+            >
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="w-6 h-6 rounded-lg bg-[#EF4444] text-white flex items-center justify-center font-black text-xs shadow-xs">
+                  ⚡
+                </span>
+                <span className="font-display font-black text-white text-xs tracking-wider">
+                  CODEVAS
+                </span>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-[10px] font-bold text-slate-300 hidden sm:inline">
+                  Fitur
+                </span>
+                <button className="px-2 py-0.5 rounded-lg bg-[#EF4444] text-white font-black text-[10px] border border-white/20 shadow-xs">
+                  Mulai
+                </button>
+              </div>
+            </div>
+          ) : isGridMode ? (
+            <div
+              id="live-arena"
+              className={`grid-arena w-full min-h-[7.5rem] bg-slate-50 border-3 rounded-2xl p-2.5 shadow-[0_4px_0_#0f172a] overflow-auto transition-all ${
+                liveEval.passed ? "border-emerald-600 ring-4 ring-emerald-300/60" : "border-slate-900"
+              }`}
+              style={{ display: "grid", ...arenaStyle }}
+            >
+              {isBentoMode ? (
+                <>
+                  <div
+                    style={itemStyles["card-1"] || itemStyles["item-1"] || {}}
+                    className="card-1 rounded-xl p-2.5 bg-gradient-to-br from-indigo-500 to-purple-600 text-white border-2 border-slate-900 shadow-xs flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs">📈</span>
+                      <span className="text-[8px] bg-white/20 px-1.5 py-0.5 rounded-full font-bold">+148%</span>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black leading-tight">Proyeksi Analitik</p>
+                      <p className="text-[8px] text-white/80">Dashboard Utama</p>
+                    </div>
+                  </div>
+                  <div
+                    style={itemStyles["card-2"] || itemStyles["item-2"] || {}}
+                    className="card-2 rounded-xl p-1.5 bg-amber-50 border-2 border-slate-900 shadow-xs flex flex-col items-center justify-center text-center"
+                  >
+                    <span className="text-xs">👥</span>
+                    <span className="text-[8px] font-black text-slate-900">12.4k User</span>
+                  </div>
+                  <div
+                    style={itemStyles["card-3"] || itemStyles["item-3"] || {}}
+                    className="card-3 rounded-xl p-1.5 bg-emerald-50 border-2 border-slate-900 shadow-xs flex flex-col items-center justify-center text-center"
+                  >
+                    <span className="text-xs">⚡</span>
+                    <span className="text-[8px] font-black text-slate-900">99.9% Uptime</span>
+                  </div>
+                  <div
+                    style={itemStyles["card-4"] || itemStyles["item-4"] || {}}
+                    className="card-4 rounded-xl p-1.5 bg-rose-50 border-2 border-slate-900 shadow-xs flex flex-col items-center justify-center text-center"
+                  >
+                    <span className="text-xs">🛡️</span>
+                    <span className="text-[8px] font-black text-slate-900">Enkripsi</span>
+                  </div>
+                </>
+              ) : isGridHeaderMode ? (
+                <>
+                  <div
+                    style={itemStyles["header"] || itemStyles["item-1"] || {}}
+                    className="header grid-header rounded-xl p-2 bg-indigo-50 border-2 border-slate-900 shadow-xs flex items-center justify-between"
+                  >
+                    <span className="text-[9px] font-black text-indigo-950 font-mono">👑 .header (Span 3)</span>
+                    <span className="text-xs">⚡</span>
+                  </div>
+                  <div
+                    style={itemStyles["card-1"] || itemStyles["item-2"] || {}}
+                    className="card-1 rounded-xl p-2 bg-amber-50 border-2 border-slate-900 shadow-xs flex items-center justify-center text-center"
+                  >
+                    <span className="text-[9px] font-bold text-slate-800">Konten A</span>
+                  </div>
+                  <div
+                    style={itemStyles["card-2"] || itemStyles["item-3"] || {}}
+                    className="card-2 rounded-xl p-2 bg-emerald-50 border-2 border-slate-900 shadow-xs flex items-center justify-center text-center"
+                  >
+                    <span className="text-[9px] font-bold text-slate-800">Konten B</span>
+                  </div>
+                  <div
+                    style={itemStyles["card-3"] || itemStyles["item-4"] || {}}
+                    className="card-3 rounded-xl p-2 bg-rose-50 border-2 border-slate-900 shadow-xs flex items-center justify-center text-center"
+                  >
+                    <span className="text-[9px] font-bold text-slate-800">Konten C</span>
+                  </div>
+                </>
+              ) : isGridSidebarMode ? (
+                <>
+                  <div
+                    style={itemStyles["sidebar"] || itemStyles["item-1"] || {}}
+                    className="sidebar grid-sidebar rounded-xl p-2 bg-purple-50 border-2 border-slate-900 shadow-xs flex flex-col justify-center items-center text-center"
+                  >
+                    <span className="text-xs">🏰</span>
+                    <span className="text-[9px] font-black text-purple-950 font-mono">.sidebar</span>
+                    <span className="text-[8px] text-purple-700">Tower Span</span>
+                  </div>
+                  <div
+                    style={itemStyles["card-1"] || itemStyles["item-2"] || {}}
+                    className="card-1 rounded-xl p-2 bg-sky-50 border-2 border-slate-900 shadow-xs flex items-center justify-center"
+                  >
+                    <span className="text-[9px] font-bold text-slate-800">Panel 1</span>
+                  </div>
+                  <div
+                    style={itemStyles["card-2"] || itemStyles["item-3"] || {}}
+                    className="card-2 rounded-xl p-2 bg-emerald-50 border-2 border-slate-900 shadow-xs flex items-center justify-center"
+                  >
+                    <span className="text-[9px] font-bold text-slate-800">Panel 2</span>
+                  </div>
+                </>
+              ) : (
+                Array.from({ length: itemsCount }).map((_, i) => {
+                  const color = palette[i % palette.length];
+                  const label = itemLabels[i] || `Sel ${i + 1}`;
+                  const itemSpecificStyle = itemStyles[`card-${i + 1}`] || itemStyles[`item-${i + 1}`] || {};
+
+                  return (
+                    <div
+                      key={i}
+                      style={itemSpecificStyle}
+                      className={`card-${i + 1} rounded-xl border-2 border-slate-900 flex flex-col items-center justify-center p-2 shadow-xs transition-all ${color.bg}`}
+                    >
+                      <span className="text-xs">{color.emoji}</span>
+                      <span className="text-[9px] font-bold font-mono text-slate-900 text-center truncate max-w-full">
+                        {label}
+                      </span>
+                    </div>
+                  );
+                })
+              )}
+            </div>
           ) : (
             <div
               id="live-arena"
@@ -1349,7 +1681,7 @@ function ChallengePlaygroundContent({
               {Array.from({ length: itemsCount }).map((_, i) => {
                 const color = palette[i % palette.length];
                 const label = itemLabels[i] || `Permen ${i + 1}`;
-                const itemSpecificStyle = itemStyles[`item-${i + 1}`] || {};
+                const itemSpecificStyle = itemStyles[`item-${i + 1}`] || itemStyles[`card-${i + 1}`] || {};
 
                 return (
                   <div
@@ -1358,9 +1690,7 @@ function ChallengePlaygroundContent({
                     className={`permen-${i + 1} card-${i + 1} rounded-xl border-2 border-slate-900 flex flex-col items-center justify-center shadow-[0_2px_0_#0f172a] transition-all duration-200 ${
                       color.bg
                     } ${
-                      isLevel10
-                        ? "w-[44%] min-h-[3rem] p-1"
-                        : itemsCount > 4
+                      itemsCount > 4
                         ? "w-10 h-10 p-0.5"
                         : "w-12 h-12 p-1"
                     }`}
@@ -1604,6 +1934,177 @@ function ChallengePlaygroundContent({
                   </div>
                 )}
               </div>
+            ) : isNavbarMode ? (
+              <div
+                id="live-arena"
+                className={`navbar w-full min-h-[5.5rem] bg-slate-900 border-4 rounded-3xl p-5 shadow-[0_8px_0_#0f172a] overflow-auto transition-all ${
+                  liveEval.passed
+                    ? "border-emerald-600 ring-4 ring-emerald-300/60"
+                    : "border-slate-900"
+                }`}
+                style={arenaStyle}
+              >
+                <div className="flex items-center gap-3 shrink-0">
+                  <span className="w-9 h-9 rounded-xl bg-[#EF4444] text-white flex items-center justify-center font-black text-sm shadow-md">
+                    ⚡
+                  </span>
+                  <div>
+                    <span className="font-display font-black text-white text-base tracking-wider block leading-tight">
+                      CODEVAS
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">Modern Flex Navbar</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 shrink-0">
+                  <span className="text-xs font-bold text-slate-300 hover:text-white cursor-pointer transition-colors">
+                    Kurikulum
+                  </span>
+                  <span className="text-xs font-bold text-slate-300 hover:text-white cursor-pointer transition-colors">
+                    Tantangan
+                  </span>
+                  <button className="px-4 py-2 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-xs border border-white/20 shadow-md transition-transform active:scale-95">
+                    Mulai Belajar 🚀
+                  </button>
+                </div>
+              </div>
+            ) : isGridMode ? (
+              <div
+                id="live-arena"
+                className={`grid-arena w-full min-h-[16rem] sm:min-h-[22rem] lg:min-h-[26rem] bg-slate-50 border-4 rounded-3xl p-6 shadow-[0_8px_0_#0f172a] overflow-auto transition-all ${
+                  liveEval.passed
+                    ? "border-emerald-600 ring-4 ring-emerald-300/60"
+                    : "border-slate-900"
+                }`}
+                style={{ display: "grid", ...arenaStyle }}
+              >
+                {isBentoMode ? (
+                  <>
+                    <div
+                      style={itemStyles["card-1"] || itemStyles["item-1"] || {}}
+                      className="card-1 rounded-2xl p-5 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex flex-col justify-between"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl">📈</span>
+                        <span className="text-xs bg-white/20 backdrop-blur-sm px-2.5 py-1 rounded-full font-bold">
+                          +148% Bulanan
+                        </span>
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-black leading-tight">Analisis Ekosistem Digital</h4>
+                        <p className="text-xs text-white/80 mt-1">Bento Hero Card membentang 2 kolom penuh.</p>
+                      </div>
+                    </div>
+                    <div
+                      style={itemStyles["card-2"] || itemStyles["item-2"] || {}}
+                      className="card-2 rounded-2xl p-4 bg-amber-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex flex-col items-center justify-center text-center"
+                    >
+                      <span className="text-2xl">👥</span>
+                      <span className="text-sm font-black text-slate-900 mt-1">12,480 Siswa</span>
+                      <span className="text-[10px] text-slate-500">Aktif Belajar</span>
+                    </div>
+                    <div
+                      style={itemStyles["card-3"] || itemStyles["item-3"] || {}}
+                      className="card-3 rounded-2xl p-4 bg-emerald-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex flex-col items-center justify-center text-center"
+                    >
+                      <span className="text-2xl">⚡</span>
+                      <span className="text-sm font-black text-slate-900 mt-1">99.98%</span>
+                      <span className="text-[10px] text-slate-500">Live Uptime</span>
+                    </div>
+                    <div
+                      style={itemStyles["card-4"] || itemStyles["item-4"] || {}}
+                      className="card-4 rounded-2xl p-4 bg-rose-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex flex-col items-center justify-center text-center"
+                    >
+                      <span className="text-2xl">🛡️</span>
+                      <span className="text-sm font-black text-slate-900 mt-1">AES-256</span>
+                      <span className="text-[10px] text-slate-500">Security Grade</span>
+                    </div>
+                    <div
+                      style={itemStyles["card-5"] || itemStyles["item-5"] || {}}
+                      className="card-5 rounded-2xl p-4 bg-sky-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex flex-col items-center justify-center text-center"
+                    >
+                      <span className="text-2xl">⭐</span>
+                      <span className="text-sm font-black text-slate-900 mt-1">4.9 / 5.0</span>
+                      <span className="text-[10px] text-slate-500">Rating Komunitas</span>
+                    </div>
+                  </>
+                ) : isGridHeaderMode ? (
+                  <>
+                    <div
+                      style={itemStyles["header"] || itemStyles["item-1"] || {}}
+                      className="header grid-header rounded-2xl p-4 bg-indigo-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex items-center justify-between"
+                    >
+                      <div>
+                        <span className="text-xs font-black text-indigo-950 font-mono block">👑 .header</span>
+                        <p className="text-xs text-indigo-800">Membentang melintasi 3 kolom dengan grid-column: span 3;</p>
+                      </div>
+                      <span className="text-2xl">⚡</span>
+                    </div>
+                    <div
+                      style={itemStyles["card-1"] || itemStyles["item-2"] || {}}
+                      className="card-1 rounded-2xl p-4 bg-amber-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex flex-col items-center justify-center text-center"
+                    >
+                      <span className="text-xl">📦</span>
+                      <span className="text-xs font-bold text-slate-800 mt-1">Konten Kolom 1</span>
+                    </div>
+                    <div
+                      style={itemStyles["card-2"] || itemStyles["item-3"] || {}}
+                      className="card-2 rounded-2xl p-4 bg-emerald-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex flex-col items-center justify-center text-center"
+                    >
+                      <span className="text-xl">📊</span>
+                      <span className="text-xs font-bold text-slate-800 mt-1">Konten Kolom 2</span>
+                    </div>
+                    <div
+                      style={itemStyles["card-3"] || itemStyles["item-4"] || {}}
+                      className="card-3 rounded-2xl p-4 bg-rose-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex flex-col items-center justify-center text-center"
+                    >
+                      <span className="text-xl">⚙️</span>
+                      <span className="text-xs font-bold text-slate-800 mt-1">Konten Kolom 3</span>
+                    </div>
+                  </>
+                ) : isGridSidebarMode ? (
+                  <>
+                    <div
+                      style={itemStyles["sidebar"] || itemStyles["item-1"] || {}}
+                      className="sidebar grid-sidebar rounded-2xl p-5 bg-purple-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex flex-col justify-center items-center text-center"
+                    >
+                      <span className="text-3xl">🏰</span>
+                      <span className="text-sm font-black text-purple-950 font-mono mt-2">.sidebar</span>
+                      <span className="text-xs text-purple-700">Tower Span 2 Baris</span>
+                    </div>
+                    <div
+                      style={itemStyles["card-1"] || itemStyles["item-2"] || {}}
+                      className="card-1 rounded-2xl p-5 bg-sky-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex items-center justify-center"
+                    >
+                      <span className="text-sm font-bold text-slate-800">Panel Konten 1</span>
+                    </div>
+                    <div
+                      style={itemStyles["card-2"] || itemStyles["item-3"] || {}}
+                      className="card-2 rounded-2xl p-5 bg-emerald-50 border-3 border-slate-900 shadow-[0_4px_0_#0f172a] flex items-center justify-center"
+                    >
+                      <span className="text-sm font-bold text-slate-800">Panel Konten 2</span>
+                    </div>
+                  </>
+                ) : (
+                  Array.from({ length: itemsCount }).map((_, i) => {
+                    const color = palette[i % palette.length];
+                    const label = itemLabels[i] || `Sel ${i + 1}`;
+                    const itemSpecificStyle = itemStyles[`card-${i + 1}`] || itemStyles[`item-${i + 1}`] || {};
+
+                    return (
+                      <div
+                        key={i}
+                        style={itemSpecificStyle}
+                        className={`card-${i + 1} rounded-2xl border-3 border-slate-900 flex flex-col items-center justify-center p-4 shadow-[0_4px_0_#0f172a] transition-all ${color.bg}`}
+                      >
+                        <span className="text-2xl">{color.emoji}</span>
+                        <span className="text-xs font-bold font-mono text-slate-900 text-center truncate max-w-full mt-1">
+                          {label}
+                        </span>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             ) : (
               <div
                 id="live-arena"
@@ -1617,7 +2118,7 @@ function ChallengePlaygroundContent({
                 {Array.from({ length: itemsCount }).map((_, i) => {
                   const color = palette[i % palette.length];
                   const label = itemLabels[i] || `Permen ${i + 1}`;
-                  const itemSpecificStyle = itemStyles[`item-${i + 1}`] || {};
+                  const itemSpecificStyle = itemStyles[`item-${i + 1}`] || itemStyles[`card-${i + 1}`] || {};
 
                   return (
                     <div
@@ -1628,9 +2129,7 @@ function ChallengePlaygroundContent({
                       } rounded-2xl border-3 border-slate-900 flex flex-col items-center justify-center shadow-[0_4px_0_#0f172a] transition-all duration-200 ${
                         color.bg
                       } ${
-                        isLevel10
-                          ? "w-[46%] min-h-[5rem] p-2"
-                          : itemsCount > 4
+                        itemsCount > 4
                           ? "w-14 h-14 p-1"
                           : "w-20 h-20 p-2"
                       }`}
