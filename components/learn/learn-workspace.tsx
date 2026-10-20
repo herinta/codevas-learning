@@ -74,6 +74,10 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
         if (json.success && json.data) {
           const found: ChallengeData = json.data;
           setChallenge(found);
+          // Otomatis munculkan popup materi/teori setiap kali ada materi
+          if (found.theory || found.concept_demo || found.target_visual?.concept_demo) {
+            setShowTheoryModal(true);
+          }
           setCssCode(
             found.codeSnapshot ||
               found.initial_state ||
