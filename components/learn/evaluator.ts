@@ -10,35 +10,45 @@ export function evaluateLiveGoals(
   const normalized = cssCode.toLowerCase().replace(/\s+/g, " ");
 
   // ================= HTML ARCHITECTURE LEVELS 1-12 =================
+  // ================= HTML ARCHITECTURE LEVELS 1-12 =================
   if (challengeId === "html-1-raw-content") {
-    const hasH1 = /<h1[^>]*>[\s\S]*Profil Saya[\s\S]*<\/h1>/i.test(cssCode);
+    const hasH1 = /<h1[^>]*>[\s\S]*profil[\s\S]*<\/h1>/i.test(cssCode);
+    const hasName = /<p[^>]*>[^<]*nama\s*:[^<]+<\/p>/i.test(cssCode);
+    const hasAge = /<p[^>]*>[^<]*umur\s*:[^<]+<\/p>/i.test(cssCode);
+    const passed = hasH1 && hasName && hasAge;
     return {
-      passed: hasH1,
-      goals: [{ label: "<h1>Profil Saya</h1>", passed: hasH1 }],
+      passed,
+      goals: [
+        { label: "Judul <h1>Profil Saya</h1>", passed: hasH1 },
+        { label: "Data <p>Nama: [namamu]</p>", passed: hasName },
+        { label: "Data <p>Umur: [umurmu]</p>", passed: hasAge },
+      ],
     };
   }
 
   if (challengeId === "html-2-paragraph") {
-    const hasH1 = /<h1[^>]*>[\s\S]*<\/h1>/i.test(cssCode);
-    const hasP = /<p[^>]*>[\s\S]+<\/p>/i.test(cssCode);
+    const hasH2 = /<h2[^>]*>[\s\S]*tentang[\s\S]*<\/h2>/i.test(cssCode);
+    const paragraphs = [...cssCode.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(m => m[1].replace(/<[^>]*>/g, '').trim());
+    const hasBio = paragraphs.some(p => p.length >= 15 && !/^nama\s*:/i.test(p) && !/^umur\s*:/i.test(p));
+    const passed = hasH2 && hasBio;
     return {
-      passed: hasH1 && hasP,
+      passed,
       goals: [
-        { label: "Judul <h1>Profil Saya</h1>", passed: hasH1 },
-        { label: "Paragraf <p> deskripsi dirimu", passed: hasP },
+        { label: "Sub-judul <h2>Tentang Saya</h2>", passed: hasH2 },
+        { label: "Paragraf <p> cerita dirimu (minimal 15 karakter)", passed: hasBio },
       ],
     };
   }
 
   if (challengeId === "html-3-first-box") {
-    const hasDiv = /<div[^>]*>[\s\S]*<h1[\s\S]*<p[\s\S]*<\/div>/i.test(cssCode);
-    const hasBothTags = /<h1[^>]*>[\s\S]*<\/h1>/i.test(cssCode) && /<p[^>]*>[\s\S]*<\/p>/i.test(cssCode);
-    const passed = hasDiv && hasBothTags;
+    const hasDiv = /<div[^>]*>[\s\S]*<\/div>/i.test(cssCode);
+    const hasEnclosed = /<div[^>]*>[\s\S]*<h1[\s\S]*<h2[\s\S]*<\/div>/i.test(cssCode) || /<div[^>]*>[\s\S]*<h1[\s\S]*<p[\s\S]*<\/div>/i.test(cssCode);
+    const passed = hasDiv && hasEnclosed;
     return {
       passed,
       goals: [
-        { label: "<div> pembungkus (Parent container)", passed: hasDiv },
-        { label: "Nesting: <h1> dan <p> di dalam <div>", passed: hasBothTags && hasDiv },
+        { label: "<div class=\"profile-card\"> pembungkus utama", passed: hasDiv },
+        { label: "Nesting: seluruh elemen profil di dalam <div>", passed: hasEnclosed },
       ],
     };
   }
@@ -46,22 +56,26 @@ export function evaluateLiveGoals(
   if (challengeId === "html-4-siblings") {
     const divs = cssCode.match(/<div[^>]*>[\s\S]*?<\/div>/gi);
     const hasTwoDivs = Boolean(divs && divs.length >= 2);
+    const hasStatus = /<h3[^>]*>[\s\S]*<\/h3>/i.test(cssCode) && /<p[^>]*>[\s\S]*status[\s\S]*<\/p>/i.test(cssCode);
+    const passed = hasTwoDivs && hasStatus;
     return {
-      passed: hasTwoDivs,
+      passed,
       goals: [
-        { label: "<div> pertama untuk blok atas", passed: Boolean(divs && divs.length >= 1) },
-        { label: "<div> kedua sejajar (Sibling)", passed: hasTwoDivs },
+        { label: "Dua kontainer <div> sejajar (Siblings)", passed: hasTwoDivs },
+        { label: "Kartu kedua memuat <h3> dan <p> status", passed: hasStatus },
       ],
     };
   }
 
   if (challengeId === "html-5-matryoshka") {
-    const hasParentAndChildren = /<div[^>]*>[\s\S]*<div[^>]*>[\s\S]*?<\/div>[\s\S]*<div[^>]*>[\s\S]*?<\/div>[\s\S]*<\/div>/i.test(cssCode);
+    const hasParent = /<div[^>]*>[\s\S]*<\/div>/i.test(cssCode);
+    const hasDualChildren = /<div[^>]*>[\s\S]*<div[^>]*>[\s\S]*?<\/div>[\s\S]*<div[^>]*>[\s\S]*?<\/div>[\s\S]*<\/div>/i.test(cssCode);
+    const passed = hasParent && hasDualChildren;
     return {
-      passed: hasParentAndChildren,
+      passed,
       goals: [
-        { label: "Satu <div> Parent pembungkus utama", passed: /<div[^>]*>[\s\S]*<\/div>/i.test(cssCode) },
-        { label: "Dua <div> Child di dalam Parent (Nesting)", passed: hasParentAndChildren },
+        { label: "Satu <div> Parent pembungkus utama", passed: hasParent },
+        { label: "Dua <div> Child di dalam Parent (Kolom Foto & Teks)", passed: hasDualChildren },
       ],
     };
   }
@@ -69,79 +83,106 @@ export function evaluateLiveGoals(
   if (challengeId === "html-6-image-element") {
     const hasImg = /<img\b[^>]*>/i.test(cssCode);
     const hasSrc = /<img\b[^>]*\bsrc\s*=\s*["'][^"']+["'][^>]*>/i.test(cssCode);
+    const hasAlt = /<img\b[^>]*\balt\s*=\s*["'][^"']*["'][^>]*>/i.test(cssCode);
+    const passed = hasImg && hasSrc && hasAlt;
     return {
-      passed: hasImg && hasSrc,
+      passed,
       goals: [
         { label: "Tag <img> self-closing", passed: hasImg },
-        { label: "Atribut src dengan link gambar", passed: hasSrc },
+        { label: "Atribut src dengan link foto profil", passed: hasSrc },
+        { label: "Atribut alt deskripsi foto", passed: hasAlt },
       ],
     };
   }
 
   if (challengeId === "html-7-action-button") {
-    const hasButton = /<button[^>]*>[\s\S]*Follow[\s\S]*<\/button>/i.test(cssCode);
+    const buttons = cssCode.match(/<button[^>]*>[\s\S]*?<\/button>/gi);
+    const hasFirstBtn = Boolean(buttons && buttons.length >= 1);
+    const hasSecondBtn = Boolean(buttons && buttons.length >= 2);
+    const passed = hasFirstBtn && hasSecondBtn;
     return {
-      passed: hasButton,
-      goals: [{ label: "Tag <button> dengan teks 'Follow'", passed: hasButton }],
+      passed,
+      goals: [
+        { label: "Tombol aksi pertama <button>", passed: hasFirstBtn },
+        { label: "Tombol aksi kedua <button> (minimal 2 tombol)", passed: hasSecondBtn },
+      ],
     };
   }
 
   if (challengeId === "html-8-link") {
-    const hasLink = /<a\b[^>]*\bhref\s*=\s*["'][^"']+["'][^>]*>[\s\S]+<\/a>/i.test(cssCode);
+    const hasLink = /<a\b[^>]*>[\s\S]+<\/a>/i.test(cssCode);
+    const hasHref = /<a\b[^>]*\bhref\s*=\s*["'][^"']+["'][^>]*>/i.test(cssCode);
+    const passed = hasLink && hasHref;
     return {
-      passed: hasLink,
-      goals: [{ label: "Tag <a> dengan atribut href", passed: hasLink }],
+      passed,
+      goals: [
+        { label: "Tag <a> pembungkus tautan", passed: hasLink },
+        { label: "Atribut href ke alamat web tujuan", passed: hasHref },
+      ],
     };
   }
 
   if (challengeId === "html-9-list-hierarchy") {
     const hasUl = /<ul[^>]*>[\s\S]*<\/ul>/i.test(cssCode);
-    const hasLi = /<ul[^>]*>[\s\S]*<li[^>]*>[\s\S]*?<\/li>[\s\S]*<\/ul>/i.test(cssCode);
+    const lis = cssCode.match(/<li[^>]*>[\s\S]*?<\/li>/gi);
+    const hasThreeLis = Boolean(lis && lis.length >= 3);
+    const passed = hasUl && hasThreeLis;
     return {
-      passed: hasUl && hasLi,
+      passed,
       goals: [
         { label: "Pembungkus daftar <ul>", passed: hasUl },
-        { label: "Item daftar <li> di dalam <ul>", passed: hasLi },
+        { label: "Minimal 3 butir keahlian/hobi <li> di dalam <ul>", passed: hasThreeLis },
       ],
     };
   }
 
   if (challengeId === "html-10-semantic-touch") {
-    const hasSection = /<section[^>]*>[\s\S]+<\/section>/i.test(cssCode);
+    const hasHeader = /<header[^>]*>[\s\S]*<\/header>/i.test(cssCode);
+    const hasSection = /<section[^>]*>[\s\S]*<\/section>/i.test(cssCode);
+    const hasFooter = /<footer[^>]*>[\s\S]*<\/footer>/i.test(cssCode);
+    const passed = hasHeader && hasSection && hasFooter;
     return {
-      passed: hasSection,
-      goals: [{ label: "Tag semantik <section> sebagai pembungkus", passed: hasSection }],
+      passed,
+      goals: [
+        { label: "Tag semantik <header> bagian atas kartu", passed: hasHeader },
+        { label: "Tag semantik <section> bagian konten & keahlian", passed: hasSection },
+        { label: "Tag semantik <footer> bagian bawah kartu", passed: hasFooter },
+      ],
     };
   }
 
   if (challengeId === "html-11-form-wrapper") {
     const hasForm = /<form[^>]*>[\s\S]*<\/form>/i.test(cssCode);
-    const hasInput = /<form[^>]*>[\s\S]*<input\b[^>]*>[\s\S]*<\/form>/i.test(cssCode);
-    const hasButton = /<form[^>]*>[\s\S]*<button\b[^>]*>[\s\S]*<\/button>[\s\S]*<\/form>/i.test(cssCode);
+    const inputs = cssCode.match(/<input\b[^>]*>/gi);
+    const hasTwoInputs = Boolean(inputs && inputs.length >= 2);
+    const hasButton = /<button\b[^>]*>[\s\S]*<\/button>/i.test(cssCode);
+    const passed = hasForm && hasTwoInputs && hasButton;
     return {
-      passed: hasForm && hasInput && hasButton,
+      passed,
       goals: [
         { label: "Wadah formulir <form>", passed: hasForm },
-        { label: "Elemen input <input>", passed: hasInput },
-        { label: "Tombol aksi <button>", passed: hasButton },
+        { label: "Minimal 2 field masukan <input> (nama & email)", passed: hasTwoInputs },
+        { label: "Tombol submit <button>", passed: hasButton },
       ],
     };
   }
 
   if (challengeId === "html-12-boss-card") {
-    const hasImg = /<img\b[^>]*>/i.test(cssCode);
-    const hasInnerDiv = /<div[^>]*>[\s\S]*<div[^>]*>[\s\S]*<\/div>[\s\S]*<\/div>/i.test(cssCode);
-    const hasHead = /<h[1-3][^>]*>[\s\S]*?<\/h[1-3]>/i.test(cssCode);
-    const hasP = /<p[^>]*>[\s\S]*?<\/p>/i.test(cssCode);
-    const hasBtn = /<button[^>]*>[\s\S]*?<\/button>/i.test(cssCode);
-    const passed = hasImg && hasInnerDiv && hasHead && hasP && hasBtn;
+    const hasDiv = /<div[^>]*>[\s\S]*<\/div>/i.test(cssCode);
+    const hasHeader = /<header[^>]*>[\s\S]*<\/header>/i.test(cssCode) && /<img\b/i.test(cssCode) && /<h1\b/i.test(cssCode);
+    const hasBioAndSection = /<section[^>]*>[\s\S]*<h2[\s\S]*<\/section>/i.test(cssCode);
+    const lis = cssCode.match(/<li[^>]*>[\s\S]*?<\/li>/gi);
+    const hasThreeLis = Boolean(lis && lis.length >= 3);
+    const hasActionAndForm = (/<button\b/i.test(cssCode) || /<a\b/i.test(cssCode)) && /<form\b[^>]*>[\s\S]*<\/form>/i.test(cssCode);
+    const passed = hasDiv && hasHeader && hasBioAndSection && hasThreeLis && hasActionAndForm;
     return {
       passed,
       goals: [
-        { label: "<div> Parent utama Profile Card", passed: /<div[^>]*>[\s\S]*<\/div>/i.test(cssCode) },
-        { label: "Tag <img /> Avatar foto", passed: hasImg },
-        { label: "<div> Child pembungkus teks", passed: hasInnerDiv },
-        { label: "Elemen <h2>, <p>, dan <button>", passed: hasHead && hasP && hasBtn },
+        { label: "<div> Parent utama Profile Card", passed: hasDiv },
+        { label: "<header> berisi foto <img> dan <h1>", passed: hasHeader },
+        { label: "<section> dengan <h2> dan deskripsi", passed: hasBioAndSection },
+        { label: "Daftar <ul> dengan minimal 3 <li>", passed: hasThreeLis },
+        { label: "Tombol/Tautan dan formulir kontak <form>", passed: hasActionAndForm },
       ],
     };
   }
