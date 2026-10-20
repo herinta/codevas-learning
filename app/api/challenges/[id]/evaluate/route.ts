@@ -14,12 +14,12 @@ function evaluateCss(challengeId: string, cssCode: string): {
   const normalized = cssCode.toLowerCase().replace(/\s+/g, " ");
   const feedback: string[] = [];
 
-  // ================= HTML ARCHITECTURE (12 Levels) =================
-  if (challengeId === "html-1-raw-content") {
+  // ================= HTML ARCHITECTURE (20 Levels Focused on Divs & Containers) =================
+  if (challengeId === "html-1-raw-content" || challengeId === "html-1") {
     const hasH1 = /<h1[^>]*>[\s\S]*profil[\s\S]*<\/h1>/i.test(cssCode);
     const hasName = /<p[^>]*>[^<]*nama\s*:[^<]+<\/p>/i.test(cssCode);
     const hasAge = /<p[^>]*>[^<]*umur\s*:[^<]+<\/p>/i.test(cssCode);
-    if (!hasH1) feedback.push("Gunakan tag <h1> dengan teks 'Profil Saya'.");
+    if (!hasH1) feedback.push("Gunakan tag <h1> dengan teks 'Profil Developer'.");
     if (!hasName) feedback.push("Tambahkan tag <p> dengan format 'Nama: [namamu]'.");
     if (!hasAge) feedback.push("Tambahkan tag <p> dengan format 'Umur: [umurmu]'.");
     const passed = hasH1 && hasName && hasAge;
@@ -30,51 +30,67 @@ function evaluateCss(challengeId: string, cssCode: string): {
     };
   }
 
-  if (challengeId === "html-2-paragraph") {
-    const hasH2 = /<h2[^>]*>[\s\S]*tentang[\s\S]*<\/h2>/i.test(cssCode);
-    const paragraphs = [...cssCode.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(m => m[1].replace(/<[^>]*>/g, '').trim());
-    const hasBio = paragraphs.some(p => p.length >= 15 && !/^nama\s*:/i.test(p) && !/^umur\s*:/i.test(p));
-    if (!hasH2) feedback.push("Tambahkan sub-judul <h2>Tentang Saya</h2>.");
-    if (!hasBio) feedback.push("Tuliskan cerita singkat tentang dirimu dengan tag <p> (minimal 15 karakter).");
-    const passed = hasH2 && hasBio;
-    return {
-      passed,
-      score: passed ? 100 : 50,
-      feedback: passed ? ["Keren! Cerita tentang dirimu berhasil ditambahkan dengan tag <h2> dan <p>!"] : feedback,
-    };
-  }
-
-  if (challengeId === "html-3-first-box") {
+  if (challengeId === "html-2-first-box" || challengeId === "html-2") {
     const hasDiv = /<div[^>]*>[\s\S]*<\/div>/i.test(cssCode);
-    const hasEnclosed = /<div[^>]*>[\s\S]*<h1[\s\S]*<h2[\s\S]*<\/div>/i.test(cssCode) || /<div[^>]*>[\s\S]*<h1[\s\S]*<p[\s\S]*<\/div>/i.test(cssCode);
-    if (!hasDiv) feedback.push("Gunakan tag <div class=\"profile-card\"> ... </div> sebagai pembungkus.");
-    if (!hasEnclosed) feedback.push("Pastikan seluruh elemen profil berada di dalam satu kontainer <div>.");
+    const hasEnclosed = /<div[^>]*>[\s\S]*<h1[\s\S]*<p[\s\S]*<\/div>/i.test(cssCode);
+    if (!hasDiv) feedback.push("Gunakan tag <div> ... </div> sebagai wadah pembungkus utama.");
+    if (!hasEnclosed) feedback.push("Pastikan seluruh elemen profil (h1 dan data p) berada di dalam <div>.");
     const passed = hasDiv && hasEnclosed;
     return {
       passed,
-      score: passed ? 100 : 50,
+      score: passed ? 100 : (hasDiv ? 50 : 0),
       feedback: passed ? ["Kardus <div> pertamamu berhasil membungkus seluruh elemen profil dengan rapi!"] : feedback,
     };
   }
 
-  if (challengeId === "html-4-siblings") {
-    const divs = cssCode.match(/<div[^>]*>[\s\S]*?<\/div>/gi);
-    const hasTwoDivs = Boolean(divs && divs.length >= 2);
-    const hasStatus = /<h3[^>]*>[\s\S]*<\/h3>/i.test(cssCode) && /<p[^>]*>[\s\S]*status[\s\S]*<\/p>/i.test(cssCode);
-    if (!hasTwoDivs) feedback.push("Buat minimal dua <div> sejajar (siblings, atas dan bawah).");
-    if (!hasStatus) feedback.push("Di kartu kedua, tambahkan <h3>Status Harian</h3> dan <p> statusmu.");
-    const passed = hasTwoDivs && hasStatus;
+  if (challengeId === "html-3-named-container" || challengeId === "html-3") {
+    const hasNamedDiv = /<div[^>]*class\s*=\s*["'][^"']*\bprofile-card\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasEnclosed = /<div[^>]*class\s*=\s*["'][^"']*\bprofile-card\b[^"']*["'][^>]*>[\s\S]*<h1[\s\S]*<\/div>/i.test(cssCode);
+    if (!hasNamedDiv) feedback.push("Beri identitas class='profile-card' pada tag pembungkus div.");
+    if (!hasEnclosed) feedback.push("Pastikan elemen profil berada di dalam kontainer bertarget.");
+    const passed = hasNamedDiv && hasEnclosed;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["Dua kardus sejajar (Kartu Profil & Status Harian) berhasil disusun berdampingan!"] : feedback,
+      feedback: passed ? ["Kardusmu kini memiliki identitas class='profile-card' yang siap ditata oleh CSS!"] : feedback,
     };
   }
 
-  if (challengeId === "html-5-matryoshka") {
-    const hasParent = /<div[^>]*>[\s\S]*<\/div>/i.test(cssCode);
-    const hasDualChildren = /<div[^>]*>[\s\S]*<div[^>]*>[\s\S]*?<\/div>[\s\S]*<div[^>]*>[\s\S]*?<\/div>[\s\S]*<\/div>/i.test(cssCode);
-    if (!hasParent || !hasDualChildren) feedback.push("Buat satu <div> parent yang membungkus dua <div> child (avatar-box dan info-box).");
+  if (challengeId === "html-4-siblings" || challengeId === "html-4") {
+    const divs = cssCode.match(/<div[^>]*>[\s\S]*?<\/div>/gi);
+    const hasTwoDivs = Boolean(divs && divs.length >= 2);
+    const hasNotesBox =
+      /<div[^>]*class\s*=\s*["'][^"']*\b(notes-card|activity-card|note-box|status-box)\b[^"']*["'][^>]*>/i.test(cssCode) ||
+      (/<h3[^>]*>[\s\S]*<\/h3>/i.test(cssCode) && /<p[^>]*>[\s\S]*<\/p>/i.test(cssCode) && Boolean(divs && divs.length >= 2));
+    if (!hasTwoDivs) feedback.push("Buat minimal dua <div> sejajar (siblings, atas dan bawah).");
+    if (!hasNotesBox) feedback.push("Di kartu kedua, buat <div class='notes-card'> berisi <h3> dan <p>.");
+    const passed = hasTwoDivs && hasNotesBox;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Dua kontainer bersaudara (Profile Card & Notes Card) berhasil disusun sejajar!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-5-triple-stack" || challengeId === "html-5") {
+    const hasTopBar = /<div[^>]*class\s*=\s*["'][^"']*\btop-bar\b[^"']*["'][^>]*>[\s\S]*<\/div>/i.test(cssCode);
+    const hasContentArea = /<div[^>]*class\s*=\s*["'][^"']*\bcontent-area\b[^"']*["'][^>]*>[\s\S]*<\/div>/i.test(cssCode);
+    const hasBottomBar = /<div[^>]*class\s*=\s*["'][^"']*\bbottom-bar\b[^"']*["'][^>]*>[\s\S]*<\/div>/i.test(cssCode);
+    if (!hasTopBar) feedback.push("Buat zona atas <div class='top-bar'>.");
+    if (!hasContentArea) feedback.push("Buat zona konten <div class='content-area'>.");
+    if (!hasBottomBar) feedback.push("Buat zona bawah <div class='bottom-bar'>.");
+    const passed = hasTopBar && hasContentArea && hasBottomBar;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Tiga zona vertikal (top-bar, content-area, bottom-bar) berhasil dirakit!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-6-matryoshka" || challengeId === "html-6") {
+    const hasParent = /<div[^>]*class\s*=\s*["'][^"']*\bcard\b[^"']*["'][^>]*>[\s\S]*<\/div>/i.test(cssCode) || /<div[^>]*>[\s\S]*<\/div>/i.test(cssCode);
+    const hasDualChildren = /<div[^>]*class\s*=\s*["'][^"']*\bavatar-box\b[^"']*["'][^>]*>/i.test(cssCode) && /<div[^>]*class\s*=\s*["'][^"']*\binfo-box\b[^"']*["'][^>]*>/i.test(cssCode);
+    if (!hasParent || !hasDualChildren) feedback.push("Buat satu <div class='card'> parent yang membungkus dua child: avatar-box dan info-box.");
     const passed = hasParent && hasDualChildren;
     return {
       passed,
@@ -83,109 +99,219 @@ function evaluateCss(challengeId: string, cssCode: string): {
     };
   }
 
-  if (challengeId === "html-6-image-element") {
-    const hasImg = /<img\b[^>]*>/i.test(cssCode);
-    const hasSrc = /<img\b[^>]*\bsrc\s*=\s*["'][^"']+["'][^>]*>/i.test(cssCode);
-    const hasAlt = /<img\b[^>]*\balt\s*=\s*["'][^"']*["'][^>]*>/i.test(cssCode);
-    if (!hasImg) feedback.push("Gunakan tag <img> (self-closing).");
-    if (!hasSrc) feedback.push("Sertakan atribut src dengan tautan foto profil.");
-    if (!hasAlt) feedback.push("Sertakan atribut alt untuk deskripsi foto profil.");
-    const passed = hasImg && hasSrc && hasAlt;
+  if (challengeId === "html-7-avatar-frame" || challengeId === "html-7") {
+    const hasFrame = /<div[^>]*class\s*=\s*["'][^"']*\bavatar-frame\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasImg = /<img\b[^>]*\bsrc\s*=\s*["'][^"']+["'][^>]*>/i.test(cssCode) && /<img\b[^>]*\balt\s*=\s*["'][^"']*["'][^>]*>/i.test(cssCode);
+    if (!hasFrame) feedback.push("Bungkus gambar dengan <div class='avatar-frame'>.");
+    if (!hasImg) feedback.push("Pastikan tag <img> memiliki atribut src dan alt di dalam frame.");
+    const passed = hasFrame && hasImg;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["Foto profil nyata dengan atribut src dan alt berhasil dipasang!"] : feedback,
+      feedback: passed ? ["Frame pembungkus foto <div class='avatar-frame'> berhasil dibuat rapi!"] : feedback,
     };
   }
 
-  if (challengeId === "html-7-action-button") {
+  if (challengeId === "html-8-card-anatomy" || challengeId === "html-8") {
+    const hasHeader = /<div[^>]*class\s*=\s*["'][^"']*\bcard-header\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasBody = /<div[^>]*class\s*=\s*["'][^"']*\bcard-body\b[^"']*["'][^>]*>/i.test(cssCode);
+    if (!hasHeader) feedback.push("Buat wadah anatomi atas <div class='card-header'>.");
+    if (!hasBody) feedback.push("Buat wadah anatomi konten <div class='card-body'>.");
+    const passed = hasHeader && hasBody;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Anatomi kartu profesional (card-header dan card-body) berhasil dipisahkan!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-9-action-row" || challengeId === "html-9") {
+    const hasRow = /<div[^>]*class\s*=\s*["'][^"']*\baction-row\b[^"']*["'][^>]*>/i.test(cssCode);
     const buttons = cssCode.match(/<button[^>]*>[\s\S]*?<\/button>/gi);
-    const hasTwoButtons = Boolean(buttons && buttons.length >= 2);
-    if (!hasTwoButtons) feedback.push("Tambahkan minimal dua tombol <button> (misal: Follow dan Kirim Pesan).");
-    return {
-      passed: hasTwoButtons,
-      score: hasTwoButtons ? 100 : 0,
-      feedback: hasTwoButtons ? ["Tombol aksi ganda interaktif <button> berhasil dibuat!"] : feedback,
-    };
-  }
-
-  if (challengeId === "html-8-link") {
-    const hasLink = /<a\b[^>]*>[\s\S]+<\/a>/i.test(cssCode);
-    const hasHref = /<a\b[^>]*\bhref\s*=\s*["'][^"']+["'][^>]*>/i.test(cssCode);
-    if (!hasLink) feedback.push("Gunakan tag <a> pembungkus tautan.");
-    if (!hasHref) feedback.push("Sertakan atribut href yang mengarah ke link tujuan.");
-    const passed = hasLink && hasHref;
+    const hasButtons = Boolean(buttons && buttons.length >= 2);
+    if (!hasRow) feedback.push("Bungkus tombol dengan <div class='action-row'>.");
+    if (!hasButtons) feedback.push("Sertakan minimal 2 tombol <button> di dalam baris aksi.");
+    const passed = hasRow && hasButtons;
     return {
       passed,
-      score: passed ? 100 : 0,
-      feedback: passed ? ["Tautan portofolio <a> dengan atribut href berhasil dipasang!"] : feedback,
+      score: passed ? 100 : (hasRow ? 50 : 0),
+      feedback: passed ? ["Baris aksi tombol interaktif <div class='action-row'> berhasil dirakit!"] : feedback,
     };
   }
 
-  if (challengeId === "html-9-list-hierarchy") {
-    const hasUl = /<ul[^>]*>[\s\S]*<\/ul>/i.test(cssCode);
+  if (challengeId === "html-10-badge-overlay" || challengeId === "html-10") {
+    const hasBadge = /<div[^>]*class\s*=\s*["'][^"']*\b(badge-role|badge-tag|badge-pill|badge-status|badge-pro|badge)\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasText = /<div[^>]*class\s*=\s*["'][^"']*\b(badge-role|badge-tag|badge-pill|badge-status|badge-pro|badge)\b[^"']*["'][^>]*>[^<]+<\/div>/i.test(cssCode);
+    if (!hasBadge) feedback.push("Buat label mini tag <div class='badge-role'> (atau badge-tag).");
+    if (!hasText) feedback.push("Tuliskan label profesi atau spesialisasi (misal: Frontend Developer) di dalam badge.");
+    const passed = hasBadge && hasText;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Badge label profesi berhasil diposisikan ke dalam header kartu!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-11-stats-columns" || challengeId === "html-11") {
+    const hasStatsRow = /<div[^>]*class\s*=\s*["'][^"']*\b(metrics-row|stats-row)\b[^"']*["'][^>]*>/i.test(cssCode);
+    const statBoxes = cssCode.match(/<div[^>]*class\s*=\s*["'][^"']*\b(metric-box|stat-box)\b[^"']*["'][^>]*>/gi);
+    const hasThreeStats = Boolean(statBoxes && statBoxes.length >= 3);
+    if (!hasStatsRow) feedback.push("Buat pembungkus baris <div class='metrics-row'> (atau stats-row).");
+    if (!hasThreeStats) feedback.push("Sertakan minimal 3 kotak anak <div class='metric-box'> di dalam baris metrik.");
+    const passed = hasStatsRow && hasThreeStats;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Tiga kolom metrik ringkasan portofolio berhasil dirakit dengan pola baris-kotak!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-12-modular-card" || challengeId === "html-12") {
+    const hasParent = /<div[^>]*class\s*=\s*["'][^"']*\bprofile-card\b[^"']*["'][^>]*>/i.test(cssCode) || /<div[^>]*class\s*=\s*["'][^"']*\bcard\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasHeader = /<div[^>]*class\s*=\s*["'][^"']*\bcard-header\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasBody = /<div[^>]*class\s*=\s*["'][^"']*\bcard-body\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasStats = /<div[^>]*class\s*=\s*["'][^"']*\b(metrics-row|stats-row)\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasFooter = /<div[^>]*class\s*=\s*["'][^"']*\b(card-footer|action-row)\b[^"']*["'][^>]*>/i.test(cssCode);
+
+    if (!hasParent) feedback.push("Bungkus seluruh komponen dengan <div class='profile-card'>.");
+    if (!hasHeader) feedback.push("Buat <div class='card-header'> yang memuat avatar-frame dan badge.");
+    if (!hasBody || !hasStats) feedback.push("Buat <div class='card-body'> yang memuat nama, bio, dan metrics-row (3 metric-box).");
+    if (!hasFooter) feedback.push("Buat <div class='card-footer'> dengan action-row dan 2 tombol.");
+
+    const passed = hasParent && hasHeader && hasBody && hasStats && hasFooter;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["PROYEK CAPSTONE SELESAI! Kamu resmi menguasai 5 tingkatan kontainer modular Profile Card!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-13-split-layout" || challengeId === "html-13") {
+    const hasLayout = /<div[^>]*class\s*=\s*["'][^"']*\bapp-layout\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasSidebar = /<div[^>]*class\s*=\s*["'][^"']*\bsidebar\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasMain = /<div[^>]*class\s*=\s*["'][^"']*\bmain-content\b[^"']*["'][^>]*>/i.test(cssCode);
+    if (!hasLayout) feedback.push("Buat kardus pembungkus layar <div class='app-layout'>.");
+    if (!hasSidebar) feedback.push("Buat panel bilah samping <div class='sidebar'>.");
+    if (!hasMain) feedback.push("Buat panel area kerja utama <div class='main-content'>.");
+    const passed = hasLayout && hasSidebar && hasMain;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Layout belah layar (app-layout -> sidebar & main-content) berhasil dirakit!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-14-sidebar-nav" || challengeId === "html-14") {
+    const hasBrand = /<div[^>]*class\s*=\s*["'][^"']*\bbrand-box\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasMenu = /<div[^>]*class\s*=\s*["'][^"']*\bmenu-box\b[^"']*["'][^>]*>/i.test(cssCode);
     const lis = cssCode.match(/<li[^>]*>[\s\S]*?<\/li>/gi);
     const hasThreeLis = Boolean(lis && lis.length >= 3);
-    if (!hasUl) feedback.push("Gunakan tag <ul> sebagai wadah daftar.");
-    if (!hasThreeLis) feedback.push("Sertakan minimal 3 butir keahlian atau hobi dengan tag <li> di dalam <ul>.");
-    const passed = hasUl && hasThreeLis;
+    if (!hasBrand) feedback.push("Buat <div class='brand-box'> berisi logo/nama webmu.");
+    if (!hasMenu) feedback.push("Buat <div class='menu-box'> yang membungkus <ul>.");
+    if (!hasThreeLis) feedback.push("Sertakan minimal 3 butir tautan menu <li> di dalam <ul>.");
+    const passed = hasBrand && hasMenu && hasThreeLis;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["Hierarki daftar keahlian <ul> dengan minimal 3 item <li> berhasil dirakit!"] : feedback,
+      feedback: passed ? ["Bilah samping navigasi lengkap (brand-box dan menu-box dengan list) berhasil dibuat!"] : feedback,
     };
   }
 
-  if (challengeId === "html-10-semantic-touch") {
-    const hasHeader = /<header[^>]*>[\s\S]*<\/header>/i.test(cssCode);
-    const hasSection = /<section[^>]*>[\s\S]*<\/section>/i.test(cssCode);
-    const hasFooter = /<footer[^>]*>[\s\S]*<\/footer>/i.test(cssCode);
-    if (!hasHeader) feedback.push("Gunakan tag semantik <header> di bagian atas kartu.");
-    if (!hasSection) feedback.push("Gunakan tag semantik <section> untuk blok cerita & keahlian.");
-    if (!hasFooter) feedback.push("Gunakan tag semantik <footer> di bagian bawah kartu.");
-    const passed = hasHeader && hasSection && hasFooter;
+  if (challengeId === "html-15-content-cards" || challengeId === "html-15") {
+    const hasBanner = /<div[^>]*class\s*=\s*["'][^"']*\bbanner-card\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasOverview = /<div[^>]*class\s*=\s*["'][^"']*\boverview-card\b[^"']*["'][^>]*>/i.test(cssCode);
+    if (!hasBanner) feedback.push("Buat kartu ucapan selamat datang <div class='banner-card'>.");
+    if (!hasOverview) feedback.push("Buat kartu ringkasan target <div class='overview-card'>.");
+    const passed = hasBanner && hasOverview;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["Kerangka arsitektur semantik (<header>, <section>, <footer>) berhasil diterapkan!"] : feedback,
+      feedback: passed ? ["Dua kartu modular mandiri berhasil ditumpuk di area main content!"] : feedback,
     };
   }
 
-  if (challengeId === "html-11-form-wrapper") {
+  if (challengeId === "html-16-form-group" || challengeId === "html-16") {
     const hasForm = /<form[^>]*>[\s\S]*<\/form>/i.test(cssCode);
+    const groups = cssCode.match(/<div[^>]*class\s*=\s*["'][^"']*\bform-group\b[^"']*["'][^>]*>/gi);
+    const hasTwoGroups = Boolean(groups && groups.length >= 2);
     const inputs = cssCode.match(/<input\b[^>]*>/gi);
-    const hasTwoInputs = Boolean(inputs && inputs.length >= 2);
-    const hasButton = /<button\b[^>]*>[\s\S]*<\/button>/i.test(cssCode);
-    if (!hasForm) feedback.push("Bungkus elemen formulir dengan tag <form>.");
-    if (!hasTwoInputs) feedback.push("Sertakan minimal dua input masukan (nama & email) dengan tag <input>.");
-    if (!hasButton) feedback.push("Sertakan tombol submit dengan tag <button>.");
-    const passed = hasForm && hasTwoInputs && hasButton;
+    const hasInputs = Boolean(inputs && inputs.length >= 2);
+    const hasButton = /<button[^>]*>[\s\S]*<\/button>/i.test(cssCode);
+    if (!hasForm) feedback.push("Bungkus formulir dengan tag <form>.");
+    if (!hasTwoGroups) feedback.push("Bungkus setiap baris input ke dalam <div class='form-group'> (minimal 2 grup).");
+    if (!hasInputs) feedback.push("Setiap grup harus memuat pasangan <label> dan <input>.");
+    if (!hasButton) feedback.push("Tambahkan tombol submit <button type='submit'>.");
+    const passed = hasForm && hasTwoGroups && hasInputs && hasButton;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["Formulir kontak lengkap (form, 2 input, dan submit button) berhasil dirakit!"] : feedback,
+      feedback: passed ? ["Arsitektur formulir terstruktur dengan grouping div form-group berhasil dirakit!"] : feedback,
     };
   }
 
-  if (challengeId === "html-12-boss-card") {
-    const hasDiv = /<div[^>]*>[\s\S]*<\/div>/i.test(cssCode);
-    const hasHeader = /<header[^>]*>[\s\S]*<\/header>/i.test(cssCode) && /<img\b/i.test(cssCode) && /<h1\b/i.test(cssCode);
-    const hasBioAndSection = /<section[^>]*>[\s\S]*<h2[\s\S]*<\/section>/i.test(cssCode);
-    const lis = cssCode.match(/<li[^>]*>[\s\S]*?<\/li>/gi);
-    const hasThreeLis = Boolean(lis && lis.length >= 3);
-    const hasActionAndForm = (/<button\b/i.test(cssCode) || /<a\b/i.test(cssCode)) && /<form\b[^>]*>[\s\S]*<\/form>/i.test(cssCode);
-
-    if (!hasDiv) feedback.push("Bungkus seluruh kartu dengan <div class=\"profile-card\"> utama.");
-    if (!hasHeader) feedback.push("Buat <header> yang memuat foto <img> dan <h1>Profil Developer</h1>.");
-    if (!hasBioAndSection) feedback.push("Buat <section> yang memuat <h2>Tentang Saya</h2> dan deskripsi.");
-    if (!hasThreeLis) feedback.push("Sertakan daftar <ul> dengan minimal 3 item <li>.");
-    if (!hasActionAndForm) feedback.push("Tambahkan tombol aksi atau link portofolio serta <form> kontak.");
-
-    const passed = hasDiv && hasHeader && hasBioAndSection && hasThreeLis && hasActionAndForm;
+  if (challengeId === "html-17-modal-dialog" || challengeId === "html-17") {
+    const hasOverlay = /<div[^>]*class\s*=\s*["'][^"']*\bmodal-overlay\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasBox = /<div[^>]*class\s*=\s*["'][^"']*\bmodal-box\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasContent = /<h3\b/i.test(cssCode) && /<button\b/i.test(cssCode);
+    if (!hasOverlay) feedback.push("Buat kardus luar lapisan gelap <div class='modal-overlay'>.");
+    if (!hasBox) feedback.push("Di dalamnya, buat kardus popup tengah <div class='modal-box'>.");
+    if (!hasContent) feedback.push("Sertakan judul <h3>, teks paragraf, dan tombol <button>Tutup</button> di dalam modal-box.");
+    const passed = hasOverlay && hasBox && hasContent;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["LUAR BIASA! Kamu resmi menguasai HTML Architecture dan berhasil membangun Full Landing Profile Card!"] : feedback,
+      feedback: passed ? ["Arsitektur popup modal 2 lapis (overlay dan modal box) berhasil dirakit sempurna!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-18-bento-grid" || challengeId === "html-18") {
+    const hasBento = /<div[^>]*class\s*=\s*["'][^"']*\bbento-container\b[^"']*["'][^>]*>/i.test(cssCode);
+    const items = cssCode.match(/<div[^>]*class\s*=\s*["'][^"']*\bbento-item\b[^"']*["'][^>]*>/gi);
+    const hasFourItems = Boolean(items && items.length >= 4);
+    if (!hasBento) feedback.push("Buat wadah induk <div class='bento-container'>.");
+    if (!hasFourItems) feedback.push("Sertakan minimal 4 kardus modular <div class='bento-item'> di dalamnya.");
+    const passed = hasBento && hasFourItems;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Pondasi 4 blok Bento Box modern ala Apple berhasil dibangun!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-19-semantic-hybrid" || challengeId === "html-19") {
+    const hasHeader = /<header[^>]*>[\s\S]*<div[^>]*class\s*=\s*["'][^"']*\bcontainer\b[^"']*["'][^>]*>[\s\S]*<\/div>[\s\S]*<\/header>/i.test(cssCode);
+    const hasMain = /<main[^>]*>[\s\S]*<div[^>]*class\s*=\s*["'][^"']*\bcontainer\b[^"']*["'][^>]*>[\s\S]*<\/div>[\s\S]*<\/main>/i.test(cssCode);
+    const hasFooter = /<footer[^>]*>[\s\S]*<div[^>]*class\s*=\s*["'][^"']*\bcontainer\b[^"']*["'][^>]*>[\s\S]*<\/div>[\s\S]*<\/footer>/i.test(cssCode);
+    if (!hasHeader) feedback.push("Buat tag <header> yang membungkus <div class='container'>.");
+    if (!hasMain) feedback.push("Buat tag <main> yang membungkus <div class='container'>.");
+    if (!hasFooter) feedback.push("Buat tag <footer> yang membungkus <div class='container'>.");
+    const passed = hasHeader && hasMain && hasFooter;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Harmoni sempurna! Semantik SEO dan div container layout berhasil dipadukan!"] : feedback,
+    };
+  }
+
+  if (challengeId === "html-20-boss-dashboard" || challengeId === "html-20") {
+    const hasLayout = /<div[^>]*class\s*=\s*["'][^"']*\bdashboard-layout\b[^"']*["'][^>]*>/i.test(cssCode);
+    const hasSidebar = /<div[^>]*class\s*=\s*["'][^"']*\bsidebar\b[^"']*["'][^>]*>/i.test(cssCode) && /<ul\b/i.test(cssCode);
+    const hasMain = /<div[^>]*class\s*=\s*["'][^"']*\bmain-panel\b[^"']*["'][^>]*>/i.test(cssCode);
+    const bentoCards = cssCode.match(/<div[^>]*class\s*=\s*["'][^"']*\b(bento-item|card|stat-box)\b/gi);
+    const hasCards = Boolean(bentoCards && bentoCards.length >= 3);
+
+    if (!hasLayout) feedback.push("Bungkus seluruh dashboard dengan <div class='dashboard-layout'>.");
+    if (!hasSidebar) feedback.push("Buat <div class='sidebar'> dengan brand dan daftar navigasi <ul>-<li>.");
+    if (!hasMain) feedback.push("Buat area kerja utama <div class='main-panel'>.");
+    if (!hasCards) feedback.push("Sertakan minimal 3 kartu bento/komponen modular dan form di dalam main-panel.");
+
+    const passed = hasLayout && hasSidebar && hasMain && hasCards;
+    return {
+      passed,
+      score: passed ? 100 : 60,
+      feedback: passed
+        ? ["🏆 PROYEK AKHIR SELESAI! Selamat, kamu resmi menguasai arsitektur HTML & Sistem Kontainer Div secara mendalam dan profesional! 🎉"]
+        : feedback,
     };
   }
 
@@ -313,7 +439,7 @@ function evaluateCss(challengeId: string, cssCode: string): {
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["Selamat! Kamu telah menaklukkan Boss Fight CSS Basics dan merakit Notification Badge dengan sempurna!"] : feedback,
+      feedback: passed ? ["Selamat! Kamu berhasil menyelesaikan proyek akhir CSS Basics dan merakit Notification Badge dengan presisi standar industri!"] : feedback,
     };
   }
 
@@ -472,7 +598,7 @@ function evaluateCss(challengeId: string, cssCode: string): {
       passed,
       score: passed ? 100 : 60,
       feedback: passed
-        ? ["👑 BOSS FIGHT TAKLUK! Kamu berhasil merakit Modern Navbar dengan tata letak kelas dunia! Selamat menyelesaikan CSS Flexbox! 🎉🏆"]
+        ? ["🏆 PROYEK SELESAI! Kamu berhasil merakit Modern Navbar dengan tata letak kelas dunia! Selamat menyelesaikan kelas CSS Flexbox! 🎉"]
         : feedback,
     };
   }
@@ -696,7 +822,7 @@ export async function POST(
       currentLevelXp: result.currentLevelXp,
       message: result.isClassCompleted
         ? "🏆 Selamat! Kamu telah menyelesaikan seluruh level dalam kelas ini!"
-        : "Selamat! Level berhasil ditaklukkan, level berikutnya telah terbuka!",
+        : "Selamat! Level berhasil diselesaikan, level berikutnya telah terbuka!",
     });
   } catch (error) {
     console.error(`[API POST /api/challenges/[id]/evaluate Error]:`, error);

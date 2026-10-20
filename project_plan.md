@@ -105,3 +105,14 @@ Dengan struktur ini, tabel `classes` di *database* sudah pasti akan punya kolom 
    - Setup Google OAuth Provider (Google Client ID & Secret).
    - Sinkronisasi sesi login Google ke entitas database `users`.
    - Middleware proteksi rute (`/dashboard`, `/classes/[id]`).
+
+3. **📚 Interstitial Theory Checkpoints & Guided Examples (Jeda Materi & Contoh Konseptual)**:
+   - Menyisipkan jeda materi teori dan contoh secara berkala (setiap 3-4 level atau sebelum konsep baru diperkenalkan).
+   - Menjelaskan fungsi filosofis tag/properti secara komprehensif (*"Tag/properti ini untuk apa, kenapa kita butuh kardus/container ini, dan apa konsekuensinya jika tidak dibungkus"*).
+   - Mencegah kebingungan pengguna dari kemunculan sintaks baru secara mendadak tanpa pengenalan.
+   - Menyajikan *Interactive Concept Demo / Visual Walkthrough* (kode contoh + kanvas peraga sebelum masuk ke tantangan koding aktif).
+
+4. **🎯 Kurikulum Bertingkat Berdasarkan Group Age (Age-Tiered Classes)**:
+   - Merancang diferensiasi kurikulum dan gaya bahasa materi sesuai rentang usia pengguna (6-7 th, 8-10 th, 11-13 th, 13-17 th).
+   - Menyesuaikan analogi (misal: "kardus mainan" untuk usia anak vs "container DOM hierarchy" untuk remaja).
+   - Memfilter rekomendasi kelas di dashboard berdasarkan `age_group` yang dipilih saat registrasi.

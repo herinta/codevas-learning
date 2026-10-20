@@ -10,7 +10,7 @@ export class ChallengeService {
     userId?: string
   ): Promise<(ChallengeEntity & { codeSnapshot?: string | null; userStatus?: string }) | null> {
     const rows = await query<ChallengeEntity>(
-      'SELECT * FROM challenges WHERE id = $1 LIMIT 1',
+      'SELECT * FROM challenges WHERE id = $1 OR id LIKE $1 || \'-%\' ORDER BY CASE WHEN id = $1 THEN 1 ELSE 2 END LIMIT 1',
       [id]
     );
     if (!rows.length) return null;
@@ -22,7 +22,7 @@ export class ChallengeService {
     if (userId) {
       const progRows = await query<UserProgressEntity>(
         'SELECT * FROM user_progress WHERE user_id = $1 AND challenge_id = $2 LIMIT 1',
-        [userId, id]
+        [userId, challenge.id]
       );
       if (progRows.length) {
         codeSnapshot = progRows[0].code_snapshot;

@@ -851,10 +851,10 @@ export const ClassDetailClient: React.FC<ClassDetailClientProps> = ({ initialDat
                 <div className="text-center py-4">
                   <Trophy className="w-12 h-12 text-amber-500 mx-auto mb-2" />
                   <p className="font-display font-black text-sm text-slate-900">
-                    Semua Quest Selesai!
+                    Semua Modul Selesai!
                   </p>
                   <p className="text-xs text-slate-600 mt-1">
-                    Hebat! Kamu telah menaklukkan seluruh tantangan kelas ini.
+                    Luar biasa! Kamu telah berhasil menyelesaikan seluruh modul pembelajaran di kelas ini.
                   </p>
                 </div>
               )}

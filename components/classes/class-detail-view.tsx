@@ -351,10 +351,10 @@ export const ClassDetailView: React.FC<ClassDetailViewProps> = ({ classData }) =
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="font-display font-black text-2xl text-on-surface">
-                      Daftar Modul &amp; Misi Koding
+                      Daftar Modul Pembelajaran
                     </h2>
                     <p className="text-xs text-on-surface-variant mt-0.5">
-                      Tuntaskan puzzle kode untuk membuka modul berikutnya
+                      Selesaikan tantangan kode untuk membuka modul berikutnya
                     </p>
                   </div>
                   <span className="text-xs font-bold text-primary bg-primary-fixed px-3 py-1.5 rounded-full border border-primary/20">

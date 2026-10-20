@@ -17,7 +17,7 @@ export const MissionPanel: React.FC<MissionPanelProps> = ({ challenge }) => {
       <div className="space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF08A] border-2 border-slate-900 text-slate-900 font-display font-black text-xs shadow-[0_2px_0_#0f172a]">
           <Zap className="w-3.5 h-3.5 fill-[#EF4444] text-[#EF4444]" />
-          <span>Misi Tantangan (+{challenge?.xp_reward} XP)</span>
+          <span>Panduan Tantangan (+{challenge?.xp_reward} XP)</span>
         </div>
         <h2 className="font-display font-black text-2xl text-slate-900 tracking-tight">
           {challenge?.title}
