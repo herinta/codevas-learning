@@ -88,6 +88,9 @@ export default function ProfilePage() {
       await refreshUser();
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("codevas:progress-updated"));
+        try {
+          localStorage.setItem("codevas:progress-synced", Date.now().toString());
+        } catch {}
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Gagal mengunggah foto profil.";
@@ -161,6 +164,12 @@ export default function ProfilePage() {
 
       setSuccessMsg("Profil berhasil diperbarui! 🎉");
       await refreshUser();
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("codevas:progress-updated"));
+        try {
+          localStorage.setItem("codevas:progress-synced", Date.now().toString());
+        } catch {}
+      }
     } catch {
       setErrorMsg("Terjadi gangguan jaringan saat menyimpan profil.");
     } finally {

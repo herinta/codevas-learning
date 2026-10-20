@@ -79,8 +79,16 @@ export const Navbar: React.FC = () => {
                 href="/dashboard"
                 className="flex items-center gap-2 py-1 px-2.5 rounded-full hover:bg-slate-100 transition-colors border border-slate-300"
               >
-                <div className="w-7 h-7 rounded-full bg-[#EF4444] text-white text-xs font-black flex items-center justify-center border-2 border-slate-900 uppercase">
-                  {user.username.slice(0, 2)}
+                <div className="w-7 h-7 rounded-full bg-[#EF4444] text-white text-xs font-black flex items-center justify-center border-2 border-slate-900 uppercase overflow-hidden shrink-0">
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt={`@${user.username}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    user.username.slice(0, 2)
+                  )}
                 </div>
                 <span className="font-display font-bold text-xs text-slate-900 max-w-[100px] truncate">
                   @{user.username}
@@ -129,8 +137,16 @@ export const Navbar: React.FC = () => {
         <div className="flex md:hidden items-center gap-2">
           {user ? (
             <Link href="/dashboard">
-              <div className="w-8 h-8 rounded-full bg-[#EF4444] text-white text-xs font-black flex items-center justify-center border-2 border-slate-900 uppercase">
-                {user.username.slice(0, 2)}
+              <div className="w-8 h-8 rounded-full bg-[#EF4444] text-white text-xs font-black flex items-center justify-center border-2 border-slate-900 uppercase overflow-hidden shrink-0">
+                {user.avatar_url ? (
+                  <img
+                    src={user.avatar_url}
+                    alt={`@${user.username}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  user.username.slice(0, 2)
+                )}
               </div>
             </Link>
           ) : (
@@ -201,13 +217,28 @@ export const Navbar: React.FC = () => {
           <div className="pt-2 border-t-2 border-slate-100 flex flex-col gap-2">
             {user ? (
               <div className="flex items-center justify-between px-2 py-1.5">
-                <span className="text-xs font-bold text-slate-900">@{user.username} (Lv.{user.level || 1} • {user.xp_points} XP)</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-7 h-7 rounded-full bg-[#EF4444] text-white text-[10px] font-black flex items-center justify-center border-2 border-slate-900 uppercase overflow-hidden shrink-0">
+                    {user.avatar_url ? (
+                      <img
+                        src={user.avatar_url}
+                        alt={`@${user.username}`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      user.username.slice(0, 2)
+                    )}
+                  </div>
+                  <span className="text-xs font-bold text-slate-900 truncate">
+                    @{user.username} (Lv.{user.level || 1} • {user.xp_points} XP)
+                  </span>
+                </div>
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     logout();
                   }}
-                  className="text-xs font-bold text-red-600 flex items-center gap-1 cursor-pointer"
+                  className="text-xs font-bold text-red-600 flex items-center gap-1 cursor-pointer shrink-0"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span>Keluar</span>

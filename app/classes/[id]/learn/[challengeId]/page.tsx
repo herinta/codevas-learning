@@ -1441,7 +1441,15 @@ function ChallengePlaygroundContent({
               className="w-8 h-8 rounded-full border-2 border-slate-900 overflow-hidden bg-[#EF4444] shadow-[0_2px_0_#991b1b] flex items-center justify-center text-xs font-black text-white hover:scale-105 active:translate-y-0.5 transition-transform shrink-0"
               title={`@${user.username} — Profil Pengguna`}
             >
-              {user.username.slice(0, 2).toUpperCase()}
+              {user.avatar_url ? (
+                <img
+                  src={user.avatar_url}
+                  alt={`@${user.username}`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                user.username.slice(0, 2).toUpperCase()
+              )}
             </Link>
           ) : (
             <Link

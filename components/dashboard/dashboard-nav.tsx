@@ -172,33 +172,51 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
               <div className="relative">
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="w-9 h-9 rounded-full border-2 border-slate-900 overflow-hidden bg-[#EF4444] shadow-[0_2px_0_#991b1b] flex items-center justify-center text-xs font-black text-white focus:outline-none cursor-pointer hover:scale-105 transition-transform"
+                  className="w-9 h-9 rounded-full border-2 border-slate-900 overflow-hidden bg-[#EF4444] shadow-[0_2px_0_#991b1b] flex items-center justify-center text-xs font-black text-white focus:outline-none cursor-pointer hover:scale-105 transition-transform shrink-0"
                   title={`@${user.username}`}
                 >
-                  {initials}
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt={`@${user.username}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    initials
+                  )}
                 </button>
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full pointer-events-none"></span>
 
                 {/* Profile Dropdown Menu */}
                 {profileDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-white border-3 border-slate-900 rounded-2xl p-3 shadow-[0_6px_0_#0f172a] z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                    <div className="px-2 py-1.5 border-b-2 border-slate-100 mb-2">
-                      <p className="font-display font-black text-sm text-slate-900 truncate">
-                        @{user.username}
-                      </p>
-                      <p className="font-medium text-xs text-slate-500 truncate">
-                        {user.email}
-                      </p>
-                      <div className="flex items-center gap-1.5 mt-2">
-                        <span className="font-mono text-[10px] font-black text-slate-900 bg-[#FEF08A] px-2 py-0.5 rounded-full border border-slate-900">
-                          Lv.{user.level || 1}
-                        </span>
-                        <span className="font-mono text-[10px] font-black text-[#0369A1] bg-[#E0F2FE] px-2 py-0.5 rounded-full border border-slate-900">
-                          {user.xp_points} XP
-                        </span>
+                    <div className="px-2 py-1.5 border-b-2 border-slate-100 mb-2 flex items-center gap-2.5">
+                      <div className="w-10 h-10 rounded-full border-2 border-slate-900 overflow-hidden bg-[#EF4444] shadow-[0_2px_0_#991b1b] flex items-center justify-center text-xs font-black text-white shrink-0">
+                        {user.avatar_url ? (
+                          <img
+                            src={user.avatar_url}
+                            alt={`@${user.username}`}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          initials
+                        )}
                       </div>
-                      <div className="text-[11px] font-bold text-slate-600 mt-1">
-                        {user.rank_title || "Siswa Pemula"}
+                      <div className="min-w-0 flex-1">
+                        <p className="font-display font-black text-sm text-slate-900 truncate">
+                          @{user.username}
+                        </p>
+                        <p className="font-medium text-xs text-slate-500 truncate">
+                          {user.email}
+                        </p>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="font-mono text-[10px] font-black text-slate-900 bg-[#FEF08A] px-1.5 py-0.5 rounded-full border border-slate-900">
+                            Lv.{user.level || 1}
+                          </span>
+                          <span className="font-mono text-[10px] font-black text-[#0369A1] bg-[#E0F2FE] px-1.5 py-0.5 rounded-full border border-slate-900">
+                            {user.xp_points} XP
+                          </span>
+                        </div>
                       </div>
                     </div>
 
@@ -296,6 +314,23 @@ export const DashboardNav: React.FC<DashboardNavProps> = ({
 
             {user ? (
               <>
+                <div className="flex items-center gap-2.5 px-3 py-2 bg-slate-50 border-2 border-slate-900 rounded-xl mb-1">
+                  <div className="w-8 h-8 rounded-full border-2 border-slate-900 overflow-hidden bg-[#EF4444] flex items-center justify-center text-xs font-black text-white shrink-0">
+                    {user.avatar_url ? (
+                      <img
+                        src={user.avatar_url}
+                        alt={`@${user.username}`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      initials
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-bold text-xs text-slate-900 truncate">@{user.username}</p>
+                    <p className="text-[10px] text-slate-500 truncate">Lv.{user.level || 1} • {user.xp_points} XP</p>
+                  </div>
+                </div>
                 <Link
                   href="/profile"
                   onClick={() => setMobileMenuOpen(false)}
