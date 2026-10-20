@@ -147,6 +147,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
+      suppressHydrationWarning
       className={`${dmSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <head>
@@ -155,7 +156,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrgAndWebsite) }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#FFFDF7] text-slate-900 font-body selection:bg-[#FEF08A] selection:text-slate-900">
+      <body
+        suppressHydrationWarning
+        className="min-h-full flex flex-col bg-[#FFFDF7] text-slate-900 font-body selection:bg-[#FEF08A] selection:text-slate-900"
+      >
         <AuthProvider>
           <PwaProvider>
             {children}
