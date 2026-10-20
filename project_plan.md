@@ -40,79 +40,138 @@ Menggunakan `JSONB` agar struktur tabel fleksibel menampung konfigurasi soal yan
 Kurikulum dibagi berdasarkan **Kategori** (metode pendekatan belajar). Di dalam setiap kategori, terdapat beberapa **Class** (materi spesifik).
 
 ### Kategori: Live Code
-*(Fokus MVP saat ini. Pengguna memanipulasi kode dengan validasi antarmuka secara real-time. Visual kanvas berupa blok wireframe solid abu-abu untuk Layout).*
+*(Pengguna memanipulasi kode dengan validasi antarmuka secara real-time. Visual kanvas berupa blok wireframe modern dengan feedback instan).*
 
-**Class: CSS Flexbox**
-*   Level 1: The Activation (Menyalakan `display: flex`)
-*   Level 2: The Sniper (Menggunakan `justify-content: center`)
-*   Level 3: The Split (Menggunakan `justify-content: space-between`)
-*   Level 4: The Breathing Room (Menggunakan `justify-content: space-evenly`)
-*   Level 5: The Push (Menggunakan `justify-content: flex-end`)
-*   Level 6: The Gravity (Menggunakan `align-items: center`)
-*   Level 7: The Floor (Menggunakan `align-items: flex-end`)
-*   Level 8: The Tetris Tower (Mengubah orientasi dengan `flex-direction: column`)
-*   Level 9: The Gap (Memberi jarak dengan `gap`)
-*   Level 10: Boss Fight - Centering Div (Jurus pamungkas mempusatkan elemen)
+> [!NOTE]
+> **Standar Bahasa & Tone Kurikulum:**
+> Wajib menggunakan terminologi rekayasa web profesional dan bersih (industri standar). **DILARANG KERAS** menggunakan istilah game/slang gaming seperti *"misi"*, *"quest"*, *"menaklukkan"*, *"jurus"*, *"Boss Fight"*, atau memaksakan penggunaan kata *"status"*.
 
-**Class: CSS Grid**
-*   Level 1: The Blueprint (Membuat papan `grid-template-columns`)
-*   Level 2: The Triplets (Membagi ruang menjadi 3 kolom rata)
-*   Level 3: The Asymmetry (Layout Sidebar dan Konten)
-*   Level 4: The Alleyway (Penerapan Grid Gap)
-*   Level 5: The Header Expansion (Memperlebar sel dengan `col-span`)
-*   Level 6: The Tower Expansion (Mempertinggi sel dengan `row-span`)
-*   Level 7: The VIP Pass (Mengubah urutan render elemen menggunakan `order`)
-*   Level 8: The Perfect Center (Menggunakan `place-items-center`)
-*   Level 9: The Inception (Menerapkan Flexbox di dalam sel Grid)
-*   Level 10: Boss Fight - The Bento Box (Merakit komponen menjadi UI Dashboard)
+**Class 1: HTML Architecture (The Skeletons & Hierarchy)** — *20 Levels*
+*   Level 1: The Raw Canvas & Floating Elements (Header `<h1>` & Biodata `<p>`)
+*   Level 2: The Need for Boundaries (Bungkus ke dalam `<div>` pertama)
+*   Level 3: The Named Box (Identitas Kontainer `<div class="profile-card">`)
+*   Level 4: The Siblings (Dua Kontainer Bersaudara `<div class="notes-card">`)
+*   Level 5: The Triple Stack (Tiga Zona Vertikal `top-bar`, `content-area`, `bottom-bar`)
+*   Level 6: The Matryoshka (Nesting Kolom Ganda `bio-col` & `details-col`)
+*   Level 7: The Media Frame (Bingkai Gambar Avatar `<div class="avatar-frame">`)
+*   Level 8: The Media & Content Cluster (Avatar + Konten Teks)
+*   Level 9: The Action Row (Pengelompokan Tombol Aksi `<div class="action-row">`)
+*   Level 10: The Badge Pill (Label Kategori & Tag Profesi `<div class="badge-role">`)
+*   Level 11: The Metrics Summary (3 Kolom Metrik `<div class="metrics-row">`)
+*   Level 12: Capstone Project - The Modular Profile Card
+*   Level 13: The Two-Panel Split (Sidebar & Main Content Layout)
+*   Level 14: Sidebar Navigation Box (`brand-box` & `menu-box`)
+*   Level 15: The Header Bar Cluster (Baris Navigasi Atas)
+*   Level 16: The Bento Grid Foundation (Kartu-Kartu Dashboard)
+*   Level 17: Interactive Input Group (Pengelompokan Form `<div class="form-group">`)
+*   Level 18: The Form Stack (Struktur Form Lengkap)
+*   Level 19: The Semantic Hybrid (`<header>`, `<main>`, `<footer>` + Container `<div>`)
+*   Level 20: Final Project - Complete Web Dashboard Architecture
 
-**Class: Component Styling** *(Coming Soon)*
-**Class: Full Web Integration** *(Coming Soon)*
-**Class: React & Next.js Basics** *(Coming Soon)*
+**Class 2: CSS Basics (The Fundamentals)** — *12 Levels*
+*   Level 1: The Canvas (`background-color`)
+*   Level 2: The Ink (`color`)
+*   Level 3: Typography (`font-size`, `font-family`)
+*   Level 4: The Alignment (`text-align`)
+*   Level 5: The Inner Cushion (`padding`)
+*   Level 6: The Independent Cushion (`padding-top`, etc.)
+*   Level 7: The Outer Space (`margin`)
+*   Level 8: The Symmetrical Spacer (`margin: 0 auto`)
+*   Level 9: The Fence (`border`)
+*   Level 10: The Smooth Edge (`border-radius`)
+*   Level 11: The Elevation (`box-shadow`)
+*   Level 12: Final Component - The Notification Badge
+
+**Class 3: CSS Flexbox (The 1D Layout)** — *12 Levels*
+*   Level 1: The Activation (`display: flex`)
+*   Level 2: The Push to End (`justify-content: flex-end`)
+*   Level 3: The Center Stage (`justify-content: center`)
+*   Level 4: The Equal Space (`justify-content: space-between`)
+*   Level 5: The Vertical Alignment (`align-items: center`)
+*   Level 6: The Baseline Anchor (`align-items: flex-end`)
+*   Level 7: The Column Reorientation (`flex-direction: column`)
+*   Level 8: The Gutter (`gap`)
+*   Level 9: The Wrap Around (`flex-wrap: wrap`)
+*   Level 10: The Space Distributor (`flex: 1`)
+*   Level 11: The Ultimate Centering (Horizontal & Vertical Center)
+*   Level 12: Final Component - The Modern Navbar
+
+**Class 4: CSS Grid (The 2D Layout)** — *12 Levels*
+*   Level 1: The Blueprint (`grid-template-columns: 1fr 1fr`)
+*   Level 2: The Triplets (`repeat(3, 1fr)`)
+*   Level 3: The Asymmetry (Sidebar 250px + Content 1fr)
+*   Level 4: The Alleyway (`gap: 24px`)
+*   Level 5: The Header Expansion (`grid-column: span 3`)
+*   Level 6: The Tower Expansion (`grid-row: span 2`)
+*   Level 7: The Absolute Placement (`grid-column: 1 / 3`)
+*   Level 8: The Row Sizing (`grid-template-rows`)
+*   Level 9: The Dynamic Blueprint (`grid-template-areas`)
+*   Level 10: The Semantic Area Assignment (`grid-area`)
+*   Level 11: The Inception (Flexbox di dalam sel Grid)
+*   Level 12: Final Layout - The Bento Box Dashboard
+
+**Class 5: Component Styling (The Artist)** — *6 Levels (Neo-brutalism, Glassmorphism, UI Cards)*
+**Class 6: Tailwind CSS (The Modern Way)** — *6 Levels (Utility Classes, Responsive, Dark Mode)*
 
 ---
 
-### Kategori: Visual Logic (Drag & Drop)
-*(Pendekatan drag-and-drop blok visual untuk membangun insting hierarki/logika tanpa risiko syntax error).*
-
-**Class: Javascript Logic Blocks** *(Coming Soon)*
-**Class: CSS Layouting Hierarchy** *(Coming Soon)*
-**Class: HTML DOM Tree Assembly** *(Coming Soon)*
+### Kategori: Visual Logic (Drag & Drop) *(Roadmap)*
+*   **Class: Javascript Logic Blocks**
+*   **Class: CSS Layouting Hierarchy**
+*   **Class: HTML DOM Tree Assembly**
 
 ---
 
-### Kategori: Theory (Multiple Choice)
-*(Kuis UI interaktif untuk menguji pemahaman konsep dasar sebelum menyentuh kode).*
-
-**Class: CSS Selectors Quiz** *(Coming Soon)*
-**Class: HTML Semantic Quiz** *(Coming Soon)*
-**Class: JS Fundamentals Quiz** *(Coming Soon)*
-```eof
-
-Dengan struktur ini, tabel `classes` di *database* sudah pasti akan punya kolom `category`. AI juga tidak akan kebingungan membuat inisiatif fitur yang belum perlu dibuat karena batas-batas `(Coming Soon)` sudah disiapkan dengan tegas!
+### Kategori: Theory (Multiple Choice) *(Roadmap)*
+*   **Class: CSS Selectors Quiz**
+*   **Class: HTML Semantic Quiz**
+*   **Class: JS Fundamentals Quiz**
 
 ---
 
-## 6. Next Tasks (Upcoming Milestones)
-1. **📱 Full Mobile Responsiveness**:
-   - Optimalisasi semua halaman agar responsive di layar mobile (`sm`, `md` breakpoints).
-   - Mobile navigation drawer / hamburger menu untuk Navbar.
-   - Penyesuaian layout split-screen `/classes/[id]` pada mobile (tab switching antara kanvas & code/instruksi).
-   - Layout kartu Dashboard dan Silabus Katalog yang adaptive.
+## 6. Sesi Terakhir: Progress Summary (20-21 Oktober 2026)
 
-2. **🔐 Authentication dengan Auth.js (NextAuth v5) & Google Login**:
-   - Integrasi `@auth/core` / `next-auth` App Router handler (`/api/auth/[...nextauth]`).
-   - Setup Google OAuth Provider (Google Client ID & Secret).
-   - Sinkronisasi sesi login Google ke entitas database `users`.
+### ✅ Pencapaian yang Sudah Selesai:
+1. **Pembersihan Total Istilah Game & Kata "Status":**
+   - Menghapus dan mengganti semua istilah game (*"misi"*, *"quest"*, *"menaklukkan"*, *"boss fight"*, *"jurus"*) di seluruh kurikulum dan UI menjadi istilah profesional (*"Panduan Tantangan"*, *"Capstone Project"*, *"Final Project"*, *"Final Component"*, *"menyelesaikan"*).
+   - Menghapus referensi kata *"status"* yang dipaksakan:
+     - Level 4 diubah dari *"Kartu Status Harian"* (`status-box`) menjadi *"Kartu Catatan Pengembang"* (`notes-card`).
+     - Level 10 diubah dari *"Kardus Tag Status"* (`badge-status`) menjadi *"Label Kategori & Tag Profesi"* (`badge-role`).
+     - Level 11 diubah dari XP status game menjadi metrik portofolio profesional riil (`metrics-row` dengan Proyek, Kontribusi, Repositori).
+2. **Modularisasi Halaman Belajar (`/classes/[id]/learn/[challengeid]`):**
+   - Halaman kerja belajar yang sebelumnya menumpuk telah dipisah menjadi komponen modular mandiri: `MissionPanel`, `TheoryModal`, `SyntaxHelperBar`, `CompletionActionBar`, `LiveArena`, dan `StyleParser`.
+3. **Penyempurnaan Kurikulum HTML Architecture (20 Level):**
+   - Dibuat bertahap dengan penekanan pada logika pembungkus `<div>` (kardus dalam kardus) dan penulisan data biodata pengguna yang nyata.
+4. **Sinkronisasi Database & Evaluator:**
+   - Skema dan data awal `docker/init-db.sql` telah diperbarui dan dieksekusi ke PostgreSQL lokal (56 tantangan aktif).
+   - Script `scripts/setup-db.mjs` telah disederhanakan untuk membaca dan menjalankan `docker/init-db.sql` secara langsung.
+   - Evaluator (`components/learn/evaluator.ts` dan `/api/challenges/[id]/evaluate/route.ts`) telah diperbarui dengan umpan balik profesional dan backward-compatibility.
+5. **Verifikasi Teknis & Git:**
+   - Validasi TypeScript: `npx tsc --noEmit` lolos tanpa error (0 error).
+   - Seluruh perubahan telah di-commit dan di-push ke branch **`dev`**.
+
+---
+
+## 7. Next Session Backlog (Prioritas Kerja AI Agent Besok)
+
+AI Agent pada sesi selanjutnya dapat langsung memprioritaskan tugas-tugas terencana berikut:
+
+1. **📚 Interstitial Theory Checkpoints & Guided Examples (Jeda Materi & Contoh Konseptual):**
+   - *Target:* Menyisipkan jeda materi teori dan contoh interaktif secara berkala (misal setiap 3-4 level atau sebelum ada sintaks/konsep baru).
+   - *Tujuan:* Menjelaskan filosofi dan fungsi tag/properti secara komprehensif (*"Tag/properti ini untuk apa, kenapa kita butuh pembungkus/container ini, dan apa akibatnya jika tidak dibungkus"*), sehingga pengguna tidak bingung atau merasa tiba-tiba ada hal asing muncul tanpa pengenalan.
+   - *Komponen:* Sediakan *Concept Demo / Visual Walkthrough* (contoh kode + peraga visual) sebelum pengguna masuk ke lembar latihan aktif.
+
+2. **📱 Full Mobile Responsiveness:**
+   - Tata letak split-screen pada halaman `/classes/[id]/learn/[challengeid]` agar dapat bertransisi dengan baik di layar kecil (misal menggunakan tab switcher antara *Editor Kode*, *Panduan*, dan *Pratinjau Kanvas*).
+   - Mobile navigation drawer / hamburger menu pada Navbar.
+   - Penyesuaian layout kartu Dashboard dan Katalog Kelas pada layar ponsel (`sm`, `md` breakpoints).
+
+3. **🔐 Authentication dengan Auth.js (NextAuth v5) & Google OAuth:**
+   - Setup App Router handler `/api/auth/[...nextauth]`.
+   - Setup Google OAuth Provider.
+   - Sinkronisasi sesi Google ke tabel `users` PostgreSQL.
    - Middleware proteksi rute (`/dashboard`, `/classes/[id]`).
 
-3. **📚 Interstitial Theory Checkpoints & Guided Examples (Jeda Materi & Contoh Konseptual)**:
-   - Menyisipkan jeda materi teori dan contoh secara berkala (setiap 3-4 level atau sebelum konsep baru diperkenalkan).
-   - Menjelaskan fungsi filosofis tag/properti secara komprehensif (*"Tag/properti ini untuk apa, kenapa kita butuh kardus/container ini, dan apa konsekuensinya jika tidak dibungkus"*).
-   - Mencegah kebingungan pengguna dari kemunculan sintaks baru secara mendadak tanpa pengenalan.
-   - Menyajikan *Interactive Concept Demo / Visual Walkthrough* (kode contoh + kanvas peraga sebelum masuk ke tantangan koding aktif).
-
-4. **🎯 Kurikulum Bertingkat Berdasarkan Group Age (Age-Tiered Classes)**:
-   - Merancang diferensiasi kurikulum dan gaya bahasa materi sesuai rentang usia pengguna (6-7 th, 8-10 th, 11-13 th, 13-17 th).
-   - Menyesuaikan analogi (misal: "kardus mainan" untuk usia anak vs "container DOM hierarchy" untuk remaja).
-   - Memfilter rekomendasi kelas di dashboard berdasarkan `age_group` yang dipilih saat registrasi.
+4. **🎯 Kurikulum Bertingkat Sesuai Group Age (Age-Tiered Classes):**
+   - Menyesuaikan gaya bahasa dan analogi materi berdasarkan rentang usia (6-7 th, 8-10 th, 11-13 th, 13-17 th).
+   - Filter rekomendasi materi di dashboard sesuai `age_group` user.
