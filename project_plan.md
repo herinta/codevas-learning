@@ -175,3 +175,135 @@ AI Agent pada sesi selanjutnya dapat langsung memprioritaskan tugas-tugas terenc
 4. **🎯 Kurikulum Bertingkat Sesuai Group Age (Age-Tiered Classes):**
    - Menyesuaikan gaya bahasa dan analogi materi berdasarkan rentang usia (6-7 th, 8-10 th, 11-13 th, 13-17 th).
    - Filter rekomendasi materi di dashboard sesuai `age_group` user.
+
+---
+
+## 8. Dokumentasi Struktur File & Komponen (Directory Architecture)
+
+Proyek ini dibangun menggunakan arsitektur **Next.js App Router (v15)** dengan pemisahan tanggung jawab (*separation of concerns*) yang jelas antara presentasi antarmuka, parsing kode visual, data service, dan persistensi database.
+
+```text
+codevas/
+├── app/                              # Next.js App Router (Pages, Layouts & API Endpoints)
+│   ├── (auth)/                       # Routing Autentikasi Pengguna
+│   │   ├── login/page.tsx            # Form login dengan email/password & Google
+│   │   └── register/page.tsx         # Registrasi user baru + pemilihan age_group
+│   ├── admin/                        # Panel Admin Manajemen Kurikulum
+│   │   └── page.tsx                  # Dashboard admin untuk kelola class & challenge
+│   ├── classes/                      # Katalog & Modul Pembelajaran
+│   │   ├── page.tsx                  # Daftar seluruh kelas & filter kategori
+│   │   ├── [id]/page.tsx             # Detail kelas & roadmap level/modul
+│   │   └── [id]/learn/[challengeid]/ # Workspace live code interaktif
+│   │       └── page.tsx              # Container loader level (fetch DB + fallback static)
+│   ├── dashboard/page.tsx            # Beranda belajar siswa (streak, XP, recent progress)
+│   ├── demo/page.tsx                 # Preview demo interaktif bagi pengunjung publik
+│   ├── api/                          # REST API Endpoints Backend
+│   │   ├── auth/                     # Autentikasi, login/register, session check
+│   │   ├── classes/                  # GET katalog kelas & detail kurikulum
+│   │   ├── challenges/               # GET detail soal & POST evaluasi server-side
+│   │   │   └── [id]/evaluate/route.ts# Validasi backend, award XP & unlock level berikutnya
+│   │   ├── enrollments/              # Status pendaftaran kelas user
+│   │   ├── progress/                 # Update & fetch snapshot kode serta status level
+│   │   └── admin/                    # CRUD API untuk manajemen kurikulum oleh admin
+│   ├── globals.css                   # Global styles & Candy Light Mode design tokens
+│   └── layout.tsx                    # Root layout, font provider, & global navigation
+│
+├── components/                       # Komponen UI Terisolasi & Modular
+│   ├── learn/                        # 🧠 Modul Workspace Belajar (Live Code Engine)
+│   │   ├── learn-workspace.tsx       # Orkestrator utama: state kode, evaluasi, & layout
+│   │   ├── learn-header.tsx          # Top bar: navigasi kembali, nama level, timer, & XP reward
+│   │   ├── mission-panel.tsx         # Panel instruksi: deskripsi tugas & panduan koding
+│   │   ├── code-editor-panel.tsx     # Monaco Editor terintegrasi + syntax helper bar
+│   │   ├── live-arena.tsx            # Kanvas pratinjau rendering real-time DOM/CSS
+│   │   ├── completion-action-bar.tsx # Baris aksi sukses: mini-confetti, ringkasan XP & tombol lanjut
+│   │   ├── theory-modal.tsx          # Modal penjelasan teori mendalam & analogi konsep
+│   │   ├── session-expired-modal.tsx # Dialog peringatan jika sesi login kedaluwarsa
+│   │   ├── evaluator.ts              # Client-side validation engine untuk auto-check instan
+│   │   ├── style-parser.ts           # Parser selector CSS, style rule, & inline declaration
+│   │   ├── types.ts                  # TypeScript interface spesifik komponen learn
+│   │   └── use-mini-confetti.ts      # Custom hook animasi partikel perayaan penyelesaian
+│   ├── classes/                      # Komponen katalog kelas, progress bar, & card list
+│   ├── dashboard/                    # Komponen visual statistik siswa & kalender streak
+│   ├── admin/                        # Komponen form editor soal & live preview admin
+│   ├── navigation/                   # Navbar utama, breadcrumbs, & profil menu
+│   └── ui/                           # Primitif UI (Button, Modal, Badge, Card, Tooltip)
+│
+├── lib/                              # Core Utilities, Services & Database Access
+│   ├── services/                     # 🛡️ Service Layer (Database Queries PostgreSQL)
+│   │   ├── challenge.service.ts      # Query level, validasi server, & logic unlock
+│   │   ├── class.service.ts          # Query kelas, statistik modul, & metadata
+│   │   ├── user.service.ts           # Manajemen akun, hash password, & XP ledger
+│   │   ├── progress.service.ts       # Manajemen status level (LOCKED, IN_PROGRESS, COMPLETED)
+│   │   └── enrollment.service.ts     # Pendaftaran siswa ke kelas pembelajaran
+│   ├── db/                           # Konfigurasi pg Pool & koneksi PostgreSQL
+│   ├── classes-data.ts               # Dataset statis fallback untuk demo offline / preview
+│   └── gamification.ts               # Kalkulasi level siswa, penamaan rank badge, & XP tiers
+│
+├── docker/                           # Konfigurasi Kontainerisasi & Database
+│   └── init-db.sql                   # 💎 Single Source of Truth: Skema DDL & seed 56 level
+├── scripts/                          # Skrip Utilitas & Pemeliharaan
+│   └── setup-db.mjs                  # Eksekutor migrasi database dari docker/init-db.sql
+└── project_plan.md                   # Dokumentasi sentral rencana, progres, & arsitektur proyek
+```
+
+---
+
+## 9. Diagram Alur Kerja & Sistem (System Execution Flows)
+
+### 1. Alur Belajar Interaktif (Live Code & Instant Validation Loop)
+Alur ketika siswa mengerjakan tantangan koding pada workspace:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Siswa as Pengguna (Siswa)
+    participant Editor as Monaco Editor
+    participant Parser as StyleParser / DOM Parser
+    participant Canvas as Live Arena Canvas
+    participant ClientEval as evaluator.ts (Client)
+    participant ActionBar as CompletionActionBar
+    participant ServerAPI as POST /api/challenges/[id]/evaluate
+    participant DB as PostgreSQL (DB)
+
+    Siswa->>Editor: Mengetik kode HTML / CSS
+    Editor->>Parser: Ekstrak tag HTML / CSS AST
+    Parser->>Canvas: Render ulang visual secara real-time (Candy Light Mode)
+    Canvas->>ClientEval: Jalankan validasi instan terhadap validation_rules
+    alt Aturan Belum Terpenuhi
+        ClientEval-->>ActionBar: Status: Belum Selesai (Siswa terus eksplorasi)
+    else Seluruh Kriteria Lulus (Passed)
+        ClientEval-->>ActionBar: Status: LULUS (Passed)!
+        ActionBar->>Siswa: Tampilkan animasi sukses, mini-confetti, & suara perayaan
+        Siswa->>ActionBar: Klik tombol "Lanjut ke Level Berikutnya"
+        ActionBar->>ServerAPI: Kirim snapshot kode & waktu pengerjaan
+        ServerAPI->>DB: Update user_progress (COMPLETED) & Catat XP di xp_transactions
+        ServerAPI->>DB: Unlock level urutan berikutnya (status: IN_PROGRESS)
+        ServerAPI-->>ActionBar: Respon sukses + data level berikutnya
+        ActionBar->>Siswa: Navigasikan langsung ke URL level berikutnya
+    end
+```
+
+### 2. Alur Pembacaan Data & Navigasi Modul (Data Fetching & Fallback Flow)
+Alur bagaimana data materi dibaca dan disajikan kepada pengguna:
+
+```mermaid
+flowchart TD
+    Start([Pengguna Mengakses Halaman Belajar]) --> CheckDB{Apakah Terhubung ke Database?}
+    CheckDB -- Ya (Database Aktif) --> FetchDB[Ambil Data via challenge.service.ts dari PostgreSQL]
+    CheckDB -- Tidak (Mode Demo/Offline) --> FetchStatic[Ambil Data Fallback dari lib/classes-data.ts]
+    FetchDB --> CombineData[Siapkan Initial State, Locked Template, & Theory Info]
+    FetchStatic --> CombineData
+    CombineData --> RenderWorkspace[Render LearnWorkspace: CodeEditor + LiveArena + MissionPanel]
+    RenderWorkspace --> UserReady[Siap Digunakan oleh Siswa]
+```
+
+### 3. Alur Migrasi & Konsistensi Database (Database Sync Flow)
+Alur pemeliharaan skema agar data di database selalu konsisten dengan silabus:
+
+```mermaid
+flowchart LR
+    A[docker/init-db.sql\nSingle Source of Truth] -->|Dibaca oleh Node.js| B[scripts/setup-db.mjs]
+    B -->|Eksekusi Query DDL & Seed| C[(PostgreSQL Server)]
+    C -->|Dikelola oleh| D[lib/services/*.service.ts]
+    D -->|Disajikan ke API| E[app/api/challenges & classes]
+```
