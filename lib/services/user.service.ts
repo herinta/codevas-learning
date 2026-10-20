@@ -9,11 +9,13 @@ export interface CreateUserInput {
   password: string;
   full_name?: string;
   avatar_url?: string;
+  age_group?: string;
 }
 
 export interface UpdateProfileInput {
   full_name?: string;
   avatar_url?: string;
+  age_group?: string;
 }
 
 export class UserService {
@@ -74,15 +76,16 @@ export class UserService {
     const avatarUrl =
       input.avatar_url ||
       `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(cleanUsername)}`;
+    const ageGroup = input.age_group?.trim() || null;
 
     const initialXp = 50;
     const initialStats = calculateGamificationStats(initialXp);
 
     const rows = await query<UserEntity>(
-      `INSERT INTO users (username, email, password_hash, full_name, avatar_url, xp_points, level, streak_days, last_active_date, role)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, 1, CURRENT_DATE, 'USER')
+      `INSERT INTO users (username, email, password_hash, full_name, avatar_url, xp_points, level, streak_days, last_active_date, role, age_group)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 1, CURRENT_DATE, 'USER', $8)
        RETURNING *`,
-      [cleanUsername, cleanEmail, hashedPassword, fullName, avatarUrl, initialXp, initialStats.level]
+      [cleanUsername, cleanEmail, hashedPassword, fullName, avatarUrl, initialXp, initialStats.level, ageGroup]
     );
 
     const newUser = rows[0];
@@ -102,7 +105,7 @@ export class UserService {
   }
 
   /**
-   * Update full_name and avatar_url
+   * Update full_name, avatar_url, and age_group
    */
   static async updateProfile(userId: string, input: UpdateProfileInput): Promise<UserEntity | null> {
     const fields: string[] = [];
@@ -117,6 +120,11 @@ export class UserService {
     if (input.avatar_url !== undefined) {
       fields.push(`avatar_url = $${idx++}`);
       values.push(input.avatar_url.trim());
+    }
+
+    if (input.age_group !== undefined) {
+      fields.push(`age_group = $${idx++}`);
+      values.push(input.age_group ? input.age_group.trim() : null);
     }
 
     if (fields.length === 0) {

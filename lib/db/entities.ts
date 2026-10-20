@@ -20,6 +20,7 @@ export interface UserEntity {
   password_hash: string;
   full_name: string | null;
   avatar_url: string | null;
+  age_group?: string | null;
   xp_points: number;
   level: number;
   streak_days: number;

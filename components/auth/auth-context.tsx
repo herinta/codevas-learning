@@ -20,6 +20,7 @@ export interface AuthUser {
   xp_remaining: number;
   streak_days?: number;
   role: string;
+  age_group?: string | null;
 }
 
 interface AuthContextType {

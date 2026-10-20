@@ -46,6 +46,7 @@ export async function GET(request: NextRequest) {
         xp_remaining: stats.xp_remaining,
         streak_days: user.streak_days,
         role: user.role,
+        age_group: user.age_group,
         created_at: user.created_at,
         gamification: stats,
         xp_history: xpHistory,
@@ -62,7 +63,7 @@ export async function GET(request: NextRequest) {
 
 /**
  * PUT /api/user/profile
- * Updates full_name and avatar_url
+ * Updates full_name, avatar_url, and age_group
  */
 export async function PUT(request: NextRequest) {
   try {
@@ -77,7 +78,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { full_name, avatar_url } = body;
+    const { full_name, avatar_url, age_group } = body;
 
     let sanitizedFullName: string | undefined = undefined;
     if (full_name !== undefined) {
@@ -102,9 +103,22 @@ export async function PUT(request: NextRequest) {
       sanitizedAvatarUrl = String(avatar_url).trim();
     }
 
+    let validatedAgeGroup: string | undefined = undefined;
+    if (age_group !== undefined) {
+      const allowedAgeGroups = ["6-7th", "8-10th", "11-13th", "13-17th"];
+      if (age_group !== null && age_group !== "" && !allowedAgeGroups.includes(String(age_group).trim())) {
+        return NextResponse.json(
+          { success: false, message: "Pilihan rentang usia tidak valid." },
+          { status: 400 }
+        );
+      }
+      validatedAgeGroup = age_group ? String(age_group).trim() : undefined;
+    }
+
     const updatedUser = await UserService.updateProfile(payload.userId, {
       full_name: sanitizedFullName,
       avatar_url: sanitizedAvatarUrl,
+      age_group: validatedAgeGroup,
     });
 
     if (!updatedUser) {
@@ -132,6 +146,7 @@ export async function PUT(request: NextRequest) {
         xp_remaining: stats.xp_remaining,
         streak_days: updatedUser.streak_days,
         role: updatedUser.role,
+        age_group: updatedUser.age_group,
       },
     });
   } catch (error) {

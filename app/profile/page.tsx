@@ -39,6 +39,7 @@ export default function ProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fullName, setFullName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [ageGroup, setAgeGroup] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -105,7 +106,7 @@ export default function ProfilePage() {
         (user as any).avatar_url ||
           `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(user.username)}`
       );
-
+      setAgeGroup((user as any).age_group || "");
     }
   }, [user, authLoading]);
 
@@ -133,6 +134,7 @@ export default function ProfilePage() {
         body: JSON.stringify({
           full_name: fullName,
           avatar_url: avatarUrl,
+          age_group: ageGroup || null,
         }),
       });
 
@@ -359,6 +361,34 @@ export default function ProfilePage() {
                   className="w-full bg-transparent border-0 p-0 text-slate-900 font-body font-bold text-sm focus:outline-none"
                 />
               </div>
+            </div>
+
+            {/* Kelompok Usia */}
+            <div>
+              <label
+                className="block font-display font-bold text-xs uppercase tracking-wider text-slate-900 mb-1.5"
+                htmlFor="age-group"
+              >
+                Kelompok Usia Belajar
+              </label>
+              <div className="flex items-center bg-slate-50 rounded-2xl border-2 border-slate-900 px-4 py-3 transition-all focus-within:ring-2 focus-within:ring-[#EF4444] shadow-[0_2px_0_#0f172a]">
+                <Sparkles className="w-5 h-5 text-slate-400 mr-2.5 shrink-0" />
+                <select
+                  id="age-group"
+                  value={ageGroup}
+                  onChange={(e) => setAgeGroup(e.target.value)}
+                  className="w-full bg-transparent border-0 p-0 text-slate-900 font-body font-bold text-sm focus:outline-none cursor-pointer"
+                >
+                  <option value="">Belum Ditentukan (Semua Modul Terbuka)</option>
+                  <option value="6-7th">6 - 7 Tahun (Petualang Cilik • TK &amp; SD Awal)</option>
+                  <option value="8-10th">8 - 10 Tahun (Penjelajah Kode • SD Kelas 3 - 5)</option>
+                  <option value="11-13th">11 - 13 Tahun (Perakit Web • SMP / Pra-Remaja)</option>
+                  <option value="13-17th">13 - 17 Tahun (Arsitek Digital • Remaja &amp; SMA/SMK)</option>
+                </select>
+              </div>
+              <p className="mt-1 text-[11px] font-mono text-slate-500">
+                Pilihan usia untuk rekomendasi modul dan kurikulum bertingkat mendatang.
+              </p>
             </div>
 
             {/* Read-Only Account Info (Username & Email) */}

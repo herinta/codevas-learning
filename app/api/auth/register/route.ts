@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { fullname, username, email, password } = body;
+    const { fullname, username, email, password, age_group } = body;
 
     // 1. Validasi input dasar
     if (!username || !email || !password) {
@@ -104,6 +104,7 @@ export async function POST(req: NextRequest) {
       email,
       password,
       full_name: sanitizedFullName,
+      age_group: age_group ? String(age_group).trim() : undefined,
     });
 
     // 5. Generate secure session token
@@ -136,6 +137,7 @@ export async function POST(req: NextRequest) {
           xp_remaining: stats.xp_remaining,
           streak_days: user.streak_days,
           role: user.role,
+          age_group: user.age_group,
         },
       },
       { status: 201 }

@@ -13,7 +13,7 @@ export const Navbar: React.FC = () => {
   const pathname = usePathname();
 
   const isDemo = pathname ? pathname.startsWith("/demo") : false;
-  const brandHref = isDemo ? "/demo" : "/";
+  const brandHref = "/demo";
   const loginHref = isDemo ? "/demo/login" : "/login";
   const registerHref = isDemo ? "/demo/register" : "/register";
 
@@ -44,12 +44,6 @@ export const Navbar: React.FC = () => {
           >
             Kelas
           </Link>
-          <a
-            href="#demo"
-            className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#BAE6FD] transition-colors"
-          >
-            Demo
-          </a>
           <a
             href="#features"
             className="px-3.5 py-1.5 rounded-full text-sm font-label font-bold text-slate-700 hover:text-slate-900 hover:bg-[#FECDD3] transition-colors"
@@ -199,13 +193,6 @@ export const Navbar: React.FC = () => {
           >
             Kelas
           </Link>
-          <a
-            href="#demo"
-            onClick={() => setMobileMenuOpen(false)}
-            className="px-3 py-2 rounded-xl text-sm font-bold text-slate-800 hover:bg-slate-100"
-          >
-            Demo
-          </a>
           <a
             href="#features"
             onClick={() => setMobileMenuOpen(false)}

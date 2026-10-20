@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
     streak_days INT NOT NULL DEFAULT 1 CHECK (streak_days >= 0),
     last_active_date DATE NOT NULL DEFAULT CURRENT_DATE,
     role VARCHAR(20) NOT NULL DEFAULT 'USER' CHECK (role IN ('USER', 'ADMIN')),
+    age_group VARCHAR(20),
     last_seen_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -36,6 +37,9 @@ BEGIN
     END IF;
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='avatar_url') THEN
         ALTER TABLE users ADD COLUMN avatar_url TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='age_group') THEN
+        ALTER TABLE users ADD COLUMN age_group VARCHAR(20);
     END IF;
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='level') THEN
         ALTER TABLE users ADD COLUMN level INT NOT NULL DEFAULT 1;

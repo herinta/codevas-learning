@@ -44,6 +44,7 @@ export async function GET(req: NextRequest) {
           xp_remaining: stats.xp_remaining,
           streak_days: user.streak_days,
           role: user.role,
+          age_group: user.age_group,
         },
       },
       { status: 200 }

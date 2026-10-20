@@ -15,33 +15,35 @@ export default function HomePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  // Jika user sudah login, redirect otomatis ke /dashboard (tidak bisa kembali kecuali logout)
+  // Jika user sudah login, redirect otomatis ke /dashboard; jika belum, alihkan sementara ke /demo
   useEffect(() => {
-    if (!loading && user) {
-      router.replace("/dashboard");
+    if (!loading) {
+      if (user) {
+        router.replace("/dashboard");
+      } else {
+        router.replace("/demo");
+      }
     }
   }, [user, loading, router]);
 
-  // Track anonymous landing page visitor (tanpa login)
+  // Track visitor
   useEffect(() => {
     if (!loading && !user) {
       fetch("/api/analytics/visit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ path: "/" }),
+        body: JSON.stringify({ path: "/demo" }),
       }).catch(() => {});
     }
   }, [loading, user]);
 
-  if (!loading && user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFDF7] text-slate-900">
-        <div className="flex items-center gap-2 font-display font-black text-sm text-[#EF4444] animate-pulse">
-          <span>Mengalihkan ke Dashboard...</span>
-        </div>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#FFFDF7] text-slate-900">
+      <div className="flex items-center gap-2 font-display font-black text-sm text-[#EF4444] animate-pulse">
+        <span>Mengalihkan ke Codevas Demo...</span>
       </div>
-    );
-  }
+    </div>
+  );
 
   return (
     <main className="min-h-screen flex flex-col bg-[#FFFDF7] text-slate-900">
