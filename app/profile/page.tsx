@@ -43,13 +43,6 @@ export default function ProfilePage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [xpHistory, setXpHistory] = useState<Array<{
-    id: string;
-    amount: number;
-    source: string;
-    description: string;
-    created_at: string;
-  }>>([]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -113,17 +106,6 @@ export default function ProfilePage() {
           `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(user.username)}`
       );
 
-      // Fetch latest gamification profile & history
-      fetch("/api/user/profile")
-        .then((res) => res.json())
-        .then((json) => {
-          if (json.success && json.data) {
-            if (Array.isArray(json.data.xp_history)) {
-              setXpHistory(json.data.xp_history);
-            }
-          }
-        })
-        .catch(() => {});
     }
   }, [user, authLoading]);
 
@@ -477,48 +459,6 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* XP Transactions History List */}
-            <div className="space-y-3">
-              <h3 className="font-display font-black text-base text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-500" />
-                <span>Riwayat Perolehan EXP</span>
-              </h3>
-
-              {xpHistory.length === 0 ? (
-                <div className="p-4 bg-slate-50 rounded-xl border-2 border-slate-200 text-center text-xs text-slate-600 font-medium">
-                  Belum ada catatan transaksi EXP. Selesaikan quest tantangan pertamamu untuk mulai mengumpulkan EXP!
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {xpHistory.map((item) => (
-                    <div
-                      key={item.id}
-                      className="p-3 bg-white rounded-xl border-2 border-slate-900 shadow-[0_2px_0_#0f172a] flex items-center justify-between gap-3 text-xs"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="px-2 py-0.5 bg-[#FEF08A] text-slate-900 font-mono font-black rounded-lg border border-slate-900 text-[11px]">
-                          +{item.amount} XP
-                        </span>
-                        <div>
-                          <p className="font-display font-bold text-slate-900 leading-snug">
-                            {item.description || item.source}
-                          </p>
-                          <span className="text-[10px] text-slate-500 font-mono">
-                            {new Date(item.created_at).toLocaleString("id-ID", {
-                              dateStyle: "medium",
-                              timeStyle: "short",
-                            })}
-                          </span>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
-                        {item.source}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </main>
