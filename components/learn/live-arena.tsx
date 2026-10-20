@@ -35,7 +35,9 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
   const isHtmlMode =
     challenge?.class_id === "html-architecture" || challengeId.startsWith("html-");
   const isCssBasicsMode =
-    challenge?.class_id === "css-basics" || challengeId.startsWith("css-basics-");
+    challenge?.class_id === "css-basics" ||
+    challengeId.startsWith("css-basics-") ||
+    challengeId.startsWith("basics-");
   const isNavbarMode =
     challengeId === "flexbox-12-boss-modern-navbar" || challengeId === "fb-12";
   const isGridMode =
@@ -84,6 +86,12 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
 
   // 2. CSS Basics
   if (isCssBasicsMode) {
+    const isCapstone =
+      challengeId.includes("boss") ||
+      challengeId.includes("capstone") ||
+      challengeId.includes("13") ||
+      challengeId.includes("20");
+
     return (
       <div
         id="live-arena"
@@ -91,13 +99,21 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
           isCompact ? "h-28 sm:h-36" : "h-56 sm:h-72 lg:h-96"
         }`}
       >
-        {challengeId === "css-basics-12-boss-fight" ? (
-          <span
-            className="badge transition-all inline-block font-mono text-xs sm:text-sm font-bold"
+        {isCapstone ? (
+          <div
+            className="box transition-all inline-block font-body text-center max-w-xs cursor-pointer select-none"
             style={itemStyles["box"] || arenaStyle}
           >
-            🔔 3 Pesan Baru
-          </span>
+            <div className="flex items-center justify-center gap-1.5 mb-1">
+              <span className="text-base">🚀</span>
+              <span className="font-display font-black text-sm tracking-wide">
+                Neo Component
+              </span>
+            </div>
+            <p className="text-xs opacity-90 leading-tight">
+              Komponen interaktif berstandar UI modern.
+            </p>
+          </div>
         ) : (
           <div
             className={`box transition-all w-full text-center font-body bg-white text-slate-800 border-2 border-slate-200 rounded-xl shadow-xs ${

@@ -146,33 +146,42 @@ Kurikulum dibagi berdasarkan **Kategori** (metode pendekatan belajar). Di dalam 
    - Skema dan data awal `docker/init-db.sql` telah diperbarui dan dieksekusi ke PostgreSQL lokal (56 tantangan aktif).
    - Script `scripts/setup-db.mjs` telah disederhanakan untuk membaca dan menjalankan `docker/init-db.sql` secara langsung.
    - Evaluator (`components/learn/evaluator.ts` dan `/api/challenges/[id]/evaluate/route.ts`) telah diperbarui dengan umpan balik profesional dan backward-compatibility.
-5. **Verifikasi Teknis & Git:**
-   - Validasi TypeScript: `npx tsc --noEmit` lolos tanpa error (0 error).
-   - Seluruh perubahan telah di-commit dan di-push ke branch **`dev`**.
+6. **📚 Interstitial Theory Checkpoints & Guided Examples (Class 1 & 2):**
+   - Modal teori dan panduan visual (`TheoryModal` & `MissionPanel`) diperkaya dengan:
+     - 🎯 **Filosofi & Fungsi**: Penjelasan komprehensif untuk apa tag/properti ini diciptakan.
+     - ⚠️ **Konsekuensi Logis**: Apa yang terjadi jika tanpa wadah pembungkus atau properti terkait.
+     - 🔍 **Perbandingan Visual (Sebelum vs Sesudah)**: Komparasi visual kartu tanpa pembungkus vs kartu berarsitektur rapi.
+     - 💻 **Pola Kode Acuan (Code Walkthrough)** & 📌 **Intisari Kunci (Key Takeaways)**.
+   - Diintegrasikan di seluruh checkpoint penting Class 1 (`html-architecture`).
+7. **🎨 Full 20 Levels Kurikulum Class 2 (CSS Basics):**
+   - Menambah dan merombak silabus Class 2 dari 12 level menjadi **20 level lengkap**:
+     - *Modul 1 (Warna & Kanvas)*: background-color, color, font-size.
+     - *Modul 2 (Tipografi)*: font-weight, text-align, line-height (*Checkpoint 1*).
+     - *Modul 3 (Box Model)*: padding (*Checkpoint 2*), margin, border, border-radius.
+     - *Modul 4 (Dimensi)*: width & min-height, box-sizing: border-box (*Checkpoint 3*), Capstone Badge Card (Level 13).
+     - *Modul 5 (Elevasi & Interaksi)*: box-shadow neo-brutalisme, opacity, cursor: pointer & overflow: hidden (*Checkpoint 4*).
+     - *Modul 6 (Dinamika Visual)*: linear-gradient, transform: translateY, transition (*Checkpoint 5*).
+     - *Modul 7 (Final Project)*: Complete Interactive Neo-Brutalist Component (Level 20).
+   - Sinkronisasi penuh ke `docker/init-db.sql` (64 total level tantangan aktif di database PostgreSQL), `lib/classes-data.ts`, `components/learn/evaluator.ts`, dan backend route `/api/challenges/[id]/evaluate`.
 
 ---
 
-## 7. Next Session Backlog (Prioritas Kerja AI Agent Besok)
+## 7. Next Session Backlog (Prioritas Kerja AI Agent Berikutnya)
 
-AI Agent pada sesi selanjutnya dapat langsung memprioritaskan tugas-tugas terencana berikut:
+AI Agent dapat langsung melanjutkan tugas-tugas terencana berikut:
 
-1. **📚 Interstitial Theory Checkpoints & Guided Examples (Jeda Materi & Contoh Konseptual):**
-   - *Target:* Menyisipkan jeda materi teori dan contoh interaktif secara berkala (misal setiap 3-4 level atau sebelum ada sintaks/konsep baru).
-   - *Tujuan:* Menjelaskan filosofi dan fungsi tag/properti secara komprehensif (*"Tag/properti ini untuk apa, kenapa kita butuh pembungkus/container ini, dan apa akibatnya jika tidak dibungkus"*), sehingga pengguna tidak bingung atau merasa tiba-tiba ada hal asing muncul tanpa pengenalan.
-   - *Komponen:* Sediakan *Concept Demo / Visual Walkthrough* (contoh kode + peraga visual) sebelum pengguna masuk ke lembar latihan aktif.
-
-2. **📱 Full Mobile Responsiveness:**
+1. **📱 Full Mobile Responsiveness:**
    - Tata letak split-screen pada halaman `/classes/[id]/learn/[challengeid]` agar dapat bertransisi dengan baik di layar kecil (misal menggunakan tab switcher antara *Editor Kode*, *Panduan*, dan *Pratinjau Kanvas*).
    - Mobile navigation drawer / hamburger menu pada Navbar.
    - Penyesuaian layout kartu Dashboard dan Katalog Kelas pada layar ponsel (`sm`, `md` breakpoints).
 
-3. **🔐 Authentication dengan Auth.js (NextAuth v5) & Google OAuth:**
+2. **🔐 Authentication dengan Auth.js (NextAuth v5) & Google OAuth:**
    - Setup App Router handler `/api/auth/[...nextauth]`.
    - Setup Google OAuth Provider.
    - Sinkronisasi sesi Google ke tabel `users` PostgreSQL.
    - Middleware proteksi rute (`/dashboard`, `/classes/[id]`).
 
-4. **🎯 Kurikulum Bertingkat Sesuai Group Age (Age-Tiered Classes):**
+3. **🎯 Kurikulum Bertingkat Sesuai Group Age (Age-Tiered Classes):**
    - Menyesuaikan gaya bahasa dan analogi materi berdasarkan rentang usia (6-7 th, 8-10 th, 11-13 th, 13-17 th).
    - Filter rekomendasi materi di dashboard sesuai `age_group` user.
 

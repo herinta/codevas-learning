@@ -10,7 +10,12 @@ export class ChallengeService {
     userId?: string
   ): Promise<(ChallengeEntity & { codeSnapshot?: string | null; userStatus?: string }) | null> {
     const rows = await query<ChallengeEntity>(
-      'SELECT * FROM challenges WHERE id = $1 OR id LIKE $1 || \'-%\' ORDER BY CASE WHEN id = $1 THEN 1 ELSE 2 END LIMIT 1',
+      `SELECT * FROM challenges 
+       WHERE id = $1 
+          OR id LIKE $1 || '-%'
+          OR id = REPLACE($1, 'basics-', 'css-basics-')
+          OR id LIKE REPLACE($1, 'basics-', 'css-basics-') || '-%'
+       ORDER BY CASE WHEN id = $1 THEN 1 ELSE 2 END LIMIT 1`,
       [id]
     );
     if (!rows.length) return null;

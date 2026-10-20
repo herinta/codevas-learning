@@ -1,5 +1,23 @@
 import type React from "react";
 
+export interface ConceptVisualComparison {
+  withoutLabel?: string;
+  withoutDesc: string;
+  withLabel?: string;
+  withDesc: string;
+  previewCodeWithout?: string;
+  previewCodeWith?: string;
+}
+
+export interface ConceptDemo {
+  conceptTitle: string;
+  whyItMatters: string;
+  whatIfWithout?: string;
+  keyTakeaways?: string[];
+  codeExample?: string;
+  visualComparison?: ConceptVisualComparison;
+}
+
 export interface ChallengeData {
   id: string;
   class_id: string;
@@ -8,6 +26,8 @@ export interface ChallengeData {
   order_index?: number;
   instruction: string;
   theory?: string | null;
+  concept_demo?: ConceptDemo | null;
+  conceptDemo?: ConceptDemo | null;
   syntax_helpers?: string[];
   hint: string | null;
   xp_reward: number;
@@ -26,6 +46,8 @@ export interface ChallengeData {
     flexWrap?: string;
     gap?: string;
     description?: string;
+    preview?: string;
+    concept_demo?: ConceptDemo;
   };
 }
 

@@ -114,6 +114,7 @@ export interface ChallengeEntity {
   instruction: string;
   hint: string | null;
   theory?: string | null;
+  concept_demo?: Record<string, unknown> | string | null;
   syntax_helpers?: string[];
   locked_template: Record<string, unknown> | string; // JSONB
   target_visual: TargetVisualSpec | string; // JSONB

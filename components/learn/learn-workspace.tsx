@@ -350,7 +350,10 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
       {/* ======================================================== */}
       <div className="hidden lg:grid lg:grid-cols-12 flex-1 gap-0 overflow-hidden bg-[#FFFDF7]">
         {/* PANEL 1: INSTRUCTIONS & VISUAL TARGET GOAL (4 Cols) */}
-        <MissionPanel challenge={challenge} />
+        <MissionPanel
+          challenge={challenge}
+          onOpenTheory={() => setShowTheoryModal(true)}
+        />
 
         {/* PANEL 2: INTERACTIVE LIVE CANVAS (4 Cols) */}
         <div className="lg:col-span-4 border-r-3 border-slate-900 p-6 bg-slate-50 flex flex-col justify-between overflow-y-auto">

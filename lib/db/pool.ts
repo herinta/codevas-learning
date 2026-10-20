@@ -194,6 +194,7 @@ async function ensureSchema() {
         instruction TEXT NOT NULL,
         hint TEXT,
         theory TEXT,
+        concept_demo JSONB,
         syntax_helpers JSONB NOT NULL DEFAULT '[]'::jsonb,
         locked_template JSONB NOT NULL DEFAULT '{}'::jsonb,
         target_visual JSONB NOT NULL DEFAULT '{}'::jsonb,
@@ -208,6 +209,9 @@ async function ensureSchema() {
         IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'challenges') THEN
           IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='theory') THEN
             ALTER TABLE challenges ADD COLUMN theory TEXT;
+          END IF;
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='concept_demo') THEN
+            ALTER TABLE challenges ADD COLUMN concept_demo JSONB;
           END IF;
           IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='challenges' AND column_name='syntax_helpers') THEN
             ALTER TABLE challenges ADD COLUMN syntax_helpers JSONB NOT NULL DEFAULT '[]'::jsonb;

@@ -304,24 +304,24 @@ export function evaluateLiveGoals(
     };
   }
 
-  // ================= CSS BASICS (12 Levels) =================
-  if (challengeId === "css-basics-1-background-color") {
-    const passed = /background-color\s*:\s*(lightblue|#add8e6|rgb\(\s*173\s*,\s*216\s*,\s*230\s*\)|sky-?blue|#38bdf8|#60a5fa)/i.test(cssCode);
+  // ================= CSS BASICS (Full 20 Levels) =================
+  if (challengeId === "css-basics-1-background-color" || challengeId === "css-basics-1" || challengeId === "basics-1") {
+    const passed = /background-color\s*:\s*(lightblue|#add8e6|rgb\(\s*173\s*,\s*216\s*,\s*230\s*\)|sky-?blue|#38bdf8|#60a5fa|#f1f5f9|#e0f2fe|#bae6fd)/i.test(cssCode) || /background\s*:\s*(lightblue|#add8e6|#38bdf8|#e0f2fe)/i.test(cssCode);
     return {
       passed,
       goals: [{ label: "background-color: lightblue;", passed }],
     };
   }
 
-  if (challengeId === "css-basics-2-text-color") {
+  if (challengeId === "css-basics-2-text-color" || challengeId === "css-basics-2" || challengeId === "basics-2") {
     const passed = /color\s*:\s*(#333|#333333|black|#000|#000000|rgb\(\s*51\s*,\s*51\s*,\s*51\s*\)|#1e293b|#0f172a)/i.test(cssCode);
     return {
       passed,
-      goals: [{ label: "color: #333;", passed }],
+      goals: [{ label: "color: #0f172a; (atau #333)", passed }],
     };
   }
 
-  if (challengeId === "css-basics-3-font-size") {
+  if (challengeId === "css-basics-3-font-size" || challengeId === "css-basics-3" || challengeId === "basics-3") {
     const passed = /font-size\s*:\s*(24px|1\.5rem)/i.test(cssCode);
     return {
       passed,
@@ -329,23 +329,15 @@ export function evaluateLiveGoals(
     };
   }
 
-  if (challengeId === "css-basics-4-font-weight") {
+  if (challengeId === "css-basics-4-font-weight" || challengeId === "css-basics-4" || challengeId === "basics-4") {
     const passed = /font-weight\s*:\s*(bold|700|800|900)/i.test(cssCode);
     return {
       passed,
-      goals: [{ label: "font-weight: bold;", passed }],
+      goals: [{ label: "font-weight: bold; (atau 700)", passed }],
     };
   }
 
-  if (challengeId === "css-basics-5-font-style") {
-    const passed = /font-style\s*:\s*italic/i.test(cssCode);
-    return {
-      passed,
-      goals: [{ label: "font-style: italic;", passed }],
-    };
-  }
-
-  if (challengeId === "css-basics-6-text-align") {
+  if (challengeId === "css-basics-5-text-align" || challengeId === "css-basics-5" || challengeId === "basics-5") {
     const passed = /text-align\s*:\s*center/i.test(cssCode);
     return {
       passed,
@@ -353,58 +345,150 @@ export function evaluateLiveGoals(
     };
   }
 
-  if (challengeId === "css-basics-7-padding") {
-    const passed = /padding\s*:\s*(20px|1\.25rem)/i.test(cssCode);
+  if (challengeId === "css-basics-6-line-height" || challengeId === "css-basics-6" || challengeId === "basics-6") {
+    const passed = /line-height\s*:\s*(1\.6|1\.5|1\.7|24px|28px|160%)/i.test(cssCode);
+    return {
+      passed,
+      goals: [{ label: "line-height: 1.6; (atau 1.5)", passed }],
+    };
+  }
+
+  if (challengeId === "css-basics-7-padding" || challengeId === "css-basics-7" || challengeId === "basics-7") {
+    const passed = /padding\s*:\s*(20px|1\.25rem|24px|16px)/i.test(cssCode);
     return {
       passed,
       goals: [{ label: "padding: 20px;", passed }],
     };
   }
 
-  if (challengeId === "css-basics-8-margin") {
-    const passed = /margin\s*:\s*(15px|16px|1rem|20px)/i.test(cssCode);
+  if (challengeId === "css-basics-8-margin" || challengeId === "css-basics-8" || challengeId === "basics-8") {
+    const passed = /margin\s*:\s*(15px|16px|1rem|20px|24px)/i.test(cssCode);
     return {
       passed,
-      goals: [{ label: "margin: 15px;", passed }],
+      goals: [{ label: "margin: 20px; (atau 16px)", passed }],
     };
   }
 
-  if (challengeId === "css-basics-9-border") {
-    const passed = /border\s*:\s*2px\s+solid/i.test(cssCode);
+  if (challengeId === "css-basics-9-border" || challengeId === "css-basics-9" || challengeId === "basics-9") {
+    const passed = /border\s*:\s*(2px|3px|1px|4px)\s+solid/i.test(cssCode);
     return {
       passed,
-      goals: [{ label: "border: 2px solid black;", passed }],
+      goals: [{ label: "border: 2px solid #0f172a;", passed }],
     };
   }
 
-  if (challengeId === "css-basics-10-border-radius") {
-    const passed = /border-radius\s*:\s*(12px|0\.75rem)/i.test(cssCode);
+  if (challengeId === "css-basics-10-border-radius" || challengeId === "css-basics-10" || challengeId === "basics-10") {
+    const passed = /border-radius\s*:\s*(16px|12px|1rem|20px|0\.75rem)/i.test(cssCode);
     return {
       passed,
-      goals: [{ label: "border-radius: 12px;", passed }],
+      goals: [{ label: "border-radius: 16px; (atau 12px)", passed }],
     };
   }
 
-  if (challengeId === "css-basics-11-box-shadow") {
-    const passed = /box-shadow\s*:\s*0px?\s+4px?\s+10px?/i.test(cssCode) || /box-shadow\s*:\s*[^;]+/i.test(cssCode);
+  if (challengeId === "css-basics-11-dimensions" || challengeId === "css-basics-11" || challengeId === "basics-11") {
+    const hasWidth = /width\s*:\s*(320px|280px|300px|100%|20rem)/i.test(cssCode);
+    const hasHeight = /(min-height|height)\s*:\s*(160px|200px|150px|180px|auto)/i.test(cssCode);
+    const passed = hasWidth || hasHeight;
     return {
       passed,
-      goals: [{ label: "box-shadow: 0px 4px 10px rgba(0,0,0,0.1);", passed }],
-    };
-  }
-
-  if (challengeId === "css-basics-12-boss-fight") {
-    const g1 = /background(-color)?\s*:\s*(#ef4444|red|#dc2626|#f87171)/i.test(cssCode);
-    const g2 = /color\s*:\s*(white|#fff|#ffffff)/i.test(cssCode);
-    const g3 = /padding\s*:\s*8px\s+16px/i.test(cssCode) || /padding\s*:\s*(8px|16px|12px|10px)/i.test(cssCode);
-    const g4 = /border-radius\s*:\s*(999px|9999px|50px|50%|24px)/i.test(cssCode);
-    return {
-      passed: g1 && g2 && g3 && g4,
       goals: [
-        { label: "background-color: #ef4444;", passed: g1 },
-        { label: "color: white;", passed: g2 },
-        { label: "padding: 8px 16px;", passed: g3 },
-        { label: "border-radius: 999px;", passed: g4 },
+        { label: "width: 320px;", passed: hasWidth },
+        { label: "min-height: 160px; (atau height)", passed: hasHeight },
+      ],
+    };
+  }
+
+  if (challengeId === "css-basics-12-box-sizing" || challengeId === "css-basics-12" || challengeId === "basics-12") {
+    const passed = /box-sizing\s*:\s*border-box/i.test(cssCode);
+    return {
+      passed,
+      goals: [{ label: "box-sizing: border-box;", passed }],
+    };
+  }
+
+  if (challengeId === "css-basics-13-capstone-card" || challengeId === "css-basics-13" || challengeId === "basics-13") {
+    const gBg = /background(-color)?\s*:\s*(#fef08a|#fde047|#facc15|yellow|white|#fff)/i.test(cssCode);
+    const gPad = /padding\s*:\s*(16px|20px|24px|1rem)/i.test(cssCode);
+    const gBorder = /border\s*:\s*(2px|3px|4px)\s+solid/i.test(cssCode);
+    const gRadius = /border-radius\s*:\s*(16px|12px|20px|1rem)/i.test(cssCode);
+    const passed = gBg && gPad && gBorder && gRadius;
+    return {
+      passed,
+      goals: [
+        { label: "background-color: #fef08a;", passed: gBg },
+        { label: "padding: 16px;", passed: gPad },
+        { label: "border: 3px solid #0f172a;", passed: gBorder },
+        { label: "border-radius: 16px;", passed: gRadius },
+      ],
+    };
+  }
+
+  if (challengeId === "css-basics-14-box-shadow" || challengeId === "css-basics-14" || challengeId === "basics-14") {
+    const passed = /box-shadow\s*:\s*[^;]+/i.test(cssCode);
+    return {
+      passed,
+      goals: [{ label: "box-shadow: 4px 4px 0px #0f172a;", passed }],
+    };
+  }
+
+  if (challengeId === "css-basics-15-opacity" || challengeId === "css-basics-15" || challengeId === "basics-15") {
+    const passed = /opacity\s*:\s*(0\.75|0\.8|0\.7|0\.85|0\.9)/i.test(cssCode);
+    return {
+      passed,
+      goals: [{ label: "opacity: 0.75; (atau 0.8)", passed }],
+    };
+  }
+
+  if (challengeId === "css-basics-16-cursor-overflow" || challengeId === "css-basics-16" || challengeId === "basics-16") {
+    const gCursor = /cursor\s*:\s*pointer/i.test(cssCode);
+    const gOverflow = /overflow\s*:\s*hidden/i.test(cssCode);
+    const passed = gCursor && gOverflow;
+    return {
+      passed,
+      goals: [
+        { label: "cursor: pointer;", passed: gCursor },
+        { label: "overflow: hidden;", passed: gOverflow },
+      ],
+    };
+  }
+
+  if (challengeId === "css-basics-17-gradient" || challengeId === "css-basics-17" || challengeId === "basics-17") {
+    const passed = /background(-image)?\s*:\s*linear-gradient\([^;]+\)/i.test(cssCode);
+    return {
+      passed,
+      goals: [{ label: "background: linear-gradient(135deg, ...);", passed }],
+    };
+  }
+
+  if (challengeId === "css-basics-18-transform" || challengeId === "css-basics-18" || challengeId === "basics-18") {
+    const passed = /transform\s*:\s*(translatey\(-?\d+px\)|scale\([^)]+\)|translate\([^)]+\))/i.test(cssCode);
+    return {
+      passed,
+      goals: [{ label: "transform: translateY(-4px); (atau scale)", passed }],
+    };
+  }
+
+  if (challengeId === "css-basics-19-transitions" || challengeId === "css-basics-19" || challengeId === "basics-19") {
+    const passed = /transition\s*:\s*[^;]+/i.test(cssCode);
+    return {
+      passed,
+      goals: [{ label: "transition: all 0.2s ease-in-out;", passed }],
+    };
+  }
+
+  if (challengeId === "css-basics-20-boss-card" || challengeId === "css-basics-20" || challengeId === "basics-20" || challengeId === "css-basics-12-boss-fight") {
+    const gBg = /background(-color)?\s*:\s*(#fef08a|#ef4444|#fde047|#bae6fd|#fed7aa|yellow|red|white)/i.test(cssCode);
+    const gBorder = /border\s*:\s*(2px|3px|4px)\s+solid/i.test(cssCode);
+    const gRadius = /border-radius\s*:\s*(16px|20px|24px|999px|9999px|1rem)/i.test(cssCode);
+    const gShadow = /box-shadow\s*:\s*[^;]+/i.test(cssCode);
+    const passed = gBg && gBorder && gRadius && gShadow;
+    return {
+      passed,
+      goals: [
+        { label: "background-color: #fef08a;", passed: gBg },
+        { label: "border: 3px solid #0f172a;", passed: gBorder },
+        { label: "border-radius: 20px;", passed: gRadius },
+        { label: "box-shadow: 6px 6px 0px #0f172a;", passed: gShadow },
       ],
     };
   }

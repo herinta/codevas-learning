@@ -315,9 +315,9 @@ function evaluateCss(challengeId: string, cssCode: string): {
     };
   }
 
-  // ================= CSS BASICS (12 Levels) =================
-  if (challengeId === "css-basics-1-background-color") {
-    const passed = /background-color\s*:\s*(lightblue|#add8e6|rgb\(\s*173\s*,\s*216\s*,\s*230\s*\)|sky-?blue|#38bdf8|#60a5fa)/i.test(cssCode);
+  // ================= CSS BASICS (Full 20 Levels) =================
+  if (challengeId === "css-basics-1-background-color" || challengeId === "css-basics-1" || challengeId === "basics-1") {
+    const passed = /background-color\s*:\s*(lightblue|#add8e6|rgb\(\s*173\s*,\s*216\s*,\s*230\s*\)|sky-?blue|#38bdf8|#60a5fa|#f1f5f9|#e0f2fe|#bae6fd)/i.test(cssCode) || /background\s*:\s*(lightblue|#add8e6|#38bdf8|#e0f2fe)/i.test(cssCode);
     if (!passed) feedback.push("Gunakan background-color: lightblue; pada kotak.");
     return {
       passed,
@@ -326,17 +326,17 @@ function evaluateCss(challengeId: string, cssCode: string): {
     };
   }
 
-  if (challengeId === "css-basics-2-text-color") {
+  if (challengeId === "css-basics-2-text-color" || challengeId === "css-basics-2" || challengeId === "basics-2") {
     const passed = /color\s*:\s*(#333|#333333|black|#000|#000000|rgb\(\s*51\s*,\s*51\s*,\s*51\s*\)|#1e293b|#0f172a)/i.test(cssCode);
-    if (!passed) feedback.push("Gunakan color: #333; untuk mewarnai teks.");
+    if (!passed) feedback.push("Gunakan color: #0f172a; atau color: #333; untuk mewarnai teks.");
     return {
       passed,
       score: passed ? 100 : 0,
-      feedback: passed ? ["Teks kini kontras dan mudah dibaca!"] : feedback,
+      feedback: passed ? ["Teks kini kontras, tajam, dan mudah dibaca!"] : feedback,
     };
   }
 
-  if (challengeId === "css-basics-3-font-size") {
+  if (challengeId === "css-basics-3-font-size" || challengeId === "css-basics-3" || challengeId === "basics-3") {
     const passed = /font-size\s*:\s*(24px|1\.5rem)/i.test(cssCode);
     if (!passed) feedback.push("Gunakan font-size: 24px; untuk membesarkan teks.");
     return {
@@ -346,38 +346,38 @@ function evaluateCss(challengeId: string, cssCode: string): {
     };
   }
 
-  if (challengeId === "css-basics-4-font-weight") {
+  if (challengeId === "css-basics-4-font-weight" || challengeId === "css-basics-4" || challengeId === "basics-4") {
     const passed = /font-weight\s*:\s*(bold|700|800|900)/i.test(cssCode);
     if (!passed) feedback.push("Gunakan font-weight: bold; agar teks menjadi tebal.");
     return {
       passed,
       score: passed ? 100 : 0,
-      feedback: passed ? ["Teks kini tebal dan berwibawa!"] : feedback,
+      feedback: passed ? ["Teks kini tebal dan memiliki bobot fokal!"] : feedback,
     };
   }
 
-  if (challengeId === "css-basics-5-font-style") {
-    const passed = /font-style\s*:\s*italic/i.test(cssCode);
-    if (!passed) feedback.push("Gunakan font-style: italic; untuk memiringkan teks.");
-    return {
-      passed,
-      score: passed ? 100 : 0,
-      feedback: passed ? ["Penekanan teks miring berhasil diterapkan!"] : feedback,
-    };
-  }
-
-  if (challengeId === "css-basics-6-text-align") {
+  if (challengeId === "css-basics-5-text-align" || challengeId === "css-basics-5" || challengeId === "basics-5") {
     const passed = /text-align\s*:\s*center/i.test(cssCode);
     if (!passed) feedback.push("Gunakan text-align: center; untuk memusatkan teks secara horizontal.");
     return {
       passed,
       score: passed ? 100 : 0,
-      feedback: passed ? ["Paragraf kini rata tengah dengan rapi!"] : feedback,
+      feedback: passed ? ["Paragraf kini rata tengah dengan seimbang!"] : feedback,
     };
   }
 
-  if (challengeId === "css-basics-7-padding") {
-    const passed = /padding\s*:\s*(20px|1\.25rem)/i.test(cssCode);
+  if (challengeId === "css-basics-6-line-height" || challengeId === "css-basics-6" || challengeId === "basics-6") {
+    const passed = /line-height\s*:\s*(1\.6|1\.5|1\.7|24px|28px|160%)/i.test(cssCode);
+    if (!passed) feedback.push("Gunakan line-height: 1.6; untuk memberi jarak bernapas antar baris.");
+    return {
+      passed,
+      score: passed ? 100 : 0,
+      feedback: passed ? ["Irama vertikal teks kini lapang dan nyaman dibaca!"] : feedback,
+    };
+  }
+
+  if (challengeId === "css-basics-7-padding" || challengeId === "css-basics-7" || challengeId === "basics-7") {
+    const passed = /padding\s*:\s*(20px|1\.25rem|24px|16px)/i.test(cssCode);
     if (!passed) feedback.push("Gunakan padding: 20px; untuk memberi ruang napas di dalam kotak.");
     return {
       passed,
@@ -386,29 +386,29 @@ function evaluateCss(challengeId: string, cssCode: string): {
     };
   }
 
-  if (challengeId === "css-basics-8-margin") {
-    const passed = /margin\s*:\s*(15px|16px|1rem|20px)/i.test(cssCode);
-    if (!passed) feedback.push("Gunakan margin: 15px; untuk memberi jarak di luar kotak.");
+  if (challengeId === "css-basics-8-margin" || challengeId === "css-basics-8" || challengeId === "basics-8") {
+    const passed = /margin\s*:\s*(15px|16px|1rem|20px|24px)/i.test(cssCode);
+    if (!passed) feedback.push("Gunakan margin: 20px; untuk memberi jarak di luar kotak.");
     return {
       passed,
       score: passed ? 100 : 0,
-      feedback: passed ? ["Jarak luar (margin) berhasil memisahkan kotak!"] : feedback,
+      feedback: passed ? ["Jarak luar (margin) berhasil memisahkan kotak dari tetangganya!"] : feedback,
     };
   }
 
-  if (challengeId === "css-basics-9-border") {
-    const passed = /border\s*:\s*2px\s+solid/i.test(cssCode);
-    if (!passed) feedback.push("Gunakan border: 2px solid black; untuk memberi garis pembatas.");
+  if (challengeId === "css-basics-9-border" || challengeId === "css-basics-9" || challengeId === "basics-9") {
+    const passed = /border\s*:\s*(2px|3px|1px|4px)\s+solid/i.test(cssCode);
+    if (!passed) feedback.push("Gunakan border: 2px solid #0f172a; untuk memberi garis pembatas.");
     return {
       passed,
       score: passed ? 100 : 0,
-      feedback: passed ? ["Garis tepi (border) tegas berhasil dipasang!"] : feedback,
+      feedback: passed ? ["Garis tepi (border) neo-brutalisme tegas berhasil dipasang!"] : feedback,
     };
   }
 
-  if (challengeId === "css-basics-10-border-radius") {
-    const passed = /border-radius\s*:\s*(12px|0\.75rem)/i.test(cssCode);
-    if (!passed) feedback.push("Gunakan border-radius: 12px; untuk melengkungkan sudut.");
+  if (challengeId === "css-basics-10-border-radius" || challengeId === "css-basics-10" || challengeId === "basics-10") {
+    const passed = /border-radius\s*:\s*(16px|12px|1rem|20px|0\.75rem)/i.test(cssCode);
+    if (!passed) feedback.push("Gunakan border-radius: 16px; untuk melengkungkan sudut.");
     return {
       passed,
       score: passed ? 100 : 0,
@@ -416,30 +416,125 @@ function evaluateCss(challengeId: string, cssCode: string): {
     };
   }
 
-  if (challengeId === "css-basics-11-box-shadow") {
-    const passed = /box-shadow\s*:\s*0px?\s+4px?\s+10px?/i.test(cssCode) || /box-shadow\s*:\s*[^;]+/i.test(cssCode);
-    if (!passed) feedback.push("Gunakan box-shadow: 0px 4px 10px rgba(0,0,0,0.1); untuk efek melayang.");
+  if (challengeId === "css-basics-11-dimensions" || challengeId === "css-basics-11" || challengeId === "basics-11") {
+    const hasWidth = /width\s*:\s*(320px|280px|300px|100%|20rem)/i.test(cssCode);
+    const hasHeight = /(min-height|height)\s*:\s*(160px|200px|150px|180px|auto)/i.test(cssCode);
+    if (!hasWidth) feedback.push("Atur lebar kotak dengan width: 320px;.");
+    if (!hasHeight) feedback.push("Beri ruang tinggi minimal dengan min-height: 160px;.");
+    const passed = hasWidth || hasHeight;
     return {
       passed,
       score: passed ? 100 : 0,
-      feedback: passed ? ["Efek bayangan 3D (box-shadow) berhasil membuat kotak melayang!"] : feedback,
+      feedback: passed ? ["Dimensi kotak berhasil dikendalikan secara proporsional!"] : feedback,
     };
   }
 
-  if (challengeId === "css-basics-12-boss-fight") {
-    const g1 = /background(-color)?\s*:\s*(#ef4444|red|#dc2626|#f87171)/i.test(cssCode);
-    const g2 = /color\s*:\s*(white|#fff|#ffffff)/i.test(cssCode);
-    const g3 = /padding\s*:\s*8px\s+16px/i.test(cssCode) || /padding\s*:\s*(8px|16px|12px|10px)/i.test(cssCode);
-    const g4 = /border-radius\s*:\s*(999px|9999px|50px|50%|24px)/i.test(cssCode);
-    if (!g1) feedback.push("Warna latar badge harus merah (#ef4444).");
-    if (!g2) feedback.push("Warna teks badge harus putih.");
-    if (!g3) feedback.push("Beri padding 8px 16px.");
-    if (!g4) feedback.push("Beri border-radius: 999px; agar membulat sempurna.");
-    const passed = g1 && g2 && g3 && g4;
+  if (challengeId === "css-basics-12-box-sizing" || challengeId === "css-basics-12" || challengeId === "basics-12") {
+    const passed = /box-sizing\s*:\s*border-box/i.test(cssCode);
+    if (!passed) feedback.push("Kunci kalkulasi kotak dengan box-sizing: border-box;.");
+    return {
+      passed,
+      score: passed ? 100 : 0,
+      feedback: passed ? ["Kalkulasi dimensi kotak aman dari risiko overflow!"] : feedback,
+    };
+  }
+
+  if (challengeId === "css-basics-13-capstone-card" || challengeId === "css-basics-13" || challengeId === "basics-13") {
+    const gBg = /background(-color)?\s*:\s*(#fef08a|#fde047|#facc15|yellow|white|#fff)/i.test(cssCode);
+    const gPad = /padding\s*:\s*(16px|20px|24px|1rem)/i.test(cssCode);
+    const gBorder = /border\s*:\s*(2px|3px|4px)\s+solid/i.test(cssCode);
+    const gRadius = /border-radius\s*:\s*(16px|12px|20px|1rem)/i.test(cssCode);
+    if (!gBg) feedback.push("Gunakan background-color: #fef08a;.");
+    if (!gPad) feedback.push("Beri padding: 16px;.");
+    if (!gBorder) feedback.push("Beri border: 3px solid #0f172a;.");
+    if (!gRadius) feedback.push("Beri border-radius: 16px;.");
+    const passed = gBg && gPad && gBorder && gRadius;
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["Selamat! Kamu berhasil menyelesaikan proyek akhir CSS Basics dan merakit Notification Badge dengan presisi standar industri!"] : feedback,
+      feedback: passed ? ["🎉 CAPSTONE TENGAH SELESAI! Kamu sukses mengintegrasikan Box Model menjadi kartu Neo-Brutalist yang memukau!"] : feedback,
+    };
+  }
+
+  if (challengeId === "css-basics-14-box-shadow" || challengeId === "css-basics-14" || challengeId === "basics-14") {
+    const passed = /box-shadow\s*:\s*[^;]+/i.test(cssCode);
+    if (!passed) feedback.push("Gunakan box-shadow: 4px 4px 0px #0f172a; untuk bayangan tegas.");
+    return {
+      passed,
+      score: passed ? 100 : 0,
+      feedback: passed ? ["Efek bayangan tegas 3D (box-shadow) berhasil mengangkat kartu ke permukaan!"] : feedback,
+    };
+  }
+
+  if (challengeId === "css-basics-15-opacity" || challengeId === "css-basics-15" || challengeId === "basics-15") {
+    const passed = /opacity\s*:\s*(0\.75|0\.8|0\.7|0\.85|0\.9)/i.test(cssCode);
+    if (!passed) feedback.push("Gunakan opacity: 0.75; untuk meredupkan transparansi elemen.");
+    return {
+      passed,
+      score: passed ? 100 : 0,
+      feedback: passed ? ["Tingkat transparansi visual berhasil disesuaikan!"] : feedback,
+    };
+  }
+
+  if (challengeId === "css-basics-16-cursor-overflow" || challengeId === "css-basics-16" || challengeId === "basics-16") {
+    const gCursor = /cursor\s*:\s*pointer/i.test(cssCode);
+    const gOverflow = /overflow\s*:\s*hidden/i.test(cssCode);
+    if (!gCursor) feedback.push("Beri cursor: pointer;.");
+    if (!gOverflow) feedback.push("Beri overflow: hidden; agar konten tidak meluap.");
+    const passed = gCursor && gOverflow;
+    return {
+      passed,
+      score: passed ? 100 : 50,
+      feedback: passed ? ["Isyarat klik interaktif dan pencegahan luapan konten berhasil diaktifkan!"] : feedback,
+    };
+  }
+
+  if (challengeId === "css-basics-17-gradient" || challengeId === "css-basics-17" || challengeId === "basics-17") {
+    const passed = /background(-image)?\s*:\s*linear-gradient\([^;]+\)/i.test(cssCode);
+    if (!passed) feedback.push("Gunakan background: linear-gradient(135deg, #fef08a, #fed7aa);.");
+    return {
+      passed,
+      score: passed ? 100 : 0,
+      feedback: passed ? ["Gradasi latar belakang dua nada berhasil menyuntikkan energi visual!"] : feedback,
+    };
+  }
+
+  if (challengeId === "css-basics-18-transform" || challengeId === "css-basics-18" || challengeId === "basics-18") {
+    const passed = /transform\s*:\s*(translatey\(-?\d+px\)|scale\([^)]+\)|translate\([^)]+\))/i.test(cssCode);
+    if (!passed) feedback.push("Gunakan transform: translateY(-4px); untuk mengangkat posisi kartu.");
+    return {
+      passed,
+      score: passed ? 100 : 0,
+      feedback: passed ? ["Transformasi spasial kartu berhasil diterapkan!"] : feedback,
+    };
+  }
+
+  if (challengeId === "css-basics-19-transitions" || challengeId === "css-basics-19" || challengeId === "basics-19") {
+    const passed = /transition\s*:\s*[^;]+/i.test(cssCode);
+    if (!passed) feedback.push("Gunakan transition: all 0.2s ease-in-out; untuk kehalusan animasi.");
+    return {
+      passed,
+      score: passed ? 100 : 0,
+      feedback: passed ? ["Transisi mikro halus berhasil diaktifkan untuk pengalaman pengguna yang mulus!"] : feedback,
+    };
+  }
+
+  if (challengeId === "css-basics-20-boss-card" || challengeId === "css-basics-20" || challengeId === "basics-20" || challengeId === "css-basics-12-boss-fight") {
+    const gBg = /background(-color)?\s*:\s*(#fef08a|#ef4444|#fde047|#bae6fd|#fed7aa|yellow|red|white)/i.test(cssCode);
+    const gBorder = /border\s*:\s*(2px|3px|4px)\s+solid/i.test(cssCode);
+    const gRadius = /border-radius\s*:\s*(16px|20px|24px|999px|9999px|1rem)/i.test(cssCode);
+    const gShadow = /box-shadow\s*:\s*[^;]+/i.test(cssCode);
+    if (!gBg) feedback.push("Terapkan warna latar.");
+    if (!gBorder) feedback.push("Terapkan garis tepi tebal (border: 3px solid #0f172a).");
+    if (!gRadius) feedback.push("Terapkan border-radius sudut membulat.");
+    if (!gShadow) feedback.push("Terapkan efek bayangan elevasi (box-shadow).");
+    const passed = gBg && gBorder && gRadius && gShadow;
+    return {
+      passed,
+      score: passed ? 100 : 60,
+      feedback: passed
+        ? ["🏆 PROYEK AKHIR SELESAI! Selamat, kamu resmi menguasai seluruh fondasi CSS Basics, Box Model, dan Styling Modern berstandar profesional! 🎉"]
+        : feedback,
     };
   }
 
