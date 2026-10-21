@@ -86,10 +86,26 @@ function prettyFormatHtml(raw: string): string {
   if (!raw) return "";
   let clean = raw.trim();
 
-  // Split tags that are glued together onto new lines
-  clean = clean.replace(/>\s*</g, ">\n<");
+  // 1. Unescape literal escaped backslash-n (\n or \r\n)
+  clean = clean
+    .replace(/\\r\\n/g, "\n")
+    .replace(/\\n/g, "\n")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n");
 
-  const rawLines = clean.split("\n");
+  // 2. Put newline between closing tag and next opening tag (e.g. </h1><p> or </p><p>)
+  clean = clean.replace(/(<\/[a-zA-Z0-9_-]+>)\s*(<)/gi, "$1\n$2");
+
+  // 3. Put newline after block opening tags (e.g. <div><h1>)
+  clean = clean.replace(/(<(?:div|section|article|header|footer|nav|ul|ol|main)[^>]*>)\s*(<)/gi, "$1\n$2");
+
+  // 4. Put newline before closing block tags (e.g. </p></div>)
+  clean = clean.replace(/(<(?:\/[a-zA-Z0-9_-]+|[^>]+)>)\s*(<\/(?:div|section|article|header|footer|nav|ul|ol|main)>)/gi, "$1\n$2");
+
+  // 5. Any remaining glued tags (><)
+  clean = clean.replace(/>\s*(<)/g, ">\n$1");
+
+  const rawLines = clean.split(/\r?\n/);
   let indent = 0;
   const formatted: string[] = [];
 
@@ -272,7 +288,7 @@ const MiniCodeEditor: React.FC<{
     }
   };
 
-  const lines = example.code.split("\n");
+  const lines = example.code.replace(/\\n/g, "\n").split(/\r?\n/);
 
   return (
     <div className="rounded-2xl border-2 border-slate-900 bg-slate-950 overflow-hidden shadow-[0_3px_0_#0f172a] text-slate-100">

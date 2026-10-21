@@ -27,10 +27,26 @@ function prettyFormatHtml(raw: string): string {
   if (!raw) return "";
   let clean = raw.trim();
 
-  // Split tags that are glued together onto new lines
-  clean = clean.replace(/>\s*</g, ">\n<");
+  // 1. Unescape literal escaped backslash-n (\n or \r\n)
+  clean = clean
+    .replace(/\\r\\n/g, "\n")
+    .replace(/\\n/g, "\n")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n");
 
-  const rawLines = clean.split("\n");
+  // 2. Put newline between closing tag and next opening tag (e.g. </h1><p> or </p><p>)
+  clean = clean.replace(/(<\/[a-zA-Z0-9_-]+>)\s*(<)/gi, "$1\n$2");
+
+  // 3. Put newline after block opening tags (e.g. <div><h1>)
+  clean = clean.replace(/(<(?:div|section|article|header|footer|nav|ul|ol|main)[^>]*>)\s*(<)/gi, "$1\n$2");
+
+  // 4. Put newline before closing block tags (e.g. </p></div>)
+  clean = clean.replace(/(<(?:\/[a-zA-Z0-9_-]+|[^>]+)>)\s*(<\/(?:div|section|article|header|footer|nav|ul|ol|main)>)/gi, "$1\n$2");
+
+  // 5. Any remaining glued tags (><)
+  clean = clean.replace(/>\s*(<)/g, ">\n$1");
+
+  const rawLines = clean.split(/\r?\n/);
   let indent = 0;
   const formatted: string[] = [];
 
@@ -241,7 +257,10 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
     challenge?.concept_demo || challenge?.target_visual?.concept_demo || undefined;
 
   const exampleInfo = useMemo(() => getExampleSnippet(challenge), [challenge]);
-  const codeLines = useMemo(() => exampleInfo.code.split("\n"), [exampleInfo.code]);
+  const codeLines = useMemo(() => {
+    const code = exampleInfo.code.replace(/\\n/g, "\n");
+    return code.split(/\r?\n/);
+  }, [exampleInfo.code]);
 
   const parsedPreview = useMemo(() => {
     if (exampleInfo.isHtml) return null;
