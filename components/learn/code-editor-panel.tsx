@@ -26,8 +26,9 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
 
   return (
     <>
-      {/* Scoped Dynamic Styles for Live Arena with Spring Glide Animations */}
-      <style>{`
+      {/* Scoped Dynamic Styles for Live Arena with Spring Glide Animations (CSS modes only) */}
+      {!isHtmlMode && (
+        <style>{`
         #live-arena {
           box-sizing: border-box;
           transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -138,6 +139,7 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
         }
         ${scopedCss}
       `}</style>
+      )}
 
       {/* Code Editor Window Header */}
       {!isCompact && (
@@ -190,10 +192,14 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
         </div>
 
         <textarea
+          id={isCompact ? "code-editor-mobile" : "code-editor-desktop"}
           value={cssCode}
           onChange={(e) => setCssCode(e.target.value)}
           rows={isCompact ? undefined : 8}
           spellCheck={false}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
           className={`w-full bg-transparent text-[#cdd6f4] font-mono focus:outline-none resize-none leading-relaxed ${
             isCompact
               ? "flex-1 p-2 text-xs overflow-y-auto"

@@ -212,13 +212,7 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
   // Actions
   const handleSetCssCode = useCallback(
     (codeOrUpdater: string | ((prev: string) => string)) => {
-      setCssCode((prev) => {
-        const next =
-          typeof codeOrUpdater === "function" ? codeOrUpdater(prev) : codeOrUpdater;
-        return next
-          .replace(/\\r\\n/g, "\n")
-          .replace(/\\n/g, "\n");
-      });
+      setCssCode(codeOrUpdater);
     },
     []
   );
