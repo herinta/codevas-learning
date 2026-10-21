@@ -73,7 +73,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
       <div
         id="live-arena"
         className={`arena w-full bg-white border-3 sm:border-4 rounded-2xl sm:rounded-3xl p-3 sm:p-5 shadow-[0_4px_0_#0f172a] sm:shadow-[0_8px_0_#0f172a] overflow-auto transition-all relative ${borderClass} ${
-          isCompact ? "h-28 sm:h-36 text-xs" : "min-h-[14rem] sm:min-h-[20rem]"
+          isCompact ? "h-28 sm:h-36 text-xs" : "min-h-[12rem] sm:min-h-[15rem]"
         }`}
       >
         <div
@@ -96,7 +96,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
       <div
         id="live-arena"
         className={`arena w-full bg-white border-3 sm:border-4 rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-[0_4px_0_#0f172a] sm:shadow-[0_8px_0_#0f172a] overflow-auto flex items-center justify-center transition-all ${borderClass} ${
-          isCompact ? "h-28 sm:h-36" : "h-56 sm:h-72 lg:h-96"
+          isCompact ? "h-28 sm:h-36" : "h-48 sm:h-60 lg:h-64"
         }`}
       >
         {isCapstone ? (
@@ -184,7 +184,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
         className={`grid-arena w-full bg-slate-50 border-3 sm:border-4 rounded-2xl sm:rounded-3xl shadow-[0_4px_0_#0f172a] sm:shadow-[0_8px_0_#0f172a] overflow-auto transition-all ${borderClass} ${
           isCompact
             ? "min-h-[7.5rem] p-2.5"
-            : "min-h-[16rem] sm:min-h-[22rem] lg:min-h-[26rem] p-6"
+            : "min-h-[12rem] sm:min-h-[16rem] lg:min-h-[18rem] p-4 sm:p-5"
         }`}
         style={{ display: "grid", ...arenaStyle }}
       >
@@ -385,7 +385,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
     <div
       id="live-arena"
       className={`arena w-full bg-white border-3 sm:border-4 rounded-2xl sm:rounded-3xl shadow-[0_4px_0_#0f172a] sm:shadow-[0_8px_0_#0f172a] overflow-auto transition-all relative ${borderClass} ${
-        isCompact ? "h-28 sm:h-36 p-2" : "h-56 sm:h-72 lg:h-96 p-5"
+        isCompact ? "h-28 sm:h-36 p-2" : "h-48 sm:h-60 lg:h-64 p-4 sm:p-5"
       }`}
       style={arenaStyle}
     >

@@ -22,6 +22,7 @@ import { LiveArena } from "./live-arena";
 import { CodeEditorPanel } from "./code-editor-panel";
 import { CompletionActionBar } from "./completion-action-bar";
 import { TheoryModal } from "./theory-modal";
+import { TargetGoalPanel } from "./target-goal-panel";
 import { SessionExpiredModal } from "./session-expired-modal";
 
 interface LearnWorkspaceProps {
@@ -398,15 +399,38 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
         />
 
         {/* PANEL 2: INTERACTIVE LIVE CANVAS (4 Cols) */}
-        <div className="lg:col-span-4 border-r-3 border-slate-900 p-6 bg-slate-50 flex flex-col justify-between overflow-y-auto">
-          <LiveArena
+        <div className="lg:col-span-4 border-r-3 border-slate-900 p-4 sm:p-5 bg-slate-50 flex flex-col gap-4 overflow-y-auto">
+          {/* TOP: TARGET GOAL / HASIL AKHIR YANG DIHARAPKAN */}
+          <TargetGoalPanel
             challengeId={challengeId}
             challenge={challenge}
-            parsedStyles={parsedStyles}
-            sanitizedUserHtml={sanitizedUserHtml}
-            isPassed={liveEval.passed}
-            sizeMode="desktop"
           />
+
+          {/* BOTTOM: LIVE ARENA / HASIL KODEMU SAAT INI */}
+          <div className="flex flex-col gap-2 flex-1 min-h-0">
+            <div className="flex items-center justify-between px-1">
+              <span className="font-display font-black text-xs uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+                <span className={`w-2.5 h-2.5 rounded-full ${liveEval.passed ? "bg-emerald-500 animate-pulse" : "bg-[#EF4444]"}`} />
+                <span>Hasil Rendermu (Live)</span>
+              </span>
+              <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md border ${
+                liveEval.passed
+                  ? "bg-emerald-100 text-emerald-900 border-emerald-300"
+                  : "bg-slate-200 text-slate-700 border-slate-300"
+              }`}>
+                {liveEval.passed ? "Sesuai Target ✓" : "Sedang Dikerjakan"}
+              </span>
+            </div>
+
+            <LiveArena
+              challengeId={challengeId}
+              challenge={challenge}
+              parsedStyles={parsedStyles}
+              sanitizedUserHtml={sanitizedUserHtml}
+              isPassed={liveEval.passed}
+              sizeMode="desktop"
+            />
+          </div>
         </div>
 
         {/* PANEL 3: CODE EDITOR & REAL-TIME ACTION (4 Cols) */}

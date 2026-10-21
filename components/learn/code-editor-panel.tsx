@@ -2,13 +2,13 @@
 
 import React from "react";
 import { RotateCcw } from "lucide-react";
-import { isHelperActive, getScopedCss } from "./style-parser";
+import { getScopedCss } from "./style-parser";
 
 interface CodeEditorPanelProps {
   cssCode: string;
   setCssCode: (code: string | ((prev: string) => string)) => void;
-  shuffledHelpers: string[];
-  onToggleHelper: (snippet: string) => void;
+  shuffledHelpers?: string[];
+  onToggleHelper?: (snippet: string) => void;
   onReset: () => void;
   isHtmlMode: boolean;
   sizeMode?: "compact" | "desktop";
@@ -17,8 +17,6 @@ interface CodeEditorPanelProps {
 export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
   cssCode,
   setCssCode,
-  shuffledHelpers,
-  onToggleHelper,
   onReset,
   isHtmlMode,
   sizeMode = "desktop",
@@ -140,39 +138,6 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
         }
         ${scopedCss}
       `}</style>
-
-      {/* Syntax Helper Chips Bar */}
-      {shuffledHelpers && shuffledHelpers.length > 0 && (
-        <div
-          className={`flex flex-wrap gap-1.5 sm:gap-2 ${
-            isCompact
-              ? "px-2 py-1.5 bg-white border-b-2 border-slate-900 shrink-0 max-h-20 overflow-y-auto"
-              : "py-1"
-          }`}
-        >
-          {shuffledHelpers.map((snippet) => {
-            const active = isHelperActive(snippet, cssCode);
-
-            return (
-              <button
-                key={snippet}
-                type="button"
-                onClick={() => onToggleHelper(snippet)}
-                className={`transition-all cursor-pointer active:scale-95 flex items-center gap-1 shrink-0 ${
-                  isCompact ? "px-2.5 py-1 text-[11px] rounded-lg" : "px-3 py-1 text-xs rounded-xl"
-                } ${
-                  active
-                    ? "bg-[#EF4444] text-white border-2 border-slate-900 font-bold shadow-[0_2px_0_#991b1b]"
-                    : "bg-slate-100 border-2 border-slate-900 text-slate-800 font-bold hover:bg-slate-200 shadow-[0_1px_0_#0f172a]"
-                }`}
-              >
-                <span className="text-[9px] opacity-75">{active ? "✓" : "+"}</span>
-                <span className="font-mono">{snippet}</span>
-              </button>
-            );
-          })}
-        </div>
-      )}
 
       {/* Code Editor Window Header */}
       {!isCompact && (
