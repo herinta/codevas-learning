@@ -169,6 +169,21 @@ function getMissionExampleCode(challenge: ChallengeData | null): MissionExample 
     };
   }
 
+  // Target visual preview fallback (for HTML architecture, contains full structure with opening and closing tags)
+  if (
+    !isCss &&
+    challenge.target_visual?.preview &&
+    typeof challenge.target_visual.preview === "string" &&
+    challenge.target_visual.preview.includes("<")
+  ) {
+    const raw = challenge.target_visual.preview.trim();
+    return {
+      filename,
+      code: prettyFormatHtml(raw),
+      tip: "Format struktur acuan di atas (lengkap dengan tag pembuka dan penutupnya) ke dalam editor.",
+    };
+  }
+
   // Syntax helpers fallback
   if (challenge.syntax_helpers && challenge.syntax_helpers.length > 0) {
     const rawJoined = challenge.syntax_helpers
@@ -181,7 +196,7 @@ function getMissionExampleCode(challenge: ChallengeData | null): MissionExample 
     };
   }
 
-  // Target visual preview fallback
+  // Target visual preview fallback for CSS
   if (challenge.target_visual?.preview && typeof challenge.target_visual.preview === "string") {
     const raw = challenge.target_visual.preview.trim();
     return {
