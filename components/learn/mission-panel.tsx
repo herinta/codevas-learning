@@ -11,6 +11,7 @@ import {
   FileCode,
 } from "lucide-react";
 import { ChallengeData, ConceptDemo } from "./types";
+import { getPedagogicalExample } from "./pedagogical-examples";
 
 interface MissionPanelProps {
   challenge: ChallengeData | null;
@@ -132,77 +133,19 @@ function prettyFormatHtml(raw: string): string {
 }
 
 /**
- * Intelligent example code extractor for any level
+ * Intelligent pedagogical example code extractor:
+ * Ensures example code teaches the concept on a DIFFERENT case (never identical to the question).
  */
 function getMissionExampleCode(challenge: ChallengeData | null): MissionExample | null {
   if (!challenge) return null;
 
-  const isCss =
-    challenge.class_id === "css-basics" ||
-    challenge.id.startsWith("css-") ||
-    challenge.id.startsWith("basics-");
-  const filename = isCss ? "style.css" : "index.html";
-
-  // Level 1 specific clean example
-  if (challenge.id === "html-1-raw-content" || challenge.id === "html-1") {
+  const pedagogical = getPedagogicalExample(challenge);
+  if (pedagogical) {
+    const isCss = pedagogical.filename.endsWith(".css");
     return {
-      filename,
-      code: `<h1>Profil Developer</h1>\n<p>Nama: Alex Coder</p>\n<p>Umur: 16 Tahun</p>`,
-      tip: "Tuliskan kode seperti contoh di atas ke dalam editor di samping kanan. Kamu bebas menuliskan nama & umurmu sendiri!",
-    };
-  }
-
-  // Concept demo code example (e.g. from checkpoints)
-  const concept =
-    challenge.concept_demo ||
-    challenge.target_visual?.concept_demo ||
-    challenge.conceptDemo;
-
-  if (concept?.codeExample && concept.codeExample.trim()) {
-    const raw = concept.codeExample.trim();
-    return {
-      filename,
-      code: isCss ? raw : prettyFormatHtml(raw),
-      tip: isCss
-        ? "Tuliskan selector dan properti CSS seperti contoh acuan di atas ke dalam editor."
-        : "Format struktur tag seperti contoh acuan di atas ke dalam editor.",
-    };
-  }
-
-  // Target visual preview fallback (for HTML architecture, contains full structure with opening and closing tags)
-  if (
-    !isCss &&
-    challenge.target_visual?.preview &&
-    typeof challenge.target_visual.preview === "string" &&
-    challenge.target_visual.preview.includes("<")
-  ) {
-    const raw = challenge.target_visual.preview.trim();
-    return {
-      filename,
-      code: prettyFormatHtml(raw),
-      tip: "Format struktur acuan di atas (lengkap dengan tag pembuka dan penutupnya) ke dalam editor.",
-    };
-  }
-
-  // Syntax helpers fallback
-  if (challenge.syntax_helpers && challenge.syntax_helpers.length > 0) {
-    const rawJoined = challenge.syntax_helpers
-      .map((s) => s.replace(/\\n/g, "\n"))
-      .join("\n");
-    return {
-      filename,
-      code: isCss ? rawJoined : prettyFormatHtml(rawJoined),
-      tip: "Gunakan tag atau potongan acuan di atas untuk menyelesaikan tantangan.",
-    };
-  }
-
-  // Target visual preview fallback for CSS
-  if (challenge.target_visual?.preview && typeof challenge.target_visual.preview === "string") {
-    const raw = challenge.target_visual.preview.trim();
-    return {
-      filename,
-      code: isCss ? raw : prettyFormatHtml(raw),
-      tip: "Format struktur acuan di atas untuk menghasilkan visual yang diharapkan.",
+      filename: pedagogical.filename,
+      code: isCss ? pedagogical.code : prettyFormatHtml(pedagogical.code),
+      tip: pedagogical.tip,
     };
   }
 

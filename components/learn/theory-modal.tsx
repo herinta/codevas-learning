@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { ChallengeData, ConceptDemo } from "./types";
 import { parseUserStyles, sanitizeUserHtml } from "./style-parser";
+import { getPedagogicalExample } from "./pedagogical-examples";
 
 interface TheoryModalProps {
   isOpen: boolean;
@@ -163,86 +164,26 @@ function getExampleSnippet(challenge: ChallengeData | null): {
 
   const isHtml =
     challenge.class_id === "html-architecture" || challenge.id.startsWith("html-");
-  const concept = challenge.concept_demo || challenge.target_visual?.concept_demo;
 
-  // Level 1 specific clean example with explicit newlines
-  if (challenge.id === "html-1-raw-content" || challenge.id === "html-1") {
+  const pedagogical = getPedagogicalExample(challenge);
+  if (pedagogical) {
     return {
-      isHtml: true,
-      fileName: "index.html",
-      code: "<h1>Profil Developer</h1>\n<p>Nama: Alex Coder</p>\n<p>Umur: 16 Tahun</p>",
-      description: "Judul besar Profil Developer di bagian atas diikuti nama dan umur.",
-    };
-  }
-
-  // 1. If explicit concept.codeExample exists
-  if (concept?.codeExample) {
-    const raw = concept.codeExample.trim();
-    return {
-      isHtml,
-      fileName: isHtml ? "index.html" : "style.css",
-      code: isHtml ? prettyFormatHtml(raw) : raw,
-      description: challenge.target_visual?.description || undefined,
-    };
-  }
-
-  // 2. If HTML mode
-  if (isHtml) {
-    if (challenge.target_visual?.preview && challenge.target_visual.preview.includes("<")) {
-      return {
-        isHtml: true,
-        fileName: "index.html",
-        code: prettyFormatHtml(challenge.target_visual.preview),
-        description: challenge.target_visual.description || undefined,
-      };
-    }
-    if (challenge.syntax_helpers && challenge.syntax_helpers.length > 0) {
-      return {
-        isHtml: true,
-        fileName: "index.html",
-        code: prettyFormatHtml(challenge.syntax_helpers.join("\n")),
-        description: challenge.target_visual?.description || undefined,
-      };
-    }
-    return {
-      isHtml: true,
-      fileName: "index.html",
-      code: "<div>\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n</div>",
-    };
-  }
-
-  // 3. CSS mode
-  const selector =
-    challenge.class_id === "css-grid" ||
-    challenge.id.startsWith("grid-") ||
-    challenge.id.startsWith("gr-")
-      ? ".grid-arena"
-      : challenge.id.includes("navbar")
-      ? ".navbar"
-      : challenge.class_id === "css-basics" ||
-        challenge.id.startsWith("css-basics-") ||
-        challenge.id.startsWith("basics-")
-      ? ".box"
-      : ".arena";
-
-  if (challenge.syntax_helpers && challenge.syntax_helpers.length > 0) {
-    const rules = challenge.syntax_helpers
-      .filter((h) => h.includes(":") && !h.startsWith("<"))
-      .slice(0, 3)
-      .map((r) => `  ${r.endsWith(";") ? r : `${r};`}`)
-      .join("\n");
-    return {
-      isHtml: false,
-      fileName: "style.css",
-      code: `${selector} {\n${rules || "  /* Properti CSS */"}\n}`,
-      description: challenge.target_visual?.description || undefined,
+      isHtml: !pedagogical.filename.endsWith(".css"),
+      fileName: pedagogical.filename,
+      code: pedagogical.filename.endsWith(".css")
+        ? pedagogical.code
+        : prettyFormatHtml(pedagogical.code),
+      description: pedagogical.tip,
     };
   }
 
   return {
-    isHtml: false,
-    fileName: "style.css",
-    code: `${selector} {\n  background-color: lightblue;\n}`,
+    isHtml,
+    fileName: isHtml ? "index.html" : "style.css",
+    code: isHtml
+      ? "<div>\n  <h1>Judul Halaman</h1>\n  <p>Deskripsi konten</p>\n</div>"
+      : ".container {\n  display: flex;\n}",
+    description: challenge.target_visual?.description || undefined,
   };
 }
 
