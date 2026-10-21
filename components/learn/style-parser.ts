@@ -248,7 +248,10 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
   if (clean.startsWith("<")) {
     // 0a. Wrapper pattern: <div> ... </div>
     if (clean === "<div> ... </div>") {
-      const trimmed = prev.trim();
+      const trimmed = prev.replace(/<!--[\s\S]*?-->/g, "").trim();
+      if (!trimmed) {
+        return `<div>\n  \n</div>`;
+      }
       if (trimmed.startsWith("<div>") && trimmed.endsWith("</div>")) {
         return trimmed.replace(/^<div>\s*\n?/, "").replace(/\n?\s*<\/div>$/, "");
       }
@@ -304,13 +307,14 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
       }
     }
 
-    // 0d. If there is an HTML comment placeholder like <!-- ... -->, replace it!
-    if (/<!--[\s\S]*?-->/.test(prev)) {
-      return prev.replace(/<!--[\s\S]*?-->/, clean).trim();
+    // 0d. Clean any stray HTML comments
+    const cleanPrev = prev.replace(/<!--[\s\S]*?-->/g, "").trim();
+    if (cleanPrev !== prev.trim()) {
+      return cleanPrev ? `${cleanPrev}\n${clean}` : clean;
     }
 
     // 0e. Otherwise, append the snippet on a clean new line!
-    const trimmed = prev.trim();
+    const trimmed = cleanPrev;
     return trimmed ? `${trimmed}\n${clean}` : clean;
   }
 

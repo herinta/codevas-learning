@@ -234,7 +234,7 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
               ? "flex-1 p-2 text-xs overflow-y-auto"
               : "p-3 sm:p-4 text-xs sm:text-sm"
           }`}
-          placeholder={isHtmlMode ? "<!-- Tulis tag HTML di sini -->" : ".arena { display: flex; ... }"}
+          placeholder={isHtmlMode ? "Ketik kode HTML di sini..." : ".arena {\n  display: flex;\n}"}
         />
       </div>
     </>

@@ -286,7 +286,7 @@ INSERT INTO challenges (
         '["<h1>Profil Developer</h1>", "<p>Nama: Alex Coder</p>", "<p>Umur: 16 Tahun</p>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview":"<h1>Profil Developer</h1>\n<p>Nama: Alex Coder</p>\n<p>Umur: 16 Tahun</p>","description":"Judul besar Profil Developer di bagian atas diikuti nama dan umur.","concept_demo":{"conceptTitle":"Kerangka Dasar: Judul (h1) & Paragraf (p)","whyItMatters":"HTML adalah fondasi dasar setiap halaman web. Tag <h1> digunakan untuk judul utama dokumen (Heading 1), sedangkan tag <p> (Paragraph) digunakan untuk teks informasi seperti nama dan umur.","whatIfWithout":"Tanpa tag HTML, browser akan menampilkan teks polos bertumpuk tanpa hierarki judul atau batas paragraf semantik.","visualComparison":{"withoutLabel":"Teks Polos Melayang","withoutDesc":"Teks tercampur baur tanpa judul yang tegas dan tanpa pemisah baris terstruktur.","withLabel":"Struktur Semantik (h1 + p)","withDesc":"Judul utama menonjol tebal di atas, diikuti informasi nama dan umur yang rapi di bawahnya."},"codeExample":"<h1>Profil Developer</h1>\n<p>Nama: Alex Coder</p>\n<p>Umur: 16 Tahun</p>","keyTakeaways":["<h1> merepresentasikan judul tingkat tertinggi pada sebuah halaman.","<p> digunakan untuk membungkus satu paragraf teks data.","Kamu bebas mengganti teks nama dan umur sesuai identitasmu sendiri."]}}'::jsonb,
-        '<!-- Tulis judul h1 \"Profil Developer\" dan data nama & umurmu dengan tag p di sini -->',
+        '',
         '{"goals": [{"tag": "h1", "text": "Profil Developer"}, {"tag": "p", "text": "Nama:"}, {"tag": "p", "text": "Umur:"}]}'::jsonb
       ),
       (
@@ -334,7 +334,7 @@ INSERT INTO challenges (
         '["<div class=\"notes-card\">", "<h3>Catatan Belajar</h3>", "<p>Fokus Arsitektur Web</p>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview":"<div class=\"profile-card\"><h1>Profil Developer</h1></div><div class=\"notes-card\"><h3>Catatan Belajar</h3><p>Fokus Belajar</p></div>","description":"Dua div sejajar berdampingan.","concept_demo":{"conceptTitle":"Hierarki Bersaudara (Siblings vs Nesting)","whyItMatters":"Dalam arsitektur web, tidak semua elemen harus dimasukkan ke dalam wadah yang sama. Ketika dua bagian memiliki tujuan berbeda (misal: Kartu Profil dan Kartu Catatan), keduanya harus berdiri berdampingan sebagai saudara (siblings), bukan dimasukkan ke dalam satu sama lain.","whatIfWithout":"Jika kartu catatan dimasukkan ke dalam kartu profil, catatan tersebut akan mewarisi semua batasan dan styling kartu profil, sehingga struktur tata letak menjadi kacau dan sulit dipisah di masa depan.","visualComparison":{"withoutLabel":"Salah Bersarang (Over-nesting)","withoutDesc":"Catatan tertimbun di dalam profil, membatasi fleksibilitas layout.","withLabel":"Sejajar Bersaudara (Clean Siblings)","withDesc":"Dua kartu mandiri yang dapat disusun atas-bawah atau kiri-kanan dengan leluasa."},"codeExample":"<div class=\"profile-card\">\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n</div>\n<div class=\"notes-card\">\n  <h3>Catatan Belajar</h3>\n  <p>Fokus arsitektur web.</p>\n</div>","keyTakeaways":["Elemen siblings berbagi parent yang sama dan berada di level hierarki sejajar.","Gunakan penutup </div> sebelum memulai kontainer baru untuk bagian terpisah."]}}'::jsonb,
-        E'<!-- Kardus 1: Profile Card -->\n<div class=\"profile-card\">\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n</div>\n\n<!-- Buat Kardus 2 (Sibling): <div class=\"notes-card\"> berisi <h3> dan <p> di bawah ini -->',
+        E'<div class="profile-card">\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n</div>',
         '{"goals": [{"count": 2, "tag": "div"}, {"class": "notes-card"}]}'::jsonb
       ),
       (
@@ -350,7 +350,7 @@ INSERT INTO challenges (
         '["<div class=\"top-bar\">", "<div class=\"content-area\">", "<div class=\"bottom-bar\">", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"top-bar\"><h2>Codevas</h2></div><div class=\"content-area\"><p>Cerita koding...</p></div><div class=\"bottom-bar\"><p>&copy; 2026</p></div>", "description": "Tiga zona vertikal bertumpuk."}'::jsonb,
-        '<!-- Buat 3 kardus bertumpuk vertikal: <div class=\"top-bar\">, <div class=\"content-area\">, dan <div class=\"bottom-bar\"> -->',
+        '',
         '{"goals": [{"class": "top-bar"}, {"class": "content-area"}, {"class": "bottom-bar"}]}'::jsonb
       ),
       (
@@ -366,7 +366,7 @@ INSERT INTO challenges (
         '["<div class=\"card\">", "<div class=\"avatar-box\">Area Foto</div>", "<div class=\"info-box\">\\n  <h2>Alex Coder</h2>\\n  <p>Frontend Developer</p>\\n</div>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview":"<div class=\"card\"><div class=\"avatar-box\">Area Foto</div><div class=\"info-box\"><h2>Alex Coder</h2><p>Frontend Developer</p></div></div>","description":"Parent card membungkus dua child div.","concept_demo":{"conceptTitle":"Prinsip Matryoshka: Nesting Kolom Ganda","whyItMatters":"Untuk membuat layout dua kolom (kiri avatar, kanan info biodata), kita butuh 1 parent pembungkus utama dan 2 child pembungkus di dalamnya. Inilah pola arsitektur paling fundamental dalam web modern.","whatIfWithout":"Tanpa parent luar, dua kolom tidak tahu bahwa mereka satu kartu. Tanpa pembungkus child masing-masing, foto avatar dan teks akan bercampur baur dan CSS tidak bisa menatanya berdampingan.","visualComparison":{"withoutLabel":"Kolom Tercampur Baur","withoutDesc":"Foto dan teks saling menabrak tanpa batasan kolom yang jelas.","withLabel":"Parent + 2 Kolom Child","withDesc":"Kolom avatar dan kolom teks terisolasi rapi di dalam 1 wadah kartu."},"codeExample":"<div class=\"card\">\n  <div class=\"avatar-box\">\n    <p>[Avatar]</p>\n  </div>\n  <div class=\"info-box\">\n    <h3>Alex Coder</h3>\n  </div>\n</div>","keyTakeaways":["Parent mengendalikan orientasi tata letak (arah baris/kolom).","Child mengendalikan konten masing-masing kolom."]}}'::jsonb,
-        '<!-- Buat 1 div parent class=\"card\", lalu di dalamnya buat 2 div child: avatar-box & info-box -->',
+        '',
         '{"goals": [{"parent": "card", "children": ["avatar-box", "info-box"]}]}'::jsonb
       ),
       (
@@ -382,7 +382,7 @@ INSERT INTO challenges (
         '["<div class=\"avatar-frame\">", "<img src=\"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\" alt=\"Foto Profil\" />", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"card\"><div class=\"avatar-frame\"><img src=\"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\" alt=\"Avatar\" /></div><div class=\"info-box\"><h2>Alex Coder</h2><p>Junior Web Developer</p></div></div>", "description": "Foto profil di dalam avatar-frame div."}'::jsonb,
-        E'<div class=\"card\">\n  <!-- Bungkus foto profil dengan <div class=\"avatar-frame\"> di sini -->\n  <div class=\"avatar-frame\">\n    <img src=\"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\" alt=\"Avatar Alex\" />\n  </div>\n  <div class=\"info-box\">\n    <h2>Alex Coder</h2>\n    <p>Junior Web Developer</p>\n  </div>\n</div>',
+        E'<div class="card">\n  <div class="avatar-frame">\n    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Avatar Alex" />\n  </div>\n  <div class="info-box">\n    <h2>Alex Coder</h2>\n    <p>Junior Web Developer</p>\n  </div>\n</div>',
         '{"goals": [{"class": "avatar-frame", "contains": "img"}]}'::jsonb
       ),
       (
@@ -398,7 +398,7 @@ INSERT INTO challenges (
         '["<div class=\"card-header\">", "<div class=\"card-body\">", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"card\"><div class=\"card-header\"><h2>Alex Coder</h2></div><div class=\"card-body\"><p>Cerita koding...</p></div></div>", "description": "Pemisahan card-header dan card-body."}'::jsonb,
-        E'<div class=\"card\">\n  <!-- Pisahkan menjadi <div class=\"card-header\"> dan <div class=\"card-body\"> -->\n</div>',
+        E'<div class="card">\n  </div>',
         '{"goals": [{"class": "card-header"}, {"class": "card-body"}]}'::jsonb
       ),
       (
@@ -414,7 +414,7 @@ INSERT INTO challenges (
         '["<div class=\"action-row\">", "<button>Follow</button>", "<button>Kirim Pesan</button>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"action-row\"><button>Follow</button><button>Kirim Pesan</button></div>", "description": "Baris aksi pembungkus tombol."}'::jsonb,
-        E'<div class=\"card\">\n  <div class=\"card-body\">\n    <h3>Alex Coder</h3>\n    <p>Web Developer antusias.</p>\n    <!-- Bungkus 2 tombol <button> ke dalam <div class=\"action-row\"> di bawah ini -->\n  </div>\n</div>',
+        E'<div class="card">\n  <div class="card-body">\n    <h3>Alex Coder</h3>\n    <p>Web Developer antusias.</p>\n    </div>\n</div>',
         '{"goals": [{"class": "action-row", "minButtons": 2}]}'::jsonb
       ),
       (
@@ -430,7 +430,7 @@ INSERT INTO challenges (
         '["<div class=\"badge-role\">Frontend Developer</div>", "<div class=\"badge-tag\">UI Engineer</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"card-header\"><h2>Alex Coder</h2><div class=\"badge-role\">Frontend Developer</div></div>", "description": "Badge label peran di header."}'::jsonb,
-        E'<div class=\"card\">\n  <div class=\"card-header\">\n    <h2>Alex Coder</h2>\n    <!-- Tambahkan <div class=\"badge-role\">Frontend Developer</div> di sini -->\n  </div>\n</div>',
+        E'<div class="card">\n  <div class="card-header">\n    <h2>Alex Coder</h2>\n    </div>\n</div>',
         '{"goals": [{"class": "badge-role"}]}'::jsonb
       ),
       (
@@ -446,7 +446,7 @@ INSERT INTO challenges (
         '["<div class=\"metrics-row\">", "<div class=\"metric-box\">\\n  <h4>12</h4>\\n  <p>Proyek</p>\\n</div>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"metrics-row\"><div class=\"metric-box\"><h4>12</h4><p>Proyek</p></div><div class=\"metric-box\"><h4>1.5K</h4><p>Kontribusi</p></div><div class=\"metric-box\"><h4>24</h4><p>Repo</p></div></div>", "description": "Tiga kolom metric-box di dalam metrics-row."}'::jsonb,
-        E'<div class=\"card\">\n  <!-- Buat <div class=\"metrics-row\"> yang membungkus 3 <div class=\"metric-box\"> di sini -->\n</div>',
+        E'<div class="card">\n  </div>',
         '{"goals": [{"class": "metrics-row"}, {"class": "metric-box", "count": 3}]}'::jsonb
       ),
       (
@@ -462,7 +462,7 @@ INSERT INTO challenges (
         '["<div class=\"profile-card\">", "<div class=\"card-header\">", "<div class=\"card-body\">", "<div class=\"card-footer\">", "<div class=\"stats-row\">", "<div class=\"action-row\">"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview":"<div class=\"profile-card\"><div class=\"card-header\">Header</div><div class=\"card-body\">Body</div><div class=\"card-footer\">Footer</div></div>","description":"Profile Card modular lengkap 5 lapisan div.","concept_demo":{"conceptTitle":"Capstone Blueprint: 5 Lapisan Arsitektur Kartu","whyItMatters":"Komponen kartu standar industri disusun dari 5 lapisan hierarkis: Card Outer -> Header & Body -> Avatar & Info -> Action Row & Badges. Menguasai arsitektur berlapis ini adalah fondasi slicing desain Figma ke web nyata.","whatIfWithout":"Menyatukan semua elemen secara acak tanpa hierarki berlapis membuat kode CSS menjadi berantakan dan kartu akan hancur saat ukuran layar ponsel berubah.","codeExample":"<div class=\"profile-card\">\n  <div class=\"card-header\">\n    <div class=\"avatar-box\">...</div>\n    <div class=\"info-box\">...</div>\n  </div>\n  <div class=\"card-body\">...</div>\n  <div class=\"action-row\">...</div>\n</div>","keyTakeaways":["Setiap lapisan memiliki tanggung jawab tunggal (Single Responsibility Principle).","Hierarki yang bersih memudahkan penataan CSS responsif di layar ponsel maupun desktop."]}}'::jsonb,
-        '<!-- CAPSTONE PROJECT: Rakit Profile Card modular lengkap dengan 5 lapisan div! -->',
+        '',
         '{"goals": [{"class": "profile-card"}, {"class": "card-header"}, {"class": "card-body"}, {"class": "card-footer"}]}'::jsonb
       ),
       (
@@ -478,7 +478,7 @@ INSERT INTO challenges (
         '["<div class=\"app-layout\">", "<div class=\"sidebar\">\\n  <!-- Sidebar Nav -->\\n</div>", "<div class=\"main-content\">\\n  <!-- Area Kerja Utama -->\\n</div>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"app-layout\"><div class=\"sidebar\">Sidebar</div><div class=\"main-content\">Main Content</div></div>", "description": "Split screen layout sidebar dan main-content."}'::jsonb,
-        '<!-- Buat <div class=\"app-layout\"> yang memuat <div class=\"sidebar\"> dan <div class=\"main-content\"> -->',
+        '',
         '{"goals": [{"class": "app-layout"}, {"class": "sidebar"}, {"class": "main-content"}]}'::jsonb
       ),
       (
@@ -494,7 +494,7 @@ INSERT INTO challenges (
         '["<div class=\"brand-box\">\\n  <h2>Codevas App</h2>\\n</div>", "<div class=\"menu-box\">\\n  <ul>\\n    <li>Dashboard</li>\\n    <li>Kelas</li>\\n    <li>Portofolio</li>\\n  </ul>\\n</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"sidebar\"><div class=\"brand-box\"><h2>Codevas</h2></div><div class=\"menu-box\"><ul><li>Dashboard</li><li>Kelas</li><li>Portofolio</li></ul></div></div>", "description": "Sidebar dengan brand-box dan menu-box."}'::jsonb,
-        E'<div class=\"sidebar\">\n  <!-- Buat <div class=\"brand-box\"> dan <div class=\"menu-box\"> (berisi <ul> dengan 3 <li>) di sini -->\n</div>',
+        E'<div class="sidebar">\n  </div>',
         '{"goals": [{"class": "brand-box"}, {"class": "menu-box"}, {"tag": "ul", "childCount": 3}]}'::jsonb
       ),
       (
@@ -510,7 +510,7 @@ INSERT INTO challenges (
         '["<div class=\"banner-card\">\\n  <h3>Selamat Datang!</h3>\\n</div>", "<div class=\"overview-card\">\\n  <h3>Target Belajar</h3>\\n</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"main-content\"><div class=\"banner-card\">Banner</div><div class=\"overview-card\">Overview</div></div>", "description": "Dua kartu bertumpuk di main-content."}'::jsonb,
-        E'<div class=\"main-content\">\n  <!-- Buat <div class=\"banner-card\"> dan <div class=\"overview-card\"> di sini -->\n</div>',
+        E'<div class="main-content">\n  </div>',
         '{"goals": [{"class": "banner-card"}, {"class": "overview-card"}]}'::jsonb
       ),
       (
@@ -526,7 +526,7 @@ INSERT INTO challenges (
         '["<form>", "<div class=\"form-group\">\\n  <label>Nama</label>\\n  <input type=\"text\" />\\n</div>", "<button type=\"submit\">Kirim</button>", "</form>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview":"<form><div class=\"form-group\"><label>Nama</label><input type=\"text\" /></div><div class=\"form-group\"><label>Email</label><input type=\"email\" /></div><button>Kirim</button></form>","description":"Formulir rapi dengan div form-group.","concept_demo":{"conceptTitle":"Form Architecture: Logika Pembungkus Form-Group","whyItMatters":"Setiap pasang <label> dan <input> wajib dibungkus dalam satu <div class=\"form-group\">. Ini menjaga jarak vertikal antar pertanyaan dan memberi ruang khusus untuk pesan error validasi.","whatIfWithout":"Label dan input akan bertabrakan ke samping atau berantakan saat pengguna mengetik di layar ponsel.","codeExample":"<form class=\"profile-form\">\n  <div class=\"form-group\">\n    <label>Nama Lengkap</label>\n    <input type=\"text\" />\n  </div>\n</form>","keyTakeaways":["form-group mengisolasi satu unit input data.","Memudahkan styling jarak, ikon input, dan status error validasi."]}}'::jsonb,
-        '<!-- Buat formulir <form> dengan 2 <div class=\"form-group\"> dan 1 submit button -->',
+        '',
         '{"goals": [{"tag": "form"}, {"class": "form-group", "count": 2}, {"tag": "button"}]}'::jsonb
       ),
       (
@@ -542,7 +542,7 @@ INSERT INTO challenges (
         '["<div class=\"modal-overlay\">", "<div class=\"modal-box\">\\n  <h3>Konfirmasi Proyek</h3>\\n  <p>Apakah kamu yakin ingin menyimpan?</p>\\n  <button>Tutup</button>\\n</div>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"modal-overlay\"><div class=\"modal-box\"><h3>Konfirmasi</h3><p>Pesan...</p><button>Tutup</button></div></div>", "description": "Popup modal dengan overlay dan modal-box."}'::jsonb,
-        '<!-- Buat arsitektur popup modal: <div class=\"modal-overlay\"> membungkus <div class=\"modal-box\"> -->',
+        '',
         '{"goals": [{"class": "modal-overlay"}, {"class": "modal-box"}, {"contains": ["h3", "p", "button"]}]}'::jsonb
       ),
       (
@@ -558,7 +558,7 @@ INSERT INTO challenges (
         '["<div class=\"bento-container\">", "<div class=\"bento-item\">\\n  <h3>Profil Singkat</h3>\\n</div>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"bento-container\"><div class=\"bento-item\">1</div><div class=\"bento-item\">2</div><div class=\"bento-item\">3</div><div class=\"bento-item\">4</div></div>", "description": "Wadah bento-container membungkus 4 bento-item."}'::jsonb,
-        '<!-- Buat <div class=\"bento-container\"> yang membungkus 4 <div class=\"bento-item\"> -->',
+        '',
         '{"goals": [{"class": "bento-container"}, {"class": "bento-item", "count": 4}]}'::jsonb
       ),
       (
@@ -574,7 +574,7 @@ INSERT INTO challenges (
         '["<header>\\n  <div class=\"container\">\\n    <h1>Situs Koding</h1>\\n  </div>\\n</header>", "<main>\\n  <div class=\"container\">\\n    <p>Konten utama...</p>\\n  </div>\\n</main>", "<footer>\\n  <div class=\"container\">\\n    <p>&copy; 2026</p>\\n  </div>\\n</footer>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview":"<header><div class=\"container\">Header</div></header><main><div class=\"container\">Main</div></main><footer><div class=\"container\">Footer</div></footer>","description":"Tiga tag semantik masing-masing membungkus div container.","concept_demo":{"conceptTitle":"Semantic vs Div: Kapan Menggunakan Apa?","whyItMatters":"Gunakan tag semantik (<header>, <main>, <footer>) untuk menandai makna arsitektur halaman bagi mesin pencari (SEO) dan pembaca layar (Aksesibilitas). Lalu gunakan <div> di dalamnya sebagai wadah penata layout.","whatIfWithout":"Memakai 100% semantik tanpa div membuat tata letak kaku; sebaliknya memakai 100% div tanpa semantik merusak skor SEO dan aksesibilitas situs.","codeExample":"<header class=\"site-header\">\n  <div class=\"container\">\n    <!-- Navigasi -->\n  </div>\n</header>","keyTakeaways":["Tag semantik memberi makna struktural bagi search engine & screen reader.","Tag div memberi kontrol visual dan fleksibilitas tata letak (CSS styling)."]}}'::jsonb,
-        '<!-- Susun tag semantik <header>, <main>, dan <footer> yang masing-masing membungkus <div class=\"container\"> -->',
+        '',
         '{"goals": [{"tags": ["header", "main", "footer"]}, {"class": "container", "count": 3}]}'::jsonb
       ),
       (
@@ -590,7 +590,7 @@ INSERT INTO challenges (
         '["<div class=\"dashboard-layout\">", "<div class=\"sidebar\">", "<div class=\"main-panel\">", "<div class=\"bento-item\">", "<div class=\"form-group\">"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"dashboard-layout\"><div class=\"sidebar\">Nav</div><div class=\"main-panel\">Header, Bento Cards, Footer</div></div>", "description": "Arsitektur Dashboard Web lengkap dari nol."}'::jsonb,
-        E'<!-- FINAL PROJECT: Bangun kerangka Dashboard Web lengkap dari nol! -->\n<!-- Satukan <div class=\"dashboard-layout\">, sidebar, main-panel, bento cards, dan footer -->',
+        '',
         '{"goals": [{"class": "dashboard-layout"}, {"class": "sidebar"}, {"class": "main-panel"}]}'::jsonb
       ),
                   (
@@ -606,7 +606,7 @@ INSERT INTO challenges (
         '["background-color: lightblue;", "color: lightblue;", "background-color: #f1f5f9;", "background-color: #e0f2fe;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak dengan background biru muda", "description": "Warna latar kanvas.", "concept_demo": {"conceptTitle": "Kanvas & Warna Dasar", "whyItMatters": "Warna latar belakang mendefinisikan bidang kerja komponen dan memisahkannya dari halaman utama.", "whatIfWithout": "Tanpa background-color, elemen transparan menyatu dengan layar sehingga batas komponen tidak terlihat.", "codeExample": ".box {\n  background-color: lightblue;\n}", "keyTakeaways": ["background-color mewarnai seluruh area di dalam border.", "Bisa menggunakan nama warna, hex code (#38bdf8), atau RGB."]}}'::jsonb,
-        '.box {\n  /* Beri warna latar belakang di sini */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "background-color", "accepted": ["lightblue", "#add8e6", "#38bdf8", "#e0f2fe", "#60a5fa"]}]}'::jsonb
       ),
       (
@@ -622,7 +622,7 @@ INSERT INTO challenges (
         '["color: #0f172a;", "color: #333;", "text-color: #0f172a;", "font-color: #0f172a;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Teks gelap kontras", "description": "Warna teks kontras.", "concept_demo": {"conceptTitle": "Kontras Teks & Keterbacaan", "whyItMatters": "Teks yang kontras menjamin keterbacaan (readability) bagi seluruh pengguna di berbagai kondisi pencahayaan layar.", "whatIfWithout": "Warna teks yang terlalu redup atau serupa dengan background membuat mata lelah dan melanggar standar aksesibilitas.", "codeExample": ".box {\n  color: #0f172a;\n}", "keyTakeaways": ["color mengatur warna teks font.", "Pilih warna teks yang kontras tinggi terhadap background."]}}'::jsonb,
-        '.box {\n  background-color: #f1f5f9;\n  /* Tulis warna teks di sini */\n}',
+        E'.box {\n  background-color: #f1f5f9;\n  }',
         '{"goals": [{"property": "color", "accepted": ["#0f172a", "#333", "#333333", "black", "#000", "#1e293b"]}]}'::jsonb
       ),
       (
@@ -638,7 +638,7 @@ INSERT INTO challenges (
         '["font-size: 24px;", "text-size: 24px;", "font-weight: 24px;", "font-size: 1.5rem;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Ukuran huruf 24px", "description": "Hierarki ukuran teks.", "concept_demo": {"conceptTitle": "Skala Tipografi & Fokal Poin", "whyItMatters": "Skala tipografi yang konsisten membantu pembaca membedakan judul utama, subjudul, dan paragraf dengan sekilas pandang.", "codeExample": ".box {\n  font-size: 24px;\n}"}}'::jsonb,
-        '.box {\n  background-color: #f1f5f9;\n  color: #0f172a;\n  /* Perbesar ukuran huruf di sini */\n}',
+        E'.box {\n  background-color: #f1f5f9;\n  color: #0f172a;\n  }',
         '{"goals": [{"property": "font-size", "accepted": ["24px", "1.5rem"]}]}'::jsonb
       ),
       (
@@ -654,7 +654,7 @@ INSERT INTO challenges (
         '["font-weight: bold;", "font-weight: 700;", "font-style: bold;", "text-weight: bold;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Teks tebal berwibawa", "description": "Bobot fokal teks."}'::jsonb,
-        '.box {\n  font-size: 24px;\n  /* Buat teks menjadi tebal di sini */\n}',
+        E'.box {\n  font-size: 24px;\n  }',
         '{"goals": [{"property": "font-weight", "accepted": ["bold", "700", "800", "900"]}]}'::jsonb
       ),
       (
@@ -670,7 +670,7 @@ INSERT INTO challenges (
         '["text-align: center;", "align-text: center;", "align: center;", "text-align: left;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Teks rata tengah seimbang", "description": "Perataan teks horizontal."}'::jsonb,
-        '.box {\n  /* Pusatkan teks secara horizontal di sini */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "text-align", "accepted": ["center"]}]}'::jsonb
       ),
       (
@@ -686,7 +686,7 @@ INSERT INTO challenges (
         '["line-height: 1.6;", "line-height: 1.5;", "line-spacing: 1.6;", "line-height: 24px;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Teks dengan jarak baris lapang", "description": "Irama vertikal teks.", "concept_demo": {"conceptTitle": "Checkpoint 1: Tipografi & Irama Vertikal", "whyItMatters": "Tanpa line-height memadai, baris-baris kalimat panjang akan bertumpuk rapat dan menyulitkan mata melacak baris berikutnya saat membaca.", "whatIfWithout": "Kalimat bertumpuk padat dan tampak sesak seperti teks mentah unstyled.", "codeExample": ".box {\n  font-size: 16px;\n  line-height: 1.6;\n}", "keyTakeaways": ["Gunakan nilai unitless seperti 1.5 atau 1.6 agar proporsional otomatis.", "Line-height ideal untuk paragraf adalah 1.5 hingga 1.7."]}}'::jsonb,
-        '.box {\n  /* Beri jarak antar baris teks di sini */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "line-height", "accepted": ["1.6", "1.5", "1.7", "24px", "28px"]}]}'::jsonb
       ),
       (
@@ -702,7 +702,7 @@ INSERT INTO challenges (
         '["padding: 20px;", "margin: 20px;", "padding: 10px;", "inner-space: 20px;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak dengan ruang napas dalam", "description": "Ruang dalam kotak.", "concept_demo": {"conceptTitle": "Checkpoint 2: The Box Model - Ruang Dalam (Padding)", "whyItMatters": "Komponen tanpa padding terlihat amatir karena teks menabrak dinding border. Padding memberikan ruang bernapas esensial.", "whatIfWithout": "Konten teks menabrak dinding border, kartu terlihat sesak dan tidak rapi.", "codeExample": ".box {\n  padding: 20px;\n}", "keyTakeaways": ["Padding berada di dalam garis border.", "Shorthand padding: 20px berlaku untuk keempat sisi (atas, kanan, bawah, kiri)."]}}'::jsonb,
-        '.box {\n  background-color: #f1f5f9;\n  /* Beri ruang napas bagian dalam dengan padding */\n}',
+        E'.box {\n  background-color: #f1f5f9;\n  }',
         '{"goals": [{"property": "padding", "accepted": ["20px", "1.25rem", "24px", "16px"]}]}'::jsonb
       ),
       (
@@ -718,7 +718,7 @@ INSERT INTO challenges (
         '["margin: 20px;", "padding: 20px;", "margin-bottom: 20px;", "outer-space: 20px;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak dengan jarak luar", "description": "Pemisah elemen tetangga."}'::jsonb,
-        '.box {\n  /* Beri jarak luar menggunakan margin */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "margin", "accepted": ["20px", "15px", "16px", "1rem", "24px"]}]}'::jsonb
       ),
       (
@@ -734,7 +734,7 @@ INSERT INTO challenges (
         '["border: 2px solid #0f172a;", "border: 3px solid #0f172a;", "outline: 2px solid #0f172a;", "border-width: 2px;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak dengan border tegas", "description": "Garis tepi penegas batas."}'::jsonb,
-        '.box {\n  background-color: white;\n  padding: 20px;\n  /* Beri border tegas di sini */\n}',
+        E'.box {\n  background-color: white;\n  padding: 20px;\n  }',
         '{"goals": [{"property": "border", "accepted": ["2px solid #0f172a", "2px solid black", "3px solid #0f172a"]}]}'::jsonb
       ),
       (
@@ -750,7 +750,7 @@ INSERT INTO challenges (
         '["border-radius: 16px;", "border-radius: 12px;", "border-radius: 20px;", "border-radius: 50%;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak dengan sudut melengkung", "description": "Kelengkungan sudut elemen."}'::jsonb,
-        '.box {\n  border: 2px solid #0f172a;\n  /* Bulatkan sudut kotak di sini */\n}',
+        E'.box {\n  border: 2px solid #0f172a;\n  }',
         '{"goals": [{"property": "border-radius", "accepted": ["16px", "12px", "1rem", "20px"]}]}'::jsonb
       ),
       (
@@ -766,7 +766,7 @@ INSERT INTO challenges (
         '["width: 320px;", "min-height: 160px;", "height: 160px;", "width: 100%;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak berukuran terukur", "description": "Dimensi kartu proporsional."}'::jsonb,
-        '.box {\n  /* Atur width dan min-height di sini */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "width", "accepted": ["320px", "280px", "300px"]}, {"property": "min-height", "accepted": ["160px", "200px", "150px"]}]}'::jsonb
       ),
       (
@@ -782,7 +782,7 @@ INSERT INTO challenges (
         '["box-sizing: border-box;", "box-sizing: content-box;", "box-sizing: initial;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak terkunci aman", "description": "Pencegahan luapan kotak.", "concept_demo": {"conceptTitle": "Checkpoint 3: Filosofi Box-Sizing (Border-Box)", "whyItMatters": "Masalah layout web nomor 1 pada CSS klasik adalah elemen meluap (overflow) saat diberi padding. border-box adalah penyelamat arsitektur CSS modern.", "whatIfWithout": "Kotak selebar 300px + padding 20px membengkak menjadi 340px dan merusak layout kolom!", "codeExample": ".box {\n  box-sizing: border-box;\n  width: 100%;\n  padding: 20px;\n}", "keyTakeaways": ["box-sizing: border-box memasukkan padding & border ke dalam hitungan width/height.", "Sangat esensial untuk mencegah overflow dan horizontal scrolling."]}}'::jsonb,
-        '.box {\n  width: 100%;\n  padding: 20px;\n  /* Kunci kalkulasi dimensi kotak di sini */\n}',
+        E'.box {\n  width: 100%;\n  padding: 20px;\n  }',
         '{"goals": [{"property": "box-sizing", "accepted": ["border-box"]}]}'::jsonb
       ),
       (
@@ -798,7 +798,7 @@ INSERT INTO challenges (
         '["background-color: #fef08a;", "padding: 16px;", "border: 3px solid #0f172a;", "border-radius: 16px;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kartu Neo-Brutalist Kuning", "description": "Komponen kartu neo-brutalisme lengkap."}'::jsonb,
-        '.box {\n  /* Bangun kartu badge neo-brutalisme lengkap di sini */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "background-color", "accepted": ["#fef08a"]}, {"property": "padding", "accepted": ["16px"]}, {"property": "border", "accepted": ["3px solid #0f172a"]}, {"property": "border-radius", "accepted": ["16px"]}]}'::jsonb
       ),
       (
@@ -814,7 +814,7 @@ INSERT INTO challenges (
         '["box-shadow: 4px 4px 0px #0f172a;", "box-shadow: 0 4px 10px rgba(0,0,0,0.1);", "drop-shadow: 4px 4px 0px #0f172a;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak dengan bayangan tegas 3D", "description": "Elevasi bayangan fisik."}'::jsonb,
-        '.box {\n  border: 2px solid #0f172a;\n  /* Beri bayangan tegas di sini */\n}',
+        E'.box {\n  border: 2px solid #0f172a;\n  }',
         '{"goals": [{"property": "box-shadow"}]}'::jsonb
       ),
       (
@@ -830,7 +830,7 @@ INSERT INTO challenges (
         '["opacity: 0.75;", "opacity: 0.8;", "opacity: 0.5;", "visibility: hidden;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak transparan redup", "description": "Tingkat transparansi elemen."}'::jsonb,
-        '.box {\n  /* Redupkan transparansi elemen di sini */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "opacity", "accepted": ["0.75", "0.8", "0.7", "0.85"]}]}'::jsonb
       ),
       (
@@ -846,7 +846,7 @@ INSERT INTO challenges (
         '["cursor: pointer;", "overflow: hidden;", "overflow: auto;", "cursor: default;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak interaktif terkunci", "description": "Isyarat klik & overflow.", "concept_demo": {"conceptTitle": "Checkpoint 4: Isyarat Interaktif & Overflow", "whyItMatters": "Pengguna mengenali elemen interaktif lewat kursor tangan. Dan overflow: hidden memastikan clipping sudut lengkung rapi tanpa gambar yang bocor di pojok kartu.", "codeExample": ".box {\n  cursor: pointer;\n  overflow: hidden;\n}"}}'::jsonb,
-        '.box {\n  border-radius: 16px;\n  /* Beri kursor pointer dan overflow hidden */\n}',
+        E'.box {\n  border-radius: 16px;\n  }',
         '{"goals": [{"property": "cursor", "accepted": ["pointer"]}, {"property": "overflow", "accepted": ["hidden"]}]}'::jsonb
       ),
       (
@@ -862,7 +862,7 @@ INSERT INTO challenges (
         '["background: linear-gradient(135deg, #fef08a, #fed7aa);", "background-color: linear-gradient(135deg, #fef08a, #fed7aa);"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak dengan gradasi cerah", "description": "Gradasi latar belakang dua nada."}'::jsonb,
-        '.box {\n  /* Buat gradasi latar belakang di sini */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "background", "accepted": ["linear-gradient"]}]}'::jsonb
       ),
       (
@@ -878,7 +878,7 @@ INSERT INTO challenges (
         '["transform: translateY(-4px);", "transform: scale(1.05);", "translate: 0 -4px;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak melayang terangkat", "description": "Transformasi posisi spasial."}'::jsonb,
-        '.box {\n  /* Geser posisi elemen dengan transform */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "transform", "accepted": ["translatey", "scale", "translate"]}]}'::jsonb
       ),
       (
@@ -894,7 +894,7 @@ INSERT INTO challenges (
         '["transition: all 0.2s ease-in-out;", "transition: transform 0.2s ease;", "transition: 0.3s;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Kotak dengan animasi halus", "description": "Animasi mikro elastis.", "concept_demo": {"conceptTitle": "Checkpoint 5: Animasi Mikro & Interaksi Halus", "whyItMatters": "Perubahan instan membuat mata pengguna terkejut. Transisi 200ms memberikan umpan balik taktil seperti menekan tombol fisik di dunia nyata.", "codeExample": ".box {\n  transition: all 0.2s ease-in-out;\n}"}}'::jsonb,
-        '.box {\n  /* Tambahkan durasi transisi halus di sini */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "transition"}]}'::jsonb
       ),
       (
@@ -910,7 +910,7 @@ INSERT INTO challenges (
         '["background-color: #fef08a;", "padding: 24px;", "border: 3px solid #0f172a;", "border-radius: 20px;", "box-shadow: 6px 6px 0px #0f172a;", "transition: all 0.2s ease-in-out;"]'::jsonb,
         '{"element": "css-arena"}'::jsonb,
         '{"preview": "Komponen Neo-Brutalisme Masterpiece", "description": "Kartu produk profesional lengkap."}'::jsonb,
-        '.box {\n  /* Bangun mahakarya komponen Neo-Brutalisme lengkap dari nol */\n}',
+        E'.box {\n  }',
         '{"goals": [{"property": "background-color"}, {"property": "border"}, {"property": "border-radius"}, {"property": "box-shadow"}]}'::jsonb
       ),
       (
@@ -926,7 +926,7 @@ INSERT INTO challenges (
         '["display: flex;", "display: block;", "display: grid;", "flex-direction: row;"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Kotak 1", "Kotak 2", "Kotak 3"]}'::jsonb,
         '{"display": "flex", "description": "Tiga kotak berbaris horizontal ke samping."}'::jsonb,
-        '.arena {\n  /* Nyalakan mode sakti Flexbox di sini */\n}',
+        E'.arena {\n  }',
         '{"goals": [{"property": "display", "accepted": ["flex", "inline-flex"]}]}'::jsonb
       ),
       (
@@ -942,7 +942,7 @@ INSERT INTO challenges (
         '["justify-content: flex-end;", "justify-content: flex-start;", "justify-content: center;", "align-items: flex-end;"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Kotak 1", "Kotak 2", "Kotak 3"]}'::jsonb,
         '{"display": "flex", "justifyContent": "flex-end", "description": "Semua kotak terdorong ke ujung kanan."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Dorong semua kotak ke ujung kanan */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "justify-content", "accepted": ["flex-end", "end"]}]}'::jsonb
       ),
       (
@@ -958,7 +958,7 @@ INSERT INTO challenges (
         '["justify-content: center;", "text-align: center;", "justify-content: space-between;", "align-items: center;"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Kotak 1", "Kotak 2", "Kotak 3"]}'::jsonb,
         '{"display": "flex", "justifyContent": "center", "description": "Semua kotak berkumpul tepat di tengah panggung."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Kumpulkan kotak tepat di tengah horizontal */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "justify-content", "accepted": ["center"]}]}'::jsonb
       ),
       (
@@ -974,7 +974,7 @@ INSERT INTO challenges (
         '["justify-content: space-between;", "justify-content: space-around;", "justify-content: space-evenly;", "justify-content: center;"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Kiri", "Tengah", "Kanan"]}'::jsonb,
         '{"display": "flex", "justifyContent": "space-between", "description": "Kotak pertama di pojok kiri, kotak terakhir di pojok kanan."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Pisahkan kotak ke kedua ujung dinding */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "justify-content", "accepted": ["space-between"]}]}'::jsonb
       ),
       (
@@ -990,7 +990,7 @@ INSERT INTO challenges (
         '["justify-content: space-evenly;", "justify-content: space-around;", "justify-content: space-between;", "gap: 20px;"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Kotak A", "Kotak B", "Kotak C"]}'::jsonb,
         '{"display": "flex", "justifyContent": "space-evenly", "description": "Semua kotak memiliki jarak tepi dan jarak sela yang sama rata."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Berikan jarak yang sama rata ke semua sisi */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "justify-content", "accepted": ["space-evenly", "space-around"]}]}'::jsonb
       ),
       (
@@ -1006,7 +1006,7 @@ INSERT INTO challenges (
         '["align-items: center;", "justify-content: center;", "vertical-align: middle;", "align-items: flex-end;"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Kotak 1", "Kotak 2", "Kotak 3"]}'::jsonb,
         '{"display": "flex", "alignItems": "center", "description": "Kotak berada di tengah ketinggian vertikal."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Tarik kotak ke tengah secara vertikal */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "align-items", "accepted": ["center"]}]}'::jsonb
       ),
       (
@@ -1022,7 +1022,7 @@ INSERT INTO challenges (
         '["align-items: flex-end;", "align-items: flex-start;", "justify-content: flex-end;", "align-items: baseline;"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Kotak 1", "Kotak 2", "Kotak 3"]}'::jsonb,
         '{"display": "flex", "alignItems": "flex-end", "description": "Semua kotak mendarat di lantai dasar arena."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Jatuhkan kotak ke lantai dasar arena */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "align-items", "accepted": ["flex-end", "end"]}]}'::jsonb
       ),
       (
@@ -1038,7 +1038,7 @@ INSERT INTO challenges (
         '["flex-direction: column;", "flex-direction: column-reverse;", "flex-direction: row;", "display: block;"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Atas", "Tengah", "Bawah"]}'::jsonb,
         '{"display": "flex", "flexDirection": "column", "description": "Kotak tersusun lurus dari atas ke bawah."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Ubah aliran arah menjadi kolom */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "flex-direction", "accepted": ["column"]}]}'::jsonb
       ),
       (
@@ -1054,7 +1054,7 @@ INSERT INTO challenges (
         '["gap: 20px;", "margin: 20px;", "padding: 20px;", "gap: 10px;"]'::jsonb,
         '{"element": "arena", "itemsCount": 3, "itemLabels": ["Kotak 1", "Kotak 2", "Kotak 3"]}'::jsonb,
         '{"display": "flex", "gap": "20px", "description": "Terdapat jarak lorong 20px yang rapi antar kotak."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Beri jarak 20px antar kotak */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "gap", "accepted": ["20px", "1.25rem"]}]}'::jsonb
       ),
       (
@@ -1070,7 +1070,7 @@ INSERT INTO challenges (
         '["flex-wrap: wrap;", "flex-wrap: nowrap;", "overflow: auto;", "white-space: normal;"]'::jsonb,
         '{"element": "arena", "itemsCount": 6, "itemLabels": ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"]}'::jsonb,
         '{"display": "flex", "flexWrap": "wrap", "gap": "16px", "description": "Item membungkus ke baris baru secara proporsional."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Izinkan kotak membungkus ke baris baru */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "flex-wrap", "accepted": ["wrap"]}]}'::jsonb
       ),
       (
@@ -1086,7 +1086,7 @@ INSERT INTO challenges (
         '["justify-content: center;", "align-items: center;", "place-items: center;", "margin: auto;"]'::jsonb,
         '{"element": "arena", "itemsCount": 1, "itemLabels": ["🎯 Pusat Target"]}'::jsonb,
         '{"display": "flex", "justifyContent": "center", "alignItems": "center", "description": "Kotak berada presisi di titik pusat vertikal dan horizontal kanvas."}'::jsonb,
-        '.arena {\n  display: flex;\n  /* Pusatkan di tengah horizontal & vertikal */\n}',
+        E'.arena {\n  display: flex;\n  }',
         '{"goals": [{"property": "justify-content", "accepted": ["center"]}, {"property": "align-items", "accepted": ["center"]}]}'::jsonb
       ),
       (
@@ -1102,7 +1102,7 @@ INSERT INTO challenges (
         '["display: flex;", "justify-content: space-between;", "align-items: center;", "gap: 16px;"]'::jsonb,
         '{"element": "navbar", "isNavbar": true}'::jsonb,
         '{"display": "flex", "justifyContent": "space-between", "alignItems": "center", "description": "Logo di ujung kiri, menu di ujung kanan, sejajar rapi secara vertikal."}'::jsonb,
-        '.navbar {\n  /* Rakit tata letak Modern Navbar di sini */\n}',
+        E'.navbar {\n  }',
         '{"goals": [{"property": "display", "accepted": ["flex"]}, {"property": "justify-content", "accepted": ["space-between"]}, {"property": "align-items", "accepted": ["center"]}]}'::jsonb
       ),
       (
@@ -1118,7 +1118,7 @@ INSERT INTO challenges (
         '["display: grid;", "grid-template-columns: 1fr 1fr;", "grid-template-columns: repeat(2, 1fr);", "display: flex;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 4, "itemLabels": ["Panel 1", "Panel 2", "Panel 3", "Panel 4"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "1fr 1fr", "description": "4 panel terbelah rapi menjadi 2 kolom simetris."}'::jsonb,
-        '.arena {\n  /* Aktifkan grid dan buat 2 kolom 1fr 1fr */\n}',
+        E'.arena {\n  }',
         '{"goals": [{"property": "display", "accepted": ["grid"]}, {"property": "grid-template-columns", "accepted": ["1fr 1fr", "repeat(2, 1fr)", "50% 50%"]}]}'::jsonb
       ),
       (
@@ -1134,7 +1134,7 @@ INSERT INTO challenges (
         '["grid-template-columns: repeat(3, 1fr);", "grid-template-columns: 1fr 1fr 1fr;", "repeat(3, 1fr)", "grid-template-rows: repeat(3, 1fr);"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 6, "itemLabels": ["Card 1", "Card 2", "Card 3", "Card 4", "Card 5", "Card 6"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "repeat(3, 1fr)", "description": "6 kartu tersusun rapi dalam format 3 kolom sama besar."}'::jsonb,
-        '.arena {\n  display: grid;\n  /* Buat 3 kolom sama besar menggunakan fungsi repeat */\n}',
+        E'.arena {\n  display: grid;\n  }',
         '{"goals": [{"property": "grid-template-columns", "accepted": ["repeat(3, 1fr)", "1fr 1fr 1fr"]}]}'::jsonb
       ),
       (
@@ -1150,7 +1150,7 @@ INSERT INTO challenges (
         '["grid-template-columns: 250px 1fr;", "grid-template-columns: 1fr 250px;", "grid-template-columns: 250px auto;", "width: 250px;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 2, "itemLabels": ["📁 Sidebar (250px)", "📄 Konten Utama (1fr)"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "250px 1fr", "description": "Kolom pertama sidebar 250px tetap, dan kolom konten mengisi seluruh sisa ruang kanvas."}'::jsonb,
-        '.arena {\n  display: grid;\n  /* Kolom 1 selebar 250px, kolom 2 selebar 1fr */\n}',
+        E'.arena {\n  display: grid;\n  }',
         '{"goals": [{"property": "grid-template-columns", "accepted": ["250px 1fr", "250px auto"]}]}'::jsonb
       ),
       (
@@ -1166,7 +1166,7 @@ INSERT INTO challenges (
         '["gap: 24px;", "grid-gap: 24px;", "margin: 24px;", "padding: 24px;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 4, "itemLabels": ["Item A", "Item B", "Item C", "Item D"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "24px", "description": "Pemisah lorong 24px yang proporsional di antara 4 panel."}'::jsonb,
-        '.arena {\n  display: grid;\n  grid-template-columns: repeat(2, 1fr);\n  /* Beri pemisah lorong sel sebesar 24px */\n}',
+        E'.arena {\n  display: grid;\n  grid-template-columns: repeat(2, 1fr);\n  }',
         '{"goals": [{"property": "gap", "accepted": ["24px", "1.5rem"]}]}'::jsonb
       ),
       (
@@ -1182,7 +1182,7 @@ INSERT INTO challenges (
         '["grid-column: span 3;", "grid-column: 1 / 4;", "grid-row: span 3;", "width: 100%;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 4, "itemLabels": ["🌟 Header (Span 3)", "Card 1", "Card 2", "Card 3"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "repeat(3, 1fr)", "description": "Header membentang penuh melintasi 3 kolom di bagian atas."}'::jsonb,
-        '.arena {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}\n\n.header {\n  /* Bentangkan sel header ini memakan 3 kolom */\n}',
+        E'.arena {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}\n\n.header {\n  }',
         '{"goals": [{"property": "grid-column", "accepted": ["span 3", "1 / 4", "1 / -1"]}]}'::jsonb
       ),
       (
@@ -1198,7 +1198,7 @@ INSERT INTO challenges (
         '["grid-row: span 2;", "grid-row: 1 / 3;", "grid-column: span 2;", "height: 100%;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 4, "itemLabels": ["🏰 Sidebar Menara (Span 2)", "Konten 1", "Konten 2", "Konten 3"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "200px 1fr", "description": "Sidebar membentang vertikal ke bawah memakan 2 baris penuh."}'::jsonb,
-        '.arena {\n  display: grid;\n  grid-template-columns: 200px 1fr;\n  gap: 16px;\n}\n\n.sidebar {\n  /* Tinggikan menara sidebar ini memakan 2 baris */\n}',
+        E'.arena {\n  display: grid;\n  grid-template-columns: 200px 1fr;\n  gap: 16px;\n}\n\n.sidebar {\n  }',
         '{"goals": [{"property": "grid-row", "accepted": ["span 2", "1 / 3"]}]}'::jsonb
       ),
       (
@@ -1214,7 +1214,7 @@ INSERT INTO challenges (
         '["grid-column: 1 / 3;", "grid-column: 1 / 4;", "grid-column: span 2;", "grid-row: 1 / 3;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 4, "itemLabels": ["🎯 Target Box (1 / 3)", "Panel 2", "Panel 3", "Panel 4"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "repeat(3, 1fr)", "description": "Target box ditempatkan presisi membentang dari garis grid 1 ke 3."}'::jsonb,
-        '.arena {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}\n\n.item-1 {\n  /* Bentangkan dari garis ke-1 hingga ke-3 */\n}',
+        E'.arena {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}\n\n.item-1 {\n  }',
         '{"goals": [{"property": "grid-column", "accepted": ["1 / 3", "1 / span 2"]}]}'::jsonb
       ),
       (
@@ -1230,7 +1230,7 @@ INSERT INTO challenges (
         '["place-items: center;", "justify-items: center;", "align-items: center;", "justify-content: center;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 4, "itemLabels": ["Pusat 1", "Pusat 2", "Pusat 3", "Pusat 4"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "repeat(2, 1fr)", "placeItems": "center", "description": "Seluruh elemen terpusat sempurna di dalam sel grid masing-masing."}'::jsonb,
-        '.arena {\n  display: grid;\n  grid-template-columns: repeat(2, 1fr);\n  /* Pusatkan seluruh item dengan satu baris sakti */\n}',
+        E'.arena {\n  display: grid;\n  grid-template-columns: repeat(2, 1fr);\n  }',
         '{"goals": [{"property": "place-items", "accepted": ["center"]}]}'::jsonb
       ),
       (
@@ -1246,7 +1246,7 @@ INSERT INTO challenges (
         '["grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));", "grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));", "minmax(200px, 1fr)", "repeat(3, 1fr)"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 4, "itemLabels": ["Adaptif 1", "Adaptif 2", "Adaptif 3", "Adaptif 4"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "repeat(auto-fit, minmax(200px, 1fr))", "description": "Grid responsif otomatis beradaptasi tanpa satu pun media query."}'::jsonb,
-        '.arena {\n  display: grid;\n  gap: 16px;\n  /* Buat grid responsif otomatis tanpa media query */\n}',
+        E'.arena {\n  display: grid;\n  gap: 16px;\n  }',
         '{"goals": [{"property": "grid-template-columns", "accepted": ["repeat(auto-fit, minmax(200px, 1fr))", "repeat(auto-fill, minmax(200px, 1fr))"]}]}'::jsonb
       ),
       (
@@ -1262,7 +1262,7 @@ INSERT INTO challenges (
         '["grid-area: header;", "grid-area: sidebar;", "grid-area: main;", "grid-column: header;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 3, "itemLabels": ["🎨 Box Header", "Sidebar Area", "Content Area"]}'::jsonb,
         '{"display": "grid", "description": "Elemen dinamai area header secara semantik."}'::jsonb,
-        '.box-header {\n  /* Beri nama area kotak ini sebagai header */\n}',
+        E'.box-header {\n  }',
         '{"goals": [{"property": "grid-area", "accepted": ["header"]}]}'::jsonb
       ),
       (
@@ -1278,7 +1278,7 @@ INSERT INTO challenges (
         '["display: flex;", "justify-content: center;", "align-items: center;", "place-items: center;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 4, "itemLabels": ["Kartu 1", "Kartu 2", "Kartu 3", "Kartu 4"]}'::jsonb,
         '{"display": "grid", "description": "Setiap sel grid menjadi Flex container yang memusatkan isinya."}'::jsonb,
-        '.arena {\n  display: grid;\n  grid-template-columns: repeat(2, 1fr);\n  gap: 16px;\n}\n\n.card {\n  /* Jadikan kotak ini flexbox untuk memusatkan isinya */\n}',
+        E'.arena {\n  display: grid;\n  grid-template-columns: repeat(2, 1fr);\n  gap: 16px;\n}\n\n.card {\n  }',
         '{"goals": [{"property": "display", "accepted": ["flex", "inline-flex"]}]}'::jsonb
       ),
       (
@@ -1294,7 +1294,7 @@ INSERT INTO challenges (
         '["grid-template-columns: repeat(4, 1fr);", "grid-column: span 2;", "grid-row: span 2;", "gap: 16px;"]'::jsonb,
         '{"element": "grid-arena", "itemsCount": 5, "itemLabels": ["📊 Analytics Overview (Span 2)", "⚡ Speed 99", "🛡️ Firewall Active", "⭐ Community Rank (Span 2)", "💎 Pro Badge"]}'::jsonb,
         '{"display": "grid", "gridTemplateColumns": "repeat(4, 1fr)", "gap": "16px", "description": "Dashboard Bento Box modern dengan kartu-kartu proporsional bervariasi."}'::jsonb,
-        '.arena {\n  display: grid;\n  /* Atur 4 kolom grid dan gap di sini */\n}\n\n.card-1 {\n  /* Bentangkan kartu utama */\n}',
+        E'.arena {\n  display: grid;\n  }\n\n.card-1 {\n  }',
         '{"goals": [{"property": "grid-template-columns", "accepted": ["repeat(4, 1fr)", "1fr 1fr 1fr 1fr"]}, {"property": "grid-column", "accepted": ["span 2"]}]}'::jsonb
       )
       ON CONFLICT (class_id, order_index) DO UPDATE SET
@@ -1346,8 +1346,8 @@ INSERT INTO user_enrollments (id, user_id, class_id, status) VALUES
 
 INSERT INTO user_progress (user_id, challenge_id, status, code_snapshot) VALUES
       ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'flexbox-1-activation', 'COMPLETED', '.arena {\n  display: flex;\n}'),
-      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'flexbox-2-push-justify-end', 'IN_PROGRESS', '.arena {\n  display: flex;\n  /* Lengkapi agar terdorong ke ujung kanan */\n}'),
-      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'html-1-raw-content', 'IN_PROGRESS', '<!-- Tulis judul h1 "Profil Saya" dan data nama & umurmu dengan tag p di sini -->')
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'flexbox-2-push-justify-end', 'IN_PROGRESS', '.arena {\n  display: flex;\n  \n}'),
+      ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'html-1-raw-content', 'IN_PROGRESS', '')
       ON CONFLICT (user_id, challenge_id) DO UPDATE SET
         status = EXCLUDED.status,
         code_snapshot = EXCLUDED.code_snapshot;

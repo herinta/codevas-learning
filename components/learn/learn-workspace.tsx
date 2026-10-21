@@ -82,19 +82,22 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
             found.codeSnapshot ||
             found.initial_state ||
             (found.class_id === "html-architecture" || found.id.startsWith("html-")
-              ? "<!-- Tulis tag HTML di sini -->"
+              ? ""
               : found.class_id === "css-grid" || found.id.startsWith("grid-") || found.id.startsWith("gr-")
-              ? `.grid-arena {\n  display: grid;\n  /* Tulis CSS Grid di sini */\n}`
+              ? `.grid-arena {\n  display: grid;\n}`
               : found.id === "flexbox-12-boss-modern-navbar" || found.id === "fb-12"
-              ? `.navbar {\n  /* Tulis CSS Flexbox di sini */\n}`
-              : `.arena {\n  /* Tulis CSS Flexbox di sini */\n}`);
+              ? `.navbar {\n  \n}`
+              : `.arena {\n  \n}`);
 
-          // Normalize literal \n and clean cluttering instruction comments from editor
+          // Normalize literal \n, unescape quotes, and strip all instruction comments from editor
           const cleanCode = rawCode
             .replace(/\\r\\n/g, "\n")
             .replace(/\\n/g, "\n")
             .replace(/\r\n/g, "\n")
             .replace(/<!--[\s\S]*?-->\s*/g, "")
+            .replace(/\/\*[\s\S]*?\*\/\s*/g, "")
+            .replace(/\\"/g, '"')
+            .replace(/[ \t]+$/gm, "")
             .trim();
 
           setCssCode(cleanCode);
@@ -230,6 +233,9 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
         .replace(/\\n/g, "\n")
         .replace(/\r\n/g, "\n")
         .replace(/<!--[\s\S]*?-->\s*/g, "")
+        .replace(/\/\*[\s\S]*?\*\/\s*/g, "")
+        .replace(/\\"/g, '"')
+        .replace(/[ \t]+$/gm, "")
         .trim();
       setCssCode(cleanInitial);
       setHasSavedPass(false);
