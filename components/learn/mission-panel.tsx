@@ -9,8 +9,6 @@ import {
   ChevronRight,
   Layers,
   FileCode,
-  Copy,
-  Check,
 } from "lucide-react";
 import { ChallengeData, ConceptDemo } from "./types";
 
@@ -276,18 +274,6 @@ const MiniCodeEditor: React.FC<{
   example: MissionExample;
   isCss: boolean;
 }> = ({ example, isCss }) => {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(example.code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // ignore
-    }
-  };
-
   const lines = example.code.replace(/\\n/g, "\n").split(/\r?\n/);
 
   return (
@@ -310,27 +296,9 @@ const MiniCodeEditor: React.FC<{
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-display font-black text-slate-400 tracking-wider uppercase hidden sm:inline">
+          <span className="text-[10px] font-display font-black text-slate-400 tracking-wider uppercase">
             Contoh Acuan
           </span>
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-95 transition-all text-[11px] font-mono text-slate-300 hover:text-white flex items-center gap-1 border border-slate-700 cursor-pointer shadow-xs"
-            title="Salin contoh kode"
-          >
-            {copied ? (
-              <>
-                <Check className="w-3 h-3 text-emerald-400" />
-                <span className="text-emerald-400 font-bold">Tersalin!</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-3 h-3 text-slate-400" />
-                <span>Salin</span>
-              </>
-            )}
-          </button>
         </div>
       </div>
 
