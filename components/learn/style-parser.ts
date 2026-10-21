@@ -165,20 +165,60 @@ export function parseUserStyles(css: string): ParsedStyles {
  * Check if a snippet is already present in user's CSS/HTML
  */
 export function isHelperActive(snippet: string, code: string): boolean {
+  if (!code || !snippet) return false;
   const clean = snippet.trim().replace(/;$/, "");
+
+  // HTML tag snippets
   if (clean.startsWith("<")) {
+    // Exact match (case-insensitive)
+    if (code.toLowerCase().includes(clean.toLowerCase())) {
+      return true;
+    }
+
+    // Special container wrappers
     if (clean === "<div> ... </div>") {
       return /<div[^>]*>[\s\S]*<\/div>/i.test(code);
     }
+    if (clean === "<div>" || clean === "</div>") {
+      return code.toLowerCase().includes(clean.toLowerCase());
+    }
+
+    // If snippet has an inner text prefix, e.g. <p>Nama: Alex Coder</p> or <p>Umur: 16 Tahun</p>
+    const prefixMatch = clean.match(/<([a-z0-9_-]+)[^>]*>\s*([a-zA-Z0-9]+:)/i);
+    if (prefixMatch) {
+      const [, tag, prefix] = prefixMatch;
+      return new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?${prefix}`, "i").test(code);
+    }
+
+    // If snippet has a class attribute, e.g. <div class="profile-card">
+    const classMatch = clean.match(/class=["']([^"']+)["']/i);
+    if (classMatch) {
+      return new RegExp(`class=["'][^"']*\\b${classMatch[1]}\\b[^"']*["']`, "i").test(code);
+    }
+
+    // If snippet has specific inner text, e.g. <h1>Profil Developer</h1> or <button>Follow</button>
+    const innerTextMatch = clean.match(/>([^<]+)</);
+    if (innerTextMatch) {
+      const inner = innerTextMatch[1].trim();
+      if (inner.length > 2) {
+        return code.toLowerCase().includes(inner.toLowerCase());
+      }
+    }
+
+    // Void elements e.g. <img ... />
     if (clean.startsWith("<img")) {
       return /<img\b/i.test(code);
     }
-    const tagMatch = clean.match(/^<([a-z0-9]+)/i);
-    if (tagMatch) {
-      return new RegExp(`<${tagMatch[1]}\\b`, "i").test(code);
+
+    // Single tag without text e.g. <section> or <main>
+    const singleTagMatch = clean.match(/^<([a-z0-9_-]+)\s*\/?>$/i);
+    if (singleTagMatch) {
+      return new RegExp(`<${singleTagMatch[1]}\\b`, "i").test(code);
     }
-    return code.toLowerCase().includes(clean.toLowerCase());
+
+    return false;
   }
+
   if (clean.includes(":")) {
     const [prop, val] = clean.split(":").map((s) => s.trim());
     const escapedVal = val.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
@@ -198,7 +238,7 @@ export function isHelperActive(snippet: string, code: string): boolean {
 export function toggleHelperSnippet(prev: string, snippet: string): string {
   const clean = snippet.trim().replace(/;$/, "");
 
-  // 0. If snippet is an HTML tag (e.g. "<h1>Profil Saya</h1>" or "<div> ... </div>")
+  // 0. If snippet is an HTML tag (e.g. "<h1>Profil Developer</h1>", "<p>Nama: Alex Coder</p>", etc.)
   if (clean.startsWith("<")) {
     if (clean === "<div> ... </div>") {
       const trimmed = prev.trim();
@@ -208,30 +248,45 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
       return `<div>\n  ${trimmed}\n</div>`;
     }
 
-    const tagMatch = clean.match(/^<([a-z0-9]+)/i);
-    const tagName = tagMatch ? tagMatch[1] : "";
-
-    // If exact snippet exists -> TOGGLE OFF (REMOVE)
+    // 0a. If EXACT snippet exists -> TOGGLE OFF (REMOVE)
     if (prev.includes(clean)) {
-      return prev.replace(clean, "").trim();
+      return prev
+        .replace(clean, "")
+        .replace(/\n\s*\n/g, "\n")
+        .trim();
     }
 
-    // If tag already exists -> replace tag block
-    if (
-      tagName &&
-      tagName !== "div" &&
-      tagName !== "img" &&
-      new RegExp(`<${tagName}\\b[^>]*>[\\s\\S]*?<\\/${tagName}>`, "i").test(prev)
-    ) {
-      return prev.replace(new RegExp(`\\s*<${tagName}\\b[^>]*>[\\s\\S]*?<\\/${tagName}>`, "i"), "").trim();
+    // 0b. If snippet has a distinct prefix like <p>Nama: or <p>Umur:
+    const prefixMatch = clean.match(/<([a-z0-9_-]+)[^>]*>\s*([a-zA-Z0-9]+:)/i);
+    if (prefixMatch) {
+      const [, tag, prefix] = prefixMatch;
+      const existingPrefixRegex = new RegExp(`\\s*<${tag}\\b[^>]*>\\s*${prefix}[\\s\\S]*?<\\/${tag}>`, "i");
+      if (existingPrefixRegex.test(prev)) {
+        return prev
+          .replace(existingPrefixRegex, "")
+          .replace(/\n\s*\n/g, "\n")
+          .trim();
+      }
     }
 
-    // If there is an HTML comment placeholder like <!-- ... -->, replace it!
+    // 0c. If snippet is a container with a specific class, e.g. <div class="profile-card"> ... </div>
+    const classMatch = clean.match(/class=["']([^"']+)["']/i);
+    if (classMatch) {
+      const cls = classMatch[1];
+      const classRegex = new RegExp(`\\s*<div[^>]*class=["'][^"']*\\b${cls}\\b[^"']*["'][^>]*>[\\s\\S]*?<\\/div>`, "i");
+      if (classRegex.test(prev)) {
+        return prev.replace(classRegex, "").replace(/\n\s*\n/g, "\n").trim();
+      }
+    }
+
+    // 0d. If there is an HTML comment placeholder like <!-- ... -->, replace it!
     if (/<!--[\s\S]*?-->/.test(prev)) {
       return prev.replace(/<!--[\s\S]*?-->/, clean).trim();
     }
 
-    return prev ? `${prev}\n${clean}` : clean;
+    // 0e. Otherwise, append the snippet on a clean new line!
+    const trimmed = prev.trim();
+    return trimmed ? `${trimmed}\n${clean}` : clean;
   }
 
   // 1. If snippet is a CSS declaration (e.g. "display: flex" or "justify-content: center")
