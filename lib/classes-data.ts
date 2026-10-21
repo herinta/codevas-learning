@@ -57,7 +57,7 @@ export const CLASSES_LIST: ClassDetail[] = [
     categoryLabel: "Live Code",
     title: "HTML Architecture (The Skeletons & Hierarchy)",
     tagline:
-      "Memahami logika 'Kardus' (Container), hierarki parent-child, nesting, dan kapan harus membungkus elemen.",
+      "Memahami logika 'Box' (Container), hierarki parent-child, nesting, dan kapan harus membungkus elemen.",
     stage: "Stage 1: The Architect",
     stageColor: "bg-[#c8eaff] text-[#006080]",
     level: "Pemula",
@@ -77,7 +77,7 @@ export const CLASSES_LIST: ClassDetail[] = [
     status: "available",
     accentBg: "bg-tertiary-fixed",
     about:
-      "Pondasi logika kontainer web: pahami hierarki parent-child, teknik membungkus div (kardus dalam kardus), elemen self-closing, tautan, list, hingga semantik sebelum ditata oleh CSS.",
+      "Pondasi logika kontainer web: pahami hierarki parent-child, teknik membungkus div (box dalam box), elemen self-closing, tautan, list, hingga semantik sebelum ditata oleh CSS.",
     prerequisites:
       "Tidak ada prasyarat. Terbuka untuk semua yang baru pertama kali memulai belajar web.",
     instructor: {
@@ -90,14 +90,14 @@ export const CLASSES_LIST: ClassDetail[] = [
     tags: ["Live Code", "HTML Architecture", "DOM Hierarchy", "20 Levels"],
     modules: [
       { id: "html-1-raw-content", number: 1, title: "Level 1: The Raw Canvas & Floating Elements", description: "Buat judul utama h1 dan data diri nama & umurmu dengan tag p.", status: "in-progress", xp: 30, duration: "10 Menit", puzzlesCount: 1 },
-      { id: "html-2-first-box", number: 2, title: "Level 2: The First Container (Kardus Pertama)", description: "Bungkus seluruh teks profil ke dalam kardus pembungkus pertama div.", status: "locked", xp: 30, duration: "10 Menit", puzzlesCount: 1 },
+      { id: "html-2-first-box", number: 2, title: "Level 2: The First Container (Box Pertama)", description: "Bungkus seluruh teks profil ke dalam box pembungkus pertama div.", status: "locked", xp: 30, duration: "10 Menit", puzzlesCount: 1 },
       { id: "html-3-named-container", number: 3, title: "Level 3: The Named Box (Identitas Kontainer)", description: "Beri identitas class='profile-card' pada tag div pembungkus.", status: "locked", xp: 35, duration: "10 Menit", puzzlesCount: 1 },
-      { id: "html-4-siblings", number: 4, title: "Level 4: The Siblings (Dua Kardus Bersaudara)", description: "Buat dua kartu sejajar (siblings): Kartu Profil dan Kartu Catatan Pengembang.", status: "locked", xp: 35, duration: "15 Menit", puzzlesCount: 1 },
+      { id: "html-4-siblings", number: 4, title: "Level 4: The Siblings (Dua Box Bersaudara)", description: "Buat dua kartu sejajar (siblings): Kartu Profil dan Kartu Catatan Pengembang.", status: "locked", xp: 35, duration: "15 Menit", puzzlesCount: 1 },
       { id: "html-5-triple-stack", number: 5, title: "Level 5: The Triple Stack (Tiga Zona Vertikal)", description: "Bagi halaman menjadi 3 zona vertikal: top-bar, content-area, bottom-bar.", status: "locked", xp: 35, duration: "15 Menit", puzzlesCount: 1 },
-      { id: "html-6-matryoshka", number: 6, title: "Level 6: The Matryoshka (Nesting Kolom Ganda)", description: "Kardus dalam kardus: 1 div parent membungkus 2 div child avatar-box dan info-box.", status: "locked", xp: 40, duration: "15 Menit", puzzlesCount: 1 },
+      { id: "html-6-matryoshka", number: 6, title: "Level 6: The Matryoshka (Nesting Kolom Ganda)", description: "Box dalam box: 1 div parent membungkus 2 div child avatar-box dan info-box.", status: "locked", xp: 40, duration: "15 Menit", puzzlesCount: 1 },
       { id: "html-7-avatar-frame", number: 7, title: "Level 7: The Frame (Div Pembungkus Media)", description: "Bungkus elemen img dengan div avatar-frame ber-atribut src dan alt.", status: "locked", xp: 40, duration: "15 Menit", puzzlesCount: 1 },
       { id: "html-8-card-anatomy", number: 8, title: "Level 8: Card Anatomy (Header & Body Div)", description: "Pisahkan anatomi kartu menjadi div card-header dan card-body.", status: "locked", xp: 40, duration: "15 Menit", puzzlesCount: 1 },
-      { id: "html-9-action-row", number: 9, title: "Level 9: The Action Row (Kardus Tombol Aksi)", description: "Kelompokkan tombol interaksi ke dalam div baris action-row.", status: "locked", xp: 40, duration: "15 Menit", puzzlesCount: 1 },
+      { id: "html-9-action-row", number: 9, title: "Level 9: The Action Row (Box Tombol Aksi)", description: "Kelompokkan tombol interaksi ke dalam div baris action-row.", status: "locked", xp: 40, duration: "15 Menit", puzzlesCount: 1 },
       { id: "html-10-badge-overlay", number: 10, title: "Level 10: The Badge Pill (Label Kategori & Tag Profesi)", description: "Tambahkan label badge profesi/kategori ke dalam header profil.", status: "locked", xp: 40, duration: "15 Menit", puzzlesCount: 1 },
       { id: "html-11-stats-columns", number: 11, title: "Level 11: The Metrics Summary (3 Kolom Metrik)", description: "Buat metrics-row yang membungkus 3 div metric-box sejajar.", status: "locked", xp: 45, duration: "20 Menit", puzzlesCount: 1 },
       { id: "html-12-modular-card", number: 12, title: "Level 12: Capstone Project - The Modular Profile Card", description: "Proyek komprehensif: Rakit kartu modular lengkap dengan 5 lapisan div!", status: "locked", xp: 60, duration: "25 Menit", puzzlesCount: 1 },

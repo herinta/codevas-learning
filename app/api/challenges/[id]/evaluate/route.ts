@@ -39,7 +39,7 @@ function evaluateCss(challengeId: string, cssCode: string): {
     return {
       passed,
       score: passed ? 100 : (hasDiv ? 50 : 0),
-      feedback: passed ? ["Kardus <div> pertamamu berhasil membungkus seluruh elemen profil dengan rapi!"] : feedback,
+      feedback: passed ? ["Box <div> pertamamu berhasil membungkus seluruh elemen profil dengan rapi!"] : feedback,
     };
   }
 
@@ -52,7 +52,7 @@ function evaluateCss(challengeId: string, cssCode: string): {
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["Kardusmu kini memiliki identitas class='profile-card' yang siap ditata oleh CSS!"] : feedback,
+      feedback: passed ? ["Box-mu kini memiliki identitas class='profile-card' yang siap ditata oleh CSS!"] : feedback,
     };
   }
 
@@ -95,7 +95,7 @@ function evaluateCss(challengeId: string, cssCode: string): {
     return {
       passed,
       score: passed ? 100 : 50,
-      feedback: passed ? ["Sempurna! Konsep nesting kolom (kardus di dalam kardus) berhasil dipahami!"] : feedback,
+      feedback: passed ? ["Sempurna! Konsep nesting kolom (box di dalam box) berhasil dipahami!"] : feedback,
     };
   }
 
@@ -190,7 +190,7 @@ function evaluateCss(challengeId: string, cssCode: string): {
     const hasLayout = /<div[^>]*class\s*=\s*["'][^"']*\bapp-layout\b[^"']*["'][^>]*>/i.test(cssCode);
     const hasSidebar = /<div[^>]*class\s*=\s*["'][^"']*\bsidebar\b[^"']*["'][^>]*>/i.test(cssCode);
     const hasMain = /<div[^>]*class\s*=\s*["'][^"']*\bmain-content\b[^"']*["'][^>]*>/i.test(cssCode);
-    if (!hasLayout) feedback.push("Buat kardus pembungkus layar <div class='app-layout'>.");
+    if (!hasLayout) feedback.push("Buat box pembungkus layar <div class='app-layout'>.");
     if (!hasSidebar) feedback.push("Buat panel bilah samping <div class='sidebar'>.");
     if (!hasMain) feedback.push("Buat panel area kerja utama <div class='main-content'>.");
     const passed = hasLayout && hasSidebar && hasMain;
@@ -253,8 +253,8 @@ function evaluateCss(challengeId: string, cssCode: string): {
     const hasOverlay = /<div[^>]*class\s*=\s*["'][^"']*\bmodal-overlay\b[^"']*["'][^>]*>/i.test(cssCode);
     const hasBox = /<div[^>]*class\s*=\s*["'][^"']*\bmodal-box\b[^"']*["'][^>]*>/i.test(cssCode);
     const hasContent = /<h3\b/i.test(cssCode) && /<button\b/i.test(cssCode);
-    if (!hasOverlay) feedback.push("Buat kardus luar lapisan gelap <div class='modal-overlay'>.");
-    if (!hasBox) feedback.push("Di dalamnya, buat kardus popup tengah <div class='modal-box'>.");
+    if (!hasOverlay) feedback.push("Buat box luar lapisan gelap <div class='modal-overlay'>.");
+    if (!hasBox) feedback.push("Di dalamnya, buat box popup tengah <div class='modal-box'>.");
     if (!hasContent) feedback.push("Sertakan judul <h3>, teks paragraf, dan tombol <button>Tutup</button> di dalam modal-box.");
     const passed = hasOverlay && hasBox && hasContent;
     return {
@@ -269,7 +269,7 @@ function evaluateCss(challengeId: string, cssCode: string): {
     const items = cssCode.match(/<div[^>]*class\s*=\s*["'][^"']*\bbento-item\b[^"']*["'][^>]*>/gi);
     const hasFourItems = Boolean(items && items.length >= 4);
     if (!hasBento) feedback.push("Buat wadah induk <div class='bento-container'>.");
-    if (!hasFourItems) feedback.push("Sertakan minimal 4 kardus modular <div class='bento-item'> di dalamnya.");
+    if (!hasFourItems) feedback.push("Sertakan minimal 4 box modular <div class='bento-item'> di dalamnya.");
     const passed = hasBento && hasFourItems;
     return {
       passed,

@@ -136,12 +136,12 @@ Kurikulum dibagi berdasarkan **Kategori** (metode pendekatan belajar). Di dalam 
    - Menghapus dan mengganti semua istilah game (*"misi"*, *"quest"*, *"menaklukkan"*, *"boss fight"*, *"jurus"*) di seluruh kurikulum dan UI menjadi istilah profesional (*"Panduan Tantangan"*, *"Capstone Project"*, *"Final Project"*, *"Final Component"*, *"menyelesaikan"*).
    - Menghapus referensi kata *"status"* yang dipaksakan:
      - Level 4 diubah dari *"Kartu Status Harian"* (`status-box`) menjadi *"Kartu Catatan Pengembang"* (`notes-card`).
-     - Level 10 diubah dari *"Kardus Tag Status"* (`badge-status`) menjadi *"Label Kategori & Tag Profesi"* (`badge-role`).
+     - Level 10 diubah dari *"Box Tag Status"* (`badge-status`) menjadi *"Label Kategori & Tag Profesi"* (`badge-role`).
      - Level 11 diubah dari XP status game menjadi metrik portofolio profesional riil (`metrics-row` dengan Proyek, Kontribusi, Repositori).
 2. **Modularisasi Halaman Belajar (`/classes/[id]/learn/[challengeid]`):**
    - Halaman kerja belajar yang sebelumnya menumpuk telah dipisah menjadi komponen modular mandiri: `MissionPanel`, `TheoryModal`, `SyntaxHelperBar`, `CompletionActionBar`, `LiveArena`, dan `StyleParser`.
 3. **Penyempurnaan Kurikulum HTML Architecture (20 Level):**
-   - Dibuat bertahap dengan penekanan pada logika pembungkus `<div>` (kardus dalam kardus) dan penulisan data biodata pengguna yang nyata.
+   - Dibuat bertahap dengan penekanan pada logika pembungkus `<div>` (box dalam box) dan penulisan data biodata pengguna yang nyata.
 4. **Sinkronisasi Database & Evaluator:**
    - Skema dan data awal `docker/init-db.sql` telah diperbarui dan dieksekusi ke PostgreSQL lokal (56 tantangan aktif).
    - Script `scripts/setup-db.mjs` telah disederhanakan untuk membaca dan menjalankan `docker/init-db.sql` secara langsung.

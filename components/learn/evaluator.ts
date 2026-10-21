@@ -251,8 +251,8 @@ export function evaluateLiveGoals(
     return {
       passed,
       goals: [
-        { label: "Kardus luar <div class=\"modal-overlay\">", passed: hasOverlay },
-        { label: "Kardus popup tengah <div class=\"modal-box\">", passed: hasBox },
+        { label: "Box luar <div class=\"modal-overlay\">", passed: hasOverlay },
+        { label: "Box popup tengah <div class=\"modal-box\">", passed: hasBox },
         { label: "Memuat judul <h3>, paragraf, dan tombol <button>", passed: hasContent },
       ],
     };
@@ -267,7 +267,7 @@ export function evaluateLiveGoals(
       passed,
       goals: [
         { label: "Wadah induk <div class=\"bento-container\">", passed: hasBento },
-        { label: "Minimal 4 kardus modular <div class=\"bento-item\">", passed: hasFourItems },
+        { label: "Minimal 4 box modular <div class=\"bento-item\">", passed: hasFourItems },
       ],
     };
   }
