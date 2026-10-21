@@ -270,6 +270,8 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
   const cleanHint = useMemo(() => {
     if (!challenge?.hint) return null;
     return challenge.hint
+      .replace(/\\"/g, '"')
+      .replace(/\\'/g, "'")
       .replace(/\s*\(misal:[^)]+\)\.?/gi, "")
       .replace(/\[Namamu\]/g, "Alex Coder")
       .replace(/\[Umurmu\]/g, "16 Tahun")

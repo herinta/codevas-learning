@@ -30,6 +30,8 @@ interface MissionExample {
 function cleanInstructionText(text: string): string {
   if (!text) return "";
   return text
+    .replace(/\\"/g, '"')
+    .replace(/\\'/g, "'")
     .replace(
       /\s*\(misal:\s*<p>Nama:[^)]+\)\.?\s*Bebas tuliskan nama dan umurmu sendiri!?/gi,
       " Perhatikan format kode pada editor acuan di bawah!"
@@ -427,7 +429,7 @@ export const MissionPanel: React.FC<MissionPanelProps> = ({
         </button>
         {showHint && (
           <div className="mt-2 p-3.5 bg-[#FEF08A]/70 border-2 border-slate-900 rounded-xl text-xs text-slate-900 font-medium leading-relaxed shadow-[0_2px_0_#0f172a]">
-            {challenge?.hint ||
+            {challenge?.hint?.replace(/\\"/g, '"').replace(/\\'/g, "'") ||
               "Tuliskan tag HTML atau properti CSS sesuai instruksi di atas."}
           </div>
         )}
