@@ -383,17 +383,52 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
       </div>
 
       {/* ======================================================== */}
-      {/* 3. DESKTOP WORKSPACE (3 Columns: Mission | Arena | Code) */}
+      {/* 3. DESKTOP WORKSPACE (2 Columns: Soal & Editor | Target & Live) */}
       {/* ======================================================== */}
       <div className="hidden lg:grid lg:grid-cols-12 flex-1 gap-0 overflow-hidden bg-[#FFFDF7]">
-        {/* PANEL 1: INSTRUCTIONS & VISUAL TARGET GOAL (4 Cols) */}
-        <MissionPanel
-          challenge={challenge}
-          onOpenTheory={() => setShowTheoryModal(true)}
-        />
+        {/* PANEL 1: SOAL, CODE EDITOR & REAL-TIME ACTION (6 Cols) */}
+        <div className="lg:col-span-6 border-r-3 border-slate-900 p-5 sm:p-6 bg-white flex flex-col justify-between relative overflow-y-auto gap-6 shadow-xs">
+          {/* Confetti Canvas */}
+          <canvas
+            ref={confettiCanvasRef}
+            className="pointer-events-none absolute inset-0 z-30 w-full h-full"
+          />
 
-        {/* PANEL 2: INTERACTIVE LIVE CANVAS (4 Cols) */}
-        <div className="lg:col-span-4 border-r-3 border-slate-900 p-4 sm:p-5 bg-slate-50 flex flex-col gap-4 overflow-y-auto">
+          <div className="space-y-6">
+            <MissionPanel
+              challenge={challenge}
+              onOpenTheory={() => setShowTheoryModal(true)}
+            >
+              <CodeEditorPanel
+                cssCode={cssCode}
+                setCssCode={handleSetCssCode}
+                shuffledHelpers={shuffledHelpers}
+                onToggleHelper={handleToggleHelper}
+                onReset={handleReset}
+                isHtmlMode={isHtmlMode}
+                sizeMode="desktop"
+              />
+            </MissionPanel>
+          </div>
+
+          <CompletionActionBar
+            isPassed={liveEval.passed}
+            earnedXpInfo={earnedXpInfo}
+            isClassCompleted={isClassCompleted}
+            challenge={challenge}
+            saveError={saveError}
+            isSaving={isSaving}
+            onRetrySave={saveProgress}
+            onNextLevel={handleNextLevel}
+            classId={classId}
+            challengeId={challengeId}
+            user={user}
+            sizeMode="desktop"
+          />
+        </div>
+
+        {/* PANEL 2: TARGET GOAL & LIVE ARENA (6 Cols) */}
+        <div className="lg:col-span-6 p-5 sm:p-6 bg-slate-50 flex flex-col gap-5 overflow-y-auto">
           {/* TOP: TARGET GOAL / HASIL AKHIR YANG DIHARAPKAN */}
           <TargetGoalPanel
             challengeId={challengeId}
@@ -401,7 +436,7 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
           />
 
           {/* BOTTOM: LIVE ARENA / HASIL KODEMU SAAT INI */}
-          <div className="flex flex-col gap-2 flex-1 min-h-0">
+          <div className="flex flex-col gap-2.5 flex-1 min-h-0">
             <div className="flex items-center justify-between px-1">
               <span className="font-display font-black text-xs uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
                 <span className={`w-2.5 h-2.5 rounded-full ${liveEval.passed ? "bg-emerald-500 animate-pulse" : "bg-[#EF4444]"}`} />
@@ -425,42 +460,6 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
               sizeMode="desktop"
             />
           </div>
-        </div>
-
-        {/* PANEL 3: CODE EDITOR & REAL-TIME ACTION (4 Cols) */}
-        <div className="lg:col-span-4 p-6 bg-white flex flex-col justify-between relative overflow-y-auto">
-          {/* Confetti Canvas */}
-          <canvas
-            ref={confettiCanvasRef}
-            className="pointer-events-none absolute inset-0 z-30 w-full h-full"
-          />
-
-          <div className="space-y-4">
-            <CodeEditorPanel
-              cssCode={cssCode}
-              setCssCode={handleSetCssCode}
-              shuffledHelpers={shuffledHelpers}
-              onToggleHelper={handleToggleHelper}
-              onReset={handleReset}
-              isHtmlMode={isHtmlMode}
-              sizeMode="desktop"
-            />
-          </div>
-
-          <CompletionActionBar
-            isPassed={liveEval.passed}
-            earnedXpInfo={earnedXpInfo}
-            isClassCompleted={isClassCompleted}
-            challenge={challenge}
-            saveError={saveError}
-            isSaving={isSaving}
-            onRetrySave={saveProgress}
-            onNextLevel={handleNextLevel}
-            classId={classId}
-            challengeId={challengeId}
-            user={user}
-            sizeMode="desktop"
-          />
         </div>
       </div>
 
