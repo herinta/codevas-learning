@@ -380,6 +380,14 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
 export function sanitizeUserHtml(code: string): string {
   if (!code) return "";
   return code
+    // 1. Unescape literal escaped newlines and carriage returns
+    .replace(/\\r\\n/g, "\n")
+    .replace(/\\n/g, "\n")
+    .replace(/\\r/g, "\n")
+    // 2. Strip any remaining stray literal \n or /n tokens that could render as visible text
+    .replace(/(?:^|\n|>)\s*\\n\s*(?:<|\n|$)/g, "$1\n$2")
+    .replace(/(?:^|\n|>)\s*\/n\s*(?:<|\n|$)/g, "$1\n$2")
+    // 3. Security sanitization: strip script, iframe, objects, event handlers, etc.
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
     .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
     .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")

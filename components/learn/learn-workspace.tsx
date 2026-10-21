@@ -126,7 +126,11 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
 
   // Sanitized HTML for safe real-time 60 FPS arena preview
   const sanitizedUserHtml = useMemo(() => {
-    return sanitizeUserHtml(cssCode);
+    const unescaped = (cssCode || "")
+      .replace(/\\r\\n/g, "\n")
+      .replace(/\\n/g, "\n")
+      .replace(/\\r/g, "\n");
+    return sanitizeUserHtml(unescaped);
   }, [cssCode]);
 
   // Real-time Live Evaluation as user types (instant reactivity)
@@ -202,13 +206,32 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
   }, [liveEval.passed, hasSavedPass, user, saveError, saveProgress]);
 
   // Actions
+  const handleSetCssCode = useCallback(
+    (codeOrUpdater: string | ((prev: string) => string)) => {
+      setCssCode((prev) => {
+        const next =
+          typeof codeOrUpdater === "function" ? codeOrUpdater(prev) : codeOrUpdater;
+        return next
+          .replace(/\\r\\n/g, "\n")
+          .replace(/\\n/g, "\n");
+      });
+    },
+    []
+  );
+
   const handleToggleHelper = (snippet: string) => {
-    setCssCode((prev) => toggleHelperSnippet(prev, snippet));
+    handleSetCssCode((prev) => toggleHelperSnippet(prev, snippet));
   };
 
   const handleReset = () => {
     if (challenge) {
-      setCssCode(challenge.initial_state);
+      const cleanInitial = (challenge.initial_state || "")
+        .replace(/\\r\\n/g, "\n")
+        .replace(/\\n/g, "\n")
+        .replace(/\r\n/g, "\n")
+        .replace(/<!--[\s\S]*?-->\s*/g, "")
+        .trim();
+      setCssCode(cleanInitial);
       setHasSavedPass(false);
     }
   };
@@ -330,7 +353,7 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
         <div className="flex-1 p-2 flex flex-col min-h-[90px] max-h-[160px] bg-[#FFFDF7]">
           <CodeEditorPanel
             cssCode={cssCode}
-            setCssCode={setCssCode}
+            setCssCode={handleSetCssCode}
             shuffledHelpers={shuffledHelpers}
             onToggleHelper={handleToggleHelper}
             onReset={handleReset}
@@ -391,7 +414,7 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
           <div className="space-y-4">
             <CodeEditorPanel
               cssCode={cssCode}
-              setCssCode={setCssCode}
+              setCssCode={handleSetCssCode}
               shuffledHelpers={shuffledHelpers}
               onToggleHelper={handleToggleHelper}
               onReset={handleReset}

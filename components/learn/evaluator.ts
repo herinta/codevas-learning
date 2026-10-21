@@ -19,8 +19,8 @@ export function evaluateLiveGoals(
       passed,
       goals: [
         { label: "Judul <h1>Profil Developer</h1>", passed: hasH1 },
-        { label: "Data <p>Nama: [namamu]</p>", passed: hasName },
-        { label: "Data <p>Umur: [umurmu]</p>", passed: hasAge },
+        { label: "Data <p> untuk Nama (misal: Nama: Alex)", passed: hasName },
+        { label: "Data <p> untuk Umur (misal: Umur: 16)", passed: hasAge },
       ],
     };
   }

@@ -302,7 +302,7 @@ INSERT INTO challenges (
         '["<div>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview":"<div><h1>Profil Developer</h1><p>Nama: Alex Coder</p><p>Umur: 16 Tahun</p></div>","description":"Kontainer div membungkus seluruh teks profil.","concept_demo":{"conceptTitle":"Filosofi Kardus: Kenapa Harus Dibungkus <div>?","whyItMatters":"Tag <div> adalah kotak pembungkus generik (kontainer). Tanpa pembungkus, elemen teks mengambang bebas di layar tanpa batas tepi. Dengan membungkus elemen ke dalam <div>, kita menciptakan satu kesatuan unit yang kokoh sehingga dapat diposisikan bersamaan, diberi warna latar, padding, border, dan ditata oleh CSS.","whatIfWithout":"Jika tidak dibungkus, setiap elemen melayang mandiri. Ketika kamu ingin memindahkan profil ke tengah atau memberi background kartu, kamu terpaksa memindahkannya satu-persatu dan background-nya akan terputus-putus!","visualComparison":{"withoutLabel":"Tanpa Pembungkus (Melayang Bebas)","withoutDesc":"Teks judul dan biodata tercecer di kanvas tanpa batas tepi yang menyatukan mereka.","withLabel":"Dengan Pembungkus <div> (Satu Kesatuan)","withDesc":"Seluruh elemen profil menyatu dalam satu kotak kokoh yang siap didekorasi dan digeser bersamaan."},"codeExample":"<div>\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n  <p>Umur: 16 Tahun</p>\n</div>","keyTakeaways":["<div> berfungsi sebagai wadah/container tak terlihat.","Semua elemen di dalam <div> menjadi satu kesatuan anak (children).","Langkah pertama sebelum mendesain dengan CSS adalah membungkus elemen terkait ke dalam <div>."]}}'::jsonb,
-        '<h1>Profil Developer</h1>\n<p>Nama: Alex Coder</p>\n<p>Umur: 16 Tahun</p>',
+        E'<h1>Profil Developer</h1>\n<p>Nama: Alex Coder</p>\n<p>Umur: 16 Tahun</p>',
         '{"goals": [{"tag": "div", "enclosed": true}]}'::jsonb
       ),
       (
@@ -318,7 +318,7 @@ INSERT INTO challenges (
         '["<div class=\"profile-card\">", "class=\"profile-card\""]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"profile-card\"><h1>Profil Developer</h1><p>Nama: Alex Coder</p><p>Umur: 16 Tahun</p></div>", "description": "Kontainer div dengan class profile-card."}'::jsonb,
-        '<div>\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n  <p>Umur: 16 Tahun</p>\n</div>',
+        E'<div>\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n  <p>Umur: 16 Tahun</p>\n</div>',
         '{"goals": [{"tag": "div", "class": "profile-card"}]}'::jsonb
       ),
       (
@@ -334,7 +334,7 @@ INSERT INTO challenges (
         '["<div class=\"notes-card\">", "<h3>Catatan Belajar</h3>", "<p>Fokus Arsitektur Web</p>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview":"<div class=\"profile-card\"><h1>Profil Developer</h1></div><div class=\"notes-card\"><h3>Catatan Belajar</h3><p>Fokus Belajar</p></div>","description":"Dua div sejajar berdampingan.","concept_demo":{"conceptTitle":"Hierarki Bersaudara (Siblings vs Nesting)","whyItMatters":"Dalam arsitektur web, tidak semua elemen harus dimasukkan ke dalam wadah yang sama. Ketika dua bagian memiliki tujuan berbeda (misal: Kartu Profil dan Kartu Catatan), keduanya harus berdiri berdampingan sebagai saudara (siblings), bukan dimasukkan ke dalam satu sama lain.","whatIfWithout":"Jika kartu catatan dimasukkan ke dalam kartu profil, catatan tersebut akan mewarisi semua batasan dan styling kartu profil, sehingga struktur tata letak menjadi kacau dan sulit dipisah di masa depan.","visualComparison":{"withoutLabel":"Salah Bersarang (Over-nesting)","withoutDesc":"Catatan tertimbun di dalam profil, membatasi fleksibilitas layout.","withLabel":"Sejajar Bersaudara (Clean Siblings)","withDesc":"Dua kartu mandiri yang dapat disusun atas-bawah atau kiri-kanan dengan leluasa."},"codeExample":"<div class=\"profile-card\">\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n</div>\n<div class=\"notes-card\">\n  <h3>Catatan Belajar</h3>\n  <p>Fokus arsitektur web.</p>\n</div>","keyTakeaways":["Elemen siblings berbagi parent yang sama dan berada di level hierarki sejajar.","Gunakan penutup </div> sebelum memulai kontainer baru untuk bagian terpisah."]}}'::jsonb,
-        '<!-- Kardus 1: Profile Card -->\n<div class=\"profile-card\">\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n</div>\n\n<!-- Buat Kardus 2 (Sibling): <div class=\"notes-card\"> berisi <h3> dan <p> di bawah ini -->',
+        E'<!-- Kardus 1: Profile Card -->\n<div class=\"profile-card\">\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n</div>\n\n<!-- Buat Kardus 2 (Sibling): <div class=\"notes-card\"> berisi <h3> dan <p> di bawah ini -->',
         '{"goals": [{"count": 2, "tag": "div"}, {"class": "notes-card"}]}'::jsonb
       ),
       (
@@ -382,7 +382,7 @@ INSERT INTO challenges (
         '["<div class=\"avatar-frame\">", "<img src=\"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\" alt=\"Foto Profil\" />", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"card\"><div class=\"avatar-frame\"><img src=\"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\" alt=\"Avatar\" /></div><div class=\"info-box\"><h2>Alex Coder</h2><p>Junior Web Developer</p></div></div>", "description": "Foto profil di dalam avatar-frame div."}'::jsonb,
-        '<div class=\"card\">\n  <!-- Bungkus foto profil dengan <div class=\"avatar-frame\"> di sini -->\n  <div class=\"avatar-frame\">\n    <img src=\"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\" alt=\"Avatar Alex\" />\n  </div>\n  <div class=\"info-box\">\n    <h2>Alex Coder</h2>\n    <p>Junior Web Developer</p>\n  </div>\n</div>',
+        E'<div class=\"card\">\n  <!-- Bungkus foto profil dengan <div class=\"avatar-frame\"> di sini -->\n  <div class=\"avatar-frame\">\n    <img src=\"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\" alt=\"Avatar Alex\" />\n  </div>\n  <div class=\"info-box\">\n    <h2>Alex Coder</h2>\n    <p>Junior Web Developer</p>\n  </div>\n</div>',
         '{"goals": [{"class": "avatar-frame", "contains": "img"}]}'::jsonb
       ),
       (
@@ -398,7 +398,7 @@ INSERT INTO challenges (
         '["<div class=\"card-header\">", "<div class=\"card-body\">", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"card\"><div class=\"card-header\"><h2>Alex Coder</h2></div><div class=\"card-body\"><p>Cerita koding...</p></div></div>", "description": "Pemisahan card-header dan card-body."}'::jsonb,
-        '<div class=\"card\">\n  <!-- Pisahkan menjadi <div class=\"card-header\"> dan <div class=\"card-body\"> -->\n</div>',
+        E'<div class=\"card\">\n  <!-- Pisahkan menjadi <div class=\"card-header\"> dan <div class=\"card-body\"> -->\n</div>',
         '{"goals": [{"class": "card-header"}, {"class": "card-body"}]}'::jsonb
       ),
       (
@@ -414,7 +414,7 @@ INSERT INTO challenges (
         '["<div class=\"action-row\">", "<button>Follow</button>", "<button>Kirim Pesan</button>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"action-row\"><button>Follow</button><button>Kirim Pesan</button></div>", "description": "Baris aksi pembungkus tombol."}'::jsonb,
-        '<div class=\"card\">\n  <div class=\"card-body\">\n    <h3>Alex Coder</h3>\n    <p>Web Developer antusias.</p>\n    <!-- Bungkus 2 tombol <button> ke dalam <div class=\"action-row\"> di bawah ini -->\n  </div>\n</div>',
+        E'<div class=\"card\">\n  <div class=\"card-body\">\n    <h3>Alex Coder</h3>\n    <p>Web Developer antusias.</p>\n    <!-- Bungkus 2 tombol <button> ke dalam <div class=\"action-row\"> di bawah ini -->\n  </div>\n</div>',
         '{"goals": [{"class": "action-row", "minButtons": 2}]}'::jsonb
       ),
       (
@@ -430,7 +430,7 @@ INSERT INTO challenges (
         '["<div class=\"badge-role\">Frontend Developer</div>", "<div class=\"badge-tag\">UI Engineer</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"card-header\"><h2>Alex Coder</h2><div class=\"badge-role\">Frontend Developer</div></div>", "description": "Badge label peran di header."}'::jsonb,
-        '<div class=\"card\">\n  <div class=\"card-header\">\n    <h2>Alex Coder</h2>\n    <!-- Tambahkan <div class=\"badge-role\">Frontend Developer</div> di sini -->\n  </div>\n</div>',
+        E'<div class=\"card\">\n  <div class=\"card-header\">\n    <h2>Alex Coder</h2>\n    <!-- Tambahkan <div class=\"badge-role\">Frontend Developer</div> di sini -->\n  </div>\n</div>',
         '{"goals": [{"class": "badge-role"}]}'::jsonb
       ),
       (
@@ -446,7 +446,7 @@ INSERT INTO challenges (
         '["<div class=\"metrics-row\">", "<div class=\"metric-box\">\\n  <h4>12</h4>\\n  <p>Proyek</p>\\n</div>", "</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"metrics-row\"><div class=\"metric-box\"><h4>12</h4><p>Proyek</p></div><div class=\"metric-box\"><h4>1.5K</h4><p>Kontribusi</p></div><div class=\"metric-box\"><h4>24</h4><p>Repo</p></div></div>", "description": "Tiga kolom metric-box di dalam metrics-row."}'::jsonb,
-        '<div class=\"card\">\n  <!-- Buat <div class=\"metrics-row\"> yang membungkus 3 <div class=\"metric-box\"> di sini -->\n</div>',
+        E'<div class=\"card\">\n  <!-- Buat <div class=\"metrics-row\"> yang membungkus 3 <div class=\"metric-box\"> di sini -->\n</div>',
         '{"goals": [{"class": "metrics-row"}, {"class": "metric-box", "count": 3}]}'::jsonb
       ),
       (
@@ -494,7 +494,7 @@ INSERT INTO challenges (
         '["<div class=\"brand-box\">\\n  <h2>Codevas App</h2>\\n</div>", "<div class=\"menu-box\">\\n  <ul>\\n    <li>Dashboard</li>\\n    <li>Kelas</li>\\n    <li>Portofolio</li>\\n  </ul>\\n</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"sidebar\"><div class=\"brand-box\"><h2>Codevas</h2></div><div class=\"menu-box\"><ul><li>Dashboard</li><li>Kelas</li><li>Portofolio</li></ul></div></div>", "description": "Sidebar dengan brand-box dan menu-box."}'::jsonb,
-        '<div class=\"sidebar\">\n  <!-- Buat <div class=\"brand-box\"> dan <div class=\"menu-box\"> (berisi <ul> dengan 3 <li>) di sini -->\n</div>',
+        E'<div class=\"sidebar\">\n  <!-- Buat <div class=\"brand-box\"> dan <div class=\"menu-box\"> (berisi <ul> dengan 3 <li>) di sini -->\n</div>',
         '{"goals": [{"class": "brand-box"}, {"class": "menu-box"}, {"tag": "ul", "childCount": 3}]}'::jsonb
       ),
       (
@@ -510,7 +510,7 @@ INSERT INTO challenges (
         '["<div class=\"banner-card\">\\n  <h3>Selamat Datang!</h3>\\n</div>", "<div class=\"overview-card\">\\n  <h3>Target Belajar</h3>\\n</div>"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"main-content\"><div class=\"banner-card\">Banner</div><div class=\"overview-card\">Overview</div></div>", "description": "Dua kartu bertumpuk di main-content."}'::jsonb,
-        '<div class=\"main-content\">\n  <!-- Buat <div class=\"banner-card\"> dan <div class=\"overview-card\"> di sini -->\n</div>',
+        E'<div class=\"main-content\">\n  <!-- Buat <div class=\"banner-card\"> dan <div class=\"overview-card\"> di sini -->\n</div>',
         '{"goals": [{"class": "banner-card"}, {"class": "overview-card"}]}'::jsonb
       ),
       (
@@ -590,7 +590,7 @@ INSERT INTO challenges (
         '["<div class=\"dashboard-layout\">", "<div class=\"sidebar\">", "<div class=\"main-panel\">", "<div class=\"bento-item\">", "<div class=\"form-group\">"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"dashboard-layout\"><div class=\"sidebar\">Nav</div><div class=\"main-panel\">Header, Bento Cards, Footer</div></div>", "description": "Arsitektur Dashboard Web lengkap dari nol."}'::jsonb,
-        '<!-- FINAL PROJECT: Bangun kerangka Dashboard Web lengkap dari nol! -->\n<!-- Satukan <div class=\"dashboard-layout\">, sidebar, main-panel, bento cards, dan footer -->',
+        E'<!-- FINAL PROJECT: Bangun kerangka Dashboard Web lengkap dari nol! -->\n<!-- Satukan <div class=\"dashboard-layout\">, sidebar, main-panel, bento cards, dan footer -->',
         '{"goals": [{"class": "dashboard-layout"}, {"class": "sidebar"}, {"class": "main-panel"}]}'::jsonb
       ),
                   (

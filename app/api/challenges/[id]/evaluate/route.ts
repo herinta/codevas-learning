@@ -20,8 +20,8 @@ function evaluateCss(challengeId: string, cssCode: string): {
     const hasName = /<p[^>]*>[^<]*nama\s*:[^<]+<\/p>/i.test(cssCode);
     const hasAge = /<p[^>]*>[^<]*umur\s*:[^<]+<\/p>/i.test(cssCode);
     if (!hasH1) feedback.push("Gunakan tag <h1> dengan teks 'Profil Developer'.");
-    if (!hasName) feedback.push("Tambahkan tag <p> dengan format 'Nama: [namamu]'.");
-    if (!hasAge) feedback.push("Tambahkan tag <p> dengan format 'Umur: [umurmu]'.");
+    if (!hasName) feedback.push("Tambahkan tag <p> untuk Nama (misal: <p>Nama: Alex</p>).");
+    if (!hasAge) feedback.push("Tambahkan tag <p> untuk Umur (misal: <p>Umur: 16 Tahun</p>).");
     const passed = hasH1 && hasName && hasAge;
     return {
       passed,
