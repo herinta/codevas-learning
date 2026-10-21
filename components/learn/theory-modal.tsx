@@ -27,7 +27,7 @@ function prettyFormatHtml(raw: string): string {
   if (!raw) return "";
   let clean = raw.trim();
 
-  // Split tags that are stuck together onto new lines
+  // Split tags that are glued together onto new lines
   clean = clean.replace(/>\s*</g, ">\n<");
 
   const rawLines = clean.split("\n");
@@ -258,24 +258,25 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
   }, [challenge?.hint]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
-      <div className="bg-white border-t-3 sm:border-3 border-slate-900 rounded-t-3xl sm:rounded-3xl p-5 sm:p-7 max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-[0_8px_0_#0f172a] space-y-5">
-        {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-100">
-          <div className="flex items-center gap-2.5">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 animate-in fade-in duration-200 overflow-hidden">
+      {/* Widescreen Landscape Modal Container */}
+      <div className="max-w-5xl xl:max-w-6xl w-full max-h-[88vh] flex flex-col bg-white border-3 border-slate-900 rounded-3xl shadow-[0_8px_0_#0f172a] overflow-hidden">
+        {/* Sticky Header: Never pushed offscreen */}
+        <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b-2 border-slate-200 bg-white shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-[#FEF08A] border-2 border-slate-900 flex items-center justify-center shadow-[0_2px_0_#0f172a] shrink-0">
               <Sparkles className="w-5 h-5 text-amber-900" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded-md bg-[#EF4444] text-white font-display font-black text-[10px] uppercase">
+                <span className="px-2 py-0.5 rounded-md bg-[#EF4444] text-white font-display font-black text-[10px] uppercase shrink-0">
                   Checkpoint Teori • Level {challenge?.order_index || 1}
                 </span>
-                <span className="text-[11px] font-mono font-bold text-slate-500">
+                <span className="text-[11px] font-mono font-bold text-slate-500 hidden sm:inline">
                   Concept Walkthrough
                 </span>
               </div>
-              <h3 className="font-display font-black text-lg sm:text-xl text-slate-900 leading-snug">
+              <h3 className="font-display font-black text-base sm:text-xl text-slate-900 leading-snug truncate">
                 {concept?.conceptTitle || challenge?.title || "Materi & Teori Pembelajaran"}
               </h3>
             </div>
@@ -283,217 +284,235 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl hover:bg-slate-100 text-slate-500 hover:text-slate-900 border-2 border-transparent hover:border-slate-900 cursor-pointer transition-all shrink-0"
+            className="p-2 rounded-xl hover:bg-slate-100 text-slate-500 hover:text-slate-900 border-2 border-transparent hover:border-slate-900 cursor-pointer transition-all shrink-0 ml-2"
             aria-label="Tutup Modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Section 1: Filosofi & Mengapa Diperlukan */}
-        <div className="p-4 bg-sky-50 border-2 border-slate-900 rounded-2xl space-y-2 shadow-[0_2px_0_#0f172a]">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-sky-800" />
-            <span className="text-xs font-display font-black uppercase tracking-wider text-sky-950">
-              Mengapa Ini Diperlukan? (Filosofi &amp; Fungsi)
-            </span>
-          </div>
-          <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
-            {concept?.whyItMatters ||
-              challenge?.theory ||
-              "Pahami tujuan dari konsep arsitektur kode ini sebelum memulai latihan."}
-          </p>
-        </div>
-
-        {/* What If Without / Konsekuensi Jika Tanpa Pendekatan Ini */}
-        {concept?.whatIfWithout && (
-          <div className="p-4 bg-rose-50 border-2 border-slate-900 rounded-2xl space-y-2 shadow-[0_2px_0_#0f172a]">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-display font-black uppercase tracking-wider text-rose-900 flex items-center gap-1.5">
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
-                Apa Akibatnya Jika Tanpa Pendekatan Ini?
-              </span>
-            </div>
-            <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
-              {concept.whatIfWithout}
-            </p>
-          </div>
-        )}
-
-        {/* Section 2: Kotak Text Editor Code & Contoh Hasilnya (Side-by-Side) */}
-        <div className="space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-display font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
-              <Code2 className="w-4 h-4 text-[#EF4444]" />
-              Contoh Penerapan &amp; Hasil Tampilan
-            </span>
-            <span className="text-[10px] font-mono text-slate-500">
-              Perhatikan hubungan kode &amp; hasilnya
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 items-stretch">
-            {/* Box 1: Kotak Text Editor Code */}
-            <div className="rounded-2xl border-2 border-slate-900 bg-slate-950 overflow-hidden shadow-[0_3px_0_#0f172a] flex flex-col">
-              {/* Window Header */}
-              <div className="flex items-center justify-between px-3.5 py-2 bg-slate-900 border-b border-slate-800 shrink-0">
+        {/* Scrollable Body: Fits inside screen height with smooth scrolling */}
+        <div className="p-5 sm:p-6 overflow-y-auto flex-1 bg-[#FFFDF7]/60">
+          {/* Responsive Widescreen 2-Column Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            {/* COLUMN 1 (Kiri): Teori, Filosofi, Konsekuensi & Prinsip (5 Kolom) */}
+            <div className="lg:col-span-5 space-y-4">
+              {/* Section 1: Filosofi & Mengapa Diperlukan */}
+              <div className="p-4 bg-sky-50 border-2 border-slate-900 rounded-2xl space-y-2 shadow-[0_2px_0_#0f172a]">
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
-                  </div>
-                  <span className="ml-1.5 text-[11px] font-mono font-bold text-slate-300 flex items-center gap-1">
-                    <Code2 className="w-3.5 h-3.5 text-sky-400" />
-                    {exampleInfo.fileName}
+                  <BookOpen className="w-4 h-4 text-sky-800 shrink-0" />
+                  <span className="text-xs font-display font-black uppercase tracking-wider text-sky-950">
+                    Mengapa Diperlukan? (Filosofi)
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-semibold">
-                  Editor Kode
-                </span>
-              </div>
-
-              {/* Code Body with Line Numbers & Baris Baru */}
-              <div className="p-3.5 font-mono text-xs overflow-x-auto flex-1 flex leading-relaxed bg-[#0b1120]">
-                <div className="select-none text-slate-600 pr-3 border-r border-slate-800 text-right shrink-0">
-                  {codeLines.map((_, i) => (
-                    <div key={i} className="leading-5">
-                      {i + 1}
-                    </div>
-                  ))}
-                </div>
-                <div className="pl-3 flex-1 overflow-x-auto">
-                  {codeLines.map((line, i) => (
-                    <div key={i} className="leading-5 whitespace-pre">
-                      {renderHighlightedLine(line, !exampleInfo.isHtml)}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Box 2: Contoh Hasil Tampilan di Browser */}
-            <div className="rounded-2xl border-2 border-slate-900 bg-white overflow-hidden shadow-[0_3px_0_#0f172a] flex flex-col">
-              {/* Browser Header Bar */}
-              <div className="flex items-center justify-between px-3.5 py-2 bg-slate-100 border-b-2 border-slate-900 shrink-0">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
-                    <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
-                    <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
-                  </div>
-                  <div className="px-2 py-0.5 rounded bg-white border border-slate-300 text-[10px] font-mono text-slate-500">
-                    localhost:3000
-                  </div>
-                </div>
-                <span className="text-[10px] font-mono text-slate-600 font-bold flex items-center gap-1 uppercase tracking-wider">
-                  <Monitor className="w-3.5 h-3.5 text-slate-700" />
-                  Hasil di Layar
-                </span>
-              </div>
-
-              {/* Browser Viewport Output */}
-              <div className="p-4 bg-white flex-1 overflow-y-auto flex flex-col justify-center min-h-[140px]">
-                {exampleInfo.isHtml ? (
-                  <div
-                    className="space-y-2 text-slate-900"
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizeUserHtml(exampleInfo.code),
-                    }}
-                  />
-                ) : (
-                  <div className="w-full flex items-center justify-center p-3">
-                    <div
-                      className="px-5 py-4 rounded-xl font-display font-black text-slate-900 text-center transition-all duration-300"
-                      style={parsedPreview?.arenaStyle || {}}
-                    >
-                      <span>Elemen Visual (.box)</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Section 3: Visual Comparison (Tanpa vs Dengan) */}
-        {concept?.visualComparison && (
-          <div className="space-y-2 pt-1">
-            <span className="text-xs font-display font-black uppercase tracking-wider text-slate-800">
-              Perbandingan: Tanpa vs Dengan Konsep Ini
-            </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {/* Tanpa */}
-              <div className="p-3.5 rounded-2xl border-2 border-rose-300 bg-rose-50/70 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-display font-black text-rose-800">
-                  <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                  <span>
-                    {concept.visualComparison.withoutLabel || "Tanpa Konsep Ini"}
-                  </span>
-                </div>
-                <p className="text-xs text-rose-950/80 font-medium leading-relaxed">
-                  {concept.visualComparison.withoutDesc}
+                <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+                  {concept?.whyItMatters ||
+                    challenge?.theory ||
+                    "Pahami tujuan dari konsep arsitektur kode ini sebelum memulai latihan."}
                 </p>
               </div>
 
-              {/* Dengan */}
-              <div className="p-3.5 rounded-2xl border-2 border-emerald-300 bg-emerald-50/70 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-display font-black text-emerald-800">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>
-                    {concept.visualComparison.withLabel || "Dengan Konsep Ini"}
-                  </span>
-                </div>
-                <p className="text-xs text-emerald-950/80 font-medium leading-relaxed">
-                  {concept.visualComparison.withDesc}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Section 4: Key Takeaways (If Available) */}
-        {concept?.keyTakeaways && concept.keyTakeaways.length > 0 && (
-          <div className="space-y-2 pt-1">
-            <span className="text-xs font-display font-black uppercase tracking-wider text-slate-800">
-              Prinsip Kunci yang Perlu Diingat:
-            </span>
-            <div className="space-y-1.5">
-              {concept.keyTakeaways.map((point, idx) => (
-                <div
-                  key={idx}
-                  className="p-2.5 bg-slate-50 border-2 border-slate-900 rounded-xl flex items-start gap-2 shadow-[0_1px_0_#0f172a]"
-                >
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <p className="text-xs text-slate-800 font-medium leading-relaxed">
-                    {point}
+              {/* What If Without / Konsekuensi Jika Tanpa Pendekatan Ini */}
+              {concept?.whatIfWithout && (
+                <div className="p-4 bg-rose-50 border-2 border-slate-900 rounded-2xl space-y-2 shadow-[0_2px_0_#0f172a]">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                    <span className="text-xs font-display font-black uppercase tracking-wider text-rose-900">
+                      Akibat Jika Tanpa Konsep Ini
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+                    {concept.whatIfWithout}
                   </p>
                 </div>
-              ))}
+              )}
+
+              {/* Section 3: Visual Comparison (Tanpa vs Dengan) */}
+              {concept?.visualComparison && (
+                <div className="space-y-2 pt-1">
+                  <span className="text-xs font-display font-black uppercase tracking-wider text-slate-800">
+                    Perbandingan Struktur:
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2.5">
+                    {/* Tanpa */}
+                    <div className="p-3 rounded-2xl border-2 border-rose-300 bg-rose-50/70 space-y-1">
+                      <div className="flex items-center gap-1.5 text-xs font-display font-black text-rose-800">
+                        <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                        <span>
+                          {concept.visualComparison.withoutLabel || "Tanpa Konsep Ini"}
+                        </span>
+                      </div>
+                      <p className="text-xs text-rose-950/80 font-medium leading-relaxed">
+                        {concept.visualComparison.withoutDesc}
+                      </p>
+                    </div>
+
+                    {/* Dengan */}
+                    <div className="p-3 rounded-2xl border-2 border-emerald-300 bg-emerald-50/70 space-y-1">
+                      <div className="flex items-center gap-1.5 text-xs font-display font-black text-emerald-800">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>
+                          {concept.visualComparison.withLabel || "Dengan Konsep Ini"}
+                        </span>
+                      </div>
+                      <p className="text-xs text-emerald-950/80 font-medium leading-relaxed">
+                        {concept.visualComparison.withDesc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Section 4: Key Takeaways (If Available) */}
+              {concept?.keyTakeaways && concept.keyTakeaways.length > 0 && (
+                <div className="space-y-2 pt-1">
+                  <span className="text-xs font-display font-black uppercase tracking-wider text-slate-800">
+                    Prinsip Kunci yang Perlu Diingat:
+                  </span>
+                  <div className="space-y-1.5">
+                    {concept.keyTakeaways.map((point, idx) => (
+                      <div
+                        key={idx}
+                        className="p-2.5 bg-white border-2 border-slate-900 rounded-xl flex items-start gap-2 shadow-[0_1px_0_#0f172a]"
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <p className="text-xs text-slate-800 font-medium leading-relaxed">
+                          {point}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* COLUMN 2 (Kanan): Editor Kode Acuan, Hasil Tampilan di Browser, & Petunjuk (7 Kolom) */}
+            <div className="lg:col-span-7 space-y-4">
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-display font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                    <Code2 className="w-4 h-4 text-[#EF4444]" />
+                    Contoh Penerapan &amp; Hasil Tampilan
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-500">
+                    Perhatikan hubungan kode &amp; hasilnya
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 items-stretch">
+                  {/* Box 1: Kotak Text Editor Code */}
+                  <div className="rounded-2xl border-2 border-slate-900 bg-slate-950 overflow-hidden shadow-[0_3px_0_#0f172a] flex flex-col">
+                    {/* Window Header */}
+                    <div className="flex items-center justify-between px-3 py-2 bg-slate-900 border-b border-slate-800 shrink-0">
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
+                        </div>
+                        <span className="ml-1 text-[11px] font-mono font-bold text-slate-300 flex items-center gap-1">
+                          <Code2 className="w-3.5 h-3.5 text-sky-400" />
+                          {exampleInfo.fileName}
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-semibold">
+                        Editor Kode
+                      </span>
+                    </div>
+
+                    {/* Code Body with Line Numbers & Baris Baru */}
+                    <div className="p-3 font-mono text-xs overflow-x-auto flex-1 flex leading-relaxed bg-[#0b1120] min-h-[160px] max-h-72">
+                      <div className="select-none text-slate-600 pr-3 border-r border-slate-800 text-right shrink-0">
+                        {codeLines.map((_, i) => (
+                          <div key={i} className="leading-5">
+                            {i + 1}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="pl-3 flex-1 overflow-x-auto">
+                        {codeLines.map((line, i) => (
+                          <div key={i} className="leading-5 whitespace-pre">
+                            {renderHighlightedLine(line, !exampleInfo.isHtml)}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Box 2: Contoh Hasil Tampilan di Browser */}
+                  <div className="rounded-2xl border-2 border-slate-900 bg-white overflow-hidden shadow-[0_3px_0_#0f172a] flex flex-col">
+                    {/* Browser Header Bar */}
+                    <div className="flex items-center justify-between px-3 py-2 bg-slate-100 border-b-2 border-slate-900 shrink-0">
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
+                          <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
+                          <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
+                        </div>
+                        <div className="px-2 py-0.5 rounded bg-white border border-slate-300 text-[10px] font-mono text-slate-500">
+                          localhost:3000
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-mono text-slate-600 font-bold flex items-center gap-1 uppercase tracking-wider">
+                        <Monitor className="w-3.5 h-3.5 text-slate-700" />
+                        Hasil di Layar
+                      </span>
+                    </div>
+
+                    {/* Browser Viewport Output */}
+                    <div className="p-4 bg-white flex-1 overflow-y-auto flex flex-col justify-center min-h-[160px] max-h-72">
+                      {exampleInfo.isHtml ? (
+                        <div
+                          className="space-y-2 text-slate-900"
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeUserHtml(exampleInfo.code),
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full flex items-center justify-center p-3">
+                          <div
+                            className="px-5 py-4 rounded-xl font-display font-black text-slate-900 text-center transition-all duration-300"
+                            style={parsedPreview?.arenaStyle || {}}
+                          >
+                            <span>Elemen Visual (.box)</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 5: Petunjuk Singkat */}
+              {cleanHint && (
+                <div className="p-4 bg-[#FEF08A] border-2 border-slate-900 rounded-2xl text-xs text-slate-900 font-medium leading-relaxed space-y-1.5 shadow-[0_2px_0_#0f172a]">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-900">
+                    <Lightbulb className="w-4 h-4 text-[#EF4444]" />
+                    <span className="font-display font-black text-xs uppercase tracking-wider">
+                      Petunjuk Singkat:
+                    </span>
+                  </div>
+                  <p className="leading-relaxed pl-5">{cleanHint}</p>
+                </div>
+              )}
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Section 5: Petunjuk Singkat */}
-        {cleanHint && (
-          <div className="p-3.5 bg-[#FEF08A] border-2 border-slate-900 rounded-xl text-xs text-slate-900 font-medium leading-relaxed space-y-1 shadow-[0_2px_0_#0f172a]">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900">
-              <Lightbulb className="w-3.5 h-3.5 text-[#EF4444]" />
-              <span>Petunjuk Singkat:</span>
-            </div>
-            <p>{cleanHint}</p>
-          </div>
-        )}
-
-        {/* Action Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="w-full py-3.5 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-sm border-2 border-slate-900 shadow-[0_4px_0_#991b1b] text-center cursor-pointer active:translate-y-0.5 transition-all flex items-center justify-center gap-2"
-        >
-          <span>Paham Konsepnya, Siap Latihan!</span>
-          <Sparkles className="w-4 h-4" />
-        </button>
+        {/* Sticky Footer: Always visible & reachable at the bottom */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 sm:px-6 py-3.5 border-t-2 border-slate-200 bg-white shrink-0">
+          <p className="text-xs text-slate-500 font-medium hidden sm:block">
+            💡 Amati keterkaitan antara kode di sebelah kiri dengan hasil tampilan di browser.
+          </p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-display font-black text-xs sm:text-sm border-2 border-slate-900 shadow-[0_3px_0_#991b1b] text-center cursor-pointer active:translate-y-0.5 transition-all flex items-center justify-center gap-2 shrink-0 ml-auto"
+          >
+            <span>Paham Konsepnya, Siap Latihan!</span>
+            <Sparkles className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   );
