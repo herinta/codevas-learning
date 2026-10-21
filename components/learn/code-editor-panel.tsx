@@ -147,7 +147,18 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
     }
   };
 
-  // Keyboard enhancements (Tab key inserts 2 spaces)
+  // Handle changes and ensure horizontal scroll resets to 0 when typing at start of line
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const target = e.currentTarget;
+    setCssCode(target.value);
+    const cursor = target.selectionStart;
+    if (cursor === 0 || target.value[cursor - 1] === "\n") {
+      target.scrollLeft = 0;
+      if (preRef.current) preRef.current.scrollLeft = 0;
+    }
+  };
+
+  // Keyboard enhancements (Tab key inserts 2 spaces, Enter resets horizontal scroll)
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Tab") {
       e.preventDefault();
@@ -159,6 +170,16 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
       requestAnimationFrame(() => {
         if (textareaRef.current) {
           textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + 2;
+        }
+      });
+      return;
+    }
+
+    if (e.key === "Enter") {
+      requestAnimationFrame(() => {
+        if (textareaRef.current) {
+          textareaRef.current.scrollLeft = 0;
+          if (preRef.current) preRef.current.scrollLeft = 0;
         }
       });
     }
@@ -359,7 +380,7 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
               id={isCompact ? "code-editor-mobile" : "code-editor-desktop"}
               ref={textareaRef}
               value={cssCode}
-              onChange={(e) => setCssCode(e.target.value)}
+              onChange={handleChange}
               onScroll={handleScroll}
               onKeyDown={handleKeyDown}
               spellCheck={false}
