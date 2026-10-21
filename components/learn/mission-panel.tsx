@@ -80,6 +80,42 @@ function FormattedInstruction({ text }: { text: string }) {
 }
 
 /**
+ * Formats HTML into cleanly indented separate lines (baris baru)
+ */
+function prettyFormatHtml(raw: string): string {
+  if (!raw) return "";
+  let clean = raw.trim();
+
+  // Split tags that are glued together onto new lines
+  clean = clean.replace(/>\s*</g, ">\n<");
+
+  const rawLines = clean.split("\n");
+  let indent = 0;
+  const formatted: string[] = [];
+
+  for (let line of rawLines) {
+    line = line.trim();
+    if (!line) continue;
+
+    const isClosingOnly = /^<\/[a-zA-Z0-9_-]+>$/.test(line);
+    const isOpeningOnly =
+      /^<[a-zA-Z0-9_-]+(?:\s+[^>]*)?>$/.test(line) && !line.endsWith("/>");
+
+    if (isClosingOnly) {
+      indent = Math.max(0, indent - 1);
+    }
+
+    formatted.push("  ".repeat(indent) + line);
+
+    if (isOpeningOnly) {
+      indent++;
+    }
+  }
+
+  return formatted.join("\n");
+}
+
+/**
  * Intelligent example code extractor for any level
  */
 function getMissionExampleCode(challenge: ChallengeData | null): MissionExample | null {
@@ -107,9 +143,10 @@ function getMissionExampleCode(challenge: ChallengeData | null): MissionExample 
     challenge.conceptDemo;
 
   if (concept?.codeExample && concept.codeExample.trim()) {
+    const raw = concept.codeExample.trim();
     return {
       filename,
-      code: concept.codeExample.trim(),
+      code: isCss ? raw : prettyFormatHtml(raw),
       tip: isCss
         ? "Tuliskan selector dan properti CSS seperti contoh acuan di atas ke dalam editor."
         : "Format struktur tag seperti contoh acuan di atas ke dalam editor.",
@@ -123,20 +160,17 @@ function getMissionExampleCode(challenge: ChallengeData | null): MissionExample 
       .join("\n");
     return {
       filename,
-      code: rawJoined,
+      code: isCss ? rawJoined : prettyFormatHtml(rawJoined),
       tip: "Gunakan tag atau potongan acuan di atas untuk menyelesaikan tantangan.",
     };
   }
 
   // Target visual preview fallback
   if (challenge.target_visual?.preview && typeof challenge.target_visual.preview === "string") {
-    let preview = challenge.target_visual.preview.trim();
-    if (!preview.includes("\n") && preview.includes("><")) {
-      preview = preview.replace(/></g, ">\n<");
-    }
+    const raw = challenge.target_visual.preview.trim();
     return {
       filename,
-      code: preview,
+      code: isCss ? raw : prettyFormatHtml(raw),
       tip: "Format struktur acuan di atas untuk menghasilkan visual yang diharapkan.",
     };
   }

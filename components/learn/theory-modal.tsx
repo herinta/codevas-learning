@@ -20,6 +20,117 @@ interface TheoryModalProps {
   challenge: ChallengeData | null;
 }
 
+/**
+ * Formats HTML into cleanly indented separate lines (baris baru)
+ */
+function prettyFormatHtml(raw: string): string {
+  if (!raw) return "";
+  let clean = raw.trim();
+
+  // Split tags that are stuck together onto new lines
+  clean = clean.replace(/>\s*</g, ">\n<");
+
+  const rawLines = clean.split("\n");
+  let indent = 0;
+  const formatted: string[] = [];
+
+  for (let line of rawLines) {
+    line = line.trim();
+    if (!line) continue;
+
+    const isClosingOnly = /^<\/[a-zA-Z0-9_-]+>$/.test(line);
+    const isOpeningOnly =
+      /^<[a-zA-Z0-9_-]+(?:\s+[^>]*)?>$/.test(line) && !line.endsWith("/>");
+
+    if (isClosingOnly) {
+      indent = Math.max(0, indent - 1);
+    }
+
+    formatted.push("  ".repeat(indent) + line);
+
+    if (isOpeningOnly) {
+      indent++;
+    }
+  }
+
+  return formatted.join("\n");
+}
+
+/**
+ * Lightweight syntax colorizer for the modal preview editor
+ */
+function renderHighlightedLine(line: string, isCss: boolean) {
+  if (!line.trim()) return <span>&nbsp;</span>;
+
+  if (isCss) {
+    if (line.includes("{") || line.includes("}")) {
+      const selector = line.replace(/[{}]/g, "").trim();
+      return (
+        <span>
+          <span className="text-amber-400 font-bold">{selector}</span>
+          <span className="text-slate-400">{line.includes("{") ? " {" : "}"}</span>
+        </span>
+      );
+    }
+    if (line.includes(":")) {
+      const [prop, ...valParts] = line.split(":");
+      const val = valParts.join(":");
+      return (
+        <span>
+          <span className="text-sky-300 font-medium">{prop}:</span>
+          <span className="text-emerald-300">{val}</span>
+        </span>
+      );
+    }
+    return <span className="text-slate-200">{line}</span>;
+  }
+
+  // HTML syntax highlighting
+  const parts = line.split(
+    /(<\/?[a-zA-Z0-9_-]+(?:(?:\s+[\w:-]+(?:\s*=\s*(?:".*?"|'.*?'|[^\s>]+))?)*)\s*\/?>)/g
+  );
+
+  return (
+    <span>
+      {parts.map((part, idx) => {
+        if (!part) return null;
+        if (part.startsWith("<") && part.endsWith(">")) {
+          const isClosing = part.startsWith("</");
+          const tagContent = isClosing ? part.slice(2, -1) : part.slice(1, -1);
+          const firstSpaceIdx = tagContent.indexOf(" ");
+
+          if (firstSpaceIdx === -1) {
+            return (
+              <span key={idx} className="text-sky-400">
+                &lt;{isClosing ? "/" : ""}
+                <span className="text-pink-400 font-bold">{tagContent}</span>
+                &gt;
+              </span>
+            );
+          }
+
+          const tagName = tagContent.slice(0, firstSpaceIdx);
+          const attrs = tagContent.slice(firstSpaceIdx);
+
+          return (
+            <span key={idx} className="text-sky-400">
+              &lt;
+              <span className="text-pink-400 font-bold">{tagName}</span>
+              <span className="text-amber-200">{attrs}</span>
+              &gt;
+            </span>
+          );
+        }
+        return (
+          <span key={idx} className="text-slate-100 font-medium">
+            {part}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
 function getExampleSnippet(challenge: ChallengeData | null): {
   isHtml: boolean;
   fileName: string;
@@ -38,12 +149,23 @@ function getExampleSnippet(challenge: ChallengeData | null): {
     challenge.class_id === "html-architecture" || challenge.id.startsWith("html-");
   const concept = challenge.concept_demo || challenge.target_visual?.concept_demo;
 
+  // Level 1 specific clean example with explicit newlines
+  if (challenge.id === "html-1-raw-content" || challenge.id === "html-1") {
+    return {
+      isHtml: true,
+      fileName: "index.html",
+      code: "<h1>Profil Developer</h1>\n<p>Nama: Alex Coder</p>\n<p>Umur: 16 Tahun</p>",
+      description: "Judul besar Profil Developer di bagian atas diikuti nama dan umur.",
+    };
+  }
+
   // 1. If explicit concept.codeExample exists
   if (concept?.codeExample) {
+    const raw = concept.codeExample.trim();
     return {
       isHtml,
       fileName: isHtml ? "index.html" : "style.css",
-      code: concept.codeExample.trim(),
+      code: isHtml ? prettyFormatHtml(raw) : raw,
       description: challenge.target_visual?.description || undefined,
     };
   }
@@ -54,7 +176,7 @@ function getExampleSnippet(challenge: ChallengeData | null): {
       return {
         isHtml: true,
         fileName: "index.html",
-        code: challenge.target_visual.preview.trim(),
+        code: prettyFormatHtml(challenge.target_visual.preview),
         description: challenge.target_visual.description || undefined,
       };
     }
@@ -62,7 +184,7 @@ function getExampleSnippet(challenge: ChallengeData | null): {
       return {
         isHtml: true,
         fileName: "index.html",
-        code: challenge.syntax_helpers.join("\n").trim(),
+        code: prettyFormatHtml(challenge.syntax_helpers.join("\n")),
         description: challenge.target_visual?.description || undefined,
       };
     }
@@ -75,11 +197,15 @@ function getExampleSnippet(challenge: ChallengeData | null): {
 
   // 3. CSS mode
   const selector =
-    challenge.class_id === "css-grid" || challenge.id.startsWith("grid-") || challenge.id.startsWith("gr-")
+    challenge.class_id === "css-grid" ||
+    challenge.id.startsWith("grid-") ||
+    challenge.id.startsWith("gr-")
       ? ".grid-arena"
       : challenge.id.includes("navbar")
       ? ".navbar"
-      : challenge.class_id === "css-basics" || challenge.id.startsWith("css-basics-") || challenge.id.startsWith("basics-")
+      : challenge.class_id === "css-basics" ||
+        challenge.id.startsWith("css-basics-") ||
+        challenge.id.startsWith("basics-")
       ? ".box"
       : ".arena";
 
@@ -122,6 +248,15 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
     return parseUserStyles(exampleInfo.code);
   }, [exampleInfo]);
 
+  const cleanHint = useMemo(() => {
+    if (!challenge?.hint) return null;
+    return challenge.hint
+      .replace(/\s*\(misal:[^)]+\)\.?/gi, "")
+      .replace(/\[Namamu\]/g, "Alex Coder")
+      .replace(/\[Umurmu\]/g, "16 Tahun")
+      .trim();
+  }, [challenge?.hint]);
+
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
       <div className="bg-white border-t-3 sm:border-3 border-slate-900 rounded-t-3xl sm:rounded-3xl p-5 sm:p-7 max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-[0_8px_0_#0f172a] space-y-5">
@@ -158,13 +293,15 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
         {/* Section 1: Filosofi & Mengapa Diperlukan */}
         <div className="p-4 bg-sky-50 border-2 border-slate-900 rounded-2xl space-y-2 shadow-[0_2px_0_#0f172a]">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-display font-black uppercase tracking-wider text-sky-900 flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-sky-700" />
+            <BookOpen className="w-4 h-4 text-sky-800" />
+            <span className="text-xs font-display font-black uppercase tracking-wider text-sky-950">
               Mengapa Ini Diperlukan? (Filosofi &amp; Fungsi)
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
-            {concept?.whyItMatters || challenge?.theory}
+            {concept?.whyItMatters ||
+              challenge?.theory ||
+              "Pahami tujuan dari konsep arsitektur kode ini sebelum memulai latihan."}
           </p>
         </div>
 
@@ -183,7 +320,7 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
           </div>
         )}
 
-        {/* Section 2: Kotak Text Editor Code & Contoh Hasilnya (Side-by-Side or Stacked) */}
+        {/* Section 2: Kotak Text Editor Code & Contoh Hasilnya (Side-by-Side) */}
         <div className="space-y-2.5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-display font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
@@ -216,16 +353,22 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
                 </span>
               </div>
 
-              {/* Code Body with Line Numbers */}
+              {/* Code Body with Line Numbers & Baris Baru */}
               <div className="p-3.5 font-mono text-xs overflow-x-auto flex-1 flex leading-relaxed bg-[#0b1120]">
                 <div className="select-none text-slate-600 pr-3 border-r border-slate-800 text-right shrink-0">
                   {codeLines.map((_, i) => (
-                    <div key={i}>{i + 1}</div>
+                    <div key={i} className="leading-5">
+                      {i + 1}
+                    </div>
                   ))}
                 </div>
-                <pre className="pl-3 text-sky-200 whitespace-pre font-mono flex-1">
-                  {exampleInfo.code}
-                </pre>
+                <div className="pl-3 flex-1 overflow-x-auto">
+                  {codeLines.map((line, i) => (
+                    <div key={i} className="leading-5 whitespace-pre">
+                      {renderHighlightedLine(line, !exampleInfo.isHtml)}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -239,36 +382,33 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
                     <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
                     <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-600 bg-white px-2 py-0.5 rounded-md border border-slate-300">
+                  <div className="px-2 py-0.5 rounded bg-white border border-slate-300 text-[10px] font-mono text-slate-500">
                     localhost:3000
-                  </span>
+                  </div>
                 </div>
-                <span className="text-[10px] font-display font-black text-slate-700 uppercase tracking-wider flex items-center gap-1">
-                  <Monitor className="w-3 h-3 text-slate-600" />
+                <span className="text-[10px] font-mono text-slate-600 font-bold flex items-center gap-1 uppercase tracking-wider">
+                  <Monitor className="w-3.5 h-3.5 text-slate-700" />
                   Hasil di Layar
                 </span>
               </div>
 
-              {/* Browser Canvas Body */}
-              <div className="p-4 bg-[#FFFDF7] flex-1 flex items-center justify-center min-h-[120px] overflow-auto">
+              {/* Browser Viewport Output */}
+              <div className="p-4 bg-white flex-1 overflow-y-auto flex flex-col justify-center min-h-[140px]">
                 {exampleInfo.isHtml ? (
                   <div
-                    className="w-full text-slate-900 font-body text-xs sm:text-sm space-y-2 html-live-sandbox"
+                    className="space-y-2 text-slate-900"
                     dangerouslySetInnerHTML={{
                       __html: sanitizeUserHtml(exampleInfo.code),
                     }}
                   />
                 ) : (
-                  <div
-                    className="box transition-all w-full max-w-xs text-center font-body p-4 rounded-xl border-2 border-slate-900 shadow-xs"
-                    style={parsedPreview?.itemStyles["box"] || parsedPreview?.arenaStyle || {}}
-                  >
-                    <h4 className="font-bold text-xs sm:text-sm">
-                      Contoh Elemen .box
-                    </h4>
-                    <p className="text-[11px] opacity-80 mt-1">
-                      Tampilan visual setelah CSS diterapkan
-                    </p>
+                  <div className="w-full flex items-center justify-center p-3">
+                    <div
+                      className="px-5 py-4 rounded-xl font-display font-black text-slate-900 text-center transition-all duration-300"
+                      style={parsedPreview?.arenaStyle || {}}
+                    >
+                      <span>Elemen Visual (.box)</span>
+                    </div>
                   </div>
                 )}
               </div>
@@ -276,27 +416,35 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
           </div>
         </div>
 
-        {/* Section 3: Visual Comparison (Sebelum vs Sesudah) If Available */}
+        {/* Section 3: Visual Comparison (Tanpa vs Dengan) */}
         {concept?.visualComparison && (
           <div className="space-y-2 pt-1">
             <span className="text-xs font-display font-black uppercase tracking-wider text-slate-800">
-              Perbandingan Struktur (Sebelum vs Sesudah):
+              Perbandingan: Tanpa vs Dengan Konsep Ini
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="p-3 bg-rose-50/80 border-2 border-slate-900 rounded-xl space-y-1 shadow-[0_2px_0_#0f172a]">
-                <span className="font-bold text-xs text-rose-900 block">
-                  ❌ {concept.visualComparison.withoutLabel || "Tanpa Pembungkus"}
-                </span>
-                <p className="text-[11px] sm:text-xs text-slate-700 font-medium leading-relaxed">
+              {/* Tanpa */}
+              <div className="p-3.5 rounded-2xl border-2 border-rose-300 bg-rose-50/70 space-y-1.5">
+                <div className="flex items-center gap-1.5 text-xs font-display font-black text-rose-800">
+                  <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                  <span>
+                    {concept.visualComparison.withoutLabel || "Tanpa Konsep Ini"}
+                  </span>
+                </div>
+                <p className="text-xs text-rose-950/80 font-medium leading-relaxed">
                   {concept.visualComparison.withoutDesc}
                 </p>
               </div>
 
-              <div className="p-3 bg-emerald-50/80 border-2 border-slate-900 rounded-xl space-y-1 shadow-[0_2px_0_#0f172a]">
-                <span className="font-bold text-xs text-emerald-900 block">
-                  ✅ {concept.visualComparison.withLabel || "Dengan Pembungkus Rapi"}
-                </span>
-                <p className="text-[11px] sm:text-xs text-slate-700 font-medium leading-relaxed">
+              {/* Dengan */}
+              <div className="p-3.5 rounded-2xl border-2 border-emerald-300 bg-emerald-50/70 space-y-1.5">
+                <div className="flex items-center gap-1.5 text-xs font-display font-black text-emerald-800">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>
+                    {concept.visualComparison.withLabel || "Dengan Konsep Ini"}
+                  </span>
+                </div>
+                <p className="text-xs text-emerald-950/80 font-medium leading-relaxed">
                   {concept.visualComparison.withDesc}
                 </p>
               </div>
@@ -327,13 +475,13 @@ export const TheoryModal: React.FC<TheoryModalProps> = ({
         )}
 
         {/* Section 5: Petunjuk Singkat */}
-        {challenge?.hint && (
+        {cleanHint && (
           <div className="p-3.5 bg-[#FEF08A] border-2 border-slate-900 rounded-xl text-xs text-slate-900 font-medium leading-relaxed space-y-1 shadow-[0_2px_0_#0f172a]">
             <div className="flex items-center gap-1.5 font-bold text-slate-900">
               <Lightbulb className="w-3.5 h-3.5 text-[#EF4444]" />
               <span>Petunjuk Singkat:</span>
             </div>
-            <p>{challenge.hint}</p>
+            <p>{cleanHint}</p>
           </div>
         )}
 
