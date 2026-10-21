@@ -170,30 +170,36 @@ export function isHelperActive(snippet: string, code: string): boolean {
 
   // HTML tag snippets
   if (clean.startsWith("<")) {
+    // Strip comments so <!-- ... --> never triggers false positives!
+    const effectiveCode = code.replace(/<!--[\s\S]*?-->/g, "");
+
     // Exact match (case-insensitive)
-    if (code.toLowerCase().includes(clean.toLowerCase())) {
+    if (effectiveCode.toLowerCase().includes(clean.toLowerCase())) {
       return true;
     }
 
     // Special container wrappers
     if (clean === "<div> ... </div>") {
-      return /<div[^>]*>[\s\S]*<\/div>/i.test(code);
+      return /<div[^>]*>[\s\S]*<\/div>/i.test(effectiveCode);
     }
-    if (clean === "<div>" || clean === "</div>") {
-      return code.toLowerCase().includes(clean.toLowerCase());
+    if (clean === "<div>") {
+      return /<div(?:\s+[^>]*)?>/i.test(effectiveCode);
+    }
+    if (clean === "</div>") {
+      return /<\/div>/i.test(effectiveCode);
     }
 
     // If snippet has an inner text prefix, e.g. <p>Nama: Alex Coder</p> or <p>Umur: 16 Tahun</p>
     const prefixMatch = clean.match(/<([a-z0-9_-]+)[^>]*>\s*([a-zA-Z0-9]+:)/i);
     if (prefixMatch) {
       const [, tag, prefix] = prefixMatch;
-      return new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?${prefix}`, "i").test(code);
+      return new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?${prefix}`, "i").test(effectiveCode);
     }
 
     // If snippet has a class attribute, e.g. <div class="profile-card">
     const classMatch = clean.match(/class=["']([^"']+)["']/i);
     if (classMatch) {
-      return new RegExp(`class=["'][^"']*\\b${classMatch[1]}\\b[^"']*["']`, "i").test(code);
+      return new RegExp(`class=["'][^"']*\\b${classMatch[1]}\\b[^"']*["']`, "i").test(effectiveCode);
     }
 
     // If snippet has specific inner text, e.g. <h1>Profil Developer</h1> or <button>Follow</button>
@@ -201,19 +207,19 @@ export function isHelperActive(snippet: string, code: string): boolean {
     if (innerTextMatch) {
       const inner = innerTextMatch[1].trim();
       if (inner.length > 2) {
-        return code.toLowerCase().includes(inner.toLowerCase());
+        return effectiveCode.toLowerCase().includes(inner.toLowerCase());
       }
     }
 
     // Void elements e.g. <img ... />
     if (clean.startsWith("<img")) {
-      return /<img\b/i.test(code);
+      return /<img\b/i.test(effectiveCode);
     }
 
     // Single tag without text e.g. <section> or <main>
     const singleTagMatch = clean.match(/^<([a-z0-9_-]+)\s*\/?>$/i);
     if (singleTagMatch) {
-      return new RegExp(`<${singleTagMatch[1]}\\b`, "i").test(code);
+      return new RegExp(`<${singleTagMatch[1]}\\b`, "i").test(effectiveCode);
     }
 
     return false;
@@ -240,15 +246,34 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
 
   // 0. If snippet is an HTML tag (e.g. "<h1>Profil Developer</h1>", "<p>Nama: Alex Coder</p>", etc.)
   if (clean.startsWith("<")) {
+    // 0a. Wrapper pattern: <div> ... </div>
     if (clean === "<div> ... </div>") {
       const trimmed = prev.trim();
       if (trimmed.startsWith("<div>") && trimmed.endsWith("</div>")) {
-        return trimmed.replace(/^<div>\s*/, "").replace(/\s*<\/div>$/, "");
+        return trimmed.replace(/^<div>\s*\n?/, "").replace(/\n?\s*<\/div>$/, "");
       }
       return `<div>\n  ${trimmed}\n</div>`;
     }
 
-    // 0a. If EXACT snippet exists -> TOGGLE OFF (REMOVE)
+    // 0b. Opening wrapper: <div>
+    if (clean === "<div>") {
+      const trimmed = prev.trim();
+      if (/^<div>/i.test(trimmed)) {
+        return trimmed.replace(/^<div>\s*\n?/, "");
+      }
+      return `<div>\n${trimmed}`;
+    }
+
+    // 0c. Closing wrapper: </div>
+    if (clean === "</div>") {
+      const trimmed = prev.trim();
+      if (/<\/div>$/i.test(trimmed)) {
+        return trimmed.replace(/\n?\s*<\/div>$/, "");
+      }
+      return `${trimmed}\n</div>`;
+    }
+
+    // 0d. If EXACT snippet exists -> TOGGLE OFF (REMOVE)
     if (prev.includes(clean)) {
       return prev
         .replace(clean, "")

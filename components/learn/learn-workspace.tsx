@@ -78,17 +78,26 @@ export const LearnWorkspace: React.FC<LearnWorkspaceProps> = ({
           if (found.theory || found.concept_demo || found.target_visual?.concept_demo) {
             setShowTheoryModal(true);
           }
-          setCssCode(
+          const rawCode =
             found.codeSnapshot ||
-              found.initial_state ||
-              (found.class_id === "html-architecture" || found.id.startsWith("html-")
-                ? "<!-- Tulis tag HTML di sini -->"
-                : found.class_id === "css-grid" || found.id.startsWith("grid-") || found.id.startsWith("gr-")
-                ? `.grid-arena {\n  display: grid;\n  /* Tulis CSS Grid di sini */\n}`
-                : found.id === "flexbox-12-boss-modern-navbar" || found.id === "fb-12"
-                ? `.navbar {\n  /* Tulis CSS Flexbox di sini */\n}`
-                : `.arena {\n  /* Tulis CSS Flexbox di sini */\n}`)
-          );
+            found.initial_state ||
+            (found.class_id === "html-architecture" || found.id.startsWith("html-")
+              ? "<!-- Tulis tag HTML di sini -->"
+              : found.class_id === "css-grid" || found.id.startsWith("grid-") || found.id.startsWith("gr-")
+              ? `.grid-arena {\n  display: grid;\n  /* Tulis CSS Grid di sini */\n}`
+              : found.id === "flexbox-12-boss-modern-navbar" || found.id === "fb-12"
+              ? `.navbar {\n  /* Tulis CSS Flexbox di sini */\n}`
+              : `.arena {\n  /* Tulis CSS Flexbox di sini */\n}`);
+
+          // Normalize literal \n and clean cluttering instruction comments from editor
+          const cleanCode = rawCode
+            .replace(/\\r\\n/g, "\n")
+            .replace(/\\n/g, "\n")
+            .replace(/\r\n/g, "\n")
+            .replace(/<!--[\s\S]*?-->\s*/g, "")
+            .trim();
+
+          setCssCode(cleanCode);
         } else {
           setLoadError(json.message || "Tantangan tidak ditemukan.");
         }
