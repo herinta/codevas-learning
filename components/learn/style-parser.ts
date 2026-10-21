@@ -167,12 +167,19 @@ export function parseUserStyles(css: string): ParsedStyles {
 export function isHelperActive(snippet: string, code: string): boolean {
   if (!code || !snippet) return false;
   const clean = snippet.trim().replace(/;$/, "");
+  // Strip comments so <!-- ... --> and /* ... */ never trigger false positives!
+  const effectiveCode = code.replace(/<!--[\s\S]*?-->/g, "").replace(/\/\*[\s\S]*?\*\//g, "");
 
-  // HTML tag snippets
+  // 1. HTML attribute snippet (e.g. class="profile-card")
+  const attrMatch = clean.match(/^([a-z0-9_-]+)=["']([^"']+)["']$/i);
+  if (attrMatch) {
+    const [, attrName, attrVal] = attrMatch;
+    const escapedVal = attrVal.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+    return new RegExp(`<[a-z0-9_-]+\\b[^>]*\\b${attrName}=["'][^"']*\\b${escapedVal}\\b[^"']*["']`, "i").test(effectiveCode);
+  }
+
+  // 2. HTML tag snippets
   if (clean.startsWith("<")) {
-    // Strip comments so <!-- ... --> never triggers false positives!
-    const effectiveCode = code.replace(/<!--[\s\S]*?-->/g, "");
-
     // Exact match (case-insensitive)
     if (effectiveCode.toLowerCase().includes(clean.toLowerCase())) {
       return true;
@@ -189,17 +196,19 @@ export function isHelperActive(snippet: string, code: string): boolean {
       return /<\/div>/i.test(effectiveCode);
     }
 
+    // Tag with class attribute, e.g. <div class="profile-card">
+    const tagWithClassMatch = clean.match(/^<([a-z0-9_-]+)[^>]*\bclass=["']([^"']+)["']/i);
+    if (tagWithClassMatch) {
+      const [, tag, cls] = tagWithClassMatch;
+      const escapedCls = cls.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+      return new RegExp(`<${tag}\\b[^>]*\\bclass=["'][^"']*\\b${escapedCls}\\b[^"']*["']`, "i").test(effectiveCode);
+    }
+
     // If snippet has an inner text prefix, e.g. <p>Nama: Alex Coder</p> or <p>Umur: 16 Tahun</p>
     const prefixMatch = clean.match(/<([a-z0-9_-]+)[^>]*>\s*([a-zA-Z0-9]+:)/i);
     if (prefixMatch) {
       const [, tag, prefix] = prefixMatch;
       return new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?${prefix}`, "i").test(effectiveCode);
-    }
-
-    // If snippet has a class attribute, e.g. <div class="profile-card">
-    const classMatch = clean.match(/class=["']([^"']+)["']/i);
-    if (classMatch) {
-      return new RegExp(`class=["'][^"']*\\b${classMatch[1]}\\b[^"']*["']`, "i").test(effectiveCode);
     }
 
     // If snippet has specific inner text, e.g. <h1>Profil Developer</h1> or <button>Follow</button>
@@ -225,17 +234,23 @@ export function isHelperActive(snippet: string, code: string): boolean {
     return false;
   }
 
+  // 3. CSS declaration e.g. "display: flex" or "color: lightblue"
   if (clean.includes(":")) {
     const [prop, val] = clean.split(":").map((s) => s.trim());
+    const escapedProp = prop.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
     const escapedVal = val.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
-    const regex = new RegExp(`\\b${prop}\\s*:\\s*${escapedVal}\\b`, "i");
-    return regex.test(code);
+    // Ensure prop is not preceded by word or hyphen, so "color" does not match "background-color"
+    const regex = new RegExp(`(?<![\\w-])${escapedProp}\\s*:\\s*${escapedVal}\\b`, "i");
+    return regex.test(effectiveCode);
   }
+
+  // 4. CSS selector e.g. ".profile-card"
   if (clean.startsWith(".")) {
     const escaped = clean.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
-    return new RegExp(`${escaped}\\b`, "i").test(code);
+    return new RegExp(`${escaped}\\b`, "i").test(effectiveCode);
   }
-  return code.toLowerCase().includes(clean.toLowerCase());
+
+  return effectiveCode.toLowerCase().includes(clean.toLowerCase());
 }
 
 /**
@@ -244,9 +259,29 @@ export function isHelperActive(snippet: string, code: string): boolean {
 export function toggleHelperSnippet(prev: string, snippet: string): string {
   const clean = snippet.trim().replace(/;$/, "");
 
-  // 0. If snippet is an HTML tag (e.g. "<h1>Profil Developer</h1>", "<p>Nama: Alex Coder</p>", etc.)
+  // 0. Attribute snippet: e.g. class="profile-card"
+  const attrMatch = clean.match(/^([a-z0-9_-]+)=["']([^"']+)["']$/i);
+  if (attrMatch) {
+    const [, attrName, attrVal] = attrMatch;
+    const escapedVal = attrVal.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+    const attrRegex = new RegExp(`\\s+${attrName}=["'][^"']*\\b${escapedVal}\\b[^"']*["']`, "i");
+
+    if (attrRegex.test(prev)) {
+      return prev.replace(attrRegex, "");
+    }
+
+    const openingTagRegex = /<([a-z0-9_-]+)([^>]*)>/i;
+    if (openingTagRegex.test(prev)) {
+      return prev.replace(openingTagRegex, (match, tag, rest) => {
+        return `<${tag} ${clean}${rest}>`;
+      });
+    }
+    return `${clean} ${prev}`;
+  }
+
+  // 1. If snippet is an HTML tag (e.g. "<div class=\"profile-card\">", "<h1>Profil Developer</h1>", etc.)
   if (clean.startsWith("<")) {
-    // 0a. Wrapper pattern: <div> ... </div>
+    // 1a. Wrapper pattern: <div> ... </div>
     if (clean === "<div> ... </div>") {
       const trimmed = prev.replace(/<!--[\s\S]*?-->/g, "").trim();
       if (!trimmed) {
@@ -258,7 +293,7 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
       return `<div>\n  ${trimmed}\n</div>`;
     }
 
-    // 0b. Opening wrapper: <div>
+    // 1b. Opening wrapper: <div>
     if (clean === "<div>") {
       const trimmed = prev.trim();
       if (/^<div>/i.test(trimmed)) {
@@ -267,7 +302,7 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
       return `<div>\n${trimmed}`;
     }
 
-    // 0c. Closing wrapper: </div>
+    // 1c. Closing wrapper: </div>
     if (clean === "</div>") {
       const trimmed = prev.trim();
       if (/<\/div>$/i.test(trimmed)) {
@@ -276,7 +311,32 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
       return `${trimmed}\n</div>`;
     }
 
-    // 0d. If EXACT snippet exists -> TOGGLE OFF (REMOVE)
+    // 1d. Tag with class attribute, e.g. <div class="profile-card">
+    const tagWithClassMatch = clean.match(/^<([a-z0-9_-]+)[^>]*\bclass=["']([^"']+)["']\s*\/?>$/i);
+    if (tagWithClassMatch) {
+      const [, tag, cls] = tagWithClassMatch;
+      const escapedCls = cls.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+      const tagWithClsRegex = new RegExp(`<${tag}\\b([^>]*)\\bclass=["'][^"']*\\b${escapedCls}\\b[^"']*["']([^>]*)>`, "i");
+
+      // TOGGLE OFF: remove class and revert to plain tag if no other attributes
+      if (tagWithClsRegex.test(prev)) {
+        return prev.replace(tagWithClsRegex, (match, before, after) => {
+          const remaining = (before + after).trim();
+          return remaining ? `<${tag} ${remaining}>` : `<${tag}>`;
+        });
+      }
+
+      // TOGGLE ON: if plain <tag> exists without class, upgrade it!
+      const plainTagRegex = new RegExp(`<${tag}(?![^>]*\\bclass=)([^>]*)>`, "i");
+      if (plainTagRegex.test(prev)) {
+        return prev.replace(plainTagRegex, (match, rest) => {
+          const trimmedRest = rest.trim();
+          return trimmedRest ? `<${tag} class="${cls}" ${trimmedRest}>` : `<${tag} class="${cls}">`;
+        });
+      }
+    }
+
+    // 1e. If EXACT snippet exists -> TOGGLE OFF (REMOVE)
     if (prev.includes(clean)) {
       return prev
         .replace(clean, "")
@@ -284,7 +344,7 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
         .trim();
     }
 
-    // 0b. If snippet has a distinct prefix like <p>Nama: or <p>Umur:
+    // 1f. If snippet has a distinct prefix like <p>Nama: or <p>Umur:
     const prefixMatch = clean.match(/<([a-z0-9_-]+)[^>]*>\s*([a-zA-Z0-9]+:)/i);
     if (prefixMatch) {
       const [, tag, prefix] = prefixMatch;
@@ -297,32 +357,23 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
       }
     }
 
-    // 0c. If snippet is a container with a specific class, e.g. <div class="profile-card"> ... </div>
-    const classMatch = clean.match(/class=["']([^"']+)["']/i);
-    if (classMatch) {
-      const cls = classMatch[1];
-      const classRegex = new RegExp(`\\s*<div[^>]*class=["'][^"']*\\b${cls}\\b[^"']*["'][^>]*>[\\s\\S]*?<\\/div>`, "i");
-      if (classRegex.test(prev)) {
-        return prev.replace(classRegex, "").replace(/\n\s*\n/g, "\n").trim();
-      }
-    }
-
-    // 0d. Clean any stray HTML comments
+    // 1g. Clean any stray HTML comments
     const cleanPrev = prev.replace(/<!--[\s\S]*?-->/g, "").trim();
     if (cleanPrev !== prev.trim()) {
       return cleanPrev ? `${cleanPrev}\n${clean}` : clean;
     }
 
-    // 0e. Otherwise, append the snippet on a clean new line!
+    // 1h. Otherwise, append the snippet on a clean new line!
     const trimmed = cleanPrev;
     return trimmed ? `${trimmed}\n${clean}` : clean;
   }
 
-  // 1. If snippet is a CSS declaration (e.g. "display: flex" or "justify-content: center")
+  // 2. If snippet is a CSS declaration (e.g. "display: flex" or "justify-content: center")
   if (clean.includes(":")) {
     const [prop, val] = clean.split(":").map((s) => s.trim());
+    const escapedProp = prop.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
     const escapedVal = val.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
-    const exactRegex = new RegExp(`[\\t ]*${prop}\\s*:\\s*${escapedVal}\\s*;?\\n?`, "gi");
+    const exactRegex = new RegExp(`(?<![\\w-])[\\t ]*${escapedProp}\\s*:\\s*${escapedVal}\\s*;?\\n?`, "gi");
 
     // If EXACT declaration already exists -> TOGGLE OFF (REMOVE)
     if (exactRegex.test(prev)) {
@@ -330,7 +381,7 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
     }
 
     // If the same property already exists with another value -> REPLACE IT (no stacking/spam)
-    const samePropRegex = new RegExp(`${prop}\\s*:\\s*[^;\\n]+;?`, "i");
+    const samePropRegex = new RegExp(`(?<![\\w-])${escapedProp}\\s*:\\s*[^;\\n]+;?`, "i");
     if (samePropRegex.test(prev)) {
       return prev.replace(samePropRegex, `${prop}: ${val};`);
     }
@@ -354,7 +405,7 @@ export function toggleHelperSnippet(prev: string, snippet: string): string {
     return `${prev}\n${clean};`;
   }
 
-  // 2. If snippet is a selector (e.g. ".card-2", ".permen-2", ".header", etc.)
+  // 3. If snippet is a selector (e.g. ".card-2", ".permen-2", ".header", etc.)
   if (clean.startsWith(".")) {
     const escaped = clean.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
     const blockRegex = new RegExp(`\\n*${escaped}\\s*\\{[^}]*\\}`, "gi");

@@ -315,7 +315,7 @@ INSERT INTO challenges (
         'Box polos tanpa label sulit dibedakan jika ada banyak kotak di web. Berikan identitas pada box-mu! Tambahkan atribut class bernama "profile-card" pada tag div pembungkus (<div class="profile-card">). Nama class inilah yang menjadi alamat bagi CSS untuk memberi warna dan dekorasi.',
         'Ubah <div> menjadi <div class="profile-card">.',
         'Atribut class adalah identifier yang disematkan pada tag HTML untuk mengelompokkan elemen dengan gaya atau perilaku serupa, dan menjadi jembatan utama antara kerangka HTML dan stylesheet CSS.',
-        '["<div class=\"profile-card\">", "class=\"profile-card\""]'::jsonb,
+        '["<div class=\"profile-card\">"]'::jsonb,
         '{"element": "html-arena"}'::jsonb,
         '{"preview": "<div class=\"profile-card\"><h1>Profil Developer</h1><p>Nama: Alex Coder</p><p>Umur: 16 Tahun</p></div>", "description": "Kontainer div dengan class profile-card."}'::jsonb,
         E'<div>\n  <h1>Profil Developer</h1>\n  <p>Nama: Alex Coder</p>\n  <p>Umur: 16 Tahun</p>\n</div>',
